@@ -1,42 +1,64 @@
 version: '3.1'
+volumes:
+  mssql: 
+  mysql:
+  mariadb:
+  psql:
 
 services:
+
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: test
+    ports:
+      - 11001:3306
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
+      
 
   mariadb:
     image: mariadb
     restart: always
-    ports:
-      - 11001:3306
     environment:
-      MARIADB_ROOT_PASSWORD: example
-    volumes:
-      - apps/mariadb:/var/lib/mysql
-    
-
-
-
-  postgres:
-    image: postgres:14-alpine
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: test
     ports:
-      - 11002:5432
+      - 11002:3306
     volumes:
-      - apps/postgres:/var/lib/postgresql/data
+      - mariadb:/var/lib/mysql
+      - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
+
+  psql:
+    image: postgres
     environment:
-      - POSTGRES_PASSWORD=S3cret
-      - POSTGRES_USER=citizix_user
-      - POSTGRES_DB=citizix_db
-
-
-  mysql:
-    image: mysql:8.0
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: saklia
+    volumes:
+      - psql:/var/lib/postgresql/data
+      - ./dev/docker_psql_init:/docker-entrypoint-initdb.d
     ports:
-      - 11003:3306
-    volumes:
-      - apps/mysql:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=S3cret
-      - MYSQL_USER=citizix_user
-      - MYSQL_DATABASE=citizix_db
-      - MYSQL_PASSWORD=S3cret
+      - 11003:5432
+  
+  
 
-
+  
+  # sqlserver:
+  #   image: "mcr.microsoft.com/mssql/server:2017-latest-ubuntu"
+  #   volumes:
+  #     - mssql:/var/opt/mssql/data
+  #     - ./dev/docker_sqlserver:/docker_init
+  #   restart: always
+  #   environment:
+  #     ACCEPT_EULA: "Y"
+  #     MSSSQL_PID: "Express"
+  #     SA_PASSWORD: "Example@1"
+  #   ports:
+  #     - 1433:1433
+  #   command: sh -c ' chmod +x /docker_init/entrypoint.sh; /docker_init/entrypoint.sh & /opt/mssql/bin/sqlservr;'
+  

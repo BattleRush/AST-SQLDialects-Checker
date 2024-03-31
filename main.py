@@ -1,4 +1,5 @@
 import mysql.connector 
+import mariadb
 import psycopg2
 import datetime
 import os
@@ -35,12 +36,13 @@ if not os.path.exists(f"output/{ethz_ids[selected_ethz_id]}"):
     os.makedirs(f"output/{ethz_ids[selected_ethz_id]}")
     
 current_output_folder = f"output/{ethz_ids[selected_ethz_id]}/{run_date_time}"
-os.makedirs(current_output_folder)
+# TODO ENABLE THIS LINE WHEN WE GOT OUTPUT DATA TO COLLECT
+#os.makedirs(current_output_folder)
 
 
-# create test.txt file in the output folder
-with open(f"{current_output_folder}/test.txt", "w") as f:
-    f.write("Hello World!")
+# # create test.txt file in the output folder
+# with open(f"{current_output_folder}/test.txt", "w") as f:
+#     f.write("Hello World!")
 
 
 
@@ -50,16 +52,17 @@ print("CONNECT TO MYSQL")
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="S3cret",
-    port="11003",
+    password="example",
+    port="11001",
+    database="employees"
 )
 
 cursor = mydb.cursor()
-# list all available databases
-cursor.execute("SHOW DATABASES")
-databases = cursor.fetchall()
-for database in databases:
-    print(database)
+# list all available tables
+cursor.execute("SHOW TABLES")
+tables = cursor.fetchall()
+for table in tables:
+    print(table)
 
 print(mydb) 
 
@@ -69,19 +72,19 @@ print("CONNECT TO MARIADB")
 # connect to mariadb on port localhost 11001
 mydb = mysql.connector.connect(
     host="localhost",
-    user=""
-    password="S3cret",
-    port="11001"
+    user="root",
+    password="example",
+    port=11002,
+    database="employees"
 )
 
 cursor = mydb.cursor()
-# list all available databases
-cursor.execute("SHOW DATABASES")
-databases = cursor.fetchall()
-for database in databases:
-    print(database)
-    
-print(mydb)
+# list all available tables
+cursor.execute("SHOW TABLES")
+tables = cursor.fetchall()
+for table in tables:
+    print(table)
+
 
 print("")
 print("CONNECT TO POSTGRESQL")
@@ -90,8 +93,8 @@ print("CONNECT TO POSTGRESQL")
 mydb = psycopg2.connect(
     host="localhost",
     user="postgres",
-    password="S3cret",
-    port="11002"
+    password="example",
+    port="11003"
 )
 
 cursor = mydb.cursor()
