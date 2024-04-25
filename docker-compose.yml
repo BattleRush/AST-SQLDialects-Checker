@@ -1,64 +1,44 @@
 version: '3.1'
-volumes:
-  mssql: 
-  mysql:
-  mariadb:
-  psql:
+name: astproject
 
 services:
-
   mysql:
     image: mysql
+    container_name: ast_mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: mysql
     ports:
       - 11001:3306
     volumes:
-      - mysql:/var/lib/mysql
-      - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
+      - ./dbdata/mysql:/var/lib/mysql
+      # - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
       
 
   mariadb:
     image: mariadb
+    container_name: ast_mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: mariadb
+      MYSQL_DATABASE: mariadb
     ports:
       - 11002:3306
     volumes:
-      - mariadb:/var/lib/mysql
-      - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
+      - ./dbdata/mariadb:/var/lib/mysql
+      # - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
 
-  psql:
+  postgres:
     image: postgres
+    container_name: ast_postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
-      POSTGRES_DB: saklia
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     volumes:
-      - psql:/var/lib/postgresql/data
-      - ./dev/docker_psql_init:/docker-entrypoint-initdb.d
+      - ./dbdata/postesql:/var/lib/postgresql/data
+      # - ./dev/docker_psql_init:/docker-entrypoint-initdb.d
     ports:
       - 11003:5432
-  
-  
-
-  
-  # sqlserver:
-  #   image: "mcr.microsoft.com/mssql/server:2017-latest-ubuntu"
-  #   volumes:
-  #     - mssql:/var/opt/mssql/data
-  #     - ./dev/docker_sqlserver:/docker_init
-  #   restart: always
-  #   environment:
-  #     ACCEPT_EULA: "Y"
-  #     MSSSQL_PID: "Express"
-  #     SA_PASSWORD: "Example@1"
-  #   ports:
-  #     - 1433:1433
-  #   command: sh -c ' chmod +x /docker_init/entrypoint.sh; /docker_init/entrypoint.sh & /opt/mssql/bin/sqlservr;'
-  

@@ -3,31 +3,33 @@ import mariadb
 import psycopg2
 import datetime
 import os
+import sqlite3
 
-if not os.path.exists("input"):
-    os.makedirs("input")
+# if not os.path.exists("input"):
+#     os.makedirs("input")
     
-if not os.path.exists("output"):
-    os.makedirs("output")
+# if not os.path.exists("output"):
+#     os.makedirs("output")
 
 list_of_dbms = ["mysql", "mariadb", "postgresql", "sqlite"]
 
 # check that for each dbms, there exists a folder in the input folder
-for dbms in list_of_dbms:
-    if not os.path.exists(f"input/{dbms}"):
-        os.makedirs(f"input/{dbms}")
+# for dbms in list_of_dbms:
+#     if not os.path.exists(f"input/{dbms}"):
+#         os.makedirs(f"input/{dbms}")
 
 run_date_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
-ethz_ids = ["kpiskor", "ethz_2"]
+ethz_ids = ["kpiskor", "acerfeda"]
 
 # ask for ethz id as number [0] name ...
-print("Please select your ETHZ ID:")
-for i, ethz_id in enumerate(ethz_ids):
-    print(f"[{i}] {ethz_id}")
+# print("Please select your ETHZ ID:")
+# for i, ethz_id in enumerate(ethz_ids):
+#     print(f"[{i}] {ethz_id}")
     
-selected_ethz_id = int(input("Enter the number of your ETHZ ID: "))
+# selected_ethz_id = int(input("Enter the number of your ETHZ ID: "))
+selected_ethz_id = 1
 
 print(f"Selected ETHZ ID: {ethz_ids[selected_ethz_id]}")
 
@@ -46,63 +48,39 @@ current_output_folder = f"output/{ethz_ids[selected_ethz_id]}/{run_date_time}"
 
 
 
-print("CONNECT TO MYSQL")
-
-# connect to mysql on port localhost 11003
-mydb = mysql.connector.connect(
+print("[-] Connecting to mysql ...", end="")
+mysql_connector = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="example",
+    password="mysql",
     port="11001",
-    database="employees"
+    database="mysql"
 )
+print(" done.")
 
-cursor = mydb.cursor()
-# list all available tables
-cursor.execute("SHOW TABLES")
-tables = cursor.fetchall()
-for table in tables:
-    print(table)
 
-print(mydb) 
-
-print("")
-print("CONNECT TO MARIADB")
-
-# connect to mariadb on port localhost 11001
-mydb = mysql.connector.connect(
+print("[-] Connecting to mariadb ... ", end="")
+mariadb_connector = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="example",
+    password="mariadb",
     port=11002,
-    database="employees"
+    database="mariadb"
 )
-
-cursor = mydb.cursor()
-# list all available tables
-cursor.execute("SHOW TABLES")
-tables = cursor.fetchall()
-for table in tables:
-    print(table)
+print(" done.")
 
 
-print("")
-print("CONNECT TO POSTGRESQL")
-
-# connect to postgresql on port localhost 11002
-mydb = psycopg2.connect(
+print("[-] Connecting to postgresql ...", end="")
+postgres_connector = psycopg2.connect(
     host="localhost",
     user="postgres",
-    password="example",
+    password="postgres",
     port="11003"
 )
+print(" done.")
 
-cursor = mydb.cursor()
-# list all available databases
-cursor.execute("SELECT datname FROM pg_database")
-databases = cursor.fetchall()
-for database in databases:
-    print(database)
-    
-print(mydb)
-    
+print("[-] Connecting to sqlite ...", end="")
+if not os.path.exists("./dbdata/sqlite"):
+    os.makedirs("./dbdata/sqlite")
+sqlite_connector = sqlite3.connect("./dbdata/sqlite/sqlite.db")
+print(" done.")

@@ -1,0 +1,4 @@
+mysql-connector-python
+mariadb
+psycopg2
+sqlite3
