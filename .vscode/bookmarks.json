@@ -1,0 +1,24 @@
+{
+	"files": [
+		{
+			"path": "codebase_mysql/codebase/mysql-test/mysql-test-run.pl",
+			"bookmarks": [
+				{
+					"line": 441,
+					"column": 4,
+					"label": "1. main"
+				},
+				{
+					"line": 830,
+					"column": 17,
+					"label": "3. Run tests"
+				},
+				{
+					"line": 954,
+					"column": 15,
+					"label": ""
+				}
+			]
+		}
+	]
+}
