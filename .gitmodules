@@ -1,3 +1,6 @@
 [submodule "databases/sqlite"]
 	path = databases/sqlite
 	url = https://github.com/sqlite/sqlite.git
+[submodule "databases/postgresql"]
+	path = databases/postgresql
+	url = https://github.com/postgres/postgres.git
