@@ -1,0 +1,3 @@
+[submodule "databases/sqlite"]
+	path = databases/sqlite
+	url = https://github.com/sqlite/sqlite.git
