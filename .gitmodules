@@ -7,3 +7,6 @@
 [submodule "databases/clickhouse"]
 	path = databases/clickhouse
 	url = https://github.com/ClickHouse/ClickHouse.git
+[submodule "databases/duckdb"]
+	path = databases/duckdb
+	url = https://github.com/duckdb/duckdb.git
