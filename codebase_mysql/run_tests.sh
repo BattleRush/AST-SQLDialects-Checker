@@ -9,5 +9,5 @@ export TESTS="alias analyze"
 #                     --client-bindir /home/ubuntu/Ongoing/AST/AST-SQLDialects-Checker/codebase_mysql/codebase/MYSQL_BUILD/runtime_output_directory \
 #                      $TESTS
 ./mysql-test-run.pl --extern socket=/home/ubuntu/Ongoing/AST/AST-SQLDialects-Checker/dbdata/mysql/mysqld/mysqld.sock \
-                     $TESTS
+                     $TESTS > test.txt
 

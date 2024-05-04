@@ -2,7 +2,7 @@ all: mysql
 clean:
 	rm -rf codebase_mysql/codebase
 
-mysql: mcodebase_mysql/codebase/runtime_output_directory/
+mysql: codebase_mysql/codebase/runtime_output_directory/
 
 # Build mysql
 codebase_mysql/codebase/runtime_output_directory/: codebase_mysql/codebase/Makefile
