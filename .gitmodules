@@ -4,3 +4,6 @@
 [submodule "databases/postgresql"]
 	path = databases/postgresql
 	url = https://github.com/postgres/postgres.git
+[submodule "databases/clickhouse"]
+	path = databases/clickhouse
+	url = https://github.com/ClickHouse/ClickHouse.git
