@@ -1,3 +1,5 @@
 ./dbdata/
 codebase_mysql/codebase
 /input
+/output
+previous_selection.txt

@@ -48,6 +48,23 @@ def parse_duckdb_test_cases(test_string):
     for line in lines:
         #print("Line: ", line_index, " has the length of ", len(line))
         line_index += 1
+        
+        # if line contains read_csv then skip the test
+        if "read_csv" in line:
+            return []
+        
+        if "data/csv/" in line:
+            return [] # skip for now
+        
+        if ".csv" in line:
+            return []
+        
+        if "parquet_scan" in line:
+            return []
+        
+        if "__TEST_DIR__" in line:
+            return []
+        
         #line = line.strip()
         if not line or line.startswith("#"):
             if not line: # sometimes output has commends wtf databases/duckdb/test/sql/copy/csv/csv_null_padding.test
@@ -70,6 +87,10 @@ def parse_duckdb_test_cases(test_string):
         elif line.startswith("concurrentloop"): #concurrentloop i 1 100
             return []
         elif line.startswith("unzip"): # unzip data/storage/test.db.gz __TEST_DIR__/test.db
+            return []
+        elif line.endswith("pg_attribute"):
+            return [] # skip these tests as they return nothing
+        elif line.endswith("nosort key"):
             return []
         elif line.startswith("loop") or line.startswith("foreach"):
             # TODO handle loops
@@ -97,6 +118,18 @@ def parse_duckdb_test_cases(test_string):
                 
             # todo success
             current_test = {"type": line.split()[0], "query": "", "expected_result": "", "success": None}
+            current_test["type2"] = line.split()[1] if len(line.split()) > 1 else None
+            
+            # if statement ok then put success to true
+            if current_test["type"] == "statement" and current_test["type2"] == "ok":
+                current_test["success"] = True
+            else:
+                current_test["success"] = False
+                
+            # if query then put success to true
+            if current_test["type"] == "query":
+                current_test["success"] = True
+            
             is_query = True
             is_output = False
         elif line.startswith("----"):
