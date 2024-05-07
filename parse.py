@@ -32,7 +32,7 @@ def parse_sqlite():
 
     print("Parsing sqlite tests")
     
-    with open(log_file, 'r') as file:
+    with open(log_file, 'r', encoding="utf-8") as file:
         lines = file.readlines()
         current_test = None
         is_query = False
