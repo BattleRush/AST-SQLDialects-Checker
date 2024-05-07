@@ -20,12 +20,17 @@ def parse_sqlite():
     
     # open the file and extract the sql query, expected result and the name of the test which is after START
     
-    # delete the input/sqlite folder
-    if os.path.exists("input/sqlite"):
-        os.system("rm -rf input/sqlite")
-        
-    # create the input/sqlite folder
-    os.makedirs("input/sqlite")
+    # delete the input/sqlite folder only on linux
+    if os.name == "posix":  # Linux
+        if os.path.exists("input/sqlite"):
+            os.system("rm -rf input/sqlite")
+        os.makedirs("input/sqlite")
+    elif os.name == "nt":  # Windows
+        if os.path.exists("input/sqlite"):
+            os.system("rmdir /s /q input\\sqlite")
+        os.makedirs("input\\sqlite")
+
+    print("Parsing sqlite tests")
     
     with open(log_file, 'r') as file:
         lines = file.readlines()
@@ -40,16 +45,14 @@ def parse_sqlite():
         for line in lines:
             line = line.strip()
             if not line or line.startswith("#"):
-                if not line:
-                    is_query = False
-                    is_output = False
+                #if not line:
+                    #is_query = False
+                    #is_output = False
                 continue
             elif line.startswith("----START"):              
                 test_name = line.split()[1]
                 #print("Test name: ", test_name)
                 
-                # split by - and before this is the main test
-                current_main_test = test_name.split("-")[0]
             
                 if current_test is not None:
                     # check if all_test contains the current_main_test as name
@@ -59,6 +62,7 @@ def parse_sqlite():
                             found = True
                             break
                         
+                    # check if all_tests contains the current_test as name if yes then add the test to the tests
                     if not found:
                         all_tests.append({"name": current_main_test, "tests": [current_test]})
                     else:
@@ -66,12 +70,18 @@ def parse_sqlite():
                             if test["name"] == current_main_test:
                                 test["tests"].append(current_test)
                                 break
-                
-                current_test = {"name": line.split()[1], "query": "", "expected_result": ""}
+
+                # split by - and before this is the main test
+                current_main_test = test_name.split("-")[0]
+
+                #print("Test: ", test_name)
+               
+                current_test = {"name": test_name, "query": "", "expected_result": ""}
             elif line.startswith("----END"):
                 is_query = False
                 is_output = False
             elif line.startswith(">>>>"):
+
                 is_query = True
             elif line.startswith("<<<<"):
                 is_query = False
@@ -81,10 +91,12 @@ def parse_sqlite():
                 is_output = False
             else:
                 if is_query:
+                
                     current_test["query"] += line + "\n"
                 elif is_output:
                     current_test["expected_result"] += line + "\n"
                 else:
+                    
                     #raise ValueError(f"Unexpected line: {line}")
                     pass # skip the line
 
@@ -107,7 +119,7 @@ def parse_sqlite():
         
         # save all tests in a json file
         for test in all_tests:
-            print("Test: ", test)
+            #print("Test: ", test)
             with open("input/sqlite/" + test["name"] + ".json", "w") as f:
                 f.write(json.dumps(test, indent=4))                 
                         
