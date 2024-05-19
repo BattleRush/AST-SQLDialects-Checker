@@ -3,6 +3,7 @@ import mariadb
 import psycopg2
 import datetime
 import os
+import sys
 import sqlite3
 import duckdb
 import json
@@ -13,6 +14,8 @@ import pandas as pd
     
 # if not os.path.exists("output"):
 #     os.makedirs("output")
+
+CURRENT_TEST_FILE = None
 
 list_of_dbms = ["mysql", "mariadb", "postgresql", "sqlite"]
 
@@ -59,6 +62,15 @@ os.makedirs(current_output_folder)
 #     f.write("Hello World!")
 
 
+def print_err(*args):
+    print(*args, file=sys.stderr)
+    with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.err.log", "a") as f:
+        f.write(*args)
+def print_debug(*args):
+    print(*args)
+    with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.debug.log", "a") as f:
+        f.write(*args)
+
 
 # print("[-] Connecting to mysql ...", end="")
 # mysql_connector = mysql.connector.connect(
@@ -102,11 +114,12 @@ shape_mismatch_count = 0
 unknown_count = 0
 
 for file in duck_db_files:
+    CURRENT_TEST_FILE = file
     if file.endswith(".json"):
         with open(f"input/duckdb/{file}", "r") as f:
             file_index = duck_db_files.index(file)
-            print("##################################3")
-            print("Processing file ", file_index, " out of ", len(duck_db_files), " named ", file)
+            print_debug("##################################")
+            print_debug(f"Processing file {file_index} out of {len(duck_db_files)} named {file}")
             # at start of each file, reset database
             # duckdb_connector.execute("DROP TABLE IF EXISTS tbl")
             # duckdb_connector.execute("DROP TABLE IF EXISTS test")
@@ -116,6 +129,8 @@ for file in duck_db_files:
             # duckdb_connector.execute("DROP TABLE IF EXISTS integers")
             
             # create a new connection
+            duckdb_connector.commit()
+            duckdb_connector.close()
             duckdb_connector = duckdb.connect()
             
             # delete index named i_index on integers table
@@ -123,17 +138,17 @@ for file in duck_db_files:
             
             data = json.load(f)
             for query in data:
-                print("------------------------------")
+                print_debug("------------------------------")
                 current_query = query["query"]
                 
-                type = query["type"]
+                type1 = query["type"]
                 type2 = query["type2"]                
-                print(f"[-] Executing query: {current_query} it should succed: {query['success']} of type {type} and {type2}")
+                print_debug(f"[-] Executing query: {current_query} it should succeed: {query['success']} of type {type} and {type2}")
                 try:
            
                     result = duckdb_connector.execute(current_query)
                     
-                    if type == "statement" and type2 == "ok":
+                    if type1 == "statement" and type2 == "ok":
                         success_count += 1
                         print("[+] Test passed.")
                         continue
@@ -160,11 +175,7 @@ for file in duck_db_files:
                         if len(result_string) != len(expected_result):
                             failure_count += 1
                             shape_mismatch_count += 1
-                            print(f"[-] Test failed SHAPE MISMATCH. Expected empty result but got {result_string} for query {current_query} in file {file}")
-                            with open(f"{current_output_folder}/{file}.log", "a") as f:
-                                f.write(f"Expected empty result but got {result_string} for query {current_query} in file {file}\n")
-                            continue
-                        
+                            print_err(f"[-] Test failed SHAPE MISMATCH. Expected empty result but got {result_string} for query {current_query} in file {file}")
                         # if length is 0 check if got has also 0 length then set as passed
                         if len(expected_result) == 0:
                             success_count += 1
@@ -172,23 +183,16 @@ for file in duck_db_files:
                             continue
                         else:
                             failure_count += 1
-                            print(f"[-] Test failed. Expected empty result but got {result_string} for query {current_query} in file {file}")
-                            with open(f"{current_output_folder}/{file}.log", "a") as f:
-                                f.write(f"Expected empty result but got {result_string} for query {current_query} in file {file}\n")
-                            continue
-                        
+                            print_err(f"[-] Test failed. Expected empty result but got {result_string} for query {current_query} in file {file}")
                     else:
-                        print("Shape of expected result: ", len(expected_result), len(expected_result[0]))
-                        print("Shape of result string: ", len(result_string), len(result_string[0]))
+                        # print("Shape of expected result: ", len(expected_result), len(expected_result[0]))
+                        # print("Shape of result string: ", len(result_string), len(result_string[0]))
                         
                         # if shape is mismatched, then fail the test
                         if len(expected_result) != len(result_string) or len(expected_result[0]) != len(result_string[0]):
                             failure_count += 1
                             shape_mismatch_count += 1
-                            print(f"[-] Test failed SHAPE MISMATCH. Expected shape {len(expected_result)}x{len(expected_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {current_query} in file {file}")
-                            with open(f"{current_output_folder}/{file}.log", "a") as f:
-                                f.write(f"Expected shape {len(expected_result)}x{len(expected_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {current_query} in file {file}\n")
-                            continue
+                            print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {len(expected_result)}x{len(expected_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {current_query} in file {file}")
                     
                     failed = False
                     # go row by row and check if the values are the same
@@ -206,44 +210,34 @@ for file in duck_db_files:
                             
                             if expected_value != result_value:
                                 failure_count += 1
-                                print(f"[-] Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
-                                failed = True
-                                
-                                # write log file
-                                with open(f"{current_output_folder}/{file}.log", "a") as f:
-                                    f.write(f"Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file} \n")
-
+                                print_err(f"[-] Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
                                 break
                             
                 except Exception as e:
                     print("HANDLING EXCEPTION of file ", file)
-                    if type == "statement" and type2 == "ok":
-                        print(f"[-] Test failed stmt. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
+                    if type1 == "statement" and type2 == "ok":
+                        print_err(f"[-] Test failed stmt. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
+                        
                         failure_count += 1
-                        with open(f"{current_output_folder}/{file}.log", "a") as f:
-                            f.write(f"statement ok Expected statement to pass but got error: {e} for query {current_query} in file {file} \n")
                         if "read_csv" in current_query:
-                            print("Skipping the test because it contains read_csv")
+                            print_debug("Skipping the test because it contains read_csv")
                             continue
                         #raise e
                         continue
-                    if type == "statement" and type2 == "error":
+                    if type1 == "statement" and type2 == "error":
                         success_count += 1
-                        print("[+] Test passed.")
+                        print_debug("[+] Test passed.")
                         continue
                     
                     print(current_query)
                     # if query contains read_csv, then skip the test and mark it as failed
                     if "read_csv" in current_query:
-                        print(f"[-] Test failed ERR. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
+                        print_err(f"[-] Test failed read_csv. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
                         failure_count += 1
-                        with open(f"{current_output_folder}/{file}.log", "a") as f:
-                            f.write(f"non read csv Expected statement to pass but got error: {e} for query {current_query} in file {file} \n")
-                        continue
                     else:
                         #raise e
-                        with open(f"{current_output_folder}/{file}.log", "a") as f:
-                            f.write(f"UNKNOWN Expected statement to pass but got error: {e} for query {current_query} in file {file} \n")
+                        print_err(f"UNKNOWN Expected statement to pass but got error: {e} for query {current_query} in file {file} \n")
+                        
                         failure_count += 1
                         unknown_count += 1
 
