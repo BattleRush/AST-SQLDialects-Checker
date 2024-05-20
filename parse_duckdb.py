@@ -82,6 +82,20 @@ def parse_duckdb_test_cases(test_string):
         # todo what the number after QUERY means like query I, query II
         elif line.startswith("query") or line.startswith("statement"):
             if current_test:
+                
+                # go trough expected result and create a table where rows are separated by \n and columns by \t 
+                expected_result = current_test["expected_result"]
+                expected_result = expected_result.split("\n")
+                table = []
+                for row in expected_result:
+                    # if row is empty then skip it
+                    if not row:
+                        continue
+                    
+                    table.append(row.split("\t"))
+                    
+                current_test["expected_result_table"] = table
+                
                 tests.append(current_test)
                 
             # todo success
@@ -115,6 +129,18 @@ def parse_duckdb_test_cases(test_string):
                 raise ValueError(f"Unexpected line ({line_index}) Is Query: {is_query} Is Output: {is_output} Line: {line}")
 
     if current_test:
+        # go trough expected result and create a table where rows are separated by \n and columns by \t 
+        expected_result = current_test["expected_result"]
+        expected_result = expected_result.split("\n")
+        table = []
+        for row in expected_result:
+            # if row is empty then skip it
+            if not row:
+                continue
+            table.append(row.split("\t"))
+            
+        current_test["expected_result_table"] = table
+        
         tests.append(current_test)
 
     return tests

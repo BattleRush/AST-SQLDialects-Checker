@@ -10,6 +10,8 @@ import json
 import pandas as pd
 import traceback
 
+from common import load_json, get_files, load_all_json
+
 # if not os.path.exists("input"):
 #     os.makedirs("input")
     
@@ -74,264 +76,120 @@ def print_debug(content, **kwargs):
 
 
 
-# print("[-] Connecting to mysql ...", end="")
-# mysql_connector = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="mysql",
-#     port="11001",
-#     database="mysql"
-# )
-# print(" done.")
 
+all_tests = load_all_json("sqlite")
 
-# print("[-] Connecting to mariadb ... ", end="")
-# mariadb_connector = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="mariadb",
-#     port=11002,
-#     database="mariadb"
-# )
-# print(" done.")
+print("found", len(all_tests), "tests")
 
+count = 0
+total_tests = 0
+success_tests = 0
+fail_tests = 0
+skip_tests = 0
 
-# print("[-] Connecting to postgresql ...", end="")
-# postgres_connector = psycopg2.connect(
-#     host="localhost",
-#     user="postgres",
-#     password="postgres",
-#     port="11003"
-# )
-# print(" done.")
-
-# run this before pip install duckdb --upgrade
-print("[-] Connecting to duckdb ...", end="")
-duckdb_connector = duckdb.connect()
-# go trough input/duckdb and get all the .json files
-duck_db_files = os.listdir("input/duckdb")
-success_count = 0
-failure_count = 0
-shape_mismatch_count = 0
-unknown_count = 0
-
-
-
-def clear_db(connector):
     
-
-    if type(connector) is duckdb.DuckDBPyConnection:  
-        # Retrieve database name
-        db_name = connector.execute("SELECT current_database();").fetchone()[0]
-        print(db_name)    
-          
-        # Delete all views
-        tables = connector.execute(f"SELECT table_name FROM information_schema.tables WHERE table_catalog='{db_name}' and table_type='VIEW';").fetchall()
-        if len(tables) > 0:
-            print("[-] Clearing views ...")
-            for row in tables:
-                print(f"\t[-] DROP VIEW IF EXISTS \"{row[0]}\" CASCADE;")
-                connector.execute(f"DROP VIEW IF EXISTS \"{row[0]}\" CASCADE;")
+for test in all_tests:
     
-        #  Delete all tables
-        tables = connector.execute("SELECT table_name FROM information_schema.tables WHERE table_catalog='{db_name}' and table_type in ('BASE TABLE', 'LOCAL TEMPORARY');").fetchall()
-        if len(tables) > 0:
-            print("[-] Clearing tables ...")
-            for row in tables:
-                print(f"\t[-] DROP TABLE IF EXISTS \"{row[0]}\" CASCADE;")
-                connector.execute(f"DROP TABLE IF EXISTS \"{row[0]}\" CASCADE;")
+    
+    # check if test.db exists and delete it
+    if os.path.exists("test.db"):
+        os.remove("test.db")
         
-        # Delete all schemas
-        excluded_schemas = ','.join([f"'{s}'" for s in ["information_schema", "main", "pg_catalog"]])
-        tables = connector.execute(f"SELECT schema_name, schema_owner FROM information_schema.schemata WHERE catalog_name='{db_name}' AND schema_name NOT IN ({excluded_schemas})").fetchall()
-        if len(tables) > 0:
-            print("[-] Clearing tables ...")
-            for row in tables:
-                print(f"\t[-] DROP SCHEMA IF EXISTS \"{row[0]}\" CASCADE;")
-                print(row)
-                connector.execute(f"DROP SCHEMA IF EXISTS \"{row[0]}\" CASCADE;")
-                
-        connector.commit()
-    
+    # delete test2.db and test3.db
+    if os.path.exists("test2.db"):
+        os.remove("test2.db")
         
-# def delete_all_tables(connector):
+    if os.path.exists("test3.db"):
+        os.remove("test3.db")
+        
+    # make connection to sqlite db
+    conn = sqlite3.connect("test.db")
+    c = conn.cursor()
 
+    print("Running test: ", test["name"], " number ", count, " out of ", len(all_tests))
+    count += 1
+    
+    for testInfo in test["tests"]:
+        query = testInfo["query"]
+        expected_result = testInfo["expected_result"]
+        name = testInfo["name"]
+        
+        # if query is reset_db then close conn and open new one
+        if query == "reset_db":
+            print("Resetting db")
+            conn.close()
 
-
-for file in duck_db_files:
-    CURRENT_TEST_FILE = file
-    if file.endswith(".json"):
-        with open(f"input/duckdb/{file}", "r") as f:
-            file_index = duck_db_files.index(file)
-            print_debug("##################################")
-            print_debug(f"Processing file {file_index} out of {len(duck_db_files)} named {file}")
-            # at start of each file, reset database
-            # duckdb_connector.execute("DROP TABLE IF EXISTS tbl")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS test")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS test2")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS a")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS b")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS integers")
-            
-            # create a new connection
-            duckdb_connector.commit()
-            duckdb_connector.close()
-            duckdb_connector = duckdb.connect()
-            
-            # delete index named i_index on integers table
-            duckdb_connector.execute("DROP INDEX IF EXISTS i_index")
-            
-            data = json.load(f)
-            for query in data:
-                print_debug("------------------------------")
-                current_query = query["query"]
+            # check if test.db exists and delete it
+            if os.path.exists("test.db"):
+                os.remove("test.db")
                 
-                type1 = query["type"]
-                type2 = query["type2"]                
-                print_debug(f"[-] Executing query: {current_query} it should succeed: {query['success']} of type {type} and {type2}")
-                try:
-           
-                    result = duckdb_connector.execute(current_query)
-                    
-                    if type1 == "statement" and type2 == "ok":
-                        success_count += 1
-                        print("[+] Test passed.")
-                        continue
-                    
-                    # check if the result maches the expected result
-                    # if not, write the result to the output folder
-                    
-                    expected_result = query["expected_result"]
-                    result_string = result.fetchall()
-                    
-                    # split expected result by \n and then by \t and remove empty lines
-                    expected_result = expected_result.split("\n")
-                    expected_result = [line.split("\t") for line in expected_result if line]
-                    
-                    
-                    # print("Expected: ", expected_result)
-                    # print("Got: ", result_string)
-                    
-                    #check if expected result is 1 or 2D
-                    if len(expected_result) == 0:
-                        # print("Shape of expected result: ", len(expected_result))
-                        # print("Shape of result string: ", len(result_string))
-                        
-                        if len(result_string) != len(expected_result):
-                            failure_count += 1
-                            shape_mismatch_count += 1
-                            print_err(f"[-] Test failed SHAPE MISMATCH. Expected empty result but got {result_string} for query {current_query} in file {file}")
-                        # if length is 0 check if got has also 0 length then set as passed
-                        if len(expected_result) == 0:
-                            success_count += 1
-                            print("[+] Test passed.")
-                            continue
-                        else:
-                            failure_count += 1
-                            print_err(f"[-] Test failed. Expected empty result but got {result_string} for query {current_query} in file {file}")
-                    else:
-                        # print("Shape of expected result: ", len(expected_result), len(expected_result[0]))
-                        # print("Shape of result string: ", len(result_string), len(result_string[0]))
-                        
-                        # if shape is mismatched, then fail the test
-                        if len(expected_result) != len(result_string) or len(expected_result[0]) != len(result_string[0]):
-                            failure_count += 1
-                            shape_mismatch_count += 1
-                            print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {len(expected_result)}x{len(expected_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {current_query} in file {file}")
-                    
-                    failed = False
-                    # go row by row and check if the values are the same
-                    for i in range(len(expected_result)):
-                        if failed:
-                            break
-                        for j in range(len(expected_result[i])):
-                            expected_value = str(expected_result[i][j])
-                            result_value = str(result_string[i][j])
-                            
-                            # if result value is None, then set it to empty string
-                            result_value = result_value.replace("None", "NULL")
-                            result_value = result_value.replace("True", "true")
-                            result_value = result_value.replace("False", "false")
-                            
-                            # Conversion issues (eg 1.000000 but got 1)
-                            # Detect if expected value is some kind of number
-                            if expected_value.count('.') <= 1 and expected_value.replace(".", "").isnumeric() and expected_value != result_value:
-                                try:
-                                    print_err(f"[~] COMMENCING CASTING of result value {result_value} to expected {expected_value}")
-                                    goal_cast = duckdb_connector.execute(f"SELECT TYPEOF({expected_value})").fetchall()[0][0]
-                                    
-                                    # Take care of decimal rounding errors
-                                    # if goal_cast.startswith("DECIMAL") and result_value.count('.') <= 1 and result_value.replace(".", "").isnumeric():
-                                    print_err(f"\t[-] Expected value ({expected_value}) is a {goal_cast}.")
-                                    # Cast
-                                    result_value = duckdb_connector.execute(f"SELECT CAST({result_value} AS {goal_cast})").fetchall()[0][0]
-                                    result_value = str(result_value).strip()
-                                    print_err(f"\t[-] Value got casted")
-                                except Exception as e:
-                                    print_err(f"[x] Casting err expected_value='{expected_value}' result_value='{result_value}' goal_cast={goal_cast}\n{traceback.format_exc()}")
-                                    failed = True
-                                    if expected_value != result_value:
-                                        print_err(f"[x] MEGA ERROR: Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
-                                        
-                                        print_err(f"Expected\n {query['expected_result']}\nResult:\n{result_string}")
-                                # finally:
-                                    
+            # delete test2.db and test3.db
+            if os.path.exists("test2.db"):
+                os.remove("test2.db")
+                
+            if os.path.exists("test3.db"):
+                os.remove("test3.db")
+            
+            conn = sqlite3.connect("test.db")
+            c = conn.cursor()
+            continue
+        
+        #print("Running query", name)
+        #print("Query:", query)
+        
+        try:
 
-                                    
-                        
-                            # if expected_value != result_value:
-                                
-                                
-                            
-                            
-                            if expected_value != result_value:
-                                failure_count += 1
-                                print_err(f"[-] Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
-                                break
-                            
-                except Exception as e:
-                    print("HANDLING EXCEPTION of file ", file)
-                    if type1 == "statement" and type2 == "ok":
-                        print_err(f"[-] Test failed stmt. Expected statement to pass but got error for query {current_query} in file {file}:\n{traceback.format_exc()}")
-                        
-                        failure_count += 1
-                        if "read_csv" in current_query:
-                            print_debug("Skipping the test because it contains read_csv")
-                            continue
-                        #raise e
-                        continue
-                    if type1 == "statement" and type2 == "error":
-                        success_count += 1
-                        print_debug("[+] Test passed.")
-                        continue
-                    
-                    print(current_query)
-                    # if query contains read_csv, then skip the test and mark it as failed
-                    if "read_csv" in current_query:
-                        print_err(f"[-] Test failed read_csv. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
-                        failure_count += 1
-                    else:
-                        #raise e
-                        print_err(f"UNKNOWN Expected statement to pass but got error for query {current_query} in file {file}:\n{traceback.format_exc()}")
-                        
-                        failure_count += 1
-                        unknown_count += 1
-                # finally:    
-                #     duckdb_connector.close()
-                #     duckdb_connector = duckdb.connect()
-
-
-print("Success count: ", success_count)
-print("Failure count: ", failure_count)
-print("Unknown count: ", unknown_count)
-print("Shape mismatch count: ", shape_mismatch_count)
-print("Total tests: ", success_count + failure_count)
-
-# print("[-] Connecting to sqlite ...", end="")
-# if not os.path.exists("./dbdata/sqlite"):
-#     os.makedirs("./dbdata/sqlite")
-# sqlite_connector = sqlite3.connect("./dbdata/sqlite/sqlite.db")
-# print(" done.")
-
-
-
+            # if query contains atlest 2 ; 
+            if query.count(";") > 1:
+                c.executescript(query)
+                # we assume for now these are larger queries to setup stuff
+                success_tests += 1
+            else:
+                
+                # if query contains tointeger then skip
+                if "tointeger" in query or "toreal" in query:
+                    skip_tests += 1
+                    continue
+                
+                c.execute(query)
+                result = c.fetchall()
+                #print("Result:", result)
+                #print("Expected result:", expected_result)
+                
+                if result == expected_result:
+                    #print("Test passed")
+                    success_tests += 1
+                else:
+                    fail_tests += 1
+                
+            
+        except Exception as e:
+            print("Failed main test:", test["name"])
+            print("Failed test:", name)
+            print("Running query:", query)
+            
+            print("Exception:", e)
+            print_err(f"Exception: {e}\n")
+            print_err(traceback.format_exc())
+            print_err("\n")
+            
+            exit(1)
+            
+            fail_tests += 1
+            
+    total_tests += len(test["tests"])
+    
+    conn.close()
+    
+    # check if test.db exists and delete it
+    if os.path.exists("test.db"):
+        os.remove("test.db")
+        
+    # delete test2.db and test3.db
+    if os.path.exists("test2.db"):
+        os.remove("test2.db")
+        
+    if os.path.exists("test3.db"):
+        os.remove("test3.db")
+    
+print("Total tests:", total_tests, " Success:", success_tests, " Fail:", fail_tests, " Skip:", skip_tests)
