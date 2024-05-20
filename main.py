@@ -8,6 +8,7 @@ import sqlite3
 import duckdb
 import json
 import pandas as pd
+import traceback
 
 # if not os.path.exists("input"):
 #     os.makedirs("input")
@@ -62,14 +63,15 @@ os.makedirs(current_output_folder)
 #     f.write("Hello World!")
 
 
-def print_err(*args):
-    print(*args, file=sys.stderr)
+def print_err(content, **kwargs):
+    print(content, file=sys.stderr, **kwargs)
     with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.err.log", "a") as f:
-        f.write(*args)
-def print_debug(*args):
-    print(*args)
+        f.write(content)
+def print_debug(content, **kwargs):
+    print(content, **kwargs)
     with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.debug.log", "a") as f:
-        f.write(*args)
+        f.write(content)
+
 
 
 # print("[-] Connecting to mysql ...", end="")
@@ -112,6 +114,49 @@ success_count = 0
 failure_count = 0
 shape_mismatch_count = 0
 unknown_count = 0
+
+
+
+def clear_db(connector):
+    
+
+    if type(connector) is duckdb.DuckDBPyConnection:  
+        # Retrieve database name
+        db_name = connector.execute("SELECT current_database();").fetchone()[0]
+        print(db_name)    
+          
+        # Delete all views
+        tables = connector.execute(f"SELECT table_name FROM information_schema.tables WHERE table_catalog='{db_name}' and table_type='VIEW';").fetchall()
+        if len(tables) > 0:
+            print("[-] Clearing views ...")
+            for row in tables:
+                print(f"\t[-] DROP VIEW IF EXISTS \"{row[0]}\" CASCADE;")
+                connector.execute(f"DROP VIEW IF EXISTS \"{row[0]}\" CASCADE;")
+    
+        #  Delete all tables
+        tables = connector.execute("SELECT table_name FROM information_schema.tables WHERE table_catalog='{db_name}' and table_type in ('BASE TABLE', 'LOCAL TEMPORARY');").fetchall()
+        if len(tables) > 0:
+            print("[-] Clearing tables ...")
+            for row in tables:
+                print(f"\t[-] DROP TABLE IF EXISTS \"{row[0]}\" CASCADE;")
+                connector.execute(f"DROP TABLE IF EXISTS \"{row[0]}\" CASCADE;")
+        
+        # Delete all schemas
+        excluded_schemas = ','.join([f"'{s}'" for s in ["information_schema", "main", "pg_catalog"]])
+        tables = connector.execute(f"SELECT schema_name, schema_owner FROM information_schema.schemata WHERE catalog_name='{db_name}' AND schema_name NOT IN ({excluded_schemas})").fetchall()
+        if len(tables) > 0:
+            print("[-] Clearing tables ...")
+            for row in tables:
+                print(f"\t[-] DROP SCHEMA IF EXISTS \"{row[0]}\" CASCADE;")
+                print(row)
+                connector.execute(f"DROP SCHEMA IF EXISTS \"{row[0]}\" CASCADE;")
+                
+        connector.commit()
+    
+        
+# def delete_all_tables(connector):
+
+
 
 for file in duck_db_files:
     CURRENT_TEST_FILE = file
@@ -164,13 +209,13 @@ for file in duck_db_files:
                     expected_result = [line.split("\t") for line in expected_result if line]
                     
                     
-                    print("Expected: ", expected_result)
-                    print("Got: ", result_string)
+                    # print("Expected: ", expected_result)
+                    # print("Got: ", result_string)
                     
                     #check if expected result is 1 or 2D
                     if len(expected_result) == 0:
-                        print("Shape of expected result: ", len(expected_result))
-                        print("Shape of result string: ", len(result_string))
+                        # print("Shape of expected result: ", len(expected_result))
+                        # print("Shape of result string: ", len(result_string))
                         
                         if len(result_string) != len(expected_result):
                             failure_count += 1
@@ -208,6 +253,37 @@ for file in duck_db_files:
                             result_value = result_value.replace("True", "true")
                             result_value = result_value.replace("False", "false")
                             
+                            # Conversion issues (eg 1.000000 but got 1)
+                            # Detect if expected value is some kind of number
+                            if expected_value.count('.') <= 1 and expected_value.replace(".", "").isnumeric() and expected_value != result_value:
+                                try:
+                                    print_err(f"[~] COMMENCING CASTING of result value {result_value} to expected {expected_value}")
+                                    goal_cast = duckdb_connector.execute(f"SELECT TYPEOF({expected_value})").fetchall()[0][0]
+                                    
+                                    # Take care of decimal rounding errors
+                                    # if goal_cast.startswith("DECIMAL") and result_value.count('.') <= 1 and result_value.replace(".", "").isnumeric():
+                                    print_err(f"\t[-] Expected value ({expected_value}) is a {goal_cast}.")
+                                    # Cast
+                                    result_value = duckdb_connector.execute(f"SELECT CAST({result_value} AS {goal_cast})").fetchall()[0][0]
+                                    result_value = str(result_value).strip()
+                                    print_err(f"\t[-] Value got casted")
+                                except Exception as e:
+                                    print_err(f"[x] Casting err expected_value='{expected_value}' result_value='{result_value}' goal_cast={goal_cast}\n{traceback.format_exc()}")
+                                    failed = True
+                                    if expected_value != result_value:
+                                        print_err(f"[x] MEGA ERROR: Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
+                                        
+                                        print_err(f"Expected\n {query['expected_result']}\nResult:\n{result_string}")
+                                # finally:
+                                    
+
+                                    
+                        
+                            # if expected_value != result_value:
+                                
+                                
+                            
+                            
                             if expected_value != result_value:
                                 failure_count += 1
                                 print_err(f"[-] Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
@@ -216,7 +292,7 @@ for file in duck_db_files:
                 except Exception as e:
                     print("HANDLING EXCEPTION of file ", file)
                     if type1 == "statement" and type2 == "ok":
-                        print_err(f"[-] Test failed stmt. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
+                        print_err(f"[-] Test failed stmt. Expected statement to pass but got error for query {current_query} in file {file}:\n{traceback.format_exc()}")
                         
                         failure_count += 1
                         if "read_csv" in current_query:
@@ -236,10 +312,14 @@ for file in duck_db_files:
                         failure_count += 1
                     else:
                         #raise e
-                        print_err(f"UNKNOWN Expected statement to pass but got error: {e} for query {current_query} in file {file} \n")
+                        print_err(f"UNKNOWN Expected statement to pass but got error for query {current_query} in file {file}:\n{traceback.format_exc()}")
                         
                         failure_count += 1
                         unknown_count += 1
+                # finally:    
+                #     duckdb_connector.close()
+                #     duckdb_connector = duckdb.connect()
+
 
 print("Success count: ", success_count)
 print("Failure count: ", failure_count)
