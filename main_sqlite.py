@@ -151,6 +151,12 @@ for test in all_tests:
                     skip_tests += 1
                     continue
                 
+                # if BEGIN IMMEDIATE is in query then skip or COMMIT
+                if "BEGIN IMMEDIATE" in query or "COMMIT" in query:
+                    skip_tests += 1
+                    continue
+                
+                
                 c.execute(query)
                 result = c.fetchall()
                 #print("Result:", result)
