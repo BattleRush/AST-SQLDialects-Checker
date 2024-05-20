@@ -66,34 +66,19 @@ CURRENT_TEST_FILE = None
 CURRENT_EXPECTED_VALUE = None
 CURRENT_RESULT = None
 
-def print_err(content, title="Error", **kwargs):
-    err_string = f"""\n{title}:
-Current test file: {os.path.join(DUCKDB_TESTS_PATH, CURRENT_TEST_FILE.replace(".json", "").replace("-", "/"))}
-Current expected value ({type(CURRENT_EXPECTED_VALUE)}):
-{CURRENT_EXPECTED_VALUE}
-Current result ({type(CURRENT_RESULT)}):
-{CURRENT_RESULT}
-
-Content:
-{content}
-======
-"""
-    print(err_string, file=sys.stderr, **kwargs)
+def print_err(content, **kwargs):
+    print(content, file=sys.stderr, **kwargs)
     with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.err.log", "a") as f:
-        f.write(err_string)
+        f.write(content)
 
 def print_debug(content, **kwargs):
     print(content, **kwargs)
     with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.debug.log", "a") as f:
         f.write(content)
 
-def print_info(content, **kwargs):
-    print(content, file=sys.stderr, **kwargs)
-    with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.err.log", "a") as f:
-        f.write(content)
-    print(content, **kwargs)
-    with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.debug.log", "a") as f:
-        f.write(content)
+def print_all(content, **kwargs):
+    print_err(content, **kwargs)
+    print_debug(content, **kwargs)
 
 
 def is_numeric_value(value):
@@ -195,17 +180,17 @@ def are_results_equal(expected, actual):
             # Detect if expected value is some kind of number
             if  is_numeric_value(expected_value) and is_numeric_value(result_value) and expected_value != result_value:
                 try:
-                    print_info(f"[~] COMMENCING CASTING of result value {result_value} to expected {expected_value}")
+                    print_all(f"[~] COMMENCING CASTING of result value {result_value} to expected {expected_value}")
                     goal_cast = duckdb_connector.execute(f"SELECT TYPEOF({expected_value})").fetchall()[0][0]
                     
                     # Take care of decimal rounding errors
                     # if goal_cast.startswith("DECIMAL") and result_value.count('.') <= 1 and result_value.replace(".", "").isnumeric():
-                    print_info(f"\t[-] Expected value ({expected_value}) is a {goal_cast}.")
+                    print_all(f"\t[-] Expected value ({expected_value}) is a {goal_cast}.")
                     # Cast
                     newresult = duckdb_connector.execute(f"SELECT CAST({result_value} AS {goal_cast})").fetchall()[0][0]
                     newresult = str(newresult).strip()
                     result_value = newresult
-                    print_info(f"\t[-] Value got casted to {newresult}.")
+                    print_all(f"\t[-] Value got casted to {newresult}.")
                 except Exception as e:
                     # failed = True
                     print_err(f"[X] CASTING ERROR: Manual casting failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {query_current}")
@@ -321,7 +306,7 @@ for file in duck_db_files:
                         continue
                     
                     # We dont know what the fuck is going on
-                    print_info(f"UNKNOWN Expected statement to pass but got error for query {query_current} in file {file}:\n{traceback.format_exc()}")
+                    print_err(f"UNKNOWN Expected statement to pass but got error for query {query_current} in file {file}:\n{traceback.format_exc()}")
                     is_test_failing = True
                     is_unknown_error = True
                     break
@@ -331,7 +316,7 @@ for file in duck_db_files:
                 
                 # Query is expected to just pass
                 if query_current_type1 == "statement" and query_current_type2 == "ok":
-                    print_debug("[+] Test passed.")
+                    print_debug("[+] Test passed. (query ok as expected)")
                     is_test_failing = False
                     continue
                 
@@ -358,7 +343,7 @@ for file in duck_db_files:
                 
                 
                 if is_empty_result(result_string):
-                    print_debug("[+] Query passed. (expected empty result)")
+                    print_debug("[+] Query passed. (empty result as expected)")
                     continue
                 
                                 
@@ -367,6 +352,10 @@ for file in duck_db_files:
                     print_err(f"[-] Query failed. Result does not match expected result for query")
                     is_test_failing = True
                     break
+                else:
+                    print_debug("[+] Test passed. (result matches expected result)")
+                    is_test_failing = False
+                    continue
 
 
 
