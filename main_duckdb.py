@@ -10,26 +10,14 @@ import json
 import pandas as pd
 import traceback
 import numpy as np
-# if not os.path.exists("input"):
-#     os.makedirs("input")
-    
-# if not os.path.exists("output"):
-#     os.makedirs("output")
 
 
-list_of_dbms = ["mysql", "mariadb", "postgresql", "sqlite"]
-
-# check that for each dbms, there exists a folder in the input folder
-# for dbms in list_of_dbms:
-#     if not os.path.exists(f"input/{dbms}"):
-#         os.makedirs(f"input/{dbms}")
 
 run_date_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-
 ethz_ids = ["kpiskor", "acerfeda"]
 
-# ask for ethz id as number [0] name ...
+
 
 #if previous_selection.txt exists, then read the selected ethz id from there
 if os.path.exists("previous_selection.txt"):
@@ -57,14 +45,9 @@ current_output_folder = f"output/{ethz_ids[selected_ethz_id]}/{run_date_time}"
 os.makedirs(current_output_folder)
 
 
-# # create test.txt file in the output folder
-# with open(f"{current_output_folder}/test.txt", "w") as f:
-#     f.write("Hello World!")
+
 
 DUCKDB_TESTS_PATH = os.path.dirname(os.path.abspath(__file__)) + "/databases/duckdb/test/sql/"
-CURRENT_TEST_FILE = None
-CURRENT_EXPECTED_VALUE = None
-CURRENT_RESULT = None
 
 def print_err(content, **kwargs):
     print(content, file=sys.stderr, **kwargs)
@@ -270,11 +253,10 @@ for file in duck_db_files:
                 print_debug("------------------------------\n")
                 
                 query_current       = query["query"]
-                query_exp_result    = query["expected_result"]
+                query_exp_result    = query["expected_result_table"]
                 query_current_type1 = query["type"]
                 query_current_type2 = query["type2"]
                 query_current_hastosucceed = query['success']
-                
                 
                 
                 
@@ -314,40 +296,26 @@ for file in duck_db_files:
                
                 # QUERY SUCCESSFUL
                 
-                # Query is expected to just pass
+                # If query is expected to just pass
                 if query_current_type1 == "statement" and query_current_type2 == "ok":
                     print_debug("[+] Test passed. (query ok as expected)")
                     is_test_failing = False
                     continue
                 
                 
-                
-                # check if the result maches the expected result
-                # if not, write the result to the output folder
-                
-                
-                
-                CURRENT_EXPECTED_VALUE = query_exp_result
-                CURRENT_RESULT = result_string
-                
-                # split expected result by \n and then by \t and remove empty lines
-                query_exp_result = query_exp_result.split("\n")
-                query_exp_result = [line.split("\t") for line in query_exp_result if line]
-                
-                
-                
+                # Make sure shape matches
                 if not are_results_same_shape(query_exp_result, result_string):
                     print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {len(query_exp_result)}x{len(query_exp_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {query_current}")  
                     is_test_failing = True
                     break
                 
-                
+                # If query is expected to return empty result
                 if is_empty_result(result_string):
                     print_debug("[+] Query passed. (empty result as expected)")
                     continue
                 
                                 
-                # go row by row and check if the values are the same
+                # Check if results are equal
                 if not are_results_equal(query_exp_result, result_string):
                     print_err(f"[-] Query failed. Result does not match expected result for query")
                     is_test_failing = True
