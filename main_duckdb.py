@@ -64,8 +64,7 @@ def print_all(content, **kwargs):
     print_debug(content, **kwargs)
 
 
-def is_numeric_value(value):
-    return value.count('.') <= 1 and value.replace(".", "").isnumeric()
+
 
 # print("[-] Connecting to mysql ...", end="")
 # mysql_connector = mysql.connector.connect(
@@ -147,6 +146,11 @@ def clear_db(connector):
         connector.commit()
     
        
+def is_floatingpoint_value(value):
+    return value.count('.') == 1 and value.replace(".", "").isnumeric()
+def is_integer_value(value):
+    return value.isnumeric()
+
 
 def are_results_equal(expected, actual):
     for i in range(len(expected)):
@@ -161,7 +165,9 @@ def are_results_equal(expected, actual):
             
             # Conversion issues (eg 1.000000 but got 1)
             # Detect if expected value is some kind of number
-            if  is_numeric_value(expected_value) and is_numeric_value(result_value) and expected_value != result_value:
+            if expected_value != result_value and \
+                 ((is_integer_value(expected_value) and is_integer_value(result_value)) or \
+                 ((is_floatingpoint_value(expected_value) and is_floatingpoint_value(result_value)))): 
                 try:
                     print_all(f"[~] COMMENCING CASTING of result value {result_value} to expected {expected_value}")
                     goal_cast = duckdb_connector.execute(f"SELECT TYPEOF({expected_value})").fetchall()[0][0]
@@ -177,7 +183,6 @@ def are_results_equal(expected, actual):
                 except Exception as e:
                     # failed = True
                     print_err(f"[X] CASTING ERROR: Manual casting failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {query_current}")
-                    print_err(f"Expected\n {query['query_exp_result']}\nResult:\n{actual}")
                     assert False
                 
                 # if expected_value != result_value:
@@ -193,9 +198,10 @@ def are_results_equal(expected, actual):
 
 
 def are_results_same_shape(expected, actual):
-    array1 = np.array(expected)
-    array2 = np.array(actual)
-    return array1.shape == array2.shape
+    shape_expected = (len(expected),max([len(r) for r in expected])) if len(expected) > 0 else (0,0) 
+    shape_actual   = (len(actual),max([len(r) for r in actual])) if len(actual) > 0 else (0,0)
+    
+    return shape_expected == shape_actual, shape_expected, shape_actual
 
 def is_empty_result(result):
     return len(result) == 0
@@ -215,8 +221,8 @@ is_unknown_error = False
 for file in duck_db_files:
     CURRENT_TEST_FILE = file
     
-    total_failure_count += is_test_failing
-    total_success_count += not is_test_failing
+    total_failure_count += not is_test_skipped and is_test_failing
+    total_success_count += not is_test_skipped and not is_test_failing
     total_count += not is_test_skipped
     total_unknown_count += is_unknown_error
     
@@ -227,8 +233,10 @@ for file in duck_db_files:
     if file.endswith(".json"):
         with open(f"input/duckdb/{file}", "r") as f:
             file_index = duck_db_files.index(file)
-            print_debug("\n\n##################################")
-            print_debug(f"Processing file {file_index} / {len(duck_db_files)} named {file}")
+            print_all("\n\n##################################")
+            print_all("##################################\n")
+            
+            print_all(f"Processing file {file_index} / {len(duck_db_files)} named {file}")
             
             # create a new connection
             duckdb_connector.commit()
@@ -250,7 +258,7 @@ for file in duck_db_files:
             
             #  Go through every query in the test case
             for query in data:
-                print_debug("------------------------------\n")
+                print_all("------------------------------\n")
                 
                 query_current       = query["query"]
                 query_exp_result    = query["expected_result_table"]
@@ -262,16 +270,18 @@ for file in duck_db_files:
                 
                 
                 try:  
-                    print_debug(f"[-] Executing query: '{query_current.strip()}'\n" + \
+                    print_all(f"[-] Executing query: '{query_current.strip()}'\n" + \
                                 f"Expected to succeed: {query_current_hastosucceed}\n" + \
                                 f"Type: {query_current_type1}\n" + \
                                 f"Result type: {query_current_type2}\n")
 
-                    result = duckdb_connector.execute(query_current)
-                    result_string = result.fetchall()
+                    current_result = duckdb_connector.execute(query_current).fetchall()
                     
-                    print_debug(f"Expected result: ({type(query_exp_result)}) \n{query_exp_result}\n" + \
-                                f"Result: ({type(result_string)})\n{result_string}\n")
+                    # In the tables returned by duckdb connector each row is a tuple, so we convert it to a list of lists
+                    current_result = [list(r) for r in current_result]
+                                    
+                    print_all(f"Expected result: ({type(query_exp_result)}) \n{query_exp_result}\n" + \
+                                f"Result:          ({type(current_result)})   \n{current_result}\n")
                     
                 # Handle error when running a query
                 except Exception as e:   
@@ -304,19 +314,20 @@ for file in duck_db_files:
                 
                 
                 # Make sure shape matches
-                if not are_results_same_shape(query_exp_result, result_string):
-                    print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {len(query_exp_result)}x{len(query_exp_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {query_current}")  
+                shape_match, shape_exp, shape_actual = are_results_same_shape(query_exp_result, current_result)
+                if not shape_match:
+                    print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {shape_exp} but got {shape_actual} for query {query_current}")  
                     is_test_failing = True
                     break
                 
                 # If query is expected to return empty result
-                if is_empty_result(result_string):
+                if is_empty_result(current_result):
                     print_debug("[+] Query passed. (empty result as expected)")
                     continue
                 
                                 
                 # Check if results are equal
-                if not are_results_equal(query_exp_result, result_string):
+                if not are_results_equal(query_exp_result, current_result):
                     print_err(f"[-] Query failed. Result does not match expected result for query")
                     is_test_failing = True
                     break
@@ -328,18 +339,16 @@ for file in duck_db_files:
 
 
 
-base_sucess_count = 11828
-base_failure_count = 6957
-base_unknown_count = 380
-base_shape_mismatch_count = 357
-base_total_tests = base_sucess_count + base_failure_count
-base_pass_rate = base_sucess_count / base_total_tests
+base_success_count = 1746
+base_failure_count = 622
+base_unknown_count = 32
+base_total_tests = base_success_count + base_failure_count
+base_pass_rate = base_success_count / base_total_tests
 
 
 
-print("\nSuccess count: ", success_count, f"( {'+' if (success_count - base_sucess_count) >= 0 else ''}{success_count - base_sucess_count})")
-print("Failure count: ", failure_count, f"( {'+' if (failure_count - base_failure_count) >= 0 else ''}{failure_count - base_failure_count})")
-print("Unknown count: ", unknown_count, f"( {'+' if (unknown_count - base_unknown_count) >= 0 else ''}{unknown_count - base_unknown_count})")
-print("Shape mismatch count: ", shape_mismatch_count, f"( {'+' if (shape_mismatch_count - base_shape_mismatch_count) >= 0 else ''}{shape_mismatch_count - base_shape_mismatch_count})")
-print("Pass rate: ", success_count / (success_count + failure_count), f"( {'+' if (success_count / (success_count + failure_count) - base_pass_rate) >= 0 else ''}{success_count / (success_count + failure_count) - base_pass_rate})")
-print("Total tests: ", success_count + failure_count, f"( {'+' if (success_count + failure_count - base_total_tests) >= 0 else ''}{success_count + failure_count - base_total_tests})")
+print("\nSuccess count: ", total_success_count, f"( {'+' if (total_success_count - base_success_count) >= 0 else ''}{total_success_count - base_success_count})")
+print("Failure count: ", total_failure_count, f"( {'+' if (total_failure_count - base_failure_count) >= 0 else ''}{total_failure_count - base_failure_count})")
+print("Unknown count: ", total_unknown_count, f"( {'+' if (total_unknown_count - base_unknown_count) >= 0 else ''}{total_unknown_count - base_unknown_count})")
+print("Pass rate: ", total_success_count / (total_count), f"( {'+' if (total_success_count / (total_count) - base_pass_rate) >= 0 else ''}{total_success_count / (total_count) - base_pass_rate})")
+print("Total tests: ", total_count, f"( {'+' if (total_count - base_total_tests) >= 0 else ''}{total_count - base_total_tests})")
