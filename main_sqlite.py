@@ -1,11 +1,8 @@
-import mysql.connector 
-import mariadb
-import psycopg2
+
 import datetime
 import os
 import sys
 import sqlite3
-import duckdb
 import json
 import pandas as pd
 import traceback
