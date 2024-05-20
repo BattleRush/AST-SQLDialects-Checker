@@ -1,4 +1,6 @@
-mysql-connector-python
+mysql
 mariadb
 psycopg2
-sqlite3
+duckdb
+pandas
+numpy
