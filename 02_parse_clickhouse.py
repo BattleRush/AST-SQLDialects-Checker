@@ -50,12 +50,12 @@ def parse_clickhouse():
                     continue
 
                 # if query starts with -- then skip the test
-                if query.startswith("--"):
-                    continue
+                #if query.startswith("--"):
+                #    continue
 
                 # if the query contains more than one ; then skip the test
-                if query.count(";") > 1:
-                    continue
+                #if query.count(";") > 1:
+                #    continue
 
                 with open(reference_file, 'r', encoding="utf-8", errors='ignore') as rfile:
                     expected_result = rfile.read()
