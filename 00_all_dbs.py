@@ -19,6 +19,10 @@ def run_query(db_name, query):
         raise Exception(f"Unknown db name: {db_name}")
 
 
+def clean_dbs():
+    clickhouse_processor.reset_db()
+    sqlite_processor.reset_db()
+
 # create a table of the progress report
 # we will have the following columns:
 # source_db, target_db, test_name, query, success_reference, success_test, result_match
@@ -35,15 +39,7 @@ progress_report = []
 
 list_of_dbms = ["clickhouse", "sqlite"]
 
-# reset all dbs
-for db in list_of_dbms:
-    print("Resetting", db)
-    if db == "clickhouse":
-        clickhouse_processor.reset_db()
-    elif db == "sqlite":
-        sqlite_processor.reset_db()
-    else:
-        raise Exception(f"Unknown db name: {db}")
+clean_dbs()
 
 for current_db in list_of_dbms:
     print("Loading tests for", current_db)
@@ -58,137 +54,118 @@ for current_db in list_of_dbms:
     failed_count = 0
     
     for test_file in all_tests:
-        print(test_file["name"])
         has_been_reset = False
+        
+        test_name = test_file["name"]
+        print(test_name)
+        
+        current_test_report = {
+            "test_name": test_name,
+            "source_db": current_db,
+            "queries": []
+        }
         
         for query_test in test_file["tests"]:
             #print(query_test)
-            name = query_test["name"]
-            print(" Query Name:", name)
             query = query_test["query"]
+            
+            current_query_report = {
+                "query": query,
+                "source_success": False,
+                "source_exception": "",
+                "source_result": None,
+                "target_dbs": []
+            }
             
             # if query reset_db skip for now
             if query.lower().strip() == "reset_db":
-                continue
-        
-            #print("=================================")
-            #print(f"Processing {query_test}")
-            
-            #print("Query:", query)
-            
-            # split query by ; and run each query
-            #print("Splitting query")
-            queries = query.split(";")
-            
-            for q in queries:
-                
-                
-                # if q = reset_db then reset the db
-                if q.strip().lower() == "reset_db":
-                    if has_been_reset:
-                        continue # skip if the db has already been reset
-                    
-                    has_been_reset = True
-                    if current_db == "clickhouse":
-                        clickhouse_processor.reset_db()
-                    elif current_db == "sqlite":
-                        sqlite_processor.reset_db()
-                    else:
-                        raise Exception(f"Unknown db name: {current_db}")
+                if has_been_reset:
                     continue
                 
-                has_been_reset = False
-                
-                # current_query_report = {
-                #     "source_db": current_db,
-                #     "target_db": "",
-                #     "test_name": name,
-                #     "query": q,
-                #     "success_reference": False,
-                #     "success_test": False,
-                #     "result_match": False,
-                #     "exception_reference": "",
-                #     "exception_test": ""
-                # }
-                
-                #print("Query [Part]:", q)
-                try:
-                    for target_db in list_of_dbms:
-                        #print("Running query on", target_db)
-                        
-                        if current_db == target_db:
-                            continue # skip for now the same DBs
-                        
-                        current_query_report = {
-                            "source_db": current_db,
-                            "target_db": target_db,
-                            "test_name": name,
-                            "query": q,
-                            "success_reference": False,
-                            "success_test": False,
-                            "result_match": False,
-                            "exception_reference": "",
-                            "exception_test": ""
-                        }
-                        
-                        # Reference Test
-                        try:
-                            result_reference = run_query(current_db, q)
-                            #print("Result reference:", result_reference)
-                            current_query_report["success_reference"] = True
-                            
-                        except Exception as e:
-                            current_query_report["success_reference"] = False
-                            current_query_report["exception_reference"] = str(e)
-                            #print(f"Exception: {e}")
-                            
-                        # Target Test
-                        try:
-                            result_received = run_query(target_db, q)
-                            #print("Result received:", result_received)
-                            current_query_report["success_test"] = True
-                        except Exception as e:
-                            current_query_report["success_test"] = False
-                            current_query_report["exception_test"] = str(e)
-                            #print(f"Exception: {e}")
-                            
-                        if current_query_report["success_reference"] and current_query_report["success_test"]:
-                            is_same = compare_dataframes(result_reference, result_received)
-                            
-                            if is_same:
-                                #print("Results are the same")
-                                current_query_report["result_match"] = True
-                            else:
-                                #print("Results are different")
-                                current_query_report["result_match"] = False
-                            
-                        if target_db == current_db:
-                            continue # for now skin as sometimes query are DELETE IF EXISTS; then CREATE, but if we do DELETE, DELETE, CREATE, CREATE then the results will not match as the last query will crash    
-                        
-                        # if target_db is the same as the source_db and results dont match or one has error but the other does not
-                        if target_db == current_db and (current_query_report["result_match"] == False or (current_query_report["success_reference"] != current_query_report["success_test"])):
-                            print("Error: Results do not match")
-                            print("Name:", current_query_report["test_name"])
-                            print("Reference:", current_query_report["success_reference"])
-                            print("Test:", current_query_report["success_test"])
-                            print("Match:", current_query_report["result_match"])
-                            exit(1)
-                        
-                        progress_report.append(current_query_report)                  
-                 
-                except Exception as e:
-                    print(f"Exception: {e}")
-                    exit(1)
-                    exception_count += 1
-                    
-                
-                total_count += 1
-                
-            
-            #print("=================================")
+                clean_dbs()
+                has_been_reset = True
+                continue
         
-    print(f"Total: {total_count}, Success: {success_count}, Failed: {failed_count}, Exception: {exception_count}")
-
+            has_been_reset = False
+            
+    
+            
+            source_success = False
+            source_result = None
+            # Source Test
+            try:
+                source_result = run_query(current_db, query)
+                
+                current_query_report["source_success"] = True
+                source_success = True
+                
+                # parse source result to string to save it
+                source_result_str = source_result.to_string()
+                
+                current_query_report["source_result"] = source_result_str # todo is this saved as string?                    
+            except Exception as e:
+                current_query_report["source_success"] = False
+                source_success = False
+                
+                current_query_report["source_exception"] = str(e)
+            
+            for target_db in list_of_dbms:
+                #print("Running query on", target_db)
+                
+                if current_db == target_db:
+                    continue # skip for now the same DBs
+                
+                target_success = False
+                target_result = None
+                target_db_error = ""
+                target_result_str = ""
+                
+                try:
+                    target_result = run_query(target_db, query)
+                    target_result_str = target_result.to_string()
+                    target_success = True
+                except Exception as e:
+                    target_success = False
+                    target_result = None
+                    target_db_error = str(e)
+            
+                
+                shape_equal, columns_equal, dtypes_equal, values_equal = compare_dataframes(source_result, target_result)
+                
+                full_match = shape_equal and columns_equal and dtypes_equal and values_equal
+                
+                            
+                current_target_report = {
+                    "db": target_db,
+                    "success": target_success,
+                    "result": target_result_str,
+                    "error": target_db_error,
+                    "shape_equal": shape_equal,
+                    "columns_equal": columns_equal,
+                    "dtypes_equal": dtypes_equal,
+                    "values_equal": values_equal,
+                    "full_match": full_match
+                }
+                
+                current_query_report["target_dbs"].append(current_target_report)
+                    
+                # if target_db == current_db:
+                #     continue # for now skin as sometimes query are DELETE IF EXISTS; then CREATE, but if we do DELETE, DELETE, CREATE, CREATE then the results will not match as the last query will crash    
+                
+                # # if target_db is the same as the source_db and results dont match or one has error but the other does not
+                # if target_db == current_db and (current_query_report["result_match"] == False or (current_query_report["success_reference"] != current_query_report["success_test"])):
+                #     print("Error: Results do not match")
+                #     print("Name:", current_query_report["test_name"])
+                #     print("Reference:", current_query_report["success_reference"])
+                #     print("Test:", current_query_report["success_test"])
+                #     print("Match:", current_query_report["result_match"])
+                #     exit(1)
+                
+            current_test_report["queries"].append(current_query_report)
+            
+        
+        progress_report.append(current_test_report)              
+            
 print("All tests passed")
 
 # save the progress report to a file
@@ -201,9 +178,7 @@ df = pd.DataFrame(progress_report)
 df.to_csv("progress_report.csv", index=False)
 
 
-# can you generate a html file with the output
-# if both tests are successful but the results dont match then make the table line in light yellow, if they do match then make it in light green
-# if one of the tests failed then make the line light red
+
 
 html = """
 <!DOCTYPE html>
@@ -226,62 +201,43 @@ td, th {
 
 <body>"""
 
-html += "<table>"
-
-# make test name column max 150px wide
-# make the query column max 300px wide
-
-
-html += "<tr>"
-html += "<th>Source DB</th>"
-html += "<th>Target DB</th>"
-html += "<th>Test Name</th>"
-html += "<th style='max-width: 300px;'>Query</th>"
-html += "<th>Success Reference</th>"
-html += "<th>Success Test</th>"
-html += "<th>Result Match</th>"
-
-# for the 2 exception columns make them 50px wide but only write Exception if there is an exception with a tooltip of the exception
-html += "<th style='max-width: 50px;'>Exception Reference</th>"
-html += "<th style='max-width: 50px;'>Exception Test</th>"
-
-html += "</tr>"
-
-for row in progress_report:
+# create a tab for each progress report
+for test_report in progress_report:
+    html += f"<h2>{test_report['test_name']}</h2>"
     
-    row_color = ""
-    if row["success_reference"] and row["success_test"] and not row["result_match"]:
-        row_color = "background-color: #FFFFE0;"
-    elif row["success_reference"] and row["success_test"] and row["result_match"]:
-        row_color = "background-color: #90EE90;"
-    elif not row["success_reference"] or not row["success_test"]:
-        row_color = "background-color: #FFA07A;"
-        
-    
-    html += "<tr style='" + row_color + "'>"
-    html += f"<td>{row['source_db']}</td>"
-    html += f"<td>{row['target_db']}</td>"
-    # ensure sting is broken if too long
-    html += f"<td>{row['test_name']}</td>"
-    html += f"<td style='max-width: 300px;'>{row['query']}</td>"
-    html += f"<td>{row['success_reference']}</td>"
-    html += f"<td>{row['success_test']}</td>"
-    html += f"<td>{row['result_match']}</td>"
-    
-    if row["exception_reference"]:
-        html += f"<td style='max-width: 300px;'>{row['exception_reference']}</td>"
-    else:
-        html += "<td></td>"
-        
-    if row["exception_test"]:
-        html += f"<td style='max-width: 300px;'>{row['exception_test']}</td>"
-    else:
-        html += "<td></td>"
+    html += "<table>"
+    html += "<tr>"
+    html += "<th>Query</th>"
+    html += "<th>Source Success</th>"
+    for db in list_of_dbms:
+        html += f"<th>{db} Success</th>"
+        html += f"<th>{db} Shape</th>"
+        html += f"<th>{db} Columns</th>"
+        html += f"<th>{db} Dtypes</th>"
+        html += f"<th>{db} Values</th>"
+        html += f"<th>{db} Full Match</th>"
     html += "</tr>"
     
-html += "</table>"
+    for query_report in test_report["queries"]:
+        html += "<tr>"
+        html += f"<td>{query_report['query']}</td>"
+        html += f"<td>{query_report['source_success']}</td>"
+        
+        for target_report in query_report["target_dbs"]:
+            html += f"<td>{target_report['success']}</td>"
+            html += f"<td>{target_report['shape_equal']}</td>"
+            html += f"<td>{target_report['columns_equal']}</td>"
+            html += f"<td>{target_report['dtypes_equal']}</td>"
+            html += f"<td>{target_report['values_equal']}</td>"
+            html += f"<td>{target_report['full_match']}</td>"
+            
+        html += "</tr>"
+    
+    html += "</table>"
+    
 html += "</body>"
 html += "</html>"
+
 
 with open("progress_report.html", "w") as f:
     f.write(html)

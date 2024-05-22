@@ -16,9 +16,7 @@ class ClickhouseProcessor:
         # TODO propper delete
         print("Resetting Clickhouse")
         drop_query = "DROP DATABASE IF EXISTS default"
-        create_query = "CREATE DATABASE default"
         self.client.query(drop_query)
-        self.client.query(create_query)
         self.client.close()
         time.sleep(1)
         self.client = clickhouse_connect.get_client(host='localhost', username='default', password='passwordAST1')
