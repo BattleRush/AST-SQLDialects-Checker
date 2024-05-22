@@ -191,7 +191,7 @@ def are_results_equal(expected, actual):
                 
                 
             if expected_value != result_value:
-                print_err(f"[X] Query failed. Expected: {expected_value} but got {result_value} at ({i},{j}) for query '{query_current}'")
+                print_err(f"[X] Error. Values do not match. Expected: {expected_value} but got {result_value} at ({i},{j}) for query '{query_current}'")
                 return False
     
     return True
@@ -205,6 +205,11 @@ def are_results_same_shape(expected, actual):
 
 def is_empty_result(result):
     return len(result) == 0
+
+
+DUCKDB_TESTS_PATH = os.path.dirname(os.path.abspath(__file__)) + "/databases/duckdb/test/sql/"
+def get_duckdb_testpath(file):
+    return os.path.join(DUCKDB_TESTS_PATH + file)
 
 
 
@@ -236,7 +241,7 @@ for file in duck_db_files:
             print_all("\n\n##################################")
             print_all("##################################\n")
             
-            print_all(f"Processing file {file_index} / {len(duck_db_files)} named {file}")
+            print_all(f"Processing file {file_index} / {len(duck_db_files)}\n{get_duckdb_testpath(file)}")
             
             # create a new connection
             duckdb_connector.commit()
@@ -248,26 +253,21 @@ for file in duck_db_files:
             data = json.load(f)
             
             
-            # Skip files that contain read_csv
-            if "read_csv" in "".join([query["query"] for query in data]):
-                print_debug(f"Skipping file {file} as it contains instruction 'read_csv'")
-                is_test_skipped = True
-                continue
-            
-            
-            
             #  Go through every query in the test case
             for query in data:
                 print_all("------------------------------\n")
                 
                 query_current       = query["query"]
-                query_exp_result    = query["expected_result_table"]
-                query_current_type1 = query["type"]
+                query_exp_result    = query["expected_results_table"]
+                query_exp_result_string    = query["expected_results"]
+                query_current_type1 = query["type1"]
                 query_current_type2 = query["type2"]
+                query_current_type3 = query["type3"]
                 query_current_hastosucceed = query['success']
                 
                 
-                
+                # if query_current == "PRAGMA enable_verification":
+                #     print("Ciao")
                 
                 try:  
                     print_all(f"[-] Executing query: '{query_current.strip()}'\n" + \
@@ -280,34 +280,45 @@ for file in duck_db_files:
                     # In the tables returned by duckdb connector each row is a tuple, so we convert it to a list of lists
                     current_result = [list(r) for r in current_result]
                                     
-                    print_all(f"Expected result: ({type(query_exp_result)}) \n{query_exp_result}\n" + \
+                    print_all(f"Expected result: ({type(query_exp_result_string)}) \n{query_exp_result_string}\n" + \
+                              f"Expected result: ({type(query_exp_result)}) \n{query_exp_result}\n" + \
                                 f"Result:          ({type(current_result)})   \n{current_result}\n")
                     
                 # Handle error when running a query
                 except Exception as e:   
                     #  Query was expected to pass
-                    if query_current_type1 == "statement" and query_current_type2 == "ok":
-                        print_err(f"[-] Unexpected error. Expected statement to pass but got error for query {query_current} in file {file}:\n{traceback.format_exc()}")
+                    if query_current_hastosucceed == True:
+                        print_err(f"[-] Error. Expected statement to pass but got error for query {query_current} in file {file}:\n{traceback.format_exc()}")
                         is_test_failing = True
                         break
                     
                     # Query was expected to fail
-                    if query_current_type1 == "statement" and not query_current_hastosucceed and query_current_type2 == "error":
+                    if query_current_type1 == "statement" and query_current_hastosucceed == False:
+                        print_debug("[+] Test passed. (received error as expected)")
+                        is_test_failing = False
+                        continue
+                    
+                    # 
+                    if query_current_type1 == "statement" and query_current_hastosucceed == None:
                         print_debug("[+] Test passed. (received error as expected)")
                         is_test_failing = False
                         continue
                     
                     # We dont know what the fuck is going on
-                    print_err(f"UNKNOWN Expected statement to pass but got error for query {query_current} in file {file}:\n{traceback.format_exc()}")
+                    print_err(f"UNKNOWN Error: Expected statement to pass but got error for query {query_current} in file {file}:\n{traceback.format_exc()}")
                     is_test_failing = True
                     is_unknown_error = True
                     break
                
                
                 # QUERY SUCCESSFUL
+                if query_current_type1 == "statement" and query_current_hastosucceed == False:
+                        print_err(f"[-] Error. Expected to receive an error but query passed.")
+                        is_test_failing = True
+                        break
                 
                 # If query is expected to just pass
-                if query_current_type1 == "statement" and query_current_type2 == "ok":
+                if query_current_type1 == "statement" and query_current_hastosucceed == True:
                     print_debug("[+] Test passed. (query ok as expected)")
                     is_test_failing = False
                     continue
@@ -316,7 +327,7 @@ for file in duck_db_files:
                 # Make sure shape matches
                 shape_match, shape_exp, shape_actual = are_results_same_shape(query_exp_result, current_result)
                 if not shape_match:
-                    print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {shape_exp} but got {shape_actual} for query {query_current}")  
+                    print_err(f"[-] Error. Test failed SHAPE MISMATCH. Expected shape {shape_exp} but got {shape_actual} for query {query_current}")  
                     is_test_failing = True
                     break
                 
@@ -339,9 +350,9 @@ for file in duck_db_files:
 
 
 
-base_success_count = 1746
-base_failure_count = 622
-base_unknown_count = 32
+base_success_count = 595
+base_failure_count = 255
+base_unknown_count = 21
 base_total_tests = base_success_count + base_failure_count
 base_pass_rate = base_success_count / base_total_tests
 
