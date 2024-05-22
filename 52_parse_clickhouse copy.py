@@ -4,7 +4,6 @@ import os
 import json
 import chardet
 import clickhouse_connect
-import pandas as pd
 
 
 def parse_clickhouse():
@@ -37,22 +36,42 @@ def parse_clickhouse():
             #print("Parsing file", file)
             if file.endswith(".sql"):
                 query_file = os.path.join(root, file)
+                reference_file = os.path.join(root, file.replace(".sql", ".reference"))
                 # Detect the encoding of the file
 
                 with open(query_file, 'r', encoding="utf-8", errors='ignore') as qfile:
                     query = qfile.read()
                     
-                #print(file)
-                #print(query)
+                # if query contains reinterpretAsString
+                if "reinterpretAsString" in query:
+                    print("Encountered reinterpretAsString in", query)
+                    print("Encoding is", "utf-8")
+                    print("File is", query_file)
+
+
+                # if the reference file does not exist then skip the test
+                if not os.path.exists(reference_file):
+                    continue
+
+                # if query starts with -- then skip the test
+                #if query.startswith("--"):
+                #    continue
+
+                # if the query contains more than one ; then skip the test
+                #if query.count(";") > 1:
+                #    continue
+
+                with open(reference_file, 'r', encoding="utf-8", errors='ignore') as rfile:
+                    expected_result = rfile.read()
+
+                expected_result_lines = expected_result.split("\n")
+                table = []
+                for row in expected_result_lines:
+                    # if row is empty then skip it
+                    if not row:
+                        continue
                     
-                
-                #query_result = client.execute(query)
-                #df = pd.DataFrame(query_result, columns=[x.name for x in query_result])
-                #df = client.query_df(query)
-                
-                #print(df)
-                
-                #exit
+                    table.append(row.split("\t"))
 
                     
                 # add the test to the all_tests
@@ -60,8 +79,9 @@ def parse_clickhouse():
                     "name": file,
                     "tests": [{
                         "query": query,
+                        "expected_result": expected_result,
                         "name": file,
-                        
+                        "expected_result_table": table
                     }]
                 })
                 
