@@ -2,35 +2,6 @@ version: '3.1'
 name: astproject
 
 services:
-  mysql:
-    image: mysql
-    container_name: ast_mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: test
-    ports:
-      - 11001:3306
-    volumes:
-      - ./dbdata/mysql/data:/var/lib/mysql
-      - ./dbdata/mysql/mysqld:/var/run/mysqld/ # Exposing MySQL socket
-    # - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
-      
-
-  mariadb:
-    image: mariadb
-    container_name: ast_mariadb
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: mariadb
-      MYSQL_DATABASE: mariadb
-    ports:
-      - 11002:3306
-    volumes:
-      - ./dbdata/mariadb:/var/lib/mysql
-      # - ./dev/docker_mysql_init:/docker-entrypoint-initdb.d
-
   postgres:
     image: postgres
     container_name: ast_postgres
@@ -40,6 +11,15 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./dbdata/postesql:/var/lib/postgresql/data
-      # - ./dev/docker_psql_init:/docker-entrypoint-initdb.d
     ports:
       - 11003:5432
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    user: "101:101"
+    container_name: ast_clickhouse
+    volumes:
+      - ./dbdata/clickhouse-server/config.d/:/etc/clickhouse-server/config.d/
+      - ./dbdata/clickhouse-server/users.d:/etc/clickhouse-server/users.d/
+    ports:
+      - 8123:8123
+      - 9000:9000
