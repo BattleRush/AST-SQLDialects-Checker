@@ -36,7 +36,10 @@ def parse_duckdb_test_cases(test_string):
     
     
     
-    tests = []
+    test = {
+        "name": "",
+        "tests": []
+    }
 
     
     lines = test_string.split("\n")
@@ -54,19 +57,19 @@ def parse_duckdb_test_cases(test_string):
         return []
     
     
-    
     test_string = "\n".join(lines)
-    
     # Go through every block in the test file
     for i, block in enumerate(get_blocks(test_string), start=1):
         test_case = {
-            "type1": "",
-            "type2": None,
-            "type3": None,
+            # "type1": "",
+            # "type2": None,
+            # "type3": None,
+            "name" : "",
             "query": "",
-            "success": None,
-            "expected_results": "",
-            "expected_results_table" : None
+            "expected_result": ""
+            # "success": None,
+            # "expected_results": "",
+            # "expected_results_table" : None
         }
         
         
@@ -78,7 +81,7 @@ def parse_duckdb_test_cases(test_string):
         print("\n===")
         
         # Every block starts with 'statement' or 'query'
-        assert block_lines[0].startswith(("statement","query"))
+        # assert block_lines[0].startswith(("statement","query"))
         for l in block_lines[1:]:
             assert not l.startswith(("statement","query"))
         
@@ -127,53 +130,53 @@ def parse_duckdb_test_cases(test_string):
         
         
         
-        if type1 == "query":
-            test_case["success"] = True
-        if type1 == "statement" and type2 == "ok":
-            test_case["success"] = True
-        if type1 == "statement" and type2 == "error":
-            test_case["success"] = False
-        if type1 == "statement" and type2 == "maybe":
-            test_case["success"] = None    
+        # if type1 == "query":
+        #     test_case["success"] = True
+        # if type1 == "statement" and type2 == "ok":
+        #     test_case["success"] = True
+        # if type1 == "statement" and type2 == "error":
+        #     test_case["success"] = False
+        # if type1 == "statement" and type2 == "maybe":
+        #     test_case["success"] = None    
         
 
         
         # Extracting expected results
-        expected_results = ""
-        expected_results_table = []
-        if "----" in block and block.split("----")[1].strip() != "":
-            # Expected output is after the "----" line
-            expected_results = block.split("----")[1]
+        # expected_results = ""
+        # expected_results_table = []
+        # if "----" in block and block.split("----")[1].strip() != "":
+        #     # Expected output is after the "----" line
+        #     expected_results = block.split("----")[1]
             
-            expected_results = "\n".join([i for i in expected_results.split("\n") if i.strip()!=''])
+        #     expected_results = "\n".join([i for i in expected_results.split("\n") if i.strip()!=''])
             
-            if type1 == "query":
-                expected_results_table = [c for c in [i.split("\t") for i in expected_results.split("\n")] ]
-                expected_results_table = [[c for c in r if c != ''] for r in expected_results_table]
-                # Makes sure we dont add any empty strings
-                assert not any(any(c == '' for c in r) for r in expected_results_table)
+        #     if type1 == "query":
+        #         expected_results_table = [c for c in [i.split("\t") for i in expected_results.split("\n")] ]
+        #         expected_results_table = [[c for c in r if c != ''] for r in expected_results_table]
+        #         # Makes sure we dont add any empty strings
+        #         assert not any(any(c == '' for c in r) for r in expected_results_table)
                 
                 
-                # * When result is a single column, it gets output as a row, so we have to reshape it
-                print("Expected results table:\n", expected_results_table)
-                table_shape = np.shape(np.array(expected_results_table))
-                print("Table shape:", table_shape)
-                if table_shape[1] == 1 and len(type2) > 1: # Column vector
-                    expected_results_table = np.reshape(np.array(expected_results_table), (-1, len(type2))).tolist()
+        #         # * When result is a single column, it gets output as a row, so we have to reshape it
+        #         print("Expected results table:\n", expected_results_table)
+        #         table_shape = np.shape(np.array(expected_results_table))
+        #         print("Table shape:", table_shape)
+        #         if table_shape[1] == 1 and len(type2) > 1: # Column vector
+        #             expected_results_table = np.reshape(np.array(expected_results_table), (-1, len(type2))).tolist()
             
                 
         
-        test_case["type1"] = type1
-        test_case["type2"] = type2
-        test_case["type3"] = type3
+        # test_case["type1"] = type1
+        # test_case["type2"] = type2
+        # test_case["type3"] = type3
         test_case["query"] = query
-        test_case["expected_results"] = expected_results
-        test_case["expected_results_table"] = expected_results_table
+        # test_case["expected_results"] = expected_results
+        # test_case["expected_results_table"] = expected_results_table
         
         
-        tests.append(test_case)
+        test["tests"].append(test_case)
         
-    return tests
+    return test
     
     
 def parse_duckdb():
