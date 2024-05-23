@@ -59,11 +59,13 @@ for current_db in list_of_dbms:
     success_count = 0
     failed_count = 0
     
+    index = 0
     for test_file in all_tests:
         has_been_reset = False
         
         test_name = test_file["name"]
-        print(test_name)
+        index += 1
+        print(f"Running test {test_name} number {index} out of {len(all_tests)}")
         
         current_test_report = {
             "test_name": test_name,
