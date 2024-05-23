@@ -36,14 +36,14 @@ class SQLiteProcessor:
         if os.path.exists('sqlite_processor.db-journal'):
             os.remove('sqlite_processor.db-journal')
             
-        init_connection()
+        self.init_connection()
 
 
 
 
     def run_query(self, query):
         if self.client is None:
-            init_connection()
+            self.init_connection()
         
         cursor = self.client.cursor()
         cursor.execute(query)
