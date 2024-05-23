@@ -2,6 +2,7 @@
 
 import os
 import json
+import re
 
 def parse_sqlite():
     
@@ -174,8 +175,50 @@ def parse_sqlite():
                 print("Skipping test with COLLATE")
                 continue
             
+            
+            cleaned_tests = {
+                "name": test["name"],
+                "tests": []
+            }
+            
+            has_prior_reset_db = False
+            
+            for t in test["tests"]:
+                
+                if t["query"] == "reset_db":  
+
+                    if has_prior_reset_db:
+                        continue
+                    
+                    has_prior_reset_db = True
+                    
+                    cleaned_tests["tests"].append({
+                        "name": t["name"],
+                        "query": t["query"],
+                    })
+                    
+                    continue
+                    
+                has_prior_reset_db = False
+                
+                query = t["query"]
+                # split query by ; but now then its inside a string
+                statements = re.split(r';(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)', query)
+
+                for statement in statements:
+                    
+                    # if statement is empty or only whitespace then skip
+                    if not statement.strip():
+                        continue
+                    
+                    cleaned_tests["tests"].append({
+                        "name": t["name"],
+                        "query": statement.strip() + ";",
+                    })
+                    
+            # save the cleaned tests to disk
             with open("input/sqlite/" + prefix + "_" + test["name"] + ".json", "w") as f:
-                f.write(json.dumps(test, indent=4))    
+                f.write(json.dumps(cleaned_tests, indent=4))    
             
             count += 1   
             
