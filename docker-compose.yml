@@ -6,9 +6,9 @@ services:
     image: postgres
     container_name: ast_postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: root
     volumes:
       - ./dbdata/postesql:/var/lib/postgresql/data
     ports:
