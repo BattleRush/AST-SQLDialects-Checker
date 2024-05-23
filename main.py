@@ -1,337 +1,400 @@
-import mysql.connector 
-import mariadb
-import psycopg2
-import datetime
-import os
-import sys
-import sqlite3
-import duckdb
+
 import json
-import pandas as pd
-import traceback
+import time
+from common import load_json, get_files, load_all_json, compare_arrow_tables, compare_dataframes
+from python_dbs.clickhouse import ClickhouseProcessor
+from python_dbs.sqlite import SQLiteProcessor
+from collections import defaultdict
 
-# if not os.path.exists("input"):
-#     os.makedirs("input")
+sqlite_processor = SQLiteProcessor()
+clickhouse_processor = ClickhouseProcessor()
+
+
+
+def run_query(db_name, query):
+    if db_name == "clickhouse":
+        return clickhouse_processor.run_query(query)
+    elif db_name == "sqlite":
+        return sqlite_processor.run_query(query)
+    else:
+        raise Exception(f"Unknown db name: {db_name}")
+
+
+def clean_dbs():
+    clickhouse_processor.reset_db()
+    sqlite_processor.reset_db()
+
+# create a table of the progress report
+# we will have the following columns:
+# source_db, target_db, test_name, query, success_reference, success_test, result_match
+# source db is the db from which the query iriginated
+# target db is the db to which the query was run
+# test_name is the name of the test
+# query is the query that was run
+# success_reference if the query ran successfully on the reference db from which the query originated
+# success_test if the query ran successfully on the target db
+# result_match if the result of the query on the reference db and the target db match
+
+progress_report = []
+
+
+list_of_dbms = ["clickhouse", "sqlite"]
+
+clean_dbs()
+
+for current_db in list_of_dbms:
+    print("Loading tests for", current_db)
+    all_tests = load_all_json(current_db)
+    print("Found", len(all_tests), "tests")
     
-# if not os.path.exists("output"):
-#     os.makedirs("output")
-
-CURRENT_TEST_FILE = None
-
-list_of_dbms = ["mysql", "mariadb", "postgresql", "sqlite"]
-
-# check that for each dbms, there exists a folder in the input folder
-# for dbms in list_of_dbms:
-#     if not os.path.exists(f"input/{dbms}"):
-#         os.makedirs(f"input/{dbms}")
-
-run_date_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-
-
-ethz_ids = ["kpiskor", "acerfeda"]
-
-# ask for ethz id as number [0] name ...
-
-#if previous_selection.txt exists, then read the selected ethz id from there
-if os.path.exists("previous_selection.txt"):
-    with open("previous_selection.txt", "r") as f:
-        selected_ethz_id = int(f.read())
-        print(f"Selected ETHZ ID: {ethz_ids[selected_ethz_id]}")
-else:
-    print("Please select your ETHZ ID:")
-    for i, ethz_id in enumerate(ethz_ids):
-        print(f"[{i}] {ethz_id}")
+    time.sleep(1)
     
-    selected_ethz_id = int(input("Enter the number of your ETHZ ID: "))
-
-# write to disk
-with open("previous_selection.txt", "w") as f:
-    f.write(str(selected_ethz_id))
-
-print(f"Selected ETHZ ID: {ethz_ids[selected_ethz_id]}")
-
-# create folder if not exists in output
-if not os.path.exists(f"output/{ethz_ids[selected_ethz_id]}"):
-    os.makedirs(f"output/{ethz_ids[selected_ethz_id]}")
+    exception_count = 0
+    total_count = 0
+    success_count = 0
+    failed_count = 0
     
-current_output_folder = f"output/{ethz_ids[selected_ethz_id]}/{run_date_time}"
-os.makedirs(current_output_folder)
-
-
-# # create test.txt file in the output folder
-# with open(f"{current_output_folder}/test.txt", "w") as f:
-#     f.write("Hello World!")
-
-
-def print_err(content, **kwargs):
-    print(content, file=sys.stderr, **kwargs)
-    with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.err.log", "a") as f:
-        f.write(content)
-def print_debug(content, **kwargs):
-    print(content, **kwargs)
-    with open(f"{current_output_folder}/{CURRENT_TEST_FILE}.debug.log", "a") as f:
-        f.write(content)
-
-
-
-# print("[-] Connecting to mysql ...", end="")
-# mysql_connector = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="mysql",
-#     port="11001",
-#     database="mysql"
-# )
-# print(" done.")
-
-
-# print("[-] Connecting to mariadb ... ", end="")
-# mariadb_connector = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="mariadb",
-#     port=11002,
-#     database="mariadb"
-# )
-# print(" done.")
-
-
-# print("[-] Connecting to postgresql ...", end="")
-# postgres_connector = psycopg2.connect(
-#     host="localhost",
-#     user="postgres",
-#     password="postgres",
-#     port="11003"
-# )
-# print(" done.")
-
-# run this before pip install duckdb --upgrade
-print("[-] Connecting to duckdb ...", end="")
-duckdb_connector = duckdb.connect()
-# go trough input/duckdb and get all the .json files
-duck_db_files = os.listdir("input/duckdb")
-success_count = 0
-failure_count = 0
-shape_mismatch_count = 0
-unknown_count = 0
-
-
-
-def clear_db(connector):
-    
-
-    if type(connector) is duckdb.DuckDBPyConnection:  
-        # Retrieve database name
-        db_name = connector.execute("SELECT current_database();").fetchone()[0]
-        print(db_name)    
-          
-        # Delete all views
-        tables = connector.execute(f"SELECT table_name FROM information_schema.tables WHERE table_catalog='{db_name}' and table_type='VIEW';").fetchall()
-        if len(tables) > 0:
-            print("[-] Clearing views ...")
-            for row in tables:
-                print(f"\t[-] DROP VIEW IF EXISTS \"{row[0]}\" CASCADE;")
-                connector.execute(f"DROP VIEW IF EXISTS \"{row[0]}\" CASCADE;")
-    
-        #  Delete all tables
-        tables = connector.execute("SELECT table_name FROM information_schema.tables WHERE table_catalog='{db_name}' and table_type in ('BASE TABLE', 'LOCAL TEMPORARY');").fetchall()
-        if len(tables) > 0:
-            print("[-] Clearing tables ...")
-            for row in tables:
-                print(f"\t[-] DROP TABLE IF EXISTS \"{row[0]}\" CASCADE;")
-                connector.execute(f"DROP TABLE IF EXISTS \"{row[0]}\" CASCADE;")
+    for test_file in all_tests:
+        has_been_reset = False
         
-        # Delete all schemas
-        excluded_schemas = ','.join([f"'{s}'" for s in ["information_schema", "main", "pg_catalog"]])
-        tables = connector.execute(f"SELECT schema_name, schema_owner FROM information_schema.schemata WHERE catalog_name='{db_name}' AND schema_name NOT IN ({excluded_schemas})").fetchall()
-        if len(tables) > 0:
-            print("[-] Clearing tables ...")
-            for row in tables:
-                print(f"\t[-] DROP SCHEMA IF EXISTS \"{row[0]}\" CASCADE;")
-                print(row)
-                connector.execute(f"DROP SCHEMA IF EXISTS \"{row[0]}\" CASCADE;")
-                
-        connector.commit()
-    
+        test_name = test_file["name"]
+        print(test_name)
         
-# def delete_all_tables(connector):
-
-
-
-for file in duck_db_files:
-    CURRENT_TEST_FILE = file
-    if file.endswith(".json"):
-        with open(f"input/duckdb/{file}", "r") as f:
-            file_index = duck_db_files.index(file)
-            print_debug("##################################")
-            print_debug(f"Processing file {file_index} out of {len(duck_db_files)} named {file}")
-            # at start of each file, reset database
-            # duckdb_connector.execute("DROP TABLE IF EXISTS tbl")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS test")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS test2")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS a")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS b")
-            # duckdb_connector.execute("DROP TABLE IF EXISTS integers")
+        current_test_report = {
+            "test_name": test_name,
+            "source_db": current_db,
+            "queries": []
+        }
+        
+        for query_test in test_file["tests"]:
+            #print(query_test)
+            query = query_test["query"]
             
-            # create a new connection
-            duckdb_connector.commit()
-            duckdb_connector.close()
-            duckdb_connector = duckdb.connect()
+            current_query_report = {
+                "query": query,
+                "source_success": False,
+                "source_exception": "",
+                "source_result": None,
+                "source_shape": None,
+                "target_dbs": []
+            }
             
-            # delete index named i_index on integers table
-            duckdb_connector.execute("DROP INDEX IF EXISTS i_index")
-            
-            data = json.load(f)
-            for query in data:
-                print_debug("------------------------------")
-                current_query = query["query"]
+            # if query reset_db skip for now
+            if query.lower().strip() == "reset_db":
+                if has_been_reset:
+                    continue
                 
-                type1 = query["type"]
-                type2 = query["type2"]                
-                print_debug(f"[-] Executing query: {current_query} it should succeed: {query['success']} of type {type} and {type2}")
+                clean_dbs()
+                has_been_reset = True
+                continue
+        
+            has_been_reset = False
+            
+    
+            
+            source_success = False
+            source_result = None
+            # Source Test
+            try:
+                source_result = run_query(current_db, query)
+                
+                current_query_report["source_success"] = True
+                current_query_report["source_shape"] = source_result.shape if source_result is not None else None
+                source_success = True
+                
+                # parse source result to string to save it
+                if source_result is not None:
+                    source_result_str = source_result.to_string()
+                else:
+                    source_result_str = ""
+                
+                current_query_report["source_result"] = source_result_str # todo is this saved as string?                    
+            except Exception as e:
+                current_query_report["source_success"] = False
+                source_success = False
+            
+                current_query_report["source_exception"] = str(e)
+            
+            for target_db in list_of_dbms:
+                #print("Running query on", target_db)
+                
+                if current_db == target_db:
+                    continue # skip for now the same DBs
+                
+                target_success = False
+                target_result = None
+                target_db_error = ""
+                target_result_str = ""
+                target_shape = None
+                
                 try:
-           
-                    result = duckdb_connector.execute(current_query)
-                    
-                    if type1 == "statement" and type2 == "ok":
-                        success_count += 1
-                        print("[+] Test passed.")
-                        continue
-                    
-                    # check if the result maches the expected result
-                    # if not, write the result to the output folder
-                    
-                    expected_result = query["expected_result"]
-                    result_string = result.fetchall()
-                    
-                    # split expected result by \n and then by \t and remove empty lines
-                    expected_result = expected_result.split("\n")
-                    expected_result = [line.split("\t") for line in expected_result if line]
-                    
-                    
-                    # print("Expected: ", expected_result)
-                    # print("Got: ", result_string)
-                    
-                    #check if expected result is 1 or 2D
-                    if len(expected_result) == 0:
-                        # print("Shape of expected result: ", len(expected_result))
-                        # print("Shape of result string: ", len(result_string))
-                        
-                        if len(result_string) != len(expected_result):
-                            failure_count += 1
-                            shape_mismatch_count += 1
-                            print_err(f"[-] Test failed SHAPE MISMATCH. Expected empty result but got {result_string} for query {current_query} in file {file}")
-                        # if length is 0 check if got has also 0 length then set as passed
-                        if len(expected_result) == 0:
-                            success_count += 1
-                            print("[+] Test passed.")
-                            continue
-                        else:
-                            failure_count += 1
-                            print_err(f"[-] Test failed. Expected empty result but got {result_string} for query {current_query} in file {file}")
+                    target_result = run_query(target_db, query)
+                    if target_result is not None:
+                        target_result_str = target_result.to_string()
                     else:
-                        # print("Shape of expected result: ", len(expected_result), len(expected_result[0]))
-                        # print("Shape of result string: ", len(result_string), len(result_string[0]))
-                        
-                        # if shape is mismatched, then fail the test
-                        if len(expected_result) != len(result_string) or len(expected_result[0]) != len(result_string[0]):
-                            failure_count += 1
-                            shape_mismatch_count += 1
-                            print_err(f"[-] Test failed SHAPE MISMATCH. Expected shape {len(expected_result)}x{len(expected_result[0])} but got {len(result_string)}x{len(result_string[0])} for query {current_query} in file {file}")
-                    
-                    failed = False
-                    # go row by row and check if the values are the same
-                    for i in range(len(expected_result)):
-                        if failed:
-                            break
-                        for j in range(len(expected_result[i])):
-                            expected_value = str(expected_result[i][j])
-                            result_value = str(result_string[i][j])
-                            
-                            # if result value is None, then set it to empty string
-                            result_value = result_value.replace("None", "NULL")
-                            result_value = result_value.replace("True", "true")
-                            result_value = result_value.replace("False", "false")
-                            
-                            # Conversion issues (eg 1.000000 but got 1)
-                            # Detect if expected value is some kind of number
-                            if expected_value.count('.') <= 1 and expected_value.replace(".", "").isnumeric() and expected_value != result_value:
-                                try:
-                                    print_err(f"[~] COMMENCING CASTING of result value {result_value} to expected {expected_value}")
-                                    goal_cast = duckdb_connector.execute(f"SELECT TYPEOF({expected_value})").fetchall()[0][0]
-                                    
-                                    # Take care of decimal rounding errors
-                                    # if goal_cast.startswith("DECIMAL") and result_value.count('.') <= 1 and result_value.replace(".", "").isnumeric():
-                                    print_err(f"\t[-] Expected value ({expected_value}) is a {goal_cast}.")
-                                    # Cast
-                                    result_value = duckdb_connector.execute(f"SELECT CAST({result_value} AS {goal_cast})").fetchall()[0][0]
-                                    result_value = str(result_value).strip()
-                                    print_err(f"\t[-] Value got casted")
-                                except Exception as e:
-                                    print_err(f"[x] Casting err expected_value='{expected_value}' result_value='{result_value}' goal_cast={goal_cast}\n{traceback.format_exc()}")
-                                    failed = True
-                                    if expected_value != result_value:
-                                        print_err(f"[x] MEGA ERROR: Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
-                                        
-                                        print_err(f"Expected\n {query['expected_result']}\nResult:\n{result_string}")
-                                # finally:
-                                    
-
-                                    
-                        
-                            # if expected_value != result_value:
-                                
-                                
-                            
-                            
-                            if expected_value != result_value:
-                                failure_count += 1
-                                print_err(f"[-] Test failed. Expected: {expected_value} but got {result_value} at row {i} column {j} for query {current_query} in file {file}")
-                                break
-                            
+                        target_result_str = ""
+                    target_shape = target_result.shape if target_result is not None else None
+                    target_success = True
                 except Exception as e:
-                    print("HANDLING EXCEPTION of file ", file)
-                    if type1 == "statement" and type2 == "ok":
-                        print_err(f"[-] Test failed stmt. Expected statement to pass but got error for query {current_query} in file {file}:\n{traceback.format_exc()}")
-                        
-                        failure_count += 1
-                        if "read_csv" in current_query:
-                            print_debug("Skipping the test because it contains read_csv")
-                            continue
-                        #raise e
-                        continue
-                    if type1 == "statement" and type2 == "error":
-                        success_count += 1
-                        print_debug("[+] Test passed.")
-                        continue
+                    target_success = False
+                    target_result = None
+                    target_db_error = str(e)
+            
+                
+                shape_equal, columns_equal, dtypes_equal, values_equal = compare_dataframes(source_result, target_result)
+                
+                full_match = shape_equal and columns_equal and dtypes_equal and values_equal
+                
+                            
+                current_target_report = {
+                    "db": target_db,
+                    "success": target_success,
+                    "result": target_result_str,
+                    "error": target_db_error,
+                    "shape_equal": shape_equal,
+                    "columns_equal": columns_equal,
+                    "dtypes_equal": dtypes_equal,
+                    "values_equal": values_equal,
+                    "full_match": full_match,
+                    "shape": target_shape
+                }
+                
+                current_query_report["target_dbs"].append(current_target_report)
                     
-                    print(current_query)
-                    # if query contains read_csv, then skip the test and mark it as failed
-                    if "read_csv" in current_query:
-                        print_err(f"[-] Test failed read_csv. Expected statement to pass but got error: {e} for query {current_query} in file {file}")
-                        failure_count += 1
-                    else:
-                        #raise e
-                        print_err(f"UNKNOWN Expected statement to pass but got error for query {current_query} in file {file}:\n{traceback.format_exc()}")
-                        
-                        failure_count += 1
-                        unknown_count += 1
-                # finally:    
-                #     duckdb_connector.close()
-                #     duckdb_connector = duckdb.connect()
+                # if target_db == current_db:
+                #     continue # for now skin as sometimes query are DELETE IF EXISTS; then CREATE, but if we do DELETE, DELETE, CREATE, CREATE then the results will not match as the last query will crash    
+                
+                # # if target_db is the same as the source_db and results dont match or one has error but the other does not
+                # if target_db == current_db and (current_query_report["result_match"] == False or (current_query_report["success_reference"] != current_query_report["success_test"])):
+                #     print("Error: Results do not match")
+                #     print("Name:", current_query_report["test_name"])
+                #     print("Reference:", current_query_report["success_reference"])
+                #     print("Test:", current_query_report["success_test"])
+                #     print("Match:", current_query_report["result_match"])
+                #     exit(1)
+                
+            current_test_report["queries"].append(current_query_report)
+            
+        
+        progress_report.append(current_test_report)              
+            
+print("All tests passed")
+
+# save the progress report to a file
+with open("progress_report.json", "w") as f:
+    json.dump(progress_report, f, indent=4)
+    
+# also output the result as csv table
+import pandas as pd
+df = pd.DataFrame(progress_report)
+df.to_csv("progress_report.csv", index=False)
+
+# Group progress reports by source_db
+grouped_reports = defaultdict(list)
+for report in progress_report:
+    grouped_reports[report['source_db']].append(report)
+
+html = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+table {
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.expandable-content {
+  display: none;
+  padding-left: 20px;
+}
+
+.expandable-row {
+  cursor: pointer;
+}
+</style>
+<script>
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+function toggleExpandableContent(row) {
+  var nextRow = row.nextElementSibling;
+  if (nextRow.style.display === "table-row") {
+    nextRow.style.display = "none";
+  } else {
+    nextRow.style.display = "table-row";
+  }
+}
+</script>
+</head>
+<body>
+
+<div class="tab">
+"""
+# Create tab buttons for each source_db
+for i, source_db in enumerate(grouped_reports):
+    active_class = " active" if i == 0 else ""
+    html += f'<button class="tablinks{active_class}" onclick="openTab(event, \'tab{source_db}\')">{source_db}</button>'
+
+html += "</div>"
+
+# Create tab content for each source_db
+for i, (source_db, reports) in enumerate(grouped_reports.items()):
+    display_style = "block" if i == 0 else "none"
+    html += f'<div id="tab{source_db}" class="tabcontent" style="display: {display_style};">'
+    
+    for test_report in reports:
+        html += f"<h2>{test_report['test_name']}</h2>"
+        
+        html += "<table>"
+        html += "<tr>"
+        html += "<th>Nr</th>"
+        html += "<th>Query</th>"
+        html += "<th>Source Shape</th>"
+        html += "<th>Source Result</th>"
+        html += "<th>Source Exception</th>"
+        html += "<th>Source Success</th>"
+        for db in list_of_dbms:
+            if db == test_report["source_db"]:
+                continue
+            
+            html += f"<th>{db} Success</th>"
+        html += "</tr>"
+        
+        query_count = 0
+        for query_report in test_report["queries"]:
+            query_count += 1
+            html += "<tr class='expandable-row' onclick='toggleExpandableContent(this)'>"
+            html += f"<td>{query_count}</td>"
+            html += f"<td>{query_report['query']}</td>"
+            html += f"<td>{query_report['source_shape']}</td>"
+            html += f"<td>{query_report['source_result']}</td>"
+            html += f"<td>{query_report['source_exception']}</td>"
+            html += f"<td style='background-color: {'green' if query_report['source_success'] else 'red'}'>{query_report['source_success']}</td>"
+            
+            for target_report in query_report["target_dbs"]:
+                if target_report["db"] == test_report["source_db"]:
+                    continue
+                
+                html += f"<td style='background-color: {'green' if target_report['success'] else 'red'}'>{target_report['success']}</td>"
+            
+            html += "</tr>"
+            
+            # Add hidden expandable content
+            # add a row for each db that was tested include columns for db name, success, error, result, shape, shape_equal, columns_equal, dtypes_equal, values_equal, full_match
+            first = True
+            for target_report in query_report["target_dbs"]:
+                html += "<tr class='expandable-content'>"
+                html += f"<td colspan='100%'>"  # Spanning all columns for the detailed information
+                html += "<div>"
+                # make table row with the details
+                html += "<table>"
+                if first:
+                    html += "<tr>"
+                    html += f"<th>DB</th>"
+                    html += f"<th>Success</th>"
+                    html += f"<th>Error</th>"
+                    html += f"<th>Result</th>"
+                    html += f"<th>Shape</th>"
+                    html += f"<th>Shape Equal</th>"
+                    html += f"<th>Columns Equal</th>"
+                    html += f"<th>Dtypes Equal</th>"
+                    html += f"<th>Values Equal</th>"
+                    html += f"<th>Full Match</th>"
+                    html += "</tr>"
+                    
+                first = False
+                
+                html += "<tr>"
+                html += f"<td>{target_report['db']}</td>"
+                html += f"<td style='background-color: {'green' if target_report['success'] else 'red'}'>{target_report['success']}</td>"
+                html += f"<td>{target_report['error']}</td>"
+                html += f"<td>{target_report['result']}</td>"
+                html += f"<td>{target_report['shape']}</td>"
+                html += f"<td>{target_report['shape_equal']}</td>"
+                html += f"<td>{target_report['columns_equal']}</td>"
+                html += f"<td>{target_report['dtypes_equal']}</td>"
+                html += f"<td>{target_report['values_equal']}</td>"
+                html += f"<td>{target_report['full_match']}</td>"
+                html += "</tr>"
+                html += "</table>"
+                
+                html += "</div>"
+                
+                
+            
+            # html += "<tr class='expandable-content'>"
+            # html += "<td colspan='100%'>"  # Spanning all columns for the detailed information
+            # html += "<div>"
+            # html += f"<p>Details for query: {query_report['query']}</p>"
+            # # Add more detailed information here as needed
+            # html += "</div>"
+            # html += "</td>"
+            # html += "</tr>"
+        
+        html += "</table>"
+    
+    html += "</div>"
+
+html += """
+</body>
+</html>
+"""
 
 
-print("Success count: ", success_count)
-print("Failure count: ", failure_count)
-print("Unknown count: ", unknown_count)
-print("Shape mismatch count: ", shape_mismatch_count)
-print("Total tests: ", success_count + failure_count)
 
-# print("[-] Connecting to sqlite ...", end="")
-# if not os.path.exists("./dbdata/sqlite"):
-#     os.makedirs("./dbdata/sqlite")
-# sqlite_connector = sqlite3.connect("./dbdata/sqlite/sqlite.db")
-# print(" done.")
-
-
-
+with open("progress_report.html", "w") as f:
+    f.write(html)
