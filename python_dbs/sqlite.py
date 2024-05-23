@@ -32,7 +32,7 @@ class SQLiteProcessor:
         #return pd.read_sql_query(query, self.cnx)
         # if its a statement execute it and return nothing
         
-        cursor = self.cnx.execute(query)
+        cursor = self.cnx.executescript(query)
 
         # Fetch all results
         results = cursor.fetchall()
