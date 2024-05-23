@@ -7,13 +7,12 @@ import os
 
 class ClickhouseProcessor:
     def __init__(self):
-        #  COnnect to client and aslo enable multiquery
-        
-        self.client = clickhouse_connect.get_client(host='localhost', username='default', password='')
+        # Connect to client and aslo enable multiquery
+        self.client = clickhouse_connect.get_client(host='localhost', username='default')
+
 
     def reset_db(self):
-        # disconect, delete file and reconnect
-        # TODO propper delete
+        # TODO proper delete
         print("Resetting Clickhouse")
         self.client.close()
         
@@ -24,8 +23,5 @@ class ClickhouseProcessor:
         self.client = clickhouse_connect.get_client(host='localhost', username='default', password='passwordAST1')
 
     def run_query(self, query):
-
-        # if query contains multiple queries split them and run them one by one and concatenate the results
-        # set query timeout to 5 seconds
         return self.client.query_df(query, settings={"max_execution_time": 5})
 
