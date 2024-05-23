@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 name: astproject
 
 services:
@@ -15,11 +15,12 @@ services:
       - 11003:5432
   clickhouse:
     image: clickhouse/clickhouse-server
-    user: "101:101"
-    container_name: ast_clickhouse
+    user: '101:101'
+    container_name: clickhouse
+    hostname: clickhouse
     volumes:
-      - ./dbdata/clickhouse-server/config.d/:/etc/clickhouse-server/config.d/
-      - ./dbdata/clickhouse-server/users.d:/etc/clickhouse-server/users.d/
+      - ./clickhouse/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ./clickhouse/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
     ports:
-      - 8123:8123
-      - 9000:9000
+      - '127.0.0.1:8123:8123'
+      - '127.0.0.1:9000:9000'
