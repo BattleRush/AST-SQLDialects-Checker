@@ -7,9 +7,9 @@ import os
 
 class ClickhouseProcessor:
     def __init__(self):
-        #    This method is called when you create a new object of the class
-        #    Here, you can initialize the object's attributes using the parameters
-        self.client = clickhouse_connect.get_client(host='localhost', username='default', password='passwordAST1')
+        #  COnnect to client and aslo enable multiquery
+        
+        self.client = clickhouse_connect.get_client(host='localhost', username='default', password='')
 
     def reset_db(self):
         # disconect, delete file and reconnect
