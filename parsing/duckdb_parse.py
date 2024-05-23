@@ -26,7 +26,7 @@ def get_blocks(test_string):
     return blocks
 
 TYPE3s = []
-def parse_duckdb_test_cases(test_string):
+def parse_duckdb_test_cases(test_string, test_name):
     # If test file has lines starting with these keywords, we skip it
     EXCLUDE_WORDS = ["read_csv","read_csv_auto", "data/csv/", ".csv", "parquet_scan", "__TEST_DIR__", "load", "set", "concurrentloop", "unzip", "pg_attribute", "nosort key", "loop", "foreach"]
     # If test file has lines starting with these keywords, we remove them
@@ -37,7 +37,7 @@ def parse_duckdb_test_cases(test_string):
     
     
     test = {
-        "name": "",
+        "name": test_name,
         "tests": []
     }
 
@@ -210,7 +210,10 @@ def parse_duckdb():
         # *     There are some tests that use invalid characters (see ./databases/duckdb/test/sql/insert/test_insert_invalid.test)
         with open(test, 'r', encoding='utf-8', errors='replace') as file:
             test_string = file.read()
-        parsed_tests = parse_duckdb_test_cases(test_string)
+            
+        test_name = test.split("/")[-1]
+        print("Test name:", test_name)
+        parsed_tests = parse_duckdb_test_cases(test_string, test_name)
         
         # if parsed_tests is empty, skipped increment
         if not parsed_tests:

@@ -26,7 +26,10 @@ class ClickhouseProcessor:
         command = "clickhouse-client --query 'DROP DATABASE IF EXISTS default'"
         os.system(command)
         
-        time.sleep(1)
+        command = "clickhouse-client --query 'CREATE DATABASE default'"
+        os.system(command)
+        
+        time.sleep(0.1)
         self.client = clickhouse_connect.get_client(host='localhost', username='default', port=8123)
 
     def run_query(self, query):

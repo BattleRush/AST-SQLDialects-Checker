@@ -7,12 +7,15 @@ from python_dbs.sqlite import SQLiteProcessor
 from python_dbs.postgres import PostgresProcessor
 from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.duckdb import DuckdbProcessor
+from python_dbs.clickhouse_postgresql import ClickhousePostgreProcessor
 from collections import defaultdict
 
 sqlite_processor = SQLiteProcessor()
 postgres_processor = PostgresProcessor()
 clickhouse_processor = ClickhouseProcessor()
+clickhouse_postgresql_processor = None #ClickhousePostgreProcessor()
 duckdb_processor = DuckdbProcessor()
+
 
 
 def run_query(db_name, query):
@@ -24,6 +27,8 @@ def run_query(db_name, query):
         return postgres_processor.run_query(query)
     elif db_name == "duckdb":
         return duckdb_processor.run_query(query)
+    elif db_name == "clickhouse_postgresql":
+        return clickhouse_postgresql_processor.run_query(query)
     else:
         raise Exception(f"Unknown db name: {db_name}")
 
@@ -34,6 +39,7 @@ def clean_dbs():
     postgres_processor.reset_db()
     duckdb_processor.reset_db()
     clickhouse_processor.reset_db()
+
 
 # create a table of the progress report
 # we will have the following columns:
@@ -73,7 +79,7 @@ for current_db in list_of_dbms:
         test_name = test_file["name"]
         index += 1
         
-        if index > 50:
+        if index > 20:
             break
         
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")
@@ -93,6 +99,7 @@ for current_db in list_of_dbms:
                 "source_exception": "",
                 "source_result": None,
                 "source_shape": None,
+                "source_result_html": "",
                 "target_dbs": []
             }
             
@@ -122,6 +129,7 @@ for current_db in list_of_dbms:
                 # parse source result to string to save it
                 if source_result is not None:
                     source_result_str = source_result.to_string()
+                    current_query_report["source_result_html"] = source_result.to_html()
                 else:
                     source_result_str = ""
                 
@@ -143,11 +151,13 @@ for current_db in list_of_dbms:
                 target_db_error = ""
                 target_result_str = ""
                 target_shape = None
+                target_result_html = ""
                 
                 try:
                     target_result = run_query(target_db, query)
                     if target_result is not None:
                         target_result_str = target_result.to_string()
+                        target_result_html = target_result.to_html()                        
                     else:
                         target_result_str = ""
                     target_shape = target_result.shape if target_result is not None else None
@@ -167,6 +177,7 @@ for current_db in list_of_dbms:
                     "db": target_db,
                     "success": target_success,
                     "result": target_result_str,
+                    "result_html": target_result_html,
                     "error": target_db_error,
                     "shape_equal": shape_equal,
                     "columns_equal": columns_equal,
@@ -210,7 +221,6 @@ df.to_csv("progress_report.csv", index=False)
 grouped_reports = defaultdict(list)
 for report in progress_report:
     grouped_reports[report['source_db']].append(report)
-
 html = """
 <!DOCTYPE html>
 <html>
@@ -219,6 +229,7 @@ html = """
 body {
   font-family: Arial, sans-serif;
 }
+
 
 .tab {
   overflow: hidden;
@@ -287,6 +298,15 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
+function toggleContent(header) {
+  var content = header.nextElementSibling;
+  if (content.style.display === "none" || content.style.display === "") {
+    content.style.display = "block";
+  } else {
+    content.style.display = "none";
+  }
+}
+
 function toggleExpandableContent(row) {
   var nextRow = row.nextElementSibling;
   if (nextRow.style.display === "table-row") {
@@ -301,6 +321,7 @@ function toggleExpandableContent(row) {
 
 <div class="tab">
 """
+
 # Create tab buttons for each source_db
 for i, source_db in enumerate(grouped_reports):
     active_class = " active" if i == 0 else ""
@@ -314,8 +335,10 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
     html += f'<div id="tab{source_db}" class="tabcontent" style="display: {display_style};">'
     
     for test_report in reports:
-        html += f"<h2>{test_report['test_name']}</h2>"
+        source_success_count = sum([1 for query_report in test_report["queries"] if query_report["source_success"]])
+        html += f"<h2 onclick='toggleContent(this)' style='cursor: pointer;'>{test_report['test_name']} ({len(test_report['queries'])}) Success: {source_success_count}</h2>"
         
+        html += "<div style='display: none;'>"
         html += "<table>"
         html += "<tr>"
         html += "<th>Nr</th>"
@@ -338,7 +361,7 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             html += f"<td>{query_count}</td>"
             html += f"<td><span style=\"white-space: pre-line\">{query_report['query']}</span></td>"
             html += f"<td>{query_report['source_shape']}</td>"
-            html += f"<td>{query_report['source_result']}</td>"
+            html += f"<td>{query_report['source_result_html']}</td>"
             html += f"<td>{query_report['source_exception']}</td>"
             html += f"<td style='background-color: {'green' if query_report['source_success'] else 'red'}'>{query_report['source_success']}</td>"
             
@@ -351,14 +374,13 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             html += "</tr>"
             
             # Add hidden expandable content
-            # add a row for each db that was tested include columns for db name, success, error, result, shape, shape_equal, columns_equal, dtypes_equal, values_equal, full_match
-            first = True
             html += "<tr class='expandable-content'>"
             html += f"<td colspan='100%'>"  # Spanning all columns for the detailed information
             html += "<div>"
             # make table row with the details
             html += "<table>"
             
+            first = True
             for target_report in query_report["target_dbs"]:
 
                 if first:
@@ -381,7 +403,7 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
                 html += f"<td>{target_report['db']}</td>"
                 html += f"<td style='background-color: {'green' if target_report['success'] else 'red'}'>{target_report['success']}</td>"
                 html += f"<td>{target_report['error']}</td>"
-                html += f"<td>{target_report['result']}</td>"
+                html += f"<td>{target_report['result_html']}</td>"
                 html += f"<td>{target_report['shape']}</td>"
                 html += f"<td>{target_report['shape_equal']}</td>"
                 html += f"<td>{target_report['columns_equal']}</td>"
@@ -394,19 +416,9 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             html += "</div>"
             html += "</td>"
             html += "</tr>"
-                
-                
-            
-            # html += "<tr class='expandable-content'>"
-            # html += "<td colspan='100%'>"  # Spanning all columns for the detailed information
-            # html += "<div>"
-            # html += f"<p>Details for query: {query_report['query']}</p>"
-            # # Add more detailed information here as needed
-            # html += "</div>"
-            # html += "</td>"
-            # html += "</tr>"
         
         html += "</table>"
+        html += "</div>"
     
     html += "</div>"
 

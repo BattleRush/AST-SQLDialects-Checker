@@ -182,6 +182,8 @@ def parse_sqlite():
             }
             
             has_prior_reset_db = False
+            has_only_reset_db = True
+            has_any_dollar = False # used for checking if any query contains $ sign -> used for variables
             
             for t in test["tests"]:
                 
@@ -199,6 +201,7 @@ def parse_sqlite():
                     
                     continue
                     
+                has_only_reset_db = False
                 has_prior_reset_db = False
                 
                 query = t["query"]
@@ -216,6 +219,17 @@ def parse_sqlite():
                         "query": statement.strip() + ";",
                     })
                     
+                    if "$" in statement:
+                        has_any_dollar = True
+                        
+            if has_any_dollar:
+                print("Skipping test with $ sign")
+                continue
+                    
+            if has_only_reset_db:
+                print("Skipping test with only reset_db")
+                continue
+            
             # save the cleaned tests to disk
             with open("input/sqlite/" + prefix + "_" + test["name"] + ".json", "w") as f:
                 f.write(json.dumps(cleaned_tests, indent=4))    
