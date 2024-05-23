@@ -7,12 +7,22 @@ class SQLiteProcessor:
     def __init__(self):
         #  This method is called when you create a new object of the class
         #  Here, you can initialize the object's attributes using the parameters
-        self.cnx = sqlite3.connect('sqlite_processor.db')
+        self.client = None
+        self.init_connection()
 
+    
+    def init_connection(self):
+        if self.client is not None:
+            self.client.close()
+            self.client = None
+        
+        print("[-] Initializing SQLite")
+        self.client = sqlite3.connect('sqlite_processor.db')
+        
     def reset_db(self):
         # disconect, delete file and reconnect
         print("Resetting SQLite")
-        self.cnx.close()
+        self.client.close()
         time.sleep(1)
         if os.path.exists('sqlite_processor.db'):
             os.remove('sqlite_processor.db')
@@ -26,13 +36,17 @@ class SQLiteProcessor:
         if os.path.exists('sqlite_processor.db-journal'):
             os.remove('sqlite_processor.db-journal')
             
-        self.cnx = sqlite3.connect('sqlite_processor.db')
+        init_connection()
+
+
+
 
     def run_query(self, query):
-        #return pd.read_sql_query(query, self.cnx)
-        # if its a statement execute it and return nothing
+        if self.client is None:
+            init_connection()
         
-        cursor = self.cnx.executescript(query)
+        cursor = self.client.cursor()
+        cursor.execute(query)
 
         # Fetch all results
         results = cursor.fetchall()
@@ -43,7 +57,7 @@ class SQLiteProcessor:
         # Check if any results were returned
         if results:
             # Convert the results to a DataFrame
-            df = pd.DataFrame(results, columns=[desc[0] for desc in cursor.description])
+            return pd.DataFrame(results, columns=[desc[0] for desc in cursor.description])
             #print(df)
         else:
             # return nothing

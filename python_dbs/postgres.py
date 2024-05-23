@@ -84,22 +84,19 @@ echo "PostgreSQL has been reset."
         self.client.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             
     def run_query(self, query):
-        print("Running query: ", query)
         if self.client is None:
             self.init_connection()
             
     
-        print("Running transactional query: ", query)
         with self.client.cursor() as cursor:
             cursor.execute(query)
             
             try:
-                result = cursor.fetchall()
+                results = cursor.fetchall()
                 
                 # return df
-                if result:
-                    df = pd.DataFrame(result, columns=[desc[0] for desc in cursor.description])
-                    return df
+                if results:
+                    return pd.DataFrame(results, columns=[desc[0] for desc in cursor.description])
                 else:
                     return None
             except Exception as e:

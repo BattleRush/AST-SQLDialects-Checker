@@ -7,9 +7,16 @@ import os
 
 class ClickhouseProcessor:
     def __init__(self):
-        # Connect to client and aslo enable multiquery
-        self.client = clickhouse_connect.get_client(host='localhost', username='default')
+        self.client = None
+        self.init_connection()
 
+    def init_connection(self):
+        if self.client is not None:
+            self.client.close()
+            self.client = None
+
+        print("[-] Initializing Clickhouse")
+        self.client = clickhouse_connect.get_client(host='localhost', username='default', port=8123)
 
     def reset_db(self):
         # TODO proper delete
