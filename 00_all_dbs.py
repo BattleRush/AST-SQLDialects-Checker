@@ -4,6 +4,7 @@ import time
 from common import load_json, get_files, load_all_json, compare_arrow_tables, compare_dataframes
 from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.sqlite import SQLiteProcessor
+from collections import defaultdict
 
 sqlite_processor = SQLiteProcessor()
 clickhouse_processor = ClickhouseProcessor()
@@ -46,7 +47,7 @@ for current_db in list_of_dbms:
     all_tests = load_all_json(current_db)
     print("Found", len(all_tests), "tests")
     
-    time.sleep(5)
+    time.sleep(1)
     
     exception_count = 0
     total_count = 0
@@ -74,6 +75,7 @@ for current_db in list_of_dbms:
                 "source_success": False,
                 "source_exception": "",
                 "source_result": None,
+                "source_shape": None,
                 "target_dbs": []
             }
             
@@ -97,6 +99,7 @@ for current_db in list_of_dbms:
                 source_result = run_query(current_db, query)
                 
                 current_query_report["source_success"] = True
+                current_query_report["source_shape"] = source_result.shape if source_result is not None else None
                 source_success = True
                 
                 # parse source result to string to save it
@@ -119,10 +122,12 @@ for current_db in list_of_dbms:
                 target_result = None
                 target_db_error = ""
                 target_result_str = ""
+                target_shape = None
                 
                 try:
                     target_result = run_query(target_db, query)
                     target_result_str = target_result.to_string()
+                    target_shape = target_result.shape if target_result is not None else None
                     target_success = True
                 except Exception as e:
                     target_success = False
@@ -144,7 +149,8 @@ for current_db in list_of_dbms:
                     "columns_equal": columns_equal,
                     "dtypes_equal": dtypes_equal,
                     "values_equal": values_equal,
-                    "full_match": full_match
+                    "full_match": full_match,
+                    "shape": target_shape
                 }
                 
                 current_query_report["target_dbs"].append(current_target_report)
@@ -177,14 +183,51 @@ import pandas as pd
 df = pd.DataFrame(progress_report)
 df.to_csv("progress_report.csv", index=False)
 
-
-
+# Group progress reports by source_db
+grouped_reports = defaultdict(list)
+for report in progress_report:
+    grouped_reports[report['source_db']].append(report)
 
 html = """
 <!DOCTYPE html>
 <html>
 <head>
 <style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
 table {
   font-family: Arial, sans-serif;
   border-collapse: collapse;
@@ -192,51 +235,154 @@ table {
 }
 
 td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
 
+.expandable-content {
+  display: none;
+  padding-left: 20px;
+}
+
+.expandable-row {
+  cursor: pointer;
+}
 </style>
+<script>
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
 
-<body>"""
+function toggleExpandableContent(row) {
+  var nextRow = row.nextElementSibling;
+  if (nextRow.style.display === "table-row") {
+    nextRow.style.display = "none";
+  } else {
+    nextRow.style.display = "table-row";
+  }
+}
+</script>
+</head>
+<body>
 
-# create a tab for each progress report
-for test_report in progress_report:
-    html += f"<h2>{test_report['test_name']}</h2>"
+<div class="tab">
+"""
+# Create tab buttons for each source_db
+for i, source_db in enumerate(grouped_reports):
+    active_class = " active" if i == 0 else ""
+    html += f'<button class="tablinks{active_class}" onclick="openTab(event, \'tab{source_db}\')">{source_db}</button>'
+
+html += "</div>"
+
+# Create tab content for each source_db
+for i, (source_db, reports) in enumerate(grouped_reports.items()):
+    display_style = "block" if i == 0 else "none"
+    html += f'<div id="tab{source_db}" class="tabcontent" style="display: {display_style};">'
     
-    html += "<table>"
-    html += "<tr>"
-    html += "<th>Query</th>"
-    html += "<th>Source Success</th>"
-    for db in list_of_dbms:
-        html += f"<th>{db} Success</th>"
-        html += f"<th>{db} Shape</th>"
-        html += f"<th>{db} Columns</th>"
-        html += f"<th>{db} Dtypes</th>"
-        html += f"<th>{db} Values</th>"
-        html += f"<th>{db} Full Match</th>"
-    html += "</tr>"
-    
-    for query_report in test_report["queries"]:
-        html += "<tr>"
-        html += f"<td>{query_report['query']}</td>"
-        html += f"<td>{query_report['source_success']}</td>"
+    for test_report in reports:
+        html += f"<h2>{test_report['test_name']}</h2>"
         
-        for target_report in query_report["target_dbs"]:
-            html += f"<td>{target_report['success']}</td>"
-            html += f"<td>{target_report['shape_equal']}</td>"
-            html += f"<td>{target_report['columns_equal']}</td>"
-            html += f"<td>{target_report['dtypes_equal']}</td>"
-            html += f"<td>{target_report['values_equal']}</td>"
-            html += f"<td>{target_report['full_match']}</td>"
+        html += "<table>"
+        html += "<tr>"
+        html += "<th>Query</th>"
+        html += "<th>Source Shape</th>"
+        html += "<th>Source Exception</th>"
+        html += "<th>Source Success</th>"
+        for db in list_of_dbms:
+            if db == test_report["source_db"]:
+                continue
             
+            html += f"<th>{db} Success</th>"
         html += "</tr>"
+        
+        for query_report in test_report["queries"]:
+            
+            html += "<tr class='expandable-row' onclick='toggleExpandableContent(this)'>"
+            html += f"<td>{query_report['query']}</td>"
+            html += f"<td>{query_report['source_shape']}</td>"
+            html += f"<td>{query_report['source_exception']}</td>"
+            html += f"<td style='background-color: {'green' if query_report['source_success'] else 'red'}'>{query_report['source_success']}</td>"
+            
+            for target_report in query_report["target_dbs"]:
+                if target_report["db"] == test_report["source_db"]:
+                    continue
+                
+                html += f"<td style='background-color: {'green' if target_report['success'] else 'red'}'>{target_report['success']}</td>"
+            
+            html += "</tr>"
+            
+            # Add hidden expandable content
+            # add a row for each db that was tested include columns for db name, success, error, result, shape, shape_equal, columns_equal, dtypes_equal, values_equal, full_match
+            first = True
+            for target_report in query_report["target_dbs"]:
+                html += "<tr class='expandable-content'>"
+                html += f"<td colspan='100%'>"  # Spanning all columns for the detailed information
+                html += "<div>"
+                # make table row with the details
+                html += "<table>"
+                if first:
+                    html += "<tr>"
+                    html += f"<th>DB</th>"
+                    html += f"<th>Success</th>"
+                    html += f"<th>Error</th>"
+                    html += f"<th>Result</th>"
+                    html += f"<th>Shape</th>"
+                    html += f"<th>Shape Equal</th>"
+                    html += f"<th>Columns Equal</th>"
+                    html += f"<th>Dtypes Equal</th>"
+                    html += f"<th>Values Equal</th>"
+                    html += f"<th>Full Match</th>"
+                    html += "</tr>"
+                    
+                first = False
+                
+                html += "<tr>"
+                html += f"<td>{target_report['db']}</td>"
+                html += f"<td style='background-color: {'green' if target_report['success'] else 'red'}'>{target_report['success']}</td>"
+                html += f"<td>{target_report['error']}</td>"
+                html += f"<td>{target_report['result']}</td>"
+                html += f"<td>{target_report['shape']}</td>"
+                html += f"<td>{target_report['shape_equal']}</td>"
+                html += f"<td>{target_report['columns_equal']}</td>"
+                html += f"<td>{target_report['dtypes_equal']}</td>"
+                html += f"<td>{target_report['values_equal']}</td>"
+                html += f"<td>{target_report['full_match']}</td>"
+                html += "</tr>"
+                html += "</table>"
+                
+                html += "</div>"
+                
+                
+            
+            # html += "<tr class='expandable-content'>"
+            # html += "<td colspan='100%'>"  # Spanning all columns for the detailed information
+            # html += "<div>"
+            # html += f"<p>Details for query: {query_report['query']}</p>"
+            # # Add more detailed information here as needed
+            # html += "</div>"
+            # html += "</td>"
+            # html += "</tr>"
+        
+        html += "</table>"
     
-    html += "</table>"
-    
-html += "</body>"
-html += "</html>"
+    html += "</div>"
+
+html += """
+</body>
+</html>
+"""
+
 
 
 with open("progress_report.html", "w") as f:
