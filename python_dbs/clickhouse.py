@@ -26,13 +26,6 @@ class ClickhouseProcessor:
     def run_query(self, query):
 
         # if query contains multiple queries split them and run them one by one and concatenate the results
-        if query.count(";") > 1:
-            queries = query.split(";")
-            result = []
-            for q in queries:
-                if q:
-                    result.append(self.client.query_df(q))
-                return pd.concat(result)
-        else:
-            return self.client.query_df(query)
+        # set query timeout to 5 seconds
+        return self.client.query_df(query, settings={"max_execution_time": 5})
 

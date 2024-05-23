@@ -103,13 +103,16 @@ for current_db in list_of_dbms:
                 source_success = True
                 
                 # parse source result to string to save it
-                source_result_str = source_result.to_string()
+                if source_result is not None:
+                    source_result_str = source_result.to_string()
+                else:
+                    source_result_str = ""
                 
                 current_query_report["source_result"] = source_result_str # todo is this saved as string?                    
             except Exception as e:
                 current_query_report["source_success"] = False
                 source_success = False
-                
+            
                 current_query_report["source_exception"] = str(e)
             
             for target_db in list_of_dbms:
@@ -126,7 +129,10 @@ for current_db in list_of_dbms:
                 
                 try:
                     target_result = run_query(target_db, query)
-                    target_result_str = target_result.to_string()
+                    if target_result is not None:
+                        target_result_str = target_result.to_string()
+                    else:
+                        target_result_str = ""
                     target_shape = target_result.shape if target_result is not None else None
                     target_success = True
                 except Exception as e:
@@ -295,8 +301,10 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
         
         html += "<table>"
         html += "<tr>"
+        html += "<th>Nr</th>"
         html += "<th>Query</th>"
         html += "<th>Source Shape</th>"
+        html += "<th>Source Result</th>"
         html += "<th>Source Exception</th>"
         html += "<th>Source Success</th>"
         for db in list_of_dbms:
@@ -306,11 +314,14 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             html += f"<th>{db} Success</th>"
         html += "</tr>"
         
+        query_count = 0
         for query_report in test_report["queries"]:
-            
+            query_count += 1
             html += "<tr class='expandable-row' onclick='toggleExpandableContent(this)'>"
+            html += f"<td>{query_count}</td>"
             html += f"<td>{query_report['query']}</td>"
             html += f"<td>{query_report['source_shape']}</td>"
+            html += f"<td>{query_report['source_result']}</td>"
             html += f"<td>{query_report['source_exception']}</td>"
             html += f"<td style='background-color: {'green' if query_report['source_success'] else 'red'}'>{query_report['source_success']}</td>"
             
