@@ -80,21 +80,37 @@ echo "PostgreSQL has been reset."
 
         temp_client.close()
         
-        self.client = psycopg2.connect(host="localhost", user='test', password='test', dbname='test_db', port=11003)
+        self.client = psycopg2.connect(host="localhost", user='root', password='root', dbname='test_db', port=11003)
+        self.client.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             
     def run_query(self, query):
         print("Running query: ", query)
         if self.client is None:
             self.init_connection()
             
-        try:
-            print("Running transactional query: ", query)
-            with self.client.cursor() as cursor:
-                cursor.execute(query)
-                return cursor.fetchall()
-        except Exception as e:
-            print("Error: ", e)
-            return None
+    
+        print("Running transactional query: ", query)
+        with self.client.cursor() as cursor:
+            cursor.execute(query)
+            
+            try:
+                result = cursor.fetchall()
+                
+                # return df
+                if result:
+                    df = pd.DataFrame(result, columns=[desc[0] for desc in cursor.description])
+                    return df
+                else:
+                    return None
+            except Exception as e:
+                #cursor.execute("ROLLBACK")
+                #self.client.commit()
+                
+                # if exception with no results to fetch then return None
+                if "no results to fetch" in str(e):
+                    return None
+                
+                raise e                
         
     def commit(self):
         self.client.commit()

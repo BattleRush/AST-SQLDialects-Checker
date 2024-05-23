@@ -2,20 +2,21 @@
 import json
 import time
 from common import load_json, get_files, load_all_json, compare_arrow_tables, compare_dataframes
-from python_dbs.clickhouse import ClickhouseProcessor
+#from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.sqlite import SQLiteProcessor
 from python_dbs.postgres import PostgresProcessor
 from collections import defaultdict
 
 sqlite_processor = SQLiteProcessor()
-clickhouse_processor = ClickhouseProcessor()
+#clickhouse_processor = ClickhouseProcessor()
 postgres_processor = PostgresProcessor()
 
 
 
 def run_query(db_name, query):
     if db_name == "clickhouse":
-        return clickhouse_processor.run_query(query)
+        return None
+        #return clickhouse_processor.run_query(query)
     elif db_name == "sqlite":
         return sqlite_processor.run_query(query)
     elif db_name == "postgresql":
@@ -25,7 +26,7 @@ def run_query(db_name, query):
 
 
 def clean_dbs():
-    clickhouse_processor.reset_db()
+    #clickhouse_processor.reset_db()
     sqlite_processor.reset_db()
 
 # create a table of the progress report
@@ -323,7 +324,7 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             query_count += 1
             html += "<tr class='expandable-row' onclick='toggleExpandableContent(this)'>"
             html += f"<td>{query_count}</td>"
-            html += f"<td>{query_report['query']}</td>"
+            html += f"<td><span style=\"white-space: pre-line\">{query_report['query']}</span></td>"
             html += f"<td>{query_report['source_shape']}</td>"
             html += f"<td>{query_report['source_result']}</td>"
             html += f"<td>{query_report['source_exception']}</td>"

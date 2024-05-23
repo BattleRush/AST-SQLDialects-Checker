@@ -6,11 +6,24 @@ def extract_sql_queries(file_path):
     with open(file_path, 'r', encoding="utf-8", errors='ignore') as file:
         content = file.read()
 
-    # Split content by semicolons
-    statements = content.split(';')
+    # Split content by semicolons ensure the ; is not inside quotes
+    statements = re.split(r';(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)', content)
     
     # Remove leading/trailing whitespace from each statement
     statements = [statement.strip() for statement in statements if statement.strip()]
+    
+    # go trough statements and remove any line that starts with \echo
+    cleaned_statements = []
+    
+    for statement in statements:
+        lines = statement.split("\n")
+        cleaned_lines = []
+        for line in lines:
+            if not line.startswith("\\echo"):
+                cleaned_lines.append(line)
+            
+        cleaned_statement = "\n".join(cleaned_lines)
+        cleaned_statements.append(cleaned_statement)
 
     print("Returning", len(statements), "statements")
     return statements
@@ -47,13 +60,21 @@ for sql_file in all_sql_files:
     test_name = sql_file.split("/")[-1]
     test = {
         "name": test_name,
-        "queries": []
+        "tests": []
     }
     #print("Parsing file", sql_file)
     sql_queries = extract_sql_queries(sql_file)
     print("Found", len(sql_queries), "queries")
     print(sql_queries[:2])
-    test["queries"] = sql_queries
+    
+    tests = []
+    for query in sql_queries:
+        tests.append({
+            "query": query,
+            "name": test_name
+        })
+        
+    test["tests"] = tests
     
     all_tests.append(test)
     #print(sql_queries[:2])
