@@ -9,10 +9,9 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: root
-    volumes:
-      - ./dbdata/postesql:/var/lib/postgresql/data
     ports:
       - 11003:5432
+
   clickhouse:
     image: clickhouse/clickhouse-server
     user: '101:101'
