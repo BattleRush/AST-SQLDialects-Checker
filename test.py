@@ -1,33 +1,22 @@
 import ast
 from ast import literal_eval as make_tuple
 from python_dbs.postgres import PostgresProcessor
+from python_dbs.clickhouse import ClickhouseProcessor
+from python_dbs.duckdb import DuckdbProcessor
+from python_dbs.sqlite import SQLiteProcessor
+import json
 
-
-expected = "(1, 2)"
-expected = make_tuple(expected)
-
-print(expected)
-
+ 
+clickhouse = ClickhouseProcessor()
 postgres = PostgresProcessor()
-
-# postgres.reset_db()
-
-# Create data and mock databases
-print(postgres.run_query("SELECT datname FROM pg_database"))
-# postgres.commit()
-print(postgres.run_query("SELECT usename FROM pg_catalog.pg_user WHERE usename != 'root'"))
+duckdb = DuckdbProcessor()
+sqlite = SQLiteProcessor()
 
 
-postgres.reset_db()
-print(postgres.run_query("SELECT datname FROM pg_database"))
-print(postgres.run_query("SELECT usename FROM pg_catalog.pg_user WHERE usename != 'root'"))
+# Run a test query
+query = "SELECT 1, 2"
 
-
-# print(postgres.run_query("CREATE DATABASE test_db"))
-# print(postgres.run_query("CREATE TABLE test_table (id INT, name TEXT)"))
-# print(postgres.run_query("INSERT INTO test_table (id, name) VALUES (1, 'test')"))
-# postgres.commit()
-# print(postgres.run_query("CREATE DATABASE test_db2"))
-# # Run query and print output
-# print(postgres.run_query("SELECT * FROM test_table"))
-# print(postgres.run_query("SELECT datname FROM pg_database;"))
+print("Clickhouse: " + json.dumps(clickhouse.run_query(query).to_dict()))
+print("Postgres: " + json.dumps(postgres.run_query(query).to_dict()))
+print("Duckdb: " + json.dumps(duckdb.run_query(query).to_dict()))
+print("SQLite: " + json.dumps(sqlite.run_query(query).to_dict()))

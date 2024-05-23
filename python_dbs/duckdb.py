@@ -15,7 +15,10 @@ class DuckdbProcessor:
             self.client.close()
         self.client = duckdb.connect()
     def reset_db(self):
-        print("Ciao mamma")
+        print("[-] Resetting Duckdb")
+        if self.client is not None:
+            self.client.close()
+        self.init_connection()
         
         
     
@@ -23,6 +26,7 @@ class DuckdbProcessor:
         if self.client is None:
             self.init_connection()
         
-        return self.client.sql(query).df()
+        result = self.client.execute(query)
+        return result.df() if result != None else None
 
 

@@ -20,14 +20,14 @@ class ClickhouseProcessor:
 
     def reset_db(self):
         # TODO proper delete
-        print("Resetting Clickhouse")
+        print("[-] Resetting Clickhouse")
         self.client.close()
         
-        command = "clickhouse-client --query 'DROP DATABASE IF EXISTS test_db' --password=passwordAST1"
+        command = "clickhouse-client --query 'DROP DATABASE IF EXISTS default'"
         os.system(command)
         
         time.sleep(1)
-        self.client = clickhouse_connect.get_client(host='localhost', username='default', password='passwordAST1')
+        self.client = clickhouse_connect.get_client(host='localhost', username='default', port=8123)
 
     def run_query(self, query):
         return self.client.query_df(query, settings={"max_execution_time": 5})

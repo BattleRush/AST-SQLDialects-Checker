@@ -5,22 +5,25 @@ from common import load_json, get_files, load_all_json, compare_arrow_tables, co
 #from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.sqlite import SQLiteProcessor
 from python_dbs.postgres import PostgresProcessor
+from python_dbs.clickhouse import ClickhouseProcessor
+from python_dbs.duckdb import DuckdbProcessor
 from collections import defaultdict
 
 sqlite_processor = SQLiteProcessor()
-#clickhouse_processor = ClickhouseProcessor()
 postgres_processor = PostgresProcessor()
-
+clickhouse_processor = ClickhouseProcessor()
+duckdb_processor = DuckdbProcessor()
 
 
 def run_query(db_name, query):
     if db_name == "clickhouse":
-        return None
-        #return clickhouse_processor.run_query(query)
+        return clickhouse_processor.run_query(query)
     elif db_name == "sqlite":
         return sqlite_processor.run_query(query)
     elif db_name == "postgresql":
         return postgres_processor.run_query(query)
+    elif db_name == "duckdb":
+        return duckdb_processor.run_query(query)
     else:
         raise Exception(f"Unknown db name: {db_name}")
 
@@ -28,6 +31,9 @@ def run_query(db_name, query):
 def clean_dbs():
     #clickhouse_processor.reset_db()
     sqlite_processor.reset_db()
+    postgres_processor.reset_db()
+    duckdb_processor.reset_db()
+    clickhouse_processor.reset_db()
 
 # create a table of the progress report
 # we will have the following columns:
@@ -43,7 +49,7 @@ def clean_dbs():
 progress_report = []
 
 
-list_of_dbms = ["postgresql", "sqlite", "duckdb"]
+list_of_dbms = ["postgresql", "sqlite", "clickhouse", "duckdb"]
 
 clean_dbs()
 
@@ -61,12 +67,13 @@ for current_db in list_of_dbms:
     
     index = 0
     for test_file in all_tests:
+        clean_dbs()
         has_been_reset = False
         
         test_name = test_file["name"]
         index += 1
         
-        if index > 10:
+        if index > 50:
             break
         
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")
@@ -78,7 +85,6 @@ for current_db in list_of_dbms:
         }
         
         for query_test in test_file["tests"]:
-            #print(query_test)
             query = query_test["query"]
             
             current_query_report = {

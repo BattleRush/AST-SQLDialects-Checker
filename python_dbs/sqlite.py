@@ -21,7 +21,7 @@ class SQLiteProcessor:
         
     def reset_db(self):
         # disconect, delete file and reconnect
-        #print("Resetting SQLite")
+        print("[-] Resetting SQLite")
         self.client.close()
         time.sleep(0.1)
         if os.path.exists('sqlite_processor.db'):
