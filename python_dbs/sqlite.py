@@ -29,7 +29,25 @@ class SQLiteProcessor:
         self.cnx = sqlite3.connect('sqlite_processor.db')
 
     def run_query(self, query):
-        return pd.read_sql_query(query, self.cnx)
+        #return pd.read_sql_query(query, self.cnx)
+        # if its a statement execute it and return nothing
+        
+        cursor = self.cnx.execute(query)
+
+        # Fetch all results
+        results = cursor.fetchall()
+
+        # Close the cursor
+        cursor.close()
+
+        # Check if any results were returned
+        if results:
+            # Convert the results to a DataFrame
+            df = pd.DataFrame(results, columns=[desc[0] for desc in cursor.description])
+            #print(df)
+        else:
+            # return nothing
+            return None
 
 # # Create an object of the class
 # my_object = MyClass("value1", "value2")

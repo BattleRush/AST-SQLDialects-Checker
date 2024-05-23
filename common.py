@@ -5,25 +5,38 @@ import pyarrow.compute as pc
 import pandas as pd
 
 def compare_dataframes(df1, df2):
-    # Check shape
-    if df1.shape != df2.shape:
-        return f"Shape mismatch: {df1.shape} vs {df2.shape}"
     
-    # Check column names
-    if list(df1.columns) != list(df2.columns):
-        return f"Column names mismatch: {list(df1.columns)} vs {list(df2.columns)}"
+    if df1 is None and df2 is None:
+        return True, True, True, True
+
+    if df1 is None or df2 is None:
+        return False, False, False, False
     
-    # Check data types
-    if not df1.dtypes.equals(df2.dtypes):
-        type_mismatches = df1.dtypes.compare(df2.dtypes)
-        return f"Data type mismatch:\n{type_mismatches}"
+    shape_equal = df1.shape == df2.shape
+    columns_equal = list(df1.columns) == list(df2.columns)
+    dtypes_equal = df1.dtypes.equals(df2.dtypes)
+    values_equal = df1.equals(df2)
     
-    # Check values
-    if not df1.equals(df2):
-        value_mismatches = (df1 != df2).stack()
-        return f"Value mismatches:\n{value_mismatches[value_mismatches]}"
+    return shape_equal, columns_equal, dtypes_equal, values_equal
+    # # Check shape
+    # if df1.shape != df2.shape:
+    #     return f"Shape mismatch: {df1.shape} vs {df2.shape}"
     
-    return "DataFrames are equal"
+    # # Check column names
+    # if list(df1.columns) != list(df2.columns):
+    #     return f"Column names mismatch: {list(df1.columns)} vs {list(df2.columns)}"
+    
+    # # Check data types
+    # if not df1.dtypes.equals(df2.dtypes):
+    #     type_mismatches = df1.dtypes.compare(df2.dtypes)
+    #     return f"Data type mismatch:\n{type_mismatches}"
+    
+    # # Check values
+    # if not df1.equals(df2):
+    #     value_mismatches = (df1 != df2).stack()
+    #     return f"Value mismatches:\n{value_mismatches[value_mismatches]}"
+    
+    #return "DataFrames are equal"
 def compare_arrow_tables(table1, table2):
     # Check schema (including shape)
     if table1.schema != table2.schema:

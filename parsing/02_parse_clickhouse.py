@@ -54,15 +54,22 @@ def parse_clickhouse():
                 
                 #exit
 
+                queries = query.split(";")
+                
+                # remove empty queries or that are only whitespace or newlines
+                queries = [q for q in queries if q.strip()]
+                
+                tests = []
+                for q in queries:
+                    tests.append({
+                        "query": q + ";",
+                        "name": file
+                    })
                     
                 # add the test to the all_tests
                 all_tests.append({
                     "name": file,
-                    "tests": [{
-                        "query": query,
-                        "name": file,
-                        
-                    }]
+                    "tests": tests
                 })
                 
                 count += 1
@@ -73,13 +80,20 @@ def parse_clickhouse():
     for test in all_tests:
         #print ("Writing test", test["name"])
         output_filename = test["name"].replace(".sql", "")
+        
+        # if name contains crash or fail skip
+        
+        if "crash" in output_filename or "fail" in output_filename or "overflow" in output_filename:
+            print("Skipping", output_filename)
+            continue
+        
         # save file in utf-8
         with open("input/" + database_name + "/" + output_filename + ".json", "w", encoding="utf-8") as f:
             json.dump(test, f, indent=4)
             
         test_count += 1
         
-        if test_count > 100:
+        if test_count > 150:
             break
        
      
