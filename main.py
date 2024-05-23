@@ -43,7 +43,7 @@ def clean_dbs():
 progress_report = []
 
 
-list_of_dbms = ["postgresql", "sqlite"]
+list_of_dbms = ["postgresql", "sqlite", "duckdb"]
 
 clean_dbs()
 
@@ -65,6 +65,10 @@ for current_db in list_of_dbms:
         
         test_name = test_file["name"]
         index += 1
+        
+        if index > 10:
+            break
+        
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")
         
         current_test_report = {
@@ -343,12 +347,14 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             # Add hidden expandable content
             # add a row for each db that was tested include columns for db name, success, error, result, shape, shape_equal, columns_equal, dtypes_equal, values_equal, full_match
             first = True
+            html += "<tr class='expandable-content'>"
+            html += f"<td colspan='100%'>"  # Spanning all columns for the detailed information
+            html += "<div>"
+            # make table row with the details
+            html += "<table>"
+            
             for target_report in query_report["target_dbs"]:
-                html += "<tr class='expandable-content'>"
-                html += f"<td colspan='100%'>"  # Spanning all columns for the detailed information
-                html += "<div>"
-                # make table row with the details
-                html += "<table>"
+
                 if first:
                     html += "<tr>"
                     html += f"<th>DB</th>"
@@ -377,9 +383,11 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
                 html += f"<td>{target_report['values_equal']}</td>"
                 html += f"<td>{target_report['full_match']}</td>"
                 html += "</tr>"
-                html += "</table>"
                 
-                html += "</div>"
+            html += "</table>"
+            html += "</div>"
+            html += "</td>"
+            html += "</tr>"
                 
                 
             
