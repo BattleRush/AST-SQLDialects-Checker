@@ -4,10 +4,12 @@ import time
 from common import load_json, get_files, load_all_json, compare_arrow_tables, compare_dataframes
 from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.sqlite import SQLiteProcessor
+from python_dbs.postgres import PostgresProcessor
 from collections import defaultdict
 
 sqlite_processor = SQLiteProcessor()
 clickhouse_processor = ClickhouseProcessor()
+postgres_processor = PostgresProcessor()
 
 
 
@@ -16,6 +18,8 @@ def run_query(db_name, query):
         return clickhouse_processor.run_query(query)
     elif db_name == "sqlite":
         return sqlite_processor.run_query(query)
+    elif db_name == "postgresql":
+        return postgres_processor.run_query(query)
     else:
         raise Exception(f"Unknown db name: {db_name}")
 
@@ -38,7 +42,7 @@ def clean_dbs():
 progress_report = []
 
 
-list_of_dbms = ["clickhouse", "sqlite"]
+list_of_dbms = ["postgresql", "sqlite"]
 
 clean_dbs()
 

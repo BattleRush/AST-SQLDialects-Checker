@@ -81,3 +81,13 @@ def load_all_json(database):
     for test in all_tests:
         parsed_tests.append(load_json(test))
     return parsed_tests
+
+
+def clean_input_folder(database):
+    if os.path.exists(f"input/{database}"):
+        if os.name == "posix":  # Linux
+            os.system(f"rm -rf input/{database}")
+        elif os.name == "nt":  # Windows
+            os.system(f"rmdir /s /q input\\{database}")
+            
+    os.makedirs(f"input/{database}")

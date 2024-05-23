@@ -17,32 +17,31 @@ class PostgresProcessor:
 
     def reset_db(self):
         print("[-] Resetting Postgres")
+        return
         self.client.close()
         self.client = None
         
-        with psycopg2.connect(host="localhost", user="root", password="root", port=11003) as client:
-            client.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-            with client.cursor() as cursor:
-                cursor.execute("SELECT usename FROM pg_catalog.pg_user WHERE usename != 'root'")
-                for user in cursor.fetchall():
-                    print(f"\t[-] Dropping user: {user[0]} ... ", end="")
-                    cursor.execute(f"SELECT datname FROM pg_database JOIN pg_roles ON pg_database.datdba = pg_roles.rolname WHERE rolname = '{user[0]}'")
-                    for db in cursor.fetchall():
-                        print(f"\t\t[-] Dropping database: {db[0]} ... ", end="")
-                        cursor.execute(f"DROP DATABASE {db[0]}")
-                        print("Done")
-                    cursor.execute(f"DROP USER {user[0]}")
-                client.commit()
-                cursor.close()
+        shell_command = """#!/bin/bash
+
+# Define variables
+CONTAINER_NAME="ast_postgres"
+DATA_DIR="./dbdata/postesql"
+
+# Stop and remove the PostgreSQL container
+docker stop $CONTAINER_NAME
+docker rm $CONTAINER_NAME
+
+# Remove the data directory
+rm -rf ${DATA_DIR}/*
+
+# Recreate the PostgreSQL container
+docker-compose up -d
+
+echo "PostgreSQL has been reset."
+"""
+        subprocess.run(shell_command, shell=True, check=True)
         
-        #  Run a command
         
-            with client.cursor() as cursor:
-                print("Done")
-                cursor.execute("SELECT * FROM pg_catalog.pg_user WHERE usename != 'root'")
-                print(cursor.fetchall())
-                cursor.execute("SELECT * FROM pg_database")
-                print(cursor.fetchall())
         time.sleep(1)
         # self.init_connection()
 
