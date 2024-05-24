@@ -231,6 +231,8 @@ import pandas as pd
 df = pd.DataFrame(progress_report)
 df.to_csv("progress_report.csv", index=False)
 
+exit(1) # we dont generate anymore the html report here for this run generate_html.py
+
 # reset html file to empty
 with open("progress_report.html", "w") as f:
     f.write("")

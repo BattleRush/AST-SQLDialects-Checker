@@ -28,7 +28,7 @@ def parse_clickhouse():
     test_base_dir = "databases/" + database_name + "/tests/queries"
     
     all_tests = []
-    client = clickhouse_connect.get_client(host='localhost', username='default', password='passwordAST1')
+    #client = clickhouse_connect.get_client(host='localhost', username='default', password='passwordAST1')
 
     # go only into 0_stateless
     # the folder contains multiple folder seek all files in nthe .sql file we have the query and in the reference file we have the expected result
@@ -92,9 +92,6 @@ def parse_clickhouse():
             json.dump(test, f, indent=4)
             
         test_count += 1
-        
-        if test_count > 150:
-            break
        
      
 parse_clickhouse()

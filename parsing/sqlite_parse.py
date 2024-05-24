@@ -187,8 +187,8 @@ def parse_sqlite():
             reset_count = 0
             for t in test["tests"]:
                 
-                if reset_count > 50:
-                    print("Skipping remaining test queries with more than 50 reset_db")
+                if reset_count > 10:
+                    print("Skipping remaining test queries with more than 10 reset_db")
                     continue
                 
                 if t["query"] == "reset_db":  
@@ -220,9 +220,15 @@ def parse_sqlite():
                     if not statement.strip():
                         continue
                     
+                    statement = statement.strip()
+                    
+                    # if it doesnt end with ; then add it
+                    if not statement.endswith(";"):
+                        statement += ";"
+                    
                     cleaned_tests["tests"].append({
                         "name": t["name"],
-                        "query": statement.strip() + ";",
+                        "query": statement
                     })
                     
                     if "$" in statement:
@@ -242,9 +248,6 @@ def parse_sqlite():
             
             count += 1   
             
-            # if count > 10:
-            #     break
-       
      
 #parse_duckdb()
 parse_sqlite()

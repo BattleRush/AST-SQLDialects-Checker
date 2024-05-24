@@ -19,11 +19,29 @@ def extract_sql_queries(file_path):
         lines = statement.split("\n")
         cleaned_lines = []
         for line in lines:
-            if not line.startswith("\\echo"):
+            if "\\echo" not in line:
                 cleaned_lines.append(line)
+                
+            # if we encounter a \copy <table> <file> get the file
+            if "\\copy" in line:
+                # for now we skip these
+                return []               
+                
             
         cleaned_statement = "\n".join(cleaned_lines)
+        
+        if "$" in cleaned_statement:
+            return []
+        
+        cleaned_statement = cleaned_statement.strip()
+        
+        # if statement doesnt end with ; then add it
+        if not cleaned_statement.endswith(";"):
+            cleaned_statement += ";"
+        
         cleaned_statements.append(cleaned_statement)
+        
+    
 
     print("Returning", len(statements), "statements")
     return statements
@@ -38,61 +56,66 @@ def clean_input_folder(database):
             
     os.makedirs(f"input/{database}")
 
-main_path = "databases/postgresql/"
-    
-clean_input_folder("postgresql")
 
-# get all .sql files inside main_path recursively
+def parse_postgres():
+    main_path = "databases/postgresql/"
+        
+    clean_input_folder("postgresql")
 
-all_sql_files = []
-for root, dirs, files in os.walk(main_path):
-    for file in files:
-        if file.endswith(".sql"):
-            all_sql_files.append(os.path.join(root, file))
+    # get all .sql files inside main_path recursively
+
+    all_sql_files = []
+    for root, dirs, files in os.walk(main_path):
+        for file in files:
+            if file.endswith(".sql"):
+                all_sql_files.append(os.path.join(root, file))
+                
+    print("First 4 files:", all_sql_files[:4])
+
+
+    all_tests = []
+
+    # parse each file and extract the sql queries
+    for sql_file in all_sql_files:
+        test_name = sql_file.split("/")[-1]
+        test = {
+            "name": test_name,
+            "tests": []
+        }
+        #print("Parsing file", sql_file)
+        sql_queries = extract_sql_queries(sql_file)
+        
+        if len(sql_queries) == 0:
+            print("No queries found in", sql_file)
+            continue
+        
+        print("Found", len(sql_queries), "queries")
+        print(sql_queries[:2])
+        
+        tests = []
+        for query in sql_queries:
+            tests.append({
+                "query": query,
+                "name": test_name
+            })
             
-print("First 4 files:", all_sql_files[:4])
-
-
-all_tests = []
-
-# parse each file and extract the sql queries
-for sql_file in all_sql_files:
-    test_name = sql_file.split("/")[-1]
-    test = {
-        "name": test_name,
-        "tests": []
-    }
-    #print("Parsing file", sql_file)
-    sql_queries = extract_sql_queries(sql_file)
-    print("Found", len(sql_queries), "queries")
-    print(sql_queries[:2])
-    
-    tests = []
-    for query in sql_queries:
-        tests.append({
-            "query": query,
-            "name": test_name
-        })
+        test["tests"] = tests
         
-    test["tests"] = tests
-    
-    all_tests.append(test)
-    #print(sql_queries[:2])
-    
-#print("First 4 tests:", all_tests[:4])
-
-# save the parsed tests to disk
-for i, test in enumerate(all_tests):
-    test_name = test["name"]
-    # temove .sql extension
-    test_name = test_name[:-4]
-    
-    #print("Saving test", test_name)
-    with open(f"input/postgresql/test_{test_name}.json", "w") as f:
-        json.dump(test, f, indent=4)
+        all_tests.append(test)
+        #print(sql_queries[:2])
         
-    if i > 100:
-        break
+    #print("First 4 tests:", all_tests[:4])
+
+    # save the parsed tests to disk
+    for i, test in enumerate(all_tests):
+        test_name = test["name"]
+        # temove .sql extension
+        test_name = test_name[:-4]
+        
+        #print("Saving test", test_name)
+        with open(f"input/postgresql/test_{test_name}.json", "w") as f:
+            json.dump(test, f, indent=4)
 
 
-print("Parsing postgresql tests done")
+    print("Parsing postgresql tests done")
+
