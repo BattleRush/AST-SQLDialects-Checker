@@ -14,7 +14,6 @@ services:
 
   clickhouse:
     image: clickhouse/clickhouse-server
-    user: '101:101'
     container_name: clickhouse
     hostname: clickhouse
     volumes:

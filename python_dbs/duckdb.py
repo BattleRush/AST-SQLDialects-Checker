@@ -16,7 +16,6 @@ class DuckdbProcessor:
         self.client = duckdb.connect()
     def reset_db(self):
         print("[-] Resetting Duckdb")
-        time.sleep(0.1)
         if self.client is not None:
             self.client.close()
         self.init_connection()

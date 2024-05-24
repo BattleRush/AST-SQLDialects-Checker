@@ -7,7 +7,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT # <-- ADD THIS LINE
 import time
 import subprocess
 import numpy as np
-
+import os
 
 class PostgresProcessor:
     
@@ -17,33 +17,21 @@ class PostgresProcessor:
 
     def reset_db(self):
         print("[-] Resetting Postgres")
-        return
-        self.client.close()
-        self.client = None
+        if self.client is not None:
+            self.client.close()
+            self.client = None
         
-        shell_command = """#!/bin/bash
+        abspath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../docker/")
 
+        shell_command = f"""#!/bin/bash
 # Define variables
-CONTAINER_NAME="ast_postgres"
-DATA_DIR="./dbdata/postesql"
-
-# Stop and remove the PostgreSQL container
-docker stop $CONTAINER_NAME
-docker rm $CONTAINER_NAME
-
-# Remove the data directory
-rm -rf ${DATA_DIR}/*
-
-# Recreate the PostgreSQL container
-docker-compose up -d
-
-echo "PostgreSQL has been reset."
+cd {abspath}
+docker compose down postgres
+docker compose up -d postgres
 """
         subprocess.run(shell_command, shell=True, check=True)
         
         
-        time.sleep(1)
-        # self.init_connection()
 
     def init_connection(self):
         if self.client is not None:

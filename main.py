@@ -39,6 +39,7 @@ def clean_dbs():
     postgres_processor.reset_db()
     duckdb_processor.reset_db()
     clickhouse_processor.reset_db()
+    time.sleep(2)
 
 
 # create a table of the progress report
@@ -79,7 +80,7 @@ for current_db in list_of_dbms:
         test_name = test_file["name"]
         index += 1
         
-        if index > 20:
+        if index > 1:
             break
         
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")
