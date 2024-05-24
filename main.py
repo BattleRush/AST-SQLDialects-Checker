@@ -93,7 +93,7 @@ for current_db in list_of_dbms:
         test_name = test_file["name"]
         index += 1
         
-        if index > 5:
+        if index > 50:
             break
         
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")
@@ -231,6 +231,11 @@ import pandas as pd
 df = pd.DataFrame(progress_report)
 df.to_csv("progress_report.csv", index=False)
 
+# reset html file to empty
+with open("progress_report.html", "w") as f:
+    f.write("")
+    
+
 # Group progress reports by source_db
 grouped_reports = defaultdict(list)
 for report in progress_report:
@@ -343,6 +348,11 @@ for i, source_db in enumerate(grouped_reports):
 
 html += "</div>"
 
+# append current html to the file
+with open("progress_report.html", "a") as f:
+    f.write(html)
+    html = ""
+
 # Create tab content for each source_db
 for i, (source_db, reports) in enumerate(grouped_reports.items()):
     display_style = "block" if i == 0 else "none"
@@ -433,6 +443,12 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
         
         html += "</table>"
         html += "</div>"
+        
+        # append current html to the file
+        with open("progress_report.html", "a") as f:
+            f.write(html)
+            html = ""
+            
     
     html += "</div>"
 
@@ -443,5 +459,6 @@ html += """
 
 
 
-with open("progress_report.html", "w") as f:
+with open("progress_report.html", "a") as f:
     f.write(html)
+    html = ""

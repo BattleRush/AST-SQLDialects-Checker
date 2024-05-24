@@ -97,6 +97,10 @@ docker compose up -d postgres
                 if "no results to fetch" in str(e):
                     return None
                 
+                # rollback the last failed transaction
+                print("Rolling back transaction in Postgres")
+                self.client.rollback()
+                
                 raise e                
         
     def commit(self):
