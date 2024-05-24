@@ -184,8 +184,12 @@ def parse_sqlite():
             has_prior_reset_db = False
             has_only_reset_db = True
             has_any_dollar = False # used for checking if any query contains $ sign -> used for variables
-            
+            reset_count = 0
             for t in test["tests"]:
+                
+                if reset_count > 50:
+                    print("Skipping remaining test queries with more than 50 reset_db")
+                    continue
                 
                 if t["query"] == "reset_db":  
 
@@ -198,6 +202,8 @@ def parse_sqlite():
                         "name": t["name"],
                         "query": t["query"],
                     })
+                    
+                    reset_count += 1
                     
                     continue
                     
