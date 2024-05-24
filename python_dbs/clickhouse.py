@@ -5,6 +5,7 @@ import clickhouse_connect
 import time
 import os
 import subprocess
+from subprocess import PIPE
 
 class ClickhouseProcessor:
     def __init__(self):
@@ -25,16 +26,17 @@ class ClickhouseProcessor:
             self.client.close()
             self.client = None
         
+        return
+        
         abspath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../docker/")
 
         shell_command = f"""#!/bin/bash
 # Define variables
 cd {abspath}
-docker compose down clickhouse
+docker compose down -t 0 clickhouse
 docker compose up -d clickhouse
 """
-        subprocess.run(shell_command, shell=True, check=True)
-        
+        subprocess.run(shell_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=PIPE)
         
     def run_query(self, query):
         if self.client is None:

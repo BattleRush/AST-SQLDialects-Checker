@@ -9,6 +9,10 @@ from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.duckdb import DuckdbProcessor
 from python_dbs.clickhouse_postgresql import ClickhousePostgreProcessor
 from collections import defaultdict
+import subprocess
+from subprocess import PIPE
+import os
+
 
 sqlite_processor = SQLiteProcessor()
 postgres_processor = PostgresProcessor()
@@ -39,6 +43,15 @@ def clean_dbs():
     postgres_processor.reset_db()
     duckdb_processor.reset_db()
     clickhouse_processor.reset_db()
+    abspath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "./docker/")
+
+    shell_command = f"""#!/bin/bash
+cd {abspath}
+docker compose down -t 0
+docker compose up -d
+"""
+    subprocess.run(shell_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=PIPE)
+
     time.sleep(2)
 
 
@@ -80,7 +93,7 @@ for current_db in list_of_dbms:
         test_name = test_file["name"]
         index += 1
         
-        if index > 1:
+        if index > 5:
             break
         
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")

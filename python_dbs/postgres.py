@@ -6,6 +6,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT # <-- ADD THIS LINE
 
 import time
 import subprocess
+from subprocess import PIPE
 import numpy as np
 import os
 
@@ -20,16 +21,17 @@ class PostgresProcessor:
         if self.client is not None:
             self.client.close()
             self.client = None
+        return
         
         abspath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../docker/")
 
         shell_command = f"""#!/bin/bash
 # Define variables
 cd {abspath}
-docker compose down postgres
+docker compose down -t 0 postgres
 docker compose up -d postgres
 """
-        subprocess.run(shell_command, shell=True, check=True)
+        subprocess.run(shell_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=PIPE)
         
         
 
