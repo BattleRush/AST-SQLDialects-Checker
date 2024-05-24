@@ -93,7 +93,7 @@ for current_db in list_of_dbms:
         test_name = test_file["name"]
         index += 1
         
-        if index > 50:
+        if index > 200:
             break
         
         print(f"Running test {test_name} number {index} out of {len(all_tests)}")

@@ -100,6 +100,48 @@ td, th {
 .expandable-row {
   cursor: pointer;
 }
+
+
+/* Apply styles to all tables with class 'dataframe' */
+table.dataframe {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+table.dataframe th, table.dataframe td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table.dataframe th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+table.dataframe tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table.dataframe tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+table.dataframe th:first-child, 
+table.dataframe td:first-child {
+    width: 50px; /* Adjust width of the index column */
+}
+
+table.dataframe th:first-child {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+
+
 </style>
 <script>
 function openTab(evt, tabName) {
@@ -286,6 +328,20 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
                     html += f"<th>Dtypes Equal</th>"
                     html += f"<th>Values Equal</th>"
                     html += f"<th>Full Match</th>"
+                    html += "</tr>"
+                    
+                    # add row of source
+                    html += "<tr>"
+                    html += f"<td>REFERENCE: {test_report['source_db']}</td>"
+                    html += f"<td style='background-color: {'green' if query_report['source_success'] else 'red'}'>{query_report['source_success']}</td>"
+                    html += f"<td>{query_report['source_exception']}</td>"
+                    html += f"<td>{query_report['source_result_html']}</td>"
+                    html += f"<td>{query_report['source_shape']}</td>"
+                    html += f"<td></td>"
+                    html += f"<td></td>"
+                    html += f"<td></td>"
+                    html += f"<td></td>"
+                    html += f"<td></td>"
                     html += "</tr>"
                     
                 first = False
