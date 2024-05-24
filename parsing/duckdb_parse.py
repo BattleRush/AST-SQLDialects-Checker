@@ -203,6 +203,7 @@ def parse_duckdb():
     success = 0
     skipped = 0
 
+    count = 0
     for test in all_test_files:
         print("Parsing test ", all_test_files.index(test) + 1, " out of ", len(all_test_files), ": ", test)
         
@@ -229,8 +230,13 @@ def parse_duckdb():
         # if file exists, remove it
         
         if parsed_tests:
-            with open("input/duckdb/" + output_filename + ".json", "w") as f:
-                f.write(json.dumps(parsed_tests, indent=4))
+            # with open("input/duckdb/" + output_filename + ".json", "w") as f:
+            #     f.write(json.dumps(parsed_tests, indent=4))
+            count += 1
+            prefix = str(count).zfill(5)
+            #print("Saving test", test_name)
+            with open(f"input/duckdb/{prefix}_{output_filename}.json", "w") as f:
+                json.dump(parsed_tests, f, indent=4)
         
     print ("Success:", success, " Skipped:", skipped)
     #print(parsed_tests)

@@ -363,6 +363,10 @@ for i, (source_db, reports) in enumerate(grouped_reports.items()):
             html += "</div>"
             html += "</td>"
             html += "</tr>"
+            
+            with open("progress_report.html", "a") as f:
+                f.write(html)
+                html = ""
         
         html += "</table>"
         html += "</div>"

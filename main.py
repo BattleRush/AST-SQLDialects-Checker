@@ -47,7 +47,7 @@ def clean_dbs():
 
     shell_command = f"""#!/bin/bash
 cd {abspath}
-docker compose down -t 0
+docker compose down -t 0 -v
 docker compose up -d
 """
     subprocess.run(shell_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=PIPE)
@@ -73,6 +73,9 @@ list_of_dbms = ["postgresql", "sqlite", "clickhouse", "duckdb"]
 
 clean_dbs()
 
+skip = 400
+take = 300
+
 for current_db in list_of_dbms:
     print("Loading tests for", current_db)
     all_tests = load_all_json(current_db)
@@ -86,17 +89,19 @@ for current_db in list_of_dbms:
     failed_count = 0
     
     index = 0
+    
     for test_file in all_tests:
-        clean_dbs()
+
         has_been_reset = False
         
         test_name = test_file["name"]
         index += 1
         
-        if index > 200:
-            break
+        if index < skip or index > skip + take:
+            continue
         
-        print(f"Running test {test_name} number {index} out of {len(all_tests)}")
+        clean_dbs()
+        print(f"Running test {test_name} number {index} out of {len(all_tests)} from current_db {current_db}")
         
         current_test_report = {
             "test_name": test_name,

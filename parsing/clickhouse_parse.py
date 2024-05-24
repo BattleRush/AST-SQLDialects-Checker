@@ -77,6 +77,7 @@ def parse_clickhouse():
     # write the all_tests to file for each test
     
     test_count = 0
+    count = 0
     for test in all_tests:
         #print ("Writing test", test["name"])
         output_filename = test["name"].replace(".sql", "")
@@ -87,9 +88,12 @@ def parse_clickhouse():
             print("Skipping", output_filename)
             continue
         
-        # save file in utf-8
-        with open("input/" + database_name + "/" + output_filename + ".json", "w", encoding="utf-8") as f:
+        count += 1
+        prefix = str(count).zfill(5)
+        #print("Saving test", test_name)
+        with open(f"input/{database_name}/{prefix}_{output_filename}.json", "w") as f:
             json.dump(test, f, indent=4)
+
             
         test_count += 1
        

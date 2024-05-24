@@ -106,14 +106,18 @@ def parse_postgres():
         
     #print("First 4 tests:", all_tests[:4])
 
+    count = 0
     # save the parsed tests to disk
     for i, test in enumerate(all_tests):
         test_name = test["name"]
         # temove .sql extension
         test_name = test_name[:-4]
         
+        count += 1
+        
+        prefix = str(count).zfill(5)
         #print("Saving test", test_name)
-        with open(f"input/postgresql/test_{test_name}.json", "w") as f:
+        with open(f"input/postgresql/{prefix}_{test_name}.json", "w") as f:
             json.dump(test, f, indent=4)
 
 
