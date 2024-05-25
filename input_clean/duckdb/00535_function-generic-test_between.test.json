@@ -1,0 +1,250 @@
+{
+    "name": "test_between.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SET default_null_order='nulls_first';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 10 BETWEEN 10 AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 9 BETWEEN 10 AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 10 BETWEEN NULL AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 30 BETWEEN NULL AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 10 BETWEEN 10 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 9 BETWEEN 10 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL BETWEEN 10 AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL BETWEEN NULL AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL BETWEEN 10 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL BETWEEN NULL AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (1), (2), (3), (NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT i BETWEEN 1 AND 2 FROM integers ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT i BETWEEN NULL AND 2 FROM integers ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT i BETWEEN 2 AND NULL FROM integers ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 10 BETWEEN 10 AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 9 BETWEEN 10 AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 10 BETWEEN NULL AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 30 BETWEEN NULL AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 10 BETWEEN 10 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 9 BETWEEN 10 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN 10 AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN NULL AND 20",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN 10 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN NULL AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN 1 AND 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN NULL AND 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN 2 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN -1 AND +1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 0 BETWEEN -1 AND +1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN i-1 AND i+1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN i-1 AND 10",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN NULL AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN i-1 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN 0 AND i+1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE i BETWEEN NULL AND i+1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 1 BETWEEN i-1 AND i+1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN i-1 AND i+1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE NULL BETWEEN i-1 AND NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 1 BETWEEN i-1 AND 100",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM integers WHERE 1 BETWEEN 0 AND i-1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers WHERE i >= 1 AND i < 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers WHERE i > 1 AND i <= 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM range(4) tbl(i) WHERE i >= 1 AND i < 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM range(4) tbl(i) WHERE i > 1 AND i <= 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE issue3588(c0 INT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT *\nFROM issue3588\nWHERE (SELECT 0) BETWEEN 0 AND issue3588.c0;",
+            "expected_result": ""
+        }
+    ]
+}

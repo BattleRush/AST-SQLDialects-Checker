@@ -1,0 +1,20 @@
+{
+    "name": "case_condition.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl AS SELECT * FROM range(10) tbl(i)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM tbl\nWHERE\nCASE WHEN i%2=0 THEN 1 ELSE 0 END\nAND\nCASE WHEN i<5 THEN 1 ELSE 0 END",
+            "expected_result": ""
+        }
+    ]
+}

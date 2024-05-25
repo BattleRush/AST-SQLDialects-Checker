@@ -1,0 +1,40 @@
+{
+    "name": "pivot_empty.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE Cities(Country VARCHAR, Name VARCHAR, Year INT, Population INT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PIVOT Cities ON Country USING SUM(Population);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PIVOT Cities ON Country, Name USING SUM(Population);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PIVOT Cities ON Country IN ('xx') USING SUM(Population);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PIVOT Cities ON (Country, Name) IN ('xx') USING SUM(Population);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PIVOT Cities ON Country IN ('xx', 'yy') USING SUM(Population);",
+            "expected_result": ""
+        }
+    ]
+}

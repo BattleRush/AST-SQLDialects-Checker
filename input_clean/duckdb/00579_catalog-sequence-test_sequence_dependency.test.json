@@ -1,0 +1,40 @@
+{
+    "name": "test_sequence_dependency.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "create sequence seq;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table integers(i integer default nextval('seq'));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "drop sequence seq;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "begin transaction;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "drop table integers;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "drop sequence seq;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "commit",
+            "expected_result": ""
+        }
+    ]
+}

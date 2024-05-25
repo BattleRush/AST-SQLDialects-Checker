@@ -1,0 +1,30 @@
+{
+    "name": "did_you_mean.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE hello(i INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE SCHEMA test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test.bye(i INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM helloo;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM bye;",
+            "expected_result": ""
+        }
+    ]
+}

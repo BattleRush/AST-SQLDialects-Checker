@@ -1,0 +1,310 @@
+{
+    "name": "test_interval_addition.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '1' YEAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '0' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '0' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '1' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '1' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '2' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '2' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '3' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '3' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '4' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '4' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '5' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '5' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '6' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '6' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '7' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '7' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '8' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '8' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '9' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '9' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '10' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '10' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '11' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '11' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '12' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '12' MONTH",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' + INTERVAL '10' DAY",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1992-03-01' - INTERVAL '10' DAY",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1993-03-01' - INTERVAL '10' DAY",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1993-03-01' + INTERVAL '1' SECOND",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1993-03-01' - INTERVAL '1' SECOND",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1993-03-01' + INTERVAL '1000000' SECOND",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DATE '1993-03-01' - INTERVAL '1000000' SECOND",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT INTERVAL '1000000' SECOND - DATE '1993-03-01'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIME '10:00:00' + INTERVAL '5' SECOND",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT INTERVAL '5' SECOND + TIME '10:00:00'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIME '10:00:00' - INTERVAL '5' SECOND",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIME '10:00:00' + INTERVAL '1' DAY",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIME '23:00:00' + INTERVAL '1' HOUR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIME '00:00:00' - INTERVAL '1' HOUR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIME '00:00:00' + INTERVAL '-1' HOUR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '12:15:37.123456-08'::TIMETZ + INTERVAL '2 HOUR';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '12:15:37.123456-08'::TIMETZ + INTERVAL '22 HOUR';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '12:15:37.123456-08'::TIMETZ + INTERVAL '2 DAY';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select INTERVAL '2 HOUR' + '12:15:37.123456-08'::TIMETZ;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select INTERVAL '22 HOUR' + '12:15:37.123456-08'::TIMETZ;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select INTERVAL '2 DAY' + '12:15:37.123456-08'::TIMETZ;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '12:15:37.123456-08'::TIMETZ - INTERVAL '2 HOUR';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '12:15:37.123456-08'::TIMETZ - INTERVAL '22 HOUR';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '12:15:37.123456-08'::TIMETZ - INTERVAL '2 DAY';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select INTERVAL '2 HOUR' - '12:15:37.123456-08'::TIMETZ;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIMESTAMP '1992-01-01 10:00:00' + INTERVAL '1' DAY",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT INTERVAL '1' DAY + TIMESTAMP '1992-01-01 10:00:00'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIMESTAMP '1992-01-01 10:00:05' + INTERVAL '17 years 3 months 1 day 2 hours 1 minute 57 seconds'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT TIMESTAMP '1992-01-01 10:00:00' - INTERVAL '1' DAY",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select timestamp '1993-01-01 00:00:00' - timestamp '1991-01-01 01:00:30';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE issue1998(id INTEGER, lhs TIMESTAMP, rhs TIMESTAMP);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO issue1998 VALUES\n\t(0, '2020-07-07 02:01:01', '2020-08-05 07:51:47'),\n\t(1, '2020-02-08 19:26:38', '2020-09-21 10:02:28'),\n\t(2, '2020-06-19 20:45:41', '2020-01-04 05:44:42'),\n\t(3, '2020-11-18 18:22:26', '2020-06-14 02:46:55'),\n\t(4, '2020-08-24 03:31:52', '2020-07-05 19:04:34')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT id, lhs - rhs FROM issue1998 ORDER BY 1",
+            "expected_result": ""
+        }
+    ]
+}

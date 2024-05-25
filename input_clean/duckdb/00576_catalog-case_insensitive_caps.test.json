@@ -1,0 +1,35 @@
+{
+    "name": "case_insensitive_caps.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE mytable(mycolumn INTEGER, myothercolumn INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"MYCOLUMN\" FROM \"MYTABLE\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE \"MYTABLE\" DROP COLUMN \"MYCOLUMN\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE \"MYTABLE\" ADD COLUMN mycolumn INTEGER;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE \"MYTABLE\" ALTER COLUMN \"MYCOLUMN\" SET DEFAULT 3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE \"MYTABLE\"",
+            "expected_result": ""
+        }
+    ]
+}

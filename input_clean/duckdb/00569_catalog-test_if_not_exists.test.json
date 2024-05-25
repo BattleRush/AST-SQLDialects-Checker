@@ -1,0 +1,40 @@
+{
+    "name": "test_if_not_exists.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE IF NOT EXISTS integers(i INTEGER, j INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE IF NOT EXISTS integers(i INTEGER, j INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE IF NOT EXISTS integers2 AS SELECT 42",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE IF NOT EXISTS integers2 AS SELECT 42",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE IF EXISTS integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE IF EXISTS integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE IF EXISTS no_such_scheme.integers",
+            "expected_result": ""
+        }
+    ]
+}

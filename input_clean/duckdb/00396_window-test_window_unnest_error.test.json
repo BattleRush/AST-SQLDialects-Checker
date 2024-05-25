@@ -1,0 +1,45 @@
+{
+    "name": "test_window_unnest_error.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl AS SELECT 42 AS i;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SUM(i) OVER (ROWS BETWEEN UNNEST([1]) PRECEDING AND 1 FOLLOWING) FROM tbl;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SUM(i) OVER (ROWS BETWEEN 1 PRECEDING AND UNNEST([1]) FOLLOWING) FROM tbl;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT lead(c0, UNNEST([1])) OVER (ROWS BETWEEN 2 PRECEDING AND 4 PRECEDING)\nFROM (VALUES (1, 2)) a(c0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT x, count(x) FILTER (WHERE x % 2 = UNNEST([2])) OVER (ORDER BY x ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING)\nFROM generate_series(0, 10) tbl(x);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT lead(c0, 0, UNNEST([1])) OVER (ROWS BETWEEN 2 PRECEDING AND 4 PRECEDING)\nFROM (VALUES (1, 2)) a(c0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SUM(i) OVER (ROWS BETWEEN (SELECT UNNEST([1])) PRECEDING AND 1 FOLLOWING) FROM tbl;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT lead(c0, (SELECT UNNEST([0])), (SELECT UNNEST([1]))) OVER (ROWS BETWEEN 2 PRECEDING AND 4 PRECEDING)\nFROM (VALUES (1, 2)) a(c0);",
+            "expected_result": ""
+        }
+    ]
+}

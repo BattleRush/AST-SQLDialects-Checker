@@ -1,0 +1,60 @@
+{
+    "name": "incorrect_converted_type.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_bigint.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_date.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_int.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_smallint.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_timestamp.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_timestamp_ms.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_tinyint.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_ubigint.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_uinteger.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_usmallint.parquet';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM 'data/parquet-testing/broken/broken_utinyint.parquet';",
+            "expected_result": ""
+        }
+    ]
+}

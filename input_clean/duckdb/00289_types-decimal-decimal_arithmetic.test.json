@@ -1,0 +1,150 @@
+{
+    "name": "decimal_arithmetic.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT -('0.1'::DECIMAL), -('-0.1'::DECIMAL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT +('0.1'::DECIMAL), +('-0.1'::DECIMAL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.1'::DECIMAL + '0.1'::DECIMAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.1'::DECIMAL + 1::INTEGER",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.5'::DECIMAL(4,4) + '0.5'::DECIMAL(4,4)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.5'::DECIMAL(1,1) + '100.0'::DECIMAL(3,0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ('0.5'::DECIMAL(1,1) + 10000)::VARCHAR,\n       ('0.54321'::DECIMAL(5,5) + 10000)::VARCHAR,\n       ('0.5432154321'::DECIMAL(10,10) + 10000)::VARCHAR,\n       ('0.543215432154321'::DECIMAL(15,15) + 10000::DECIMAL(20,15))::VARCHAR,\n       ('0.54321543215432154321'::DECIMAL(20,20) + 10000)::VARCHAR,\n       ('0.5432154321543215432154321'::DECIMAL(25,25) + 10000)::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ('0.54321543215432154321543215432154321'::DECIMAL(35,35) + 10000)::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.5'::DECIMAL(1,1) + 1::TINYINT,\n       '0.5'::DECIMAL(1,1) + 1::SMALLINT,\n       '0.5'::DECIMAL(1,1) + 1::INTEGER,\n       '0.5'::DECIMAL(1,1) + 1::BIGINT,\n       '0.5'::DECIMAL(1,1) + 1::HUGEINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.5'::DECIMAL(1,1) + -1::TINYINT,\n       '0.5'::DECIMAL(1,1) + -1::SMALLINT,\n       '0.5'::DECIMAL(1,1) + -1::INTEGER,\n       '0.5'::DECIMAL(1,1) + -1::BIGINT,\n       '0.5'::DECIMAL(1,1) + -1::HUGEINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.5'::DECIMAL(1,1) - 1::TINYINT,\n       '0.5'::DECIMAL(1,1) - 1::SMALLINT,\n       '0.5'::DECIMAL(1,1) - 1::INTEGER,\n       '0.5'::DECIMAL(1,1) - 1::BIGINT,\n       '0.5'::DECIMAL(1,1) - 1::HUGEINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.5'::DECIMAL(1,1) - -1::TINYINT,\n       '0.5'::DECIMAL(1,1) - -1::SMALLINT,\n       '0.5'::DECIMAL(1,1) - -1::INTEGER,\n       '0.5'::DECIMAL(1,1) - -1::BIGINT,\n       '0.5'::DECIMAL(1,1) - -1::HUGEINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE decimals(d DECIMAL(3, 2));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO decimals VALUES ('0.1'), ('0.2');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT d + 10000 FROM decimals;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT d + '0.1'::DECIMAL, d + 10000 FROM decimals;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.1'::DECIMAL * '10.0'::DECIMAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT typeof('0.1'::DECIMAL(2,1) * '10.0'::DECIMAL(3,1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.1'::DECIMAL * '0.1'::DECIMAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.1'::DECIMAL * 10::INTEGER",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '5.0'::DECIMAL(4,3) * '5.0'::DECIMAL(4,3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '-5.0'::DECIMAL(4,3) * '5.0'::DECIMAL(4,3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ('18.25'::DECIMAL(4,2) * '17.25'::DECIMAL(4,2))::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.001'::DECIMAL * 100::TINYINT,\n       '0.001'::DECIMAL * 10000::SMALLINT,\n       '0.001'::DECIMAL * 1000000::INTEGER,\n       '0.001'::DECIMAL * 100000000::BIGINT,\n       '0.001'::DECIMAL * 10000000000::HUGEINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '0.000000000000000000000000000001'::DECIMAL(38,30) * '0.000000000000000000000000000001'::DECIMAL(38,30)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 2.0 + 1.0,\n       2.0000 + 1.0000,\n       2.000000000000 + 1.000000000000,\n       2.00000000000000000000 + 1.00000000000000000000",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 2.0 - 1.0,\n       2.0000 - 1.0000,\n       2.000000000000 - 1.000000000000,\n       2.00000000000000000000 - 1.00000000000000000000",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 2.0 * 1.0,\n       2.0000 * 1.0000",
+            "expected_result": ""
+        }
+    ]
+}

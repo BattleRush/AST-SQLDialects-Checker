@@ -1,0 +1,25 @@
+{
+    "name": "pivot_generated.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE Product(DaysToManufacture int, StandardCost int GENERATED ALWAYS AS (DaysToManufacture * 5));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO Product VALUES (0), (1), (2), (4);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 'AverageCost' AS Cost_Sorted_By_Production_Days,\n  \"0\", \"1\", \"2\", \"3\", \"4\"\nFROM\n(\n  SELECT DaysToManufacture, StandardCost\n  FROM Product\n) AS SourceTable\nPIVOT\n(\n  AVG(StandardCost)\n  FOR DaysToManufacture IN (0, 1, 2, 3, 4)\n) AS PivotTable;",
+            "expected_result": ""
+        }
+    ]
+}

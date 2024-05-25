@@ -1,0 +1,35 @@
+{
+    "name": "test_quoted_column_name.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(\"42\" INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (33)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"42\" FROM integers;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE \"table \"\".\" ( \"col \"\".\" TEXT)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO \"table \"\".\" (\"col \"\".\") VALUES ('quote_escaped_quote_''')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"table \"\".\".\"col \"\".\", \"col \"\".\" FROM \"table \"\".\";",
+            "expected_result": ""
+        }
+    ]
+}

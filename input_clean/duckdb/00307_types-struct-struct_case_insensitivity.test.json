@@ -1,0 +1,55 @@
+{
+    "name": "struct_case_insensitivity.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl AS SELECT ({'HELLO': 3}) col;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT col['HELLO'] FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT col['hello'] FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT col.hello FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"COL\".\"HELLO\" FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ({'hello': 3, 'hello': 4}) col;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ({'HELLO': 3, 'HELLO': 4}) col;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ({'HELLO': 3, 'hello': 4}) col;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT col['HELL'] FROM tbl",
+            "expected_result": ""
+        }
+    ]
+}

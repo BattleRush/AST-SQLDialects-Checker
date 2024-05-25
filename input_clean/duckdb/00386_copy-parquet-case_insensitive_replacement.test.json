@@ -1,0 +1,10 @@
+{
+    "name": "case_insensitive_replacement.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT data FROM 'data/parquet-testing/CASE_INSENSITIVE.PARQUET'",
+            "expected_result": ""
+        }
+    ]
+}

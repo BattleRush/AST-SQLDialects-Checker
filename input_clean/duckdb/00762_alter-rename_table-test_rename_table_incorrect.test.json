@@ -1,0 +1,25 @@
+{
+    "name": "test_rename_table_incorrect.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl(i INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl2(i INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE non_table RENAME TO tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE tbl2 RENAME TO tbl",
+            "expected_result": ""
+        }
+    ]
+}

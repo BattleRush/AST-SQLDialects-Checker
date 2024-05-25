@@ -1,0 +1,200 @@
+{
+    "name": "test_case_insensitive_binding.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test (\"HeLlO\" INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO test VALUES (1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT HeLlO FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT hello FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"HeLlO\" FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"HELLO\" FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"HELLo\" FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT alias(HeLlO) FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT alias(hello) FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT alias(x) FROM (SELECT HeLlO as x FROM test) tbl;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test.HeLlO FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test.hello FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test.\"HeLlO\" FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test.\"HELLO\" FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test.\"HELLo\" FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE test SET hello=3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE test SET HeLlO=3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test(\"HeLlO\" INTEGER, \"HELLO\" INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test1(\"HeLlO\" INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test2(\"HELLO\" INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT HeLlO FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT hello FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"HeLlO\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"HELLO\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT \"HELLo\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test1.HeLlO FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test1.hello FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test1.\"HeLlO\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test1.\"HELLO\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test1.\"HELLo\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test2.HeLlO FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test2.hello FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test2.\"HeLlO\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test2.\"HELLO\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT test2.\"HELLo\" FROM test1, test2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM test1 JOIN test2 USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT hello FROM (SELECT 42) tbl(\"HeLlO\")",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,135 @@
+{
+    "name": "list_index.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE a(id INTEGER PRIMARY KEY, c INT[]);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (1, [1, 2, 3])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (2, NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (3, [NULL])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (4, [4, 5, NULL, 6])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=4",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE a;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE a(id INTEGER, c INT[]);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (1, [1, 2, 3])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (2, NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (3, [NULL])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (4, [4, 5, NULL, 6])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE INDEX a_index ON a(id);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=4",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (1, [4, 5, NULL])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (1, NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (1, [NULL])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO a VALUES (1, [7, 8, 9, 10, 11, 12, 13, 14, 15])",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a WHERE id=1 ORDER BY c[1] NULLS FIRST",
+            "expected_result": ""
+        }
+    ]
+}

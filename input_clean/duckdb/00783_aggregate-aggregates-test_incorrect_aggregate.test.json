@@ -1,0 +1,90 @@
+{
+    "name": "test_incorrect_aggregate.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT COUNT(1, 2, 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(COUNT(1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT STDDEV_SAMP()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT STDDEV_SAMP(1, 2, 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT STDDEV_SAMP(STDDEV_SAMP(1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SUM()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SUM(1, 2, 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SUM(SUM(1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT FIRST()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT FIRST(1, 2, 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT FIRST(FIRST(1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MAX()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MAX(1, 2, 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MAX(MAX(1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MIN()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MIN(1, 2, 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MIN(MIN(1))",
+            "expected_result": ""
+        }
+    ]
+}

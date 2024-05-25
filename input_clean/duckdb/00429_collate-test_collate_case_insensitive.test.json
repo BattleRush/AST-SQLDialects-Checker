@@ -1,0 +1,85 @@
+{
+    "name": "test_collate_case_insensitive.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE collate_test(s VARCHAR COLLATE NOCASE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO collate_test VALUES ('hello'), ('WoRlD'), ('world'), ('M\u00fchleisen')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM collate_test WHERE s='HeLlo'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM collate_test WHERE s='M\u00dchleisen'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM collate_test WHERE s='world'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE collate_join_table(s VARCHAR, i INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO collate_join_table VALUES ('HeLlO', 1), ('m\u00dcHLEISEN', 3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT collate_test.s, collate_join_table.s, i FROM collate_test JOIN collate_join_table ON (collate_test.s=collate_join_table.s) ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE collate_test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE collate_test(s VARCHAR COLLATE NOCASE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO collate_test VALUES ('Hallo'), ('ham'), ('HELLO'), ('hElp')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM collate_test ORDER BY s",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE collate_test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE collate_test(s VARCHAR COLLATE NOCASE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO collate_test VALUES ('Hallo'), ('hallo')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT s FROM collate_test",
+            "expected_result": ""
+        }
+    ]
+}

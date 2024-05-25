@@ -1,0 +1,13 @@
+{
+    "name": "ioerr2",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "alterauth-1.0",
+            "query": "CREATE TABLE t1(a, b, c);"
+        }
+    ]
+}

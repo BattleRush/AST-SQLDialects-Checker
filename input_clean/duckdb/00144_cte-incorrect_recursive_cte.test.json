@@ -1,0 +1,20 @@
+{
+    "name": "incorrect_recursive_cte.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "WITH RECURSIVE cte AS (SELECT 42) SELECT * FROM cte;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "with recursive t as (select 1 as x intersect select x+1 from t where x < 3) select * from t order by x",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "with recursive t as (select 1 as x except select x+1 from t where x < 3) select * from t order by x",
+            "expected_result": ""
+        }
+    ]
+}

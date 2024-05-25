@@ -1,0 +1,30 @@
+{
+    "name": "errors_as_json.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SET errors_as_json=true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM nonexistent_table",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cbl FROM (VALUES (42)) t(col)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select corr('hello', 'world')",
+            "expected_result": ""
+        }
+    ]
+}

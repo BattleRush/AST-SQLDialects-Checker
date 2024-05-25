@@ -1,0 +1,49 @@
+{
+    "name": "02294_decimal_second_errors.sql",
+    "tests": [
+        {
+            "query": "SELECT 1 SETTINGS max_execution_time=NaN;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": " -- { clientError 72 }\nSELECT 1 SETTINGS max_execution_time=Infinity;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": " -- { clientError 72 };",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\nSELECT 1 SETTINGS max_execution_time=-Infinity;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": " -- { clientError 72 };",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\n\n-- Ok values\nSELECT 1 SETTINGS max_execution_time=-0.5;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\nSELECT 1 SETTINGS max_execution_time=5.5;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\nSELECT 1 SETTINGS max_execution_time=-1;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\nSELECT 1 SETTINGS max_execution_time=0.0;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\nSELECT 1 SETTINGS max_execution_time=-0.0;",
+            "name": "02294_decimal_second_errors.sql"
+        },
+        {
+            "query": "\nSELECT 1 SETTINGS max_execution_time=10;",
+            "name": "02294_decimal_second_errors.sql"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "name": "test_rename_view_incorrect.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl(i INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE VIEW vw AS SELECT * FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE VIEW vw2 AS SELECT 1729 AS i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER VIEW non_view RENAME TO vw",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER VIEW vw2 RENAME TO vw",
+            "expected_result": ""
+        }
+    ]
+}

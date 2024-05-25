@@ -1,0 +1,220 @@
+{
+    "name": "test_type_resolution.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::TINYINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::SMALLINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::INT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::BIGINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::REAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::DOUBLE",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::TINYINT + 1::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::TINYINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::SMALLINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::INT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::BIGINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::REAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::DOUBLE",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::SMALLINT + 1::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::TINYINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::SMALLINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::INT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::BIGINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::REAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::DOUBLE",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::INTEGER + 1::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::TINYINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::SMALLINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::INT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::BIGINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::REAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::DOUBLE",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::BIGINT + 1::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::TINYINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::SMALLINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::INT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::BIGINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::REAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::DOUBLE",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::REAL + 1::VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::TINYINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::SMALLINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::INT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::BIGINT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::REAL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::DOUBLE",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1::DOUBLE + 1::VARCHAR",
+            "expected_result": ""
+        }
+    ]
+}

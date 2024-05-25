@@ -1,0 +1,35 @@
+{
+    "name": "test_if.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT IF(true, 1, 10), IF(false, 1, 10), IF(NULL, 1, 10)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT IF(true, 20, 2000), IF(false, 20, 2000), IF(NULL, 20, 2000)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT IF(true, 20.5, 2000), IF(false, 20, 2000.5), IF(NULL, 20, 2000.5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT IF(true, '2020-05-05'::date, '1996-11-05 10:11:56'::timestamp), IF(false, '2020-05-05'::date, '1996-11-05 10:11:56'::timestamp), IF(NULL, '2020-05-05'::date, '1996-11-05 10:11:56'::timestamp)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT IF(true, 'true', 'false'), IF(false, 'true', 'false'), IF(NULL, 'true', 'false')",
+            "expected_result": ""
+        }
+    ]
+}

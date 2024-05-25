@@ -1,0 +1,65 @@
+{
+    "name": "00433_ifnull.sql",
+    "tests": [
+        {
+            "query": "SELECT ifNull('x', 'y') AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(materialize('x'), materialize('y')) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\n\nSELECT ifNull(toNullable('x'), 'y') AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(toNullable('x'), materialize('y')) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\n\nSELECT ifNull('x', toNullable('y')) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(materialize('x'), toNullable('y')) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\n\nSELECT ifNull(toNullable('x'), toNullable('y')) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\n\nSELECT ifNull(toString(number), toString(-number)) AS res, toTypeName(res) FROM system.numbers LIMIT 5;",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(nullIf(toString(number), '1'), toString(-number)) AS res, toTypeName(res) FROM system.numbers LIMIT 5;",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(toString(number), nullIf(toString(-number), '-3')) AS res, toTypeName(res) FROM system.numbers LIMIT 5;",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(nullIf(toString(number), '1'), nullIf(toString(-number), '-3')) AS res, toTypeName(res) FROM system.numbers LIMIT 5;",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\n\nSELECT ifNull(NULL, 1) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(1, NULL) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\nSELECT ifNull(NULL, NULL) AS res, toTypeName(res);",
+            "name": "00433_ifnull.sql"
+        },
+        {
+            "query": "\n\nSELECT IFNULL(NULLIF(toString(number), '1'), NULLIF(toString(-number), '-3')) AS res, toTypeName(res) FROM system.numbers LIMIT 5;",
+            "name": "00433_ifnull.sql"
+        }
+    ]
+}

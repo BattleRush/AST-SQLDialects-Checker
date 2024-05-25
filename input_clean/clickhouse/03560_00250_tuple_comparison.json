@@ -1,0 +1,69 @@
+{
+    "name": "00250_tuple_comparison.sql",
+    "tests": [
+        {
+            "query": "SELECT\n    (1, 'Hello', 23) =  (1, 'Hello', 23),\n    (1, 'Hello', 23) != (1, 'Hello', 23),\n    (1, 'Hello', 23) <  (1, 'Hello', 23),\n    (1, 'Hello', 23) >  (1, 'Hello', 23),\n    (1, 'Hello', 23) <= (1, 'Hello', 23),\n    (1, 'Hello', 23) >= (1, 'Hello', 23);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello', 23) =  (2, 'Hello', 23),\n    (1, 'Hello', 23) != (2, 'Hello', 23),\n    (1, 'Hello', 23) <  (2, 'Hello', 23),\n    (1, 'Hello', 23) >  (2, 'Hello', 23),\n    (1, 'Hello', 23) <= (2, 'Hello', 23),\n    (1, 'Hello', 23) >= (2, 'Hello', 23);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello', 23) =  (1, 'World', 23),\n    (1, 'Hello', 23) != (1, 'World', 23),\n    (1, 'Hello', 23) <  (1, 'World', 23),\n    (1, 'Hello', 23) >  (1, 'World', 23),\n    (1, 'Hello', 23) <= (1, 'World', 23),\n    (1, 'Hello', 23) >= (1, 'World', 23);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello', 23) =  (1, 'Hello', 24),\n    (1, 'Hello', 23) != (1, 'Hello', 24),\n    (1, 'Hello', 23) <  (1, 'Hello', 24),\n    (1, 'Hello', 23) >  (1, 'Hello', 24),\n    (1, 'Hello', 23) <= (1, 'Hello', 24),\n    (1, 'Hello', 23) >= (1, 'Hello', 24);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (2, 'Hello', 23) =  (1, 'Hello', 23),\n    (2, 'Hello', 23) != (1, 'Hello', 23),\n    (2, 'Hello', 23) <  (1, 'Hello', 23),\n    (2, 'Hello', 23) >  (1, 'Hello', 23),\n    (2, 'Hello', 23) <= (1, 'Hello', 23),\n    (2, 'Hello', 23) >= (1, 'Hello', 23);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'World', 23) =  (1, 'Hello', 23),\n    (1, 'World', 23) != (1, 'Hello', 23),\n    (1, 'World', 23) <  (1, 'Hello', 23),\n    (1, 'World', 23) >  (1, 'Hello', 23),\n    (1, 'World', 23) <= (1, 'Hello', 23),\n    (1, 'World', 23) >= (1, 'Hello', 23);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello', 24) =  (1, 'Hello', 23),\n    (1, 'Hello', 24) != (1, 'Hello', 23),\n    (1, 'Hello', 24) <  (1, 'Hello', 23),\n    (1, 'Hello', 24) >  (1, 'Hello', 23),\n    (1, 'Hello', 24) <= (1, 'Hello', 23),\n    (1, 'Hello', 24) >= (1, 'Hello', 23);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello') =  (1, 'Hello'),\n    (1, 'Hello') != (1, 'Hello'),\n    (1, 'Hello') <  (1, 'Hello'),\n    (1, 'Hello') >  (1, 'Hello'),\n    (1, 'Hello') <= (1, 'Hello'),\n    (1, 'Hello') >= (1, 'Hello');",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello') =  (2, 'Hello'),\n    (1, 'Hello') != (2, 'Hello'),\n    (1, 'Hello') <  (2, 'Hello'),\n    (1, 'Hello') >  (2, 'Hello'),\n    (1, 'Hello') <= (2, 'Hello'),\n    (1, 'Hello') >= (2, 'Hello');",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'Hello') =  (1, 'World'),\n    (1, 'Hello') != (1, 'World'),\n    (1, 'Hello') <  (1, 'World'),\n    (1, 'Hello') >  (1, 'World'),\n    (1, 'Hello') <= (1, 'World'),\n    (1, 'Hello') >= (1, 'World');",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (2, 'Hello') =  (1, 'Hello'),\n    (2, 'Hello') != (1, 'Hello'),\n    (2, 'Hello') <  (1, 'Hello'),\n    (2, 'Hello') >  (1, 'Hello'),\n    (2, 'Hello') <= (1, 'Hello'),\n    (2, 'Hello') >= (1, 'Hello');",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    (1, 'World') =  (1, 'Hello'),\n    (1, 'World') != (1, 'Hello'),\n    (1, 'World') <  (1, 'Hello'),\n    (1, 'World') >  (1, 'Hello'),\n    (1, 'World') <= (1, 'Hello'),\n    (1, 'World') >= (1, 'Hello');",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    tuple(1) =  tuple(1),\n    tuple(1) != tuple(1),\n    tuple(1) <  tuple(1),\n    tuple(1) >  tuple(1),\n    tuple(1) <= tuple(1),\n    tuple(1) >= tuple(1);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    tuple(1) =  tuple(2),\n    tuple(1) != tuple(2),\n    tuple(1) <  tuple(2),\n    tuple(1) >  tuple(2),\n    tuple(1) <= tuple(2),\n    tuple(1) >= tuple(2);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    tuple(2) =  tuple(1),\n    tuple(2) != tuple(1),\n    tuple(2) <  tuple(1),\n    tuple(2) >  tuple(1),\n    tuple(2) <= tuple(1),\n    tuple(2) >= tuple(1);",
+            "name": "00250_tuple_comparison.sql"
+        },
+        {
+            "query": "\nSELECT\n    tuple(NULL) < tuple(1),\n    tuple(NULL) = tuple(1),\n    tuple(NULL) <= tuple(1),\n    tuple(1, NULL) = tuple(2, 1),\n    tuple(1, NULL) < tuple(2, 1);",
+            "name": "00250_tuple_comparison.sql"
+        }
+    ]
+}

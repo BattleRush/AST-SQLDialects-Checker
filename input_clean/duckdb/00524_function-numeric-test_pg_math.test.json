@@ -1,0 +1,180 @@
+{
+    "name": "test_pg_math.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select abs(-17.4)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select cbrt(27.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select ceil(-42.8)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select ceiling(-95.3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select exp(1.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select floor(-42.8)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select ln(2.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(100.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log10(100.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log2(4.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select pi()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select sqrt(2.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select radians(45.0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select degrees(0.5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select sign(4.1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select sign(-4.1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select sign(0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select sign(3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(2, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(0, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(2, 0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(-1, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(2, -1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(1, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(2, 1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(0.5, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(0.5, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log('Inf'::DOUBLE, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(64, 'Inf'::DOUBLE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(64, 'NaN'::DOUBLE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log('NaN'::DOUBLE, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log('-Inf'::DOUBLE, 64)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(64, '-Inf'::DOUBLE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select log(2, -1)",
+            "expected_result": ""
+        }
+    ]
+}

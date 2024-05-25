@@ -1,0 +1,55 @@
+{
+    "name": "pivot_bigquery.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE Produce AS\n  SELECT 'Kale' as product, 51 as sales, 'Q1' as quarter, 2020 as year UNION ALL\n  SELECT 'Kale', 23, 'Q2', 2020 UNION ALL\n  SELECT 'Kale', 45, 'Q3', 2020 UNION ALL\n  SELECT 'Kale', 3, 'Q4', 2020 UNION ALL\n  SELECT 'Kale', 70, 'Q1', 2021 UNION ALL\n  SELECT 'Kale', 85, 'Q2', 2021 UNION ALL\n  SELECT 'Apple', 77, 'Q1', 2020 UNION ALL\n  SELECT 'Apple', 0, 'Q2', 2020 UNION ALL\n  SELECT 'Apple', 1, 'Q1', 2021",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM Produce\nPIVOT(SUM(sales) FOR quarter IN ('Q1', 'Q2', 'Q3', 'Q4'))\nORDER BY ALL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM\n  (SELECT product, sales, quarter FROM Produce)\n  PIVOT(SUM(sales) FOR quarter IN ('Q1', 'Q2', 'Q3', 'Q4'))\nORDER BY ALL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM\n  (SELECT product, sales, quarter FROM Produce)\n  PIVOT(SUM(sales) FOR quarter IN ('Q1', 'Q2', 'Q3'))\n  ORDER BY ALL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM\n  (SELECT sales, quarter FROM Produce)\n  PIVOT(SUM(sales) FOR quarter IN ('Q1', 'Q2', 'Q3'))\n  ORDER BY ALL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM\n  (SELECT product, sales, quarter FROM Produce)\n  PIVOT(SUM(sales) total_sales, COUNT(*) num_records FOR quarter IN ('Q1', 'Q2'))\nORDER BY ALL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE OR REPLACE TABLE Produce AS\n  SELECT 'Kale' as product, 51 as Q1, 23 as Q2, 45 as Q3, 3 as Q4 UNION ALL\n  SELECT 'Apple', 77, 0, 25, 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM Produce\nUNPIVOT(sales FOR quarter IN (Q1, Q2, Q3, Q4))\nORDER BY ALL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT product, first_half_sales, second_half_sales, semesters FROM Produce\nUNPIVOT(\n  (first_half_sales, second_half_sales)\n  FOR semesters\n  IN ((Q1, Q2) AS 'semester_1', (Q3, Q4) AS 'semester_2'))",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "name": "00404_null_literal.sql",
+    "tests": [
+        {
+            "query": "SELECT NULL IS NULL;",
+            "name": "00404_null_literal.sql"
+        },
+        {
+            "query": "\nSELECT Null IS NULL;",
+            "name": "00404_null_literal.sql"
+        },
+        {
+            "query": "\nSELECT null is null;",
+            "name": "00404_null_literal.sql"
+        },
+        {
+            "query": "\nSELECT nuLL IS NOT NULL;",
+            "name": "00404_null_literal.sql"
+        },
+        {
+            "query": "\nSELECT NOT NULL IS NOT NULL;",
+            "name": "00404_null_literal.sql"
+        },
+        {
+            "query": "\nSELECT NOT NULL IS null;",
+            "name": "00404_null_literal.sql"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "name": "mix_aggregate_and_non_aggregate.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl(name VARCHAR, style VARCHAR, brewery_id INTEGER, abv DOUBLE, ibu INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT FIRST(name), FIRST(abv)\nFROM tbl\nGROUP BY style\nORDER BY abv DESC;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT FIRST(name)||abv\nFROM tbl",
+            "expected_result": ""
+        }
+    ]
+}

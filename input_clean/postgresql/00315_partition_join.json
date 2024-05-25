@@ -1,0 +1,1705 @@
+{
+    "name": "partition_join.sql",
+    "tests": [
+        {
+            "query": "--\n-- PARTITION_JOIN\n-- Test partitionwise join between partitioned tables\n--\n\n-- Enable partitionwise join, which by default is disabled.\nSET enable_partitionwise_join to true",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "--\n-- partitioned by a single column\n--\nCREATE TABLE prt1 (a int, b int, c varchar) PARTITION BY RANGE(a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_p1 PARTITION OF prt1 FOR VALUES FROM (0) TO (250)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_p3 PARTITION OF prt1 FOR VALUES FROM (500) TO (600)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_p2 PARTITION OF prt1 FOR VALUES FROM (250) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt1 SELECT i, i % 25, to_char(i, 'FM0000') FROM generate_series(0, 599) i WHERE i % 2 = 0",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX iprt1_p1_a on prt1_p1(a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX iprt1_p2_a on prt1_p2(a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX iprt1_p3_a on prt1_p3(a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2 (a int, b int, c varchar) PARTITION BY RANGE(b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_p1 PARTITION OF prt2 FOR VALUES FROM (0) TO (250)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_p2 PARTITION OF prt2 FOR VALUES FROM (250) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_p3 PARTITION OF prt2 FOR VALUES FROM (500) TO (600)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2 SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(0, 599) i WHERE i % 3 = 0",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX iprt2_p1_b on prt2_p1(b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX iprt2_p2_b on prt2_p2(b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX iprt2_p3_b on prt2_p3(b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt2 t2 WHERE t1.a = t2.b AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt2 t2 WHERE t1.a = t2.b AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left outer join, 3-way\nEXPLAIN (COSTS OFF)\nSELECT COUNT(*) FROM prt1 t1\n  LEFT JOIN prt1 t2 ON t1.a = t2.a\n  LEFT JOIN prt1 t3 ON t2.a = t3.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT COUNT(*) FROM prt1 t1\n  LEFT JOIN prt1 t2 ON t1.a = t2.a\n  LEFT JOIN prt1 t3 ON t2.a = t3.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left outer join, with whole-row reference",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "partitionwise join does not apply\nEXPLAIN (COSTS OFF)\nSELECT t1, t2 FROM prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1, t2 FROM prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- right outer join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1 RIGHT JOIN prt2 t2 ON t1.a = t2.b WHERE t2.a = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1 RIGHT JOIN prt2 t2 ON t1.a = t2.b WHERE t2.a = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full outer join, with placeholder vars\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT 50 phv, * FROM prt1 WHERE prt1.b = 0) t1 FULL JOIN (SELECT 75 phv, * FROM prt2 WHERE prt2.a = 0) t2 ON (t1.a = t2.b) WHERE t1.phv = t1.a OR t2.phv = t2.b ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT 50 phv, * FROM prt1 WHERE prt1.b = 0) t1 FULL JOIN (SELECT 75 phv, * FROM prt2 WHERE prt2.a = 0) t2 ON (t1.a = t2.b) WHERE t1.phv = t1.a OR t2.phv = t2.b ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Join with pruned partitions from joining relations\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt2 t2 WHERE t1.a = t2.b AND t1.a < 450 AND t2.b > 250 AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt2 t2 WHERE t1.a = t2.b AND t1.a < 450 AND t2.b > 250 AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Currently we can't do partitioned join if nullable-side partitions are pruned\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a < 450) t1 LEFT JOIN (SELECT * FROM prt2 WHERE b > 250) t2 ON t1.a = t2.b WHERE t1.b = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a < 450) t1 LEFT JOIN (SELECT * FROM prt2 WHERE b > 250) t2 ON t1.a = t2.b WHERE t1.b = 0 ORDER BY t1.a, t2.b;\n\n-- Currently we can't do partitioned join if nullable-side partitions are pruned\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a < 450) t1 FULL JOIN (SELECT * FROM prt2 WHERE b > 250) t2 ON t1.a = t2.b WHERE t1.b = 0 OR t2.a = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a < 450) t1 FULL JOIN (SELECT * FROM prt2 WHERE b > 250) t2 ON t1.a = t2.b WHERE t1.b = 0 OR t2.a = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Semi-join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t2.b FROM prt2 t2 WHERE t2.a = 0) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t2.b FROM prt2 t2 WHERE t2.a = 0) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Anti-join with aggregates\nEXPLAIN (COSTS OFF)\nSELECT sum(t1.a), avg(t1.a), sum(t1.b), avg(t1.b) FROM prt1 t1 WHERE NOT EXISTS (SELECT 1 FROM prt2 t2 WHERE t1.a = t2.b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT sum(t1.a), avg(t1.a), sum(t1.b), avg(t1.b) FROM prt1 t1 WHERE NOT EXISTS (SELECT 1 FROM prt2 t2 WHERE t1.a = t2.b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- lateral reference\nEXPLAIN (COSTS OFF)\nSELECT * FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t2.a AS t2a, t3.a AS t3a, least(t1.a,t2.a,t3.b) FROM prt1 t2 JOIN prt2 t3 ON (t2.a = t3.b)) ss\n\t\t\t  ON t1.a = ss.t2a WHERE t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT * FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t2.a AS t2a, t3.a AS t3a, least(t1.a,t2.a,t3.b) FROM prt1 t2 JOIN prt2 t3 ON (t2.a = t3.b)) ss\n\t\t\t  ON t1.a = ss.t2a WHERE t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, ss.t2a, ss.t2c FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t2.a AS t2a, t3.a AS t3a, t2.b t2b, t2.c t2c, least(t1.a,t2.a,t3.b) FROM prt1 t2 JOIN prt2 t3 ON (t2.a = t3.b)) ss\n\t\t\t  ON t1.c = ss.t2c WHERE (t1.b + coalesce(ss.t2b, 0)) = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, ss.t2a, ss.t2c FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t2.a AS t2a, t3.a AS t3a, t2.b t2b, t2.c t2c, least(t1.a,t2.a,t3.a) FROM prt1 t2 JOIN prt2 t3 ON (t2.a = t3.b)) ss\n\t\t\t  ON t1.c = ss.t2c WHERE (t1.b + coalesce(ss.t2b, 0)) = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- lateral reference in sample scan\nEXPLAIN (COSTS OFF)\nSELECT * FROM prt1 t1 JOIN LATERAL\n\t\t\t  (SELECT * FROM prt1 t2 TABLESAMPLE SYSTEM (t1.a) REPEATABLE(t1.b)) s\n\t\t\t  ON t1.a = s.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- lateral reference in scan's restriction clauses\nEXPLAIN (COSTS OFF)\nSELECT count(*) FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t1.b AS t1b, t2.* FROM prt2 t2) s\n\t\t\t  ON t1.a = s.b WHERE s.t1b = s.a;\nSELECT count(*) FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t1.b AS t1b, t2.* FROM prt2 t2) s\n\t\t\t  ON t1.a = s.b WHERE s.t1b = s.a;\n\nEXPLAIN (COSTS OFF)\nSELECT count(*) FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t1.b AS t1b, t2.* FROM prt2 t2) s\n\t\t\t  ON t1.a = s.b WHERE s.t1b = s.b;\nSELECT count(*) FROM prt1 t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t1.b AS t1b, t2.* FROM prt2 t2) s\n\t\t\t  ON t1.a = s.b WHERE s.t1b = s.b;\n\n-- bug with inadequate sort key representation\nSET enable_partitionwise_aggregate TO true;\nSET enable_hashjoin TO false;\n\nEXPLAIN (COSTS OFF)\nSELECT a, b FROM prt1 FULL JOIN prt2 p2(b,a,c) USING(a,b)\n  WHERE a BETWEEN 490 AND 510\n  GROUP BY 1, 2 ORDER BY 1, 2;\nSELECT a, b FROM prt1 FULL JOIN prt2 p2(b,a,c) USING(a,b)\n  WHERE a BETWEEN 490 AND 510\n  GROUP BY 1, 2 ORDER BY 1, 2;\n\nRESET enable_partitionwise_aggregate;\nRESET enable_hashjoin;\n\n--\n-- partitioned by expression\n--\nCREATE TABLE prt1_e (a int, b int, c int) PARTITION BY RANGE(((a + b)/2));\nCREATE TABLE prt1_e_p1 PARTITION OF prt1_e FOR VALUES FROM (0) TO (250);\nCREATE TABLE prt1_e_p2 PARTITION OF prt1_e FOR VALUES FROM (250) TO (500);\nCREATE TABLE prt1_e_p3 PARTITION OF prt1_e FOR VALUES FROM (500) TO (600);\nINSERT INTO prt1_e SELECT i, i, i % 25 FROM generate_series(0, 599, 2) i;\nCREATE INDEX iprt1_e_p1_ab2 on prt1_e_p1(((a+b)/2));\nCREATE INDEX iprt1_e_p2_ab2 on prt1_e_p2(((a+b)/2));\nCREATE INDEX iprt1_e_p3_ab2 on prt1_e_p3(((a+b)/2));\nANALYZE prt1_e;\n\nCREATE TABLE prt2_e (a int, b int, c int) PARTITION BY RANGE(((b + a)/2));\nCREATE TABLE prt2_e_p1 PARTITION OF prt2_e FOR VALUES FROM (0) TO (250);\nCREATE TABLE prt2_e_p2 PARTITION OF prt2_e FOR VALUES FROM (250) TO (500);\nCREATE TABLE prt2_e_p3 PARTITION OF prt2_e FOR VALUES FROM (500) TO (600);\nINSERT INTO prt2_e SELECT i, i, i % 25 FROM generate_series(0, 599, 3) i;\nANALYZE prt2_e;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_e t1, prt2_e t2 WHERE (t1.a + t1.b)/2 = (t2.b + t2.a)/2 AND t1.c = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_e t1, prt2_e t2 WHERE (t1.a + t1.b)/2 = (t2.b + t2.a)/2 AND t1.c = 0 ORDER BY t1.a, t2.b;\n\n--\n-- N-way join\n--\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM prt1 t1, prt2 t2, prt1_e t3 WHERE t1.a = t2.b AND t1.a = (t3.a + t3.b)/2 AND t1.b = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM prt1 t1, prt2 t2, prt1_e t3 WHERE t1.a = t2.b AND t1.a = (t3.a + t3.b)/2 AND t1.b = 0 ORDER BY t1.a, t2.b;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM (prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b) LEFT JOIN prt1_e t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t1.b = 0 ORDER BY t1.a, t2.b, t3.a + t3.b;\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM (prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b) LEFT JOIN prt1_e t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t1.b = 0 ORDER BY t1.a, t2.b, t3.a + t3.b;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM (prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b) RIGHT JOIN prt1_e t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t3.c = 0 ORDER BY t1.a, t2.b, t3.a + t3.b;\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM (prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b) RIGHT JOIN prt1_e t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t3.c = 0 ORDER BY t1.a, t2.b, t3.a + t3.b;\n\n--\n-- 3-way full join\n--\nEXPLAIN (COSTS OFF)\nSELECT COUNT(*) FROM prt1 FULL JOIN prt2 p2(b,a,c) USING(a,b) FULL JOIN prt2 p3(b,a,c) USING (a, b)\n  WHERE a BETWEEN 490 AND 510;\nSELECT COUNT(*) FROM prt1 FULL JOIN prt2 p2(b,a,c) USING(a,b) FULL JOIN prt2 p3(b,a,c) USING (a, b)\n  WHERE a BETWEEN 490 AND 510;\n\n--\n-- 4-way full join\n--\nEXPLAIN (COSTS OFF)\nSELECT COUNT(*) FROM prt1 FULL JOIN prt2 p2(b,a,c) USING(a,b) FULL JOIN prt2 p3(b,a,c) USING (a, b) FULL JOIN prt1 p4 (a,b,c) USING (a, b)\n  WHERE a BETWEEN 490 AND 510;\nSELECT COUNT(*) FROM prt1 FULL JOIN prt2 p2(b,a,c) USING(a,b) FULL JOIN prt2 p3(b,a,c) USING (a, b) FULL JOIN prt1 p4 (a,b,c) USING (a, b)\n  WHERE a BETWEEN 490 AND 510;\n\n-- Cases with non-nullable expressions in subquery results;\n-- make sure these go to null as expected\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.phv, t2.b, t2.phv, t3.a + t3.b, t3.phv FROM ((SELECT 50 phv, * FROM prt1 WHERE prt1.b = 0) t1 FULL JOIN (SELECT 75 phv, * FROM prt2 WHERE prt2.a = 0) t2 ON (t1.a = t2.b)) FULL JOIN (SELECT 50 phv, * FROM prt1_e WHERE prt1_e.c = 0) t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t1.a = t1.phv OR t2.b = t2.phv OR (t3.a + t3.b)/2 = t3.phv ORDER BY t1.a, t2.b, t3.a + t3.b;\nSELECT t1.a, t1.phv, t2.b, t2.phv, t3.a + t3.b, t3.phv FROM ((SELECT 50 phv, * FROM prt1 WHERE prt1.b = 0) t1 FULL JOIN (SELECT 75 phv, * FROM prt2 WHERE prt2.a = 0) t2 ON (t1.a = t2.b)) FULL JOIN (SELECT 50 phv, * FROM prt1_e WHERE prt1_e.c = 0) t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t1.a = t1.phv OR t2.b = t2.phv OR (t3.a + t3.b)/2 = t3.phv ORDER BY t1.a, t2.b, t3.a + t3.b;\n\n-- Semi-join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t1.b FROM prt2 t1, prt1_e t2 WHERE t1.a = 0 AND t1.b = (t2.a + t2.b)/2) AND t1.b = 0 ORDER BY t1.a;\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t1.b FROM prt2 t1, prt1_e t2 WHERE t1.a = 0 AND t1.b = (t2.a + t2.b)/2) AND t1.b = 0 ORDER BY t1.a;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t1.b FROM prt2 t1 WHERE t1.b IN (SELECT (t1.a + t1.b)/2 FROM prt1_e t1 WHERE t1.c = 0)) AND t1.b = 0 ORDER BY t1.a;\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t1.b FROM prt2 t1 WHERE t1.b IN (SELECT (t1.a + t1.b)/2 FROM prt1_e t1 WHERE t1.c = 0)) AND t1.b = 0 ORDER BY t1.a;\n\n-- test merge joins\nSET enable_hashjoin TO off;\nSET enable_nestloop TO off;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t1.b FROM prt2 t1 WHERE t1.b IN (SELECT (t1.a + t1.b)/2 FROM prt1_e t1 WHERE t1.c = 0)) AND t1.b = 0 ORDER BY t1.a;\nSELECT t1.* FROM prt1 t1 WHERE t1.a IN (SELECT t1.b FROM prt2 t1 WHERE t1.b IN (SELECT (t1.a + t1.b)/2 FROM prt1_e t1 WHERE t1.c = 0)) AND t1.b = 0 ORDER BY t1.a;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM (prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b) RIGHT JOIN prt1_e t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t3.c = 0 ORDER BY t1.a, t2.b, t3.a + t3.b;\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a + t3.b, t3.c FROM (prt1 t1 LEFT JOIN prt2 t2 ON t1.a = t2.b) RIGHT JOIN prt1_e t3 ON (t1.a = (t3.a + t3.b)/2) WHERE t3.c = 0 ORDER BY t1.a, t2.b, t3.a + t3.b;\n\n-- MergeAppend on nullable column\n-- This should generate a partitionwise join, but currently fails to\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t2.b FROM (SELECT * FROM prt1 WHERE a < 450) t1 LEFT JOIN (SELECT * FROM prt2 WHERE b > 250) t2 ON t1.a = t2.b WHERE t1.b = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t2.b FROM (SELECT * FROM prt1 WHERE a < 450) t1 LEFT JOIN (SELECT * FROM prt2 WHERE b > 250) t2 ON t1.a = t2.b WHERE t1.b = 0 ORDER BY t1.a, t2.b;\n\n-- merge join when expression with whole-row reference needs to be sorted;\n-- partitionwise join does not apply\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t2.b FROM prt1 t1, prt2 t2 WHERE t1::text = t2::text AND t1.a = t2.b ORDER BY t1.a;\nSELECT t1.a, t2.b FROM prt1 t1, prt2 t2 WHERE t1::text = t2::text AND t1.a = t2.b ORDER BY t1.a;\n\nRESET enable_hashjoin;\nRESET enable_nestloop;\n\n--\n-- partitioned by multiple columns\n--\nCREATE TABLE prt1_m (a int, b int, c int) PARTITION BY RANGE(a, ((a + b)/2));\nCREATE TABLE prt1_m_p1 PARTITION OF prt1_m FOR VALUES FROM (0, 0) TO (250, 250);\nCREATE TABLE prt1_m_p2 PARTITION OF prt1_m FOR VALUES FROM (250, 250) TO (500, 500);\nCREATE TABLE prt1_m_p3 PARTITION OF prt1_m FOR VALUES FROM (500, 500) TO (600, 600);\nINSERT INTO prt1_m SELECT i, i, i % 25 FROM generate_series(0, 599, 2) i;\nANALYZE prt1_m;\n\nCREATE TABLE prt2_m (a int, b int, c int) PARTITION BY RANGE(((b + a)/2), b);\nCREATE TABLE prt2_m_p1 PARTITION OF prt2_m FOR VALUES FROM (0, 0) TO (250, 250);\nCREATE TABLE prt2_m_p2 PARTITION OF prt2_m FOR VALUES FROM (250, 250) TO (500, 500);\nCREATE TABLE prt2_m_p3 PARTITION OF prt2_m FOR VALUES FROM (500, 500) TO (600, 600);\nINSERT INTO prt2_m SELECT i, i, i % 25 FROM generate_series(0, 599, 3) i;\nANALYZE prt2_m;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1_m WHERE prt1_m.c = 0) t1 FULL JOIN (SELECT * FROM prt2_m WHERE prt2_m.c = 0) t2 ON (t1.a = (t2.b + t2.a)/2 AND t2.b = (t1.a + t1.b)/2) ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1_m WHERE prt1_m.c = 0) t1 FULL JOIN (SELECT * FROM prt2_m WHERE prt2_m.c = 0) t2 ON (t1.a = (t2.b + t2.a)/2 AND t2.b = (t1.a + t1.b)/2) ORDER BY t1.a, t2.b;\n\n--\n-- tests for list partitioned tables.\n--\nCREATE TABLE plt1 (a int, b int, c text) PARTITION BY LIST(c);\nCREATE TABLE plt1_p1 PARTITION OF plt1 FOR VALUES IN ('0000', '0003', '0004', '0010');\nCREATE TABLE plt1_p2 PARTITION OF plt1 FOR VALUES IN ('0001', '0005', '0002', '0009');\nCREATE TABLE plt1_p3 PARTITION OF plt1 FOR VALUES IN ('0006', '0007', '0008', '0011');\nINSERT INTO plt1 SELECT i, i, to_char(i/50, 'FM0000') FROM generate_series(0, 599, 2) i;\nANALYZE plt1;\n\nCREATE TABLE plt2 (a int, b int, c text) PARTITION BY LIST(c);\nCREATE TABLE plt2_p1 PARTITION OF plt2 FOR VALUES IN ('0000', '0003', '0004', '0010');\nCREATE TABLE plt2_p2 PARTITION OF plt2 FOR VALUES IN ('0001', '0005', '0002', '0009');\nCREATE TABLE plt2_p3 PARTITION OF plt2 FOR VALUES IN ('0006', '0007', '0008', '0011');\nINSERT INTO plt2 SELECT i, i, to_char(i/50, 'FM0000') FROM generate_series(0, 599, 3) i;\nANALYZE plt2;\n\n--\n-- list partitioned by expression\n--\nCREATE TABLE plt1_e (a int, b int, c text) PARTITION BY LIST(ltrim(c, 'A'));\nCREATE TABLE plt1_e_p1 PARTITION OF plt1_e FOR VALUES IN ('0000', '0003', '0004', '0010');\nCREATE TABLE plt1_e_p2 PARTITION OF plt1_e FOR VALUES IN ('0001', '0005', '0002', '0009');\nCREATE TABLE plt1_e_p3 PARTITION OF plt1_e FOR VALUES IN ('0006', '0007', '0008', '0011');\nINSERT INTO plt1_e SELECT i, i, 'A' || to_char(i/50, 'FM0000') FROM generate_series(0, 599, 2) i;\nANALYZE plt1_e;\n\n-- test partition matching with N-way join\nEXPLAIN (COSTS OFF)\nSELECT avg(t1.a), avg(t2.b), avg(t3.a + t3.b), t1.c, t2.c, t3.c FROM plt1 t1, plt2 t2, plt1_e t3 WHERE t1.b = t2.b AND t1.c = t2.c AND ltrim(t3.c, 'A') = t1.c GROUP BY t1.c, t2.c, t3.c ORDER BY t1.c, t2.c, t3.c;\nSELECT avg(t1.a), avg(t2.b), avg(t3.a + t3.b), t1.c, t2.c, t3.c FROM plt1 t1, plt2 t2, plt1_e t3 WHERE t1.b = t2.b AND t1.c = t2.c AND ltrim(t3.c, 'A') = t1.c GROUP BY t1.c, t2.c, t3.c ORDER BY t1.c, t2.c, t3.c;\n\n-- joins where one of the relations is proven empty\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt2 t2 WHERE t1.a = t2.b AND t1.a = 1 AND t1.a = 2;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a = 1 AND a = 2) t1 LEFT JOIN prt2 t2 ON t1.a = t2.b;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a = 1 AND a = 2) t1 RIGHT JOIN prt2 t2 ON t1.a = t2.b, prt1 t3 WHERE t2.b = t3.a;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1 WHERE a = 1 AND a = 2) t1 FULL JOIN prt2 t2 ON t1.a = t2.b WHERE t2.a = 0 ORDER BY t1.a, t2.b;\n\n--\n-- tests for hash partitioned tables.\n--\nCREATE TABLE pht1 (a int, b int, c text) PARTITION BY HASH(c);\nCREATE TABLE pht1_p1 PARTITION OF pht1 FOR VALUES WITH (MODULUS 3, REMAINDER 0);\nCREATE TABLE pht1_p2 PARTITION OF pht1 FOR VALUES WITH (MODULUS 3, REMAINDER 1);\nCREATE TABLE pht1_p3 PARTITION OF pht1 FOR VALUES WITH (MODULUS 3, REMAINDER 2);\nINSERT INTO pht1 SELECT i, i, to_char(i/50, 'FM0000') FROM generate_series(0, 599, 2) i;\nANALYZE pht1;\n\nCREATE TABLE pht2 (a int, b int, c text) PARTITION BY HASH(c);\nCREATE TABLE pht2_p1 PARTITION OF pht2 FOR VALUES WITH (MODULUS 3, REMAINDER 0);\nCREATE TABLE pht2_p2 PARTITION OF pht2 FOR VALUES WITH (MODULUS 3, REMAINDER 1);\nCREATE TABLE pht2_p3 PARTITION OF pht2 FOR VALUES WITH (MODULUS 3, REMAINDER 2);\nINSERT INTO pht2 SELECT i, i, to_char(i/50, 'FM0000') FROM generate_series(0, 599, 3) i;\nANALYZE pht2;\n\n--\n-- hash partitioned by expression\n--\nCREATE TABLE pht1_e (a int, b int, c text) PARTITION BY HASH(ltrim(c, 'A'));\nCREATE TABLE pht1_e_p1 PARTITION OF pht1_e FOR VALUES WITH (MODULUS 3, REMAINDER 0);\nCREATE TABLE pht1_e_p2 PARTITION OF pht1_e FOR VALUES WITH (MODULUS 3, REMAINDER 1);\nCREATE TABLE pht1_e_p3 PARTITION OF pht1_e FOR VALUES WITH (MODULUS 3, REMAINDER 2);\nINSERT INTO pht1_e SELECT i, i, 'A' || to_char(i/50, 'FM0000') FROM generate_series(0, 299, 2) i;\nANALYZE pht1_e;\n\n-- test partition matching with N-way join\nEXPLAIN (COSTS OFF)\nSELECT avg(t1.a), avg(t2.b), avg(t3.a + t3.b), t1.c, t2.c, t3.c FROM pht1 t1, pht2 t2, pht1_e t3 WHERE t1.b = t2.b AND t1.c = t2.c AND ltrim(t3.c, 'A') = t1.c GROUP BY t1.c, t2.c, t3.c ORDER BY t1.c, t2.c, t3.c;\nSELECT avg(t1.a), avg(t2.b), avg(t3.a + t3.b), t1.c, t2.c, t3.c FROM pht1 t1, pht2 t2, pht1_e t3 WHERE t1.b = t2.b AND t1.c = t2.c AND ltrim(t3.c, 'A') = t1.c GROUP BY t1.c, t2.c, t3.c ORDER BY t1.c, t2.c, t3.c;\n\n-- test default partition behavior for range\nALTER TABLE prt1 DETACH PARTITION prt1_p3;\nALTER TABLE prt1 ATTACH PARTITION prt1_p3 DEFAULT;\nANALYZE prt1;\nALTER TABLE prt2 DETACH PARTITION prt2_p3;\nALTER TABLE prt2 ATTACH PARTITION prt2_p3 DEFAULT;\nANALYZE prt2;\n\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt2 t2 WHERE t1.a = t2.b AND t1.b = 0 ORDER BY t1.a, t2.b;\n\n-- test default partition behavior for list\nALTER TABLE plt1 DETACH PARTITION plt1_p3;\nALTER TABLE plt1 ATTACH PARTITION plt1_p3 DEFAULT;\nANALYZE plt1;\nALTER TABLE plt2 DETACH PARTITION plt2_p3;\nALTER TABLE plt2 ATTACH PARTITION plt2_p3 DEFAULT;\nANALYZE plt2;\n\nEXPLAIN (COSTS OFF)\nSELECT avg(t1.a), avg(t2.b), t1.c, t2.c FROM plt1 t1 RIGHT JOIN plt2 t2 ON t1.c = t2.c WHERE t1.a % 25 = 0 GROUP BY t1.c, t2.c ORDER BY t1.c, t2.c;\n--\n-- multiple levels of partitioning\n--\nCREATE TABLE prt1_l (a int, b int, c varchar) PARTITION BY RANGE(a);\nCREATE TABLE prt1_l_p1 PARTITION OF prt1_l FOR VALUES FROM (0) TO (250);\nCREATE TABLE prt1_l_p2 PARTITION OF prt1_l FOR VALUES FROM (250) TO (500) PARTITION BY LIST (c);\nCREATE TABLE prt1_l_p2_p1 PARTITION OF prt1_l_p2 FOR VALUES IN ('0000', '0001');\nCREATE TABLE prt1_l_p2_p2 PARTITION OF prt1_l_p2 FOR VALUES IN ('0002', '0003');\nCREATE TABLE prt1_l_p3 PARTITION OF prt1_l FOR VALUES FROM (500) TO (600) PARTITION BY RANGE (b);\nCREATE TABLE prt1_l_p3_p1 PARTITION OF prt1_l_p3 FOR VALUES FROM (0) TO (13);\nCREATE TABLE prt1_l_p3_p2 PARTITION OF prt1_l_p3 FOR VALUES FROM (13) TO (25);\nINSERT INTO prt1_l SELECT i, i % 25, to_char(i % 4, 'FM0000') FROM generate_series(0, 599, 2) i;\nANALYZE prt1_l;\n\nCREATE TABLE prt2_l (a int, b int, c varchar) PARTITION BY RANGE(b);\nCREATE TABLE prt2_l_p1 PARTITION OF prt2_l FOR VALUES FROM (0) TO (250);\nCREATE TABLE prt2_l_p2 PARTITION OF prt2_l FOR VALUES FROM (250) TO (500) PARTITION BY LIST (c);\nCREATE TABLE prt2_l_p2_p1 PARTITION OF prt2_l_p2 FOR VALUES IN ('0000', '0001');\nCREATE TABLE prt2_l_p2_p2 PARTITION OF prt2_l_p2 FOR VALUES IN ('0002', '0003');\nCREATE TABLE prt2_l_p3 PARTITION OF prt2_l FOR VALUES FROM (500) TO (600) PARTITION BY RANGE (a);\nCREATE TABLE prt2_l_p3_p1 PARTITION OF prt2_l_p3 FOR VALUES FROM (0) TO (13);\nCREATE TABLE prt2_l_p3_p2 PARTITION OF prt2_l_p3 FOR VALUES FROM (13) TO (25);\nINSERT INTO prt2_l SELECT i % 25, i, to_char(i % 4, 'FM0000') FROM generate_series(0, 599, 3) i;\nANALYZE prt2_l;\n\n-- inner join, qual covering only top-level partitions\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_l t1, prt2_l t2 WHERE t1.a = t2.b AND t1.b = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_l t1, prt2_l t2 WHERE t1.a = t2.b AND t1.b = 0 ORDER BY t1.a, t2.b;\n\n-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_l t1 LEFT JOIN prt2_l t2 ON t1.a = t2.b AND t1.c = t2.c WHERE t1.b = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_l t1 LEFT JOIN prt2_l t2 ON t1.a = t2.b AND t1.c = t2.c WHERE t1.b = 0 ORDER BY t1.a, t2.b;\n\n-- right join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_l t1 RIGHT JOIN prt2_l t2 ON t1.a = t2.b AND t1.c = t2.c WHERE t2.a = 0 ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_l t1 RIGHT JOIN prt2_l t2 ON t1.a = t2.b AND t1.c = t2.c WHERE t2.a = 0 ORDER BY t1.a, t2.b;\n\n-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1_l WHERE prt1_l.b = 0) t1 FULL JOIN (SELECT * FROM prt2_l WHERE prt2_l.a = 0) t2 ON (t1.a = t2.b AND t1.c = t2.c) ORDER BY t1.a, t2.b;\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1_l WHERE prt1_l.b = 0) t1 FULL JOIN (SELECT * FROM prt2_l WHERE prt2_l.a = 0) t2 ON (t1.a = t2.b AND t1.c = t2.c) ORDER BY t1.a, t2.b;\n\n-- lateral partitionwise join\nEXPLAIN (COSTS OFF)\nSELECT * FROM prt1_l t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t2.a AS t2a, t2.c AS t2c, t2.b AS t2b, t3.b AS t3b, least(t1.a,t2.a,t3.b) FROM prt1_l t2 JOIN prt2_l t3 ON (t2.a = t3.b AND t2.c = t3.c)) ss\n\t\t\t  ON t1.a = ss.t2a AND t1.c = ss.t2c WHERE t1.b = 0 ORDER BY t1.a;\nSELECT * FROM prt1_l t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t2.a AS t2a, t2.c AS t2c, t2.b AS t2b, t3.b AS t3b, least(t1.a,t2.a,t3.b) FROM prt1_l t2 JOIN prt2_l t3 ON (t2.a = t3.b AND t2.c = t3.c)) ss\n\t\t\t  ON t1.a = ss.t2a AND t1.c = ss.t2c WHERE t1.b = 0 ORDER BY t1.a;\n\n-- partitionwise join with lateral reference in sample scan\nEXPLAIN (COSTS OFF)\nSELECT * FROM prt1_l t1 JOIN LATERAL\n\t\t\t  (SELECT * FROM prt1_l t2 TABLESAMPLE SYSTEM (t1.a) REPEATABLE(t1.b)) s\n\t\t\t  ON t1.a = s.a AND t1.b = s.b AND t1.c = s.c;\n\n-- partitionwise join with lateral reference in scan's restriction clauses\nEXPLAIN (COSTS OFF)\nSELECT COUNT(*) FROM prt1_l t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t1.b AS t1b, t2.* FROM prt2_l t2) s\n\t\t\t  ON t1.a = s.b AND t1.b = s.a AND t1.c = s.c\n\t\t\t  WHERE s.t1b = s.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT COUNT(*) FROM prt1_l t1 LEFT JOIN LATERAL\n\t\t\t  (SELECT t1.b AS t1b, t2.* FROM prt2_l t2) s\n\t\t\t  ON t1.a = s.b AND t1.b = s.a AND t1.c = s.c\n\t\t\t  WHERE s.t1b = s.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- join with one side empty\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT * FROM prt1_l WHERE a = 1 AND a = 2) t1 RIGHT JOIN prt2_l t2 ON t1.a = t2.b AND t1.b = t2.a AND t1.c = t2.c",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test case to verify proper handling of subqueries in a partitioned delete.\n-- The weird-looking lateral join is just there to force creation of a\n-- nestloop parameter within the subquery, which exposes the problem if the\n-- planner fails to make multiple copies of the subquery as appropriate.\nEXPLAIN (COSTS OFF)\nDELETE FROM prt1_l\nWHERE EXISTS (\n  SELECT 1\n    FROM int4_tbl,\n         LATERAL (SELECT int4_tbl.f1 FROM int8_tbl LIMIT 2) ss\n    WHERE prt1_l.c IS NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "--\n-- negative testcases\n--\nCREATE TABLE prt1_n (a int, b int, c varchar) PARTITION BY RANGE(c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_n_p1 PARTITION OF prt1_n FOR VALUES FROM ('0000') TO ('0250')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_n_p2 PARTITION OF prt1_n FOR VALUES FROM ('0250') TO ('0500')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt1_n SELECT i, i, to_char(i, 'FM0000') FROM generate_series(0, 499, 2) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_n",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_n (a int, b int, c text) PARTITION BY LIST(c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_n_p1 PARTITION OF prt2_n FOR VALUES IN ('0000', '0003', '0004', '0010', '0006', '0007')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_n_p2 PARTITION OF prt2_n FOR VALUES IN ('0001', '0005', '0002', '0009', '0008', '0011')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_n SELECT i, i, to_char(i/50, 'FM0000') FROM generate_series(0, 599, 2) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_n",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_n (a int, b int, c text) PARTITION BY LIST(c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_n_p1 PARTITION OF prt3_n FOR VALUES IN ('0000', '0004', '0006', '0007')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_n_p2 PARTITION OF prt3_n FOR VALUES IN ('0001', '0002', '0008', '0010')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_n_p3 PARTITION OF prt3_n FOR VALUES IN ('0003', '0005', '0009', '0011')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_n SELECT i, i, to_char(i/50, 'FM0000') FROM generate_series(0, 599, 2) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt3_n",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt4_n (a int, b int, c text) PARTITION BY RANGE(a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt4_n_p1 PARTITION OF prt4_n FOR VALUES FROM (0) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt4_n_p2 PARTITION OF prt4_n FOR VALUES FROM (300) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt4_n_p3 PARTITION OF prt4_n FOR VALUES FROM (500) TO (600)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt4_n SELECT i, i, to_char(i, 'FM0000') FROM generate_series(0, 599, 2) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt4_n",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- partitionwise join can not be applied if the partition ranges differ\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt4_n t2 WHERE t1.a = t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1, prt4_n t2, prt2 t3 WHERE t1.a = t2.a and t1.a = t3.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- partitionwise join can not be applied if there are no equi-join conditions\n-- between partition keys\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1 t1 LEFT JOIN prt2 t2 ON (t1.a < t2.b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- equi-join with join condition on partial keys does not qualify for\n-- partitionwise join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_m t1, prt2_m t2 WHERE t1.a = (t2.b + t2.a)/2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- equi-join between out-of-order partition key columns does not qualify for\n-- partitionwise join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_m t1 LEFT JOIN prt2_m t2 ON t1.a = t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- equi-join between non-key columns does not qualify for partitionwise join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_m t1 LEFT JOIN prt2_m t2 ON t1.c = t2.c",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- partitionwise join can not be applied for a join between list and range\n-- partitioned tables\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_n t1 LEFT JOIN prt2_n t2 ON (t1.c = t2.c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- partitionwise join can not be applied between tables with different\n-- partition lists\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_n t1 JOIN prt2_n t2 ON (t1.c = t2.c) JOIN plt1 t3 ON (t1.c = t3.c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- partitionwise join can not be applied for a join between key column and\n-- non-key column\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_n t1 FULL JOIN prt1 t2 ON (t1.c = t2.c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "--\n-- Test some other plan types in a partitionwise join (unfortunately,\n-- we need larger tables to get the planner to choose these plan types)\n--\ncreate temp table prtx1 (a integer, b integer, c integer)\n  partition by range (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx1_1 partition of prtx1 for values from (1) to (11)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx1_2 partition of prtx1 for values from (11) to (21)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx1_3 partition of prtx1 for values from (21) to (31)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx2 (a integer, b integer, c integer)\n  partition by range (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx2_1 partition of prtx2 for values from (1) to (11)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx2_2 partition of prtx2 for values from (11) to (21)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create temp table prtx2_3 partition of prtx2 for values from (21) to (31)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "insert into prtx1 select 1 + i%30, i, i\n  from generate_series(1,1000) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "insert into prtx2 select 1 + i%30, i, i\n  from generate_series(1,500) i, generate_series(1,10) j",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create index on prtx2 (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "create index on prtx2 (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "analyze prtx1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "analyze prtx2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "explain (costs off)\nselect * from prtx1\nwhere not exists (select 1 from prtx2\n                  where prtx2.a=prtx1.a and prtx2.b=prtx1.b and prtx2.c=123)\n  and a<20 and c=120",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "select * from prtx1\nwhere not exists (select 1 from prtx2\n                  where prtx2.a=prtx1.a and prtx2.b=prtx1.b and prtx2.c=123)\n  and a<20 and c=120",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "explain (costs off)\nselect * from prtx1\nwhere not exists (select 1 from prtx2\n                  where prtx2.a=prtx1.a and (prtx2.b=prtx1.b+1 or prtx2.c=99))\n  and a<20 and c=91",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "select * from prtx1\nwhere not exists (select 1 from prtx2\n                  where prtx2.a=prtx1.a and (prtx2.b=prtx1.b+1 or prtx2.c=99))\n  and a<20 and c=91",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "--\n-- Test advanced partition-matching algorithm for partitioned join\n--\n\n-- Tests for range-partitioned tables\nCREATE TABLE prt1_adv (a int, b int, c varchar) PARTITION BY RANGE (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_p1 PARTITION OF prt1_adv FOR VALUES FROM (100) TO (200)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_p2 PARTITION OF prt1_adv FOR VALUES FROM (200) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_p3 PARTITION OF prt1_adv FOR VALUES FROM (300) TO (400)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX prt1_adv_a_idx ON prt1_adv (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt1_adv SELECT i, i % 25, to_char(i, 'FM0000') FROM generate_series(100, 399) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv (a int, b int, c varchar) PARTITION BY RANGE (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_p1 PARTITION OF prt2_adv FOR VALUES FROM (100) TO (150)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_p2 PARTITION OF prt2_adv FOR VALUES FROM (200) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_p3 PARTITION OF prt2_adv FOR VALUES FROM (350) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX prt2_adv_b_idx ON prt2_adv (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_adv_p1 SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(100, 149) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_adv_p2 SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(200, 299) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_adv_p3 SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(350, 499) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1_adv t1 WHERE EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM prt1_adv t1 WHERE EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM prt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT 175 phv, * FROM prt1_adv WHERE prt1_adv.b = 0) t1 FULL JOIN (SELECT 425 phv, * FROM prt2_adv WHERE prt2_adv.a = 0) t2 ON (t1.a = t2.b) WHERE t1.phv = t1.a OR t2.phv = t2.b ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT 175 phv, * FROM prt1_adv WHERE prt1_adv.b = 0) t1 FULL JOIN (SELECT 425 phv, * FROM prt2_adv WHERE prt2_adv.a = 0) t2 ON (t1.a = t2.b) WHERE t1.phv = t1.a OR t2.phv = t2.b ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test cases where one side has an extra partition\nCREATE TABLE prt2_adv_extra PARTITION OF prt2_adv FOR VALUES FROM (500) TO (MAXVALUE)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_adv SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(500, 599) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1_adv t1 WHERE EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM prt1_adv t1 WHERE EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.b, t1.c, t2.a, t2.c FROM prt2_adv t1 LEFT JOIN prt1_adv t2 ON (t1.b = t2.a) WHERE t1.a = 0 ORDER BY t1.b, t2.a;\n\n-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a;\nSELECT t1.* FROM prt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a;\n\n-- anti join; currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt2_adv t1 WHERE NOT EXISTS (SELECT 1 FROM prt1_adv t2 WHERE t1.b = t2.a) AND t1.a = 0 ORDER BY t1.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT 175 phv, * FROM prt1_adv WHERE prt1_adv.b = 0) t1 FULL JOIN (SELECT 425 phv, * FROM prt2_adv WHERE prt2_adv.a = 0) t2 ON (t1.a = t2.b) WHERE t1.phv = t1.a OR t2.phv = t2.b ORDER BY t1.a, t2.b;\n\n-- 3-way join where not every pair of relations can do partitioned join\nEXPLAIN (COSTS OFF)\nSELECT t1.b, t1.c, t2.a, t2.c, t3.a, t3.c FROM prt2_adv t1 LEFT JOIN prt1_adv t2 ON (t1.b = t2.a) INNER JOIN prt1_adv t3 ON (t1.b = t3.a) WHERE t1.a = 0 ORDER BY t1.b, t2.a, t3.a;\nSELECT t1.b, t1.c, t2.a, t2.c, t3.a, t3.c FROM prt2_adv t1 LEFT JOIN prt1_adv t2 ON (t1.b = t2.a) INNER JOIN prt1_adv t3 ON (t1.b = t3.a) WHERE t1.a = 0 ORDER BY t1.b, t2.a, t3.a;\n\nDROP TABLE prt2_adv_extra;\n\n-- Test cases where a partition on one side matches multiple partitions on\n-- the other side; we currently can't do partitioned join in such cases\nALTER TABLE prt2_adv DETACH PARTITION prt2_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Split prt2_adv_p3 into two partitions so that prt1_adv_p3 matches both\nCREATE TABLE prt2_adv_p3_1 PARTITION OF prt2_adv FOR VALUES FROM (350) TO (375)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_p3_2 PARTITION OF prt2_adv FOR VALUES FROM (375) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_adv SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(350, 499) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1_adv t1 WHERE EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM prt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM prt2_adv t2 WHERE t1.a = t2.b) AND t1.b = 0 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM (SELECT 175 phv, * FROM prt1_adv WHERE prt1_adv.b = 0) t1 FULL JOIN (SELECT 425 phv, * FROM prt2_adv WHERE prt2_adv.a = 0) t2 ON (t1.a = t2.b) WHERE t1.phv = t1.a OR t2.phv = t2.b ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt2_adv_p3_1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt2_adv_p3_2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test default partitions\nALTER TABLE prt1_adv DETACH PARTITION prt1_adv_p1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Change prt1_adv_p1 to the default partition\nALTER TABLE prt1_adv ATTACH PARTITION prt1_adv_p1 DEFAULT",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ALTER TABLE prt1_adv DETACH PARTITION prt1_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- We can do partitioned join even if only one of relations has the default\n-- partition\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Restore prt1_adv_p3\nALTER TABLE prt1_adv ATTACH PARTITION prt1_adv_p3 FOR VALUES FROM (300) TO (400)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Restore prt2_adv_p3\nALTER TABLE prt2_adv ATTACH PARTITION prt2_adv_p3 FOR VALUES FROM (350) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Partitioned join can't be applied because the default partition of prt1_adv\n-- matches prt2_adv_p1 and prt2_adv_p3\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b;\n\nALTER TABLE prt2_adv DETACH PARTITION prt2_adv_p3;\n-- Change prt2_adv_p3 to the default partition\nALTER TABLE prt2_adv ATTACH PARTITION prt2_adv_p3 DEFAULT;\nANALYZE prt2_adv;\n\n-- Partitioned join can't be applied because the default partition of prt1_adv\n-- matches prt2_adv_p1 and prt2_adv_p3\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt1_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt2_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_adv (a int, b int, c varchar) PARTITION BY RANGE (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_adv_p1 PARTITION OF prt3_adv FOR VALUES FROM (200) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt3_adv_p2 PARTITION OF prt3_adv FOR VALUES FROM (300) TO (400)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX prt3_adv_a_idx ON prt3_adv (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt3_adv SELECT i, i % 25, to_char(i, 'FM0000') FROM generate_series(200, 399) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt3_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- 3-way join to test the default partition of a join relation\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c, t3.a, t3.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) LEFT JOIN prt3_adv t3 ON (t1.a = t3.a) WHERE t1.b = 0 ORDER BY t1.a, t2.b, t3.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c, t3.a, t3.c FROM prt1_adv t1 LEFT JOIN prt2_adv t2 ON (t1.a = t2.b) LEFT JOIN prt3_adv t3 ON (t1.a = t3.a) WHERE t1.b = 0 ORDER BY t1.a, t2.b, t3.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt3_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test interaction of partitioned join with partition pruning\nCREATE TABLE prt1_adv (a int, b int, c varchar) PARTITION BY RANGE (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_p1 PARTITION OF prt1_adv FOR VALUES FROM (100) TO (200)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_p2 PARTITION OF prt1_adv FOR VALUES FROM (200) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_p3 PARTITION OF prt1_adv FOR VALUES FROM (300) TO (400)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX prt1_adv_a_idx ON prt1_adv (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt1_adv SELECT i, i % 25, to_char(i, 'FM0000') FROM generate_series(100, 399) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv (a int, b int, c varchar) PARTITION BY RANGE (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_p1 PARTITION OF prt2_adv FOR VALUES FROM (100) TO (200)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_p2 PARTITION OF prt2_adv FOR VALUES FROM (200) TO (400)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE INDEX prt2_adv_b_idx ON prt2_adv (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO prt2_adv SELECT i % 25, i, to_char(i, 'FM0000') FROM generate_series(100, 399) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.a < 300 AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.a < 300 AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt1_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt1_adv_default PARTITION OF prt1_adv DEFAULT",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE prt2_adv_default PARTITION OF prt2_adv DEFAULT",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.a >= 100 AND t1.a < 300 AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.b, t2.c FROM prt1_adv t1 INNER JOIN prt2_adv t2 ON (t1.a = t2.b) WHERE t1.a >= 100 AND t1.a < 300 AND t1.b = 0 ORDER BY t1.a, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE prt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Tests for list-partitioned tables\nCREATE TABLE plt1_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p1 PARTITION OF plt1_adv FOR VALUES IN ('0001', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p2 PARTITION OF plt1_adv FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p3 PARTITION OF plt1_adv FOR VALUES IN ('0008', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (1, 3, 4, 6, 8, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p1 PARTITION OF plt2_adv FOR VALUES IN ('0002', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p2 PARTITION OF plt2_adv FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p3 PARTITION OF plt2_adv FOR VALUES IN ('0007', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test cases where one side has an extra partition\nCREATE TABLE plt2_adv_extra PARTITION OF plt2_adv FOR VALUES IN ('0000')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv_extra VALUES (0, 0, '0000')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt2_adv t1 LEFT JOIN plt1_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a;\n\n-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a;\nSELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a;\n\n-- anti join; currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt2_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt1_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a;\n\nDROP TABLE plt2_adv_extra;\n\n-- Test cases where a partition on one side matches multiple partitions on\n-- the other side; we currently can't do partitioned join in such cases\nALTER TABLE plt2_adv DETACH PARTITION plt2_adv_p2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Split plt2_adv_p2 into two partitions so that plt1_adv_p2 matches both\nCREATE TABLE plt2_adv_p2_1 PARTITION OF plt2_adv FOR VALUES IN ('0004')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p2_2 PARTITION OF plt2_adv FOR VALUES IN ('0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (4, 6)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_p2_1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_p2_2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Restore plt2_adv_p2\nALTER TABLE plt2_adv ATTACH PARTITION plt2_adv_p2 FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test NULL partitions\nALTER TABLE plt1_adv DETACH PARTITION plt1_adv_p1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Change plt1_adv_p1 to the NULL partition\nCREATE TABLE plt1_adv_p1_null PARTITION OF plt1_adv FOR VALUES IN (NULL, '0001', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (1, 3)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ALTER TABLE plt2_adv DETACH PARTITION plt2_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Change plt2_adv_p3 to the NULL partition\nCREATE TABLE plt2_adv_p3_null PARTITION OF plt2_adv FOR VALUES IN (NULL, '0007', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- semi join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM plt1_adv t1 WHERE EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- anti join\nEXPLAIN (COSTS OFF)\nSELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.* FROM plt1_adv t1 WHERE NOT EXISTS (SELECT 1 FROM plt2_adv t2 WHERE t1.a = t2.a AND t1.c = t2.c) AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt1_adv_p1_null",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Restore plt1_adv_p1\nALTER TABLE plt1_adv ATTACH PARTITION plt1_adv_p1 FOR VALUES IN ('0001', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Add to plt1_adv the extra NULL partition containing only NULL values as the\n-- key values\nCREATE TABLE plt1_adv_extra PARTITION OF plt1_adv FOR VALUES IN (NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_p3_null",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Restore plt2_adv_p3\nALTER TABLE plt2_adv ATTACH PARTITION plt2_adv_p3 FOR VALUES IN ('0007', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a;\n\n-- full join; currently we can't do partitioned join if there are no matched\n-- partitions on the nullable side\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Add to plt2_adv the extra NULL partition containing only NULL values as the\n-- key values\nCREATE TABLE plt2_adv_extra PARTITION OF plt2_adv FOR VALUES IN (NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- inner join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- left join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- full join\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 FULL JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE coalesce(t1.b, 0) < 10 AND coalesce(t2.b, 0) < 10 ORDER BY t1.a, t2.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- 3-way join to test the NULL partition of a join relation\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c, t3.a, t3.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) LEFT JOIN plt1_adv t3 ON (t1.a = t3.a AND t1.c = t3.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c, t3.a, t3.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) LEFT JOIN plt1_adv t3 ON (t1.a = t3.a AND t1.c = t3.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt1_adv_extra",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_extra",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test default partitions\nALTER TABLE plt1_adv DETACH PARTITION plt1_adv_p1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Change plt1_adv_p1 to the default partition\nALTER TABLE plt1_adv ATTACH PARTITION plt1_adv_p1 DEFAULT",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt1_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_p3",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- We can do partitioned join even if only one of relations has the default\n-- partition\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ALTER TABLE plt2_adv DETACH PARTITION plt2_adv_p2",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Change plt2_adv_p2 to contain '0005' in addition to '0004' and '0006' as\n-- the key values\nCREATE TABLE plt2_adv_p2_ext PARTITION OF plt2_adv FOR VALUES IN ('0004', '0005', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (4, 5, 6)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Partitioned join can't be applied because the default partition of plt1_adv\n-- matches plt2_adv_p1 and plt2_adv_p2_ext\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a;\n\nALTER TABLE plt2_adv DETACH PARTITION plt2_adv_p2_ext;\n-- Change plt2_adv_p2_ext to the default partition\nALTER TABLE plt2_adv ATTACH PARTITION plt2_adv_p2_ext DEFAULT;\nANALYZE plt2_adv;\n\n-- Partitioned join can't be applied because the default partition of plt1_adv\n-- matches plt2_adv_p1 and plt2_adv_p2_ext\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_p2_ext",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Restore plt2_adv_p2\nALTER TABLE plt2_adv ATTACH PARTITION plt2_adv_p2 FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt3_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt3_adv_p1 PARTITION OF plt3_adv FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt3_adv_p2 PARTITION OF plt3_adv FOR VALUES IN ('0007', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt3_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt3_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- 3-way join to test the default partition of a join relation\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c, t3.a, t3.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) LEFT JOIN plt3_adv t3 ON (t1.a = t3.a AND t1.c = t3.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c, t3.a, t3.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) LEFT JOIN plt3_adv t3 ON (t1.a = t3.a AND t1.c = t3.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test cases where one side has the default partition while the other side\n-- has the NULL partition\nDROP TABLE plt2_adv_p1",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Add the NULL partition to plt2_adv\nCREATE TABLE plt2_adv_p1_null PARTITION OF plt2_adv FOR VALUES IN (NULL, '0001', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (1, 3)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv_p1_null",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Add the NULL partition that contains only NULL values as the key values\nCREATE TABLE plt2_adv_p1_null PARTITION OF plt2_adv FOR VALUES IN (NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt3_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test interaction of partitioned join with partition pruning\nCREATE TABLE plt1_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p1 PARTITION OF plt1_adv FOR VALUES IN ('0001')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p2 PARTITION OF plt1_adv FOR VALUES IN ('0002')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p3 PARTITION OF plt1_adv FOR VALUES IN ('0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p4 PARTITION OF plt1_adv FOR VALUES IN (NULL, '0004', '0005')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (1, 2, 3, 4, 5)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p1 PARTITION OF plt2_adv FOR VALUES IN ('0001', '0002')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p2 PARTITION OF plt2_adv FOR VALUES IN (NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p3 PARTITION OF plt2_adv FOR VALUES IN ('0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p4 PARTITION OF plt2_adv FOR VALUES IN ('0004', '0005')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 10, 'FM0000') FROM generate_series(1, 299) i WHERE i % 10 IN (1, 2, 3, 4, 5)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv VALUES (-1, -1, NULL)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IN ('0003', '0004', '0005') AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IN ('0003', '0004', '0005') AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IS NULL AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IS NULL AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_default PARTITION OF plt1_adv DEFAULT",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_default PARTITION OF plt2_adv DEFAULT",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IN ('0003', '0004', '0005') AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 INNER JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IN ('0003', '0004', '0005') AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IS NULL AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c FROM plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE t1.c IS NULL AND t1.b < 10 ORDER BY t1.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Test the process_outer_partition() code path\nCREATE TABLE plt1_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p1 PARTITION OF plt1_adv FOR VALUES IN ('0000', '0001', '0002')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt1_adv_p2 PARTITION OF plt1_adv FOR VALUES IN ('0003', '0004')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt1_adv SELECT i, i, to_char(i % 5, 'FM0000') FROM generate_series(0, 24) i",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p1 PARTITION OF plt2_adv FOR VALUES IN ('0002')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt2_adv_p2 PARTITION OF plt2_adv FOR VALUES IN ('0003', '0004')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt2_adv SELECT i, i, to_char(i % 5, 'FM0000') FROM generate_series(0, 24) i WHERE i % 5 IN (2, 3, 4)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt3_adv (a int, b int, c text) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt3_adv_p1 PARTITION OF plt3_adv FOR VALUES IN ('0001')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE plt3_adv_p2 PARTITION OF plt3_adv FOR VALUES IN ('0003', '0004')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO plt3_adv SELECT i, i, to_char(i % 5, 'FM0000') FROM generate_series(0, 24) i WHERE i % 5 IN (1, 3, 4)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE plt3_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- This tests that when merging partitions from plt1_adv and plt2_adv in\n-- merge_list_bounds(), process_outer_partition() returns an already-assigned\n-- merged partition when re-called with plt1_adv_p1 for the second list value\n-- '0001' of that partition\nEXPLAIN (COSTS OFF)\nSELECT t1.a, t1.c, t2.a, t2.c, t3.a, t3.c FROM (plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.c = t2.c)) FULL JOIN plt3_adv t3 ON (t1.c = t3.c) WHERE coalesce(t1.a, 0) % 5 != 3 AND coalesce(t1.a, 0) % 5 != 4 ORDER BY t1.c, t1.a, t2.a, t3.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.a, t1.c, t2.a, t2.c, t3.a, t3.c FROM (plt1_adv t1 LEFT JOIN plt2_adv t2 ON (t1.c = t2.c)) FULL JOIN plt3_adv t3 ON (t1.c = t3.c) WHERE coalesce(t1.a, 0) % 5 != 3 AND coalesce(t1.a, 0) % 5 != 4 ORDER BY t1.c, t1.a, t2.a, t3.a",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt1_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt2_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "DROP TABLE plt3_adv",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- Tests for multi-level partitioned tables\nCREATE TABLE alpha (a double precision, b int, c text) PARTITION BY RANGE (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_neg PARTITION OF alpha FOR VALUES FROM ('-Infinity') TO (0) PARTITION BY RANGE (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_pos PARTITION OF alpha FOR VALUES FROM (0) TO (10.0) PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_neg_p1 PARTITION OF alpha_neg FOR VALUES FROM (100) TO (200)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_neg_p2 PARTITION OF alpha_neg FOR VALUES FROM (200) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_neg_p3 PARTITION OF alpha_neg FOR VALUES FROM (300) TO (400)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_pos_p1 PARTITION OF alpha_pos FOR VALUES IN ('0001', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_pos_p2 PARTITION OF alpha_pos FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE alpha_pos_p3 PARTITION OF alpha_pos FOR VALUES IN ('0008', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO alpha_neg SELECT -1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(100, 399) i WHERE i % 10 IN (1, 3, 4, 6, 8, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO alpha_pos SELECT  1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(100, 399) i WHERE i % 10 IN (1, 3, 4, 6, 8, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE alpha",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta (a double precision, b int, c text) PARTITION BY RANGE (a)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_neg PARTITION OF beta FOR VALUES FROM (-10.0) TO (0) PARTITION BY RANGE (b)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_pos PARTITION OF beta FOR VALUES FROM (0) TO ('Infinity') PARTITION BY LIST (c)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_neg_p1 PARTITION OF beta_neg FOR VALUES FROM (100) TO (150)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_neg_p2 PARTITION OF beta_neg FOR VALUES FROM (200) TO (300)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_neg_p3 PARTITION OF beta_neg FOR VALUES FROM (350) TO (500)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_pos_p1 PARTITION OF beta_pos FOR VALUES IN ('0002', '0003')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_pos_p2 PARTITION OF beta_pos FOR VALUES IN ('0004', '0006')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE beta_pos_p3 PARTITION OF beta_pos FOR VALUES IN ('0007', '0009')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO beta_neg SELECT -1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(100, 149) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO beta_neg SELECT -1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(200, 299) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO beta_neg SELECT -1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(350, 499) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO beta_pos SELECT  1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(100, 149) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO beta_pos SELECT  1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(200, 299) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "INSERT INTO beta_pos SELECT  1.0, i, to_char(i % 10, 'FM0000') FROM generate_series(350, 499) i WHERE i % 10 IN (2, 3, 4, 6, 7, 9)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE beta",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.*, t2.* FROM alpha t1 INNER JOIN beta t2 ON (t1.a = t2.a AND t1.b = t2.b) WHERE t1.b >= 125 AND t1.b < 225 ORDER BY t1.a, t1.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.*, t2.* FROM alpha t1 INNER JOIN beta t2 ON (t1.a = t2.a AND t1.b = t2.b) WHERE t1.b >= 125 AND t1.b < 225 ORDER BY t1.a, t1.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.*, t2.* FROM alpha t1 INNER JOIN beta t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE ((t1.b >= 100 AND t1.b < 110) OR (t1.b >= 200 AND t1.b < 210)) AND ((t2.b >= 100 AND t2.b < 110) OR (t2.b >= 200 AND t2.b < 210)) AND t1.c IN ('0004', '0009') ORDER BY t1.a, t1.b, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.*, t2.* FROM alpha t1 INNER JOIN beta t2 ON (t1.a = t2.a AND t1.c = t2.c) WHERE ((t1.b >= 100 AND t1.b < 110) OR (t1.b >= 200 AND t1.b < 210)) AND ((t2.b >= 100 AND t2.b < 110) OR (t2.b >= 200 AND t2.b < 210)) AND t1.c IN ('0004', '0009') ORDER BY t1.a, t1.b, t2.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT t1.*, t2.* FROM alpha t1 INNER JOIN beta t2 ON (t1.a = t2.a AND t1.b = t2.b AND t1.c = t2.c) WHERE ((t1.b >= 100 AND t1.b < 110) OR (t1.b >= 200 AND t1.b < 210)) AND ((t2.b >= 100 AND t2.b < 110) OR (t2.b >= 200 AND t2.b < 210)) AND t1.c IN ('0004', '0009') ORDER BY t1.a, t1.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SELECT t1.*, t2.* FROM alpha t1 INNER JOIN beta t2 ON (t1.a = t2.a AND t1.b = t2.b AND t1.c = t2.c) WHERE ((t1.b >= 100 AND t1.b < 110) OR (t1.b >= 200 AND t1.b < 210)) AND ((t2.b >= 100 AND t2.b < 110) OR (t2.b >= 200 AND t2.b < 210)) AND t1.c IN ('0004', '0009') ORDER BY t1.a, t1.b",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- partitionwise join with fractional paths\nCREATE TABLE fract_t (id BIGINT, PRIMARY KEY (id)) PARTITION BY RANGE (id)",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE fract_t0 PARTITION OF fract_t FOR VALUES FROM ('0') TO ('1000')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "CREATE TABLE fract_t1 PARTITION OF fract_t FOR VALUES FROM ('1000') TO ('2000')",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- insert data\nINSERT INTO fract_t (id) (SELECT generate_series(0, 1999))",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "ANALYZE fract_t",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- verify plan",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "nested index only scans\nSET max_parallel_workers_per_gather = 0",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "SET enable_partitionwise_join = on",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT x.id, y.id FROM fract_t x LEFT JOIN fract_t y USING (id) ORDER BY x.id ASC LIMIT 10",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF)\nSELECT x.id, y.id FROM fract_t x LEFT JOIN fract_t y USING (id) ORDER BY x.id DESC LIMIT 10",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "-- cleanup\nDROP TABLE fract_t",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "RESET max_parallel_workers_per_gather",
+            "name": "partition_join.sql"
+        },
+        {
+            "query": "RESET enable_partitionwise_join",
+            "name": "partition_join.sql"
+        }
+    ]
+}

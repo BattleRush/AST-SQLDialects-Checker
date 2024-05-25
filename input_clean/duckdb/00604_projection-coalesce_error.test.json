@@ -1,0 +1,35 @@
+{
+    "name": "coalesce_error.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COALESCE(1, 'hello'::INT)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COALESCE(NULL, 'hello'::INT)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE vals AS SELECT * FROM (\n\tVALUES (1, 'hello'), (NULL, '2'), (3, NULL)\n) tbl(a, b)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COALESCE(a, b::INT) FROM vals",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COALESCE(NULL, b::INT) FROM vals",
+            "expected_result": ""
+        }
+    ]
+}

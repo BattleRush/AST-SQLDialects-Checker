@@ -1,0 +1,21 @@
+{
+    "name": "02815_logical_error_cannot_get_column_name_of_set.sql",
+    "tests": [
+        {
+            "query": "SELECT * FROM numbers(SETTINGS x = 1);",
+            "name": "02815_logical_error_cannot_get_column_name_of_set.sql"
+        },
+        {
+            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT * FROM numbers(numbers(SETTINGS x = 1));",
+            "name": "02815_logical_error_cannot_get_column_name_of_set.sql"
+        },
+        {
+            "query": " -- { serverError UNKNOWN_FUNCTION, UNSUPPORTED_METHOD }\nSELECT * FROM numbers(numbers(SETTINGS x = 1), SETTINGS x = 1);",
+            "name": "02815_logical_error_cannot_get_column_name_of_set.sql"
+        },
+        {
+            "query": " -- { serverError UNKNOWN_FUNCTION, UNSUPPORTED_METHOD }\n;",
+            "name": "02815_logical_error_cannot_get_column_name_of_set.sql"
+        }
+    ]
+}

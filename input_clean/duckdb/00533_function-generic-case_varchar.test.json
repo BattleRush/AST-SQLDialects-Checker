@@ -1,0 +1,25 @@
+{
+    "name": "case_varchar.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl AS SELECT i, 'thisisalongstring' || i::VARCHAR s FROM range(10) tbl(i)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT i, s, CASE WHEN i%2=0 THEN s ELSE s END FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT i, s, CASE WHEN i%2=0 THEN s ELSE s END FROM (SELECT i, s||'_suffix' FROM tbl) tbl(i, s)",
+            "expected_result": ""
+        }
+    ]
+}

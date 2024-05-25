@@ -1,0 +1,30 @@
+{
+    "name": "transaction_errors.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "ROLLBACK;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "COMMIT;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "BEGIN;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "BEGIN;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ROLLBACK;",
+            "expected_result": ""
+        }
+    ]
+}

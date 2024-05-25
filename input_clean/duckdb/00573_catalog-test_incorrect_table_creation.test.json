@@ -1,0 +1,25 @@
+{
+    "name": "test_incorrect_table_creation.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER, PRIMARY KEY(j))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER, PRIMARY KEY(i, i))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER, PRIMARY KEY(i), PRIMARY KEY(i)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER PRIMARY KEY, PRIMARY KEY(i)",
+            "expected_result": ""
+        }
+    ]
+}

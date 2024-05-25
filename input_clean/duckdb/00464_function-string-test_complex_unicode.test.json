@@ -1,0 +1,100 @@
+{
+    "name": "test_complex_unicode.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT length_grapheme('S\u0308a')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT length_grapheme('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT length_grapheme('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f L\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0fR \ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT length('S\u0308a')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT length('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT length('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f L\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0fR \ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT strlen('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT strlen('S\u0308a')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT REVERSE('S\u0308a\ufe0d')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT REVERSE('Z\u0351\u036b\u0313\u036a\u0302\u036b\u033d\u034f\u0334\u0319\u0324\u031e\u0349\u035a\u032f\u031e\u0320\u034dA\u0334\u0335\u031c\u0330\u0354\u036b\u0357\u0362')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT REVERSE('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT REVERSE('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f L\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0fR \ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT REVERSE('Mot\u00f6rHead')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT substring_grapheme('\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f', 1, 1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT substring_grapheme('S\u0308a\ufe0d', 2, 1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT substring_grapheme('test: \ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0fhello\ud83e\udd26\ud83c\udffc\u200d\u2642\ufe0f world', 7, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT substring_grapheme('S\u0308a', 1, 1)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT substring_grapheme('S\u0308a\ufe0d', -1, 1)",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "name": "case_insensitive_cte.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "with cte AS (SELECT 42 \"A\")\nselect a from cte",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "with \"CTE\" AS (SELECT 42)\nselect * from cte",
+            "expected_result": ""
+        }
+    ]
+}

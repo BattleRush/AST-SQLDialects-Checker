@@ -1,0 +1,45 @@
+{
+    "name": "test_collate_between.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE collate_test(s VARCHAR, t VARCHAR)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO collate_test VALUES ('mark', 'muhleisen')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM collate_test WHERE 'm\u00f3rritz' BETWEEN s AND t",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM collate_test WHERE 'm\u00f3rritz' COLLATE NOACCENT BETWEEN s AND t",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM collate_test WHERE 'm\u00f3rritz' BETWEEN (s COLLATE NOACCENT) AND t",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM collate_test WHERE 'm\u00f3rritz' BETWEEN s AND (t COLLATE NOACCENT)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "PRAGMA default_collation='NOACCENT'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*) FROM collate_test WHERE 'm\u00f3rritz' BETWEEN s AND t",
+            "expected_result": ""
+        }
+    ]
+}

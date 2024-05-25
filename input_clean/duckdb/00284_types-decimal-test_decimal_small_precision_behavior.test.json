@@ -1,0 +1,50 @@
+{
+    "name": "test_decimal_small_precision_behavior.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "pragma enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '1.023450000001'::DECIMAL(5,4)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '1.234499999'::DECIMAL(4,3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '1.23499999'::DECIMAL(4,3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '1.234499999'::DECIMAL(5,4)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '-1.023450000001'::DECIMAL(5,4)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '-1.234499999'::DECIMAL(4,3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '-1.23499999'::DECIMAL(4,3)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select '-1.234499999'::DECIMAL(5,4)",
+            "expected_result": ""
+        }
+    ]
+}

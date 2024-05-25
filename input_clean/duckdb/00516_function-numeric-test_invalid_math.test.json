@@ -1,0 +1,65 @@
+{
+    "name": "test_invalid_math.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl log(0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl log(-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl ln(0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl ln(-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl log10(0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl log10(-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECTl sqrt(-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SQRT(0)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT POW(1e300,100), POW(-1e300,100), POW(-1.0, 0.5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXP(1e300), EXP(1e100)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DEGREES(1e308)",
+            "expected_result": ""
+        }
+    ]
+}

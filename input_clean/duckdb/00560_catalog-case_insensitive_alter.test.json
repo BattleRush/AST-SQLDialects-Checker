@@ -1,0 +1,65 @@
+{
+    "name": "case_insensitive_alter.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE \"MyTable\"(i integer, \"BigColumn\" integer);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable ALTER BIGCOLUMN SET DATA TYPE VARCHAR",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable DROP COLUMN BIGCOLUMN;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT BIGCOLUMN FROM MyTable",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable ADD COLUMN \"BIGCOLUMN\" VARCHAR;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable ALTER COLUMN BIGCOLUMN SET DEFAULT 3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO MyTable(BIGCOLUMN) VALUES (DEFAULT)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT BIGCOLUMN FROM MyTable",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable ALTER COLUMN BIGCOLUMN DROP DEFAULT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT BIGCOLUMN FROM MyTable",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable RENAME BIGCOLUMN TO \"SmallColumn\"",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT SmallColumn FROM MyTable",
+            "expected_result": ""
+        }
+    ]
+}

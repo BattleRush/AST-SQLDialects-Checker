@@ -1,0 +1,60 @@
+{
+    "name": "extension_function_error.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT dbgen();",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DBGEN();",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM dbgen();",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CALL dbgen(sf=0.1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM dbgen",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SET TimeZone='UTC'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM TimeZone",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT dbgen()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CALL dbge()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SET TimeZon='UTC'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SET TimeZone='UTC'",
+            "expected_result": ""
+        }
+    ]
+}

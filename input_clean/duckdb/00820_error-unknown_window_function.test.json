@@ -1,0 +1,10 @@
+{
+    "name": "unknown_window_function.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT substr('hello', 3, 2) OVER ();",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "name": "01414_mutations_and_errors.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS mutation_table;",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE mutation_table\n(\n    date Date,\n    key UInt64,\n    value String\n)\nENGINE = MergeTree()\nPARTITION BY date\nORDER BY tuple();",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO mutation_table SELECT toDate('2019-10-01'), number, '42' FROM numbers(100);",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO mutation_table SELECT toDate('2019-10-02'), number, 'Hello' FROM numbers(100);",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nSELECT distinct(value) FROM mutation_table ORDER BY value;",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nALTER TABLE mutation_table MODIFY COLUMN value UInt64 SETTINGS mutations_sync = 2;",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": " --{serverError 341}\n\nSELECT distinct(value) FROM mutation_table ORDER BY value;",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": " --{serverError 6}\n\nKILL MUTATION where table = 'mutation_table' and database = currentDatabase();",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nALTER TABLE mutation_table MODIFY COLUMN value String SETTINGS mutations_sync = 2;",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nSELECT distinct(value) FROM mutation_table ORDER BY value;",
+            "name": "01414_mutations_and_errors.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS mutation_table;",
+            "name": "01414_mutations_and_errors.sql"
+        }
+    ]
+}

@@ -1,0 +1,335 @@
+{
+    "name": "test_extract_edge_cases.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(century FROM cast('2000-10-10' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(century FROM cast('2001-10-10' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(millennium FROM cast('2000-10-10' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(millennium FROM cast('2001-10-10' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 2);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 2);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 3);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 3);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 4);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 4);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 5);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 5);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) + 6);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1970-01-01' AS DATE) - 6);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(dow FROM cast('1793-05-26' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(isodow FROM cast('1793-05-26' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2005-01-01' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2006-01-01' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2008-01-01' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2009-01-01' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2010-01-01' AS DATE));",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 7);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 14);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 21);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 28);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 35);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 42);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 49);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 56);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 63);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 70);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 77);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 84);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 91);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 98);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 105);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 112);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 119);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 126);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 133);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 140);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 147);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 154);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 161);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 168);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 175);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 182);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 189);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 196);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 203);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 210);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 217);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 224);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 231);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 238);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 245);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 252);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 259);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 266);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT EXTRACT(week FROM cast('2007-01-01' AS DATE) + 273);",
+            "expected_result": ""
+        }
+    ]
+}

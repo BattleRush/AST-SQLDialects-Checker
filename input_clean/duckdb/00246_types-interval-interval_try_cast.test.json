@@ -1,0 +1,75 @@
+{
+    "name": "interval_try_cast.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast('   ' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast('AAAA' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast('00:00:' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast('3 doopiedoos' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast('3 years 2 doy' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast('3 yearweek' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast(NULL as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT try_cast('   ' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT try_cast('AAAA' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT try_cast('00:00:' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT try_cast('3 doopiedoos' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT try_cast('3 years 2 doy' as interval)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT try_cast(NULL as interval)",
+            "expected_result": ""
+        }
+    ]
+}

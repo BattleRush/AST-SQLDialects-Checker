@@ -1,0 +1,21 @@
+{
+    "name": "vtab_err",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "vtab_err-3.0",
+            "query": "CREATE TABLE r(a PRIMARY KEY, b, c);"
+        },
+        {
+            "name": "vtab_err-3.0",
+            "query": "CREATE VIRTUAL TABLE e USING echo(r);"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        }
+    ]
+}

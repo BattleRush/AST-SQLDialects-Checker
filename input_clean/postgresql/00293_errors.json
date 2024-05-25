@@ -1,0 +1,73 @@
+{
+    "name": "errors.sql",
+    "tests": [
+        {
+            "query": "--\n-- ERRORS\n--\n\n-- bad in postquel, but ok in PostgreSQL\nselect 1;\n\n\n--\n-- UNSUPPORTED STUFF\n\n-- doesn't work\n-- notify pg_class\n--\n\n--\n-- SELECT\n\n-- this used to be a syntax error, but now we allow an empty target list\nselect",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- no such relation\nselect * from nonesuch",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- bad name in target list\nselect nonesuch from pg_database",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- empty distinct list isn't OK\nselect distinct from pg_database;\n\n-- bad attribute name on lhs of operator\nselect * from pg_database where nonesuch = pg_database.datname;\n\n-- bad attribute name on rhs of operator\nselect * from pg_database where pg_database.datname = nonesuch;\n\n-- bad attribute name in select distinct on\nselect distinct on (foobar) * from pg_database;\n\n-- grouping with FOR UPDATE\nselect null from pg_database group by datname for update;\nselect null from pg_database group by grouping sets (()) for update;\n\n\n--\n-- DELETE\n\n-- missing relation name (this had better not wildcard!)\ndelete from;\n\n-- no such relation\ndelete from nonesuch;\n\n\n--\n-- DROP\n\n-- missing relation name (this had better not wildcard!)\ndrop table;\n\n-- no such relation\ndrop table nonesuch;\n\n\n--\n-- ALTER TABLE\n\n-- relation renaming\n\n-- missing relation name\nalter table rename;\n\n-- no such relation\nalter table nonesuch rename to newnonesuch;\n\n-- no such relation\nalter table nonesuch rename to stud_emp;\n\n-- conflict\nalter table stud_emp rename to student;\n\n-- self-conflict\nalter table stud_emp rename to stud_emp;\n\n\n-- attribute renaming\n\n-- no such relation\nalter table nonesuchrel rename column nonesuchatt to newnonesuchatt;\n\n-- no such attribute\nalter table emp rename column nonesuchatt to newnonesuchatt;\n\n-- conflict\nalter table emp rename column salary to manager;\n\n-- conflict\nalter table emp rename column salary to ctid;\n\n\n--\n-- TRANSACTION STUFF\n\n-- not in a xact\nabort;\n\n-- not in a xact\nend;\n\n\n--\n-- CREATE AGGREGATE\n\n-- sfunc/finalfunc type disagreement\ncreate aggregate newavg2 (sfunc = int4pl,\n\t\t\t  basetype = int4,\n\t\t\t  stype = int4,\n\t\t\t  finalfunc = int2um,\n\t\t\t  initcond = '0');\n\n-- left out basetype\ncreate aggregate newcnt1 (sfunc = int4inc,\n\t\t\t  stype = int4,\n\t\t\t  initcond = '0');\n\n\n--\n-- DROP INDEX\n\n-- missing index name\ndrop index;\n\n-- bad index name\ndrop index 314159;\n\n-- no such index\ndrop index nonesuch;\n\n\n--\n-- DROP AGGREGATE\n\n-- missing aggregate name\ndrop aggregate;\n\n-- missing aggregate type\ndrop aggregate newcnt1;\n\n-- bad aggregate name\ndrop aggregate 314159 (int);\n\n-- bad aggregate type\ndrop aggregate newcnt (nonesuch);\n\n-- no such aggregate\ndrop aggregate nonesuch (int4);\n\n-- no such aggregate for type\ndrop aggregate newcnt (float4);\n\n\n--\n-- DROP FUNCTION\n\n-- missing function name\ndrop function ();\n\n-- bad function name\ndrop function 314159();\n\n-- no such function\ndrop function nonesuch();\n\n\n--\n-- DROP TYPE\n\n-- missing type name\ndrop type;\n\n-- bad type name\ndrop type 314159;\n\n-- no such type\ndrop type nonesuch;\n\n\n--\n-- DROP OPERATOR\n\n-- missing everything\ndrop operator;\n\n-- bad operator name\ndrop operator equals;\n\n-- missing type list\ndrop operator ===;\n\n-- missing parentheses\ndrop operator int4, int4;\n\n-- missing operator name\ndrop operator (int4, int4);\n\n-- missing type list contents\ndrop operator === ();\n\n-- no such operator\ndrop operator === (int4);\n\n-- no such operator by that name\ndrop operator === (int4, int4);\n\n-- no such type1\ndrop operator = (nonesuch);\n\n-- no such type1\ndrop operator = ( , int4);\n\n-- no such type1\ndrop operator = (nonesuch, int4);\n\n-- no such type2\ndrop operator = (int4, nonesuch);\n\n-- no such type2\ndrop operator = (int4, );\n\n\n--\n-- DROP RULE\n\n-- missing rule name\ndrop rule;\n\n-- bad rule name\ndrop rule 314159;\n\n-- no such rule\ndrop rule nonesuch on noplace;\n\n-- these postquel variants are no longer supported\ndrop tuple rule nonesuch;\ndrop instance rule nonesuch on noplace;\ndrop rewrite rule nonesuch;\n\n--\n-- Check that division-by-zero is properly caught.\n--\n\nselect 1/0;\n\nselect 1::int8/0;\n\nselect 1/0::int8;\n\nselect 1::int2/0;\n\nselect 1/0::int2;\n\nselect 1::numeric/0;\n\nselect 1/0::numeric;\n\nselect 1::float8/0;\n\nselect 1/0::float8;\n\nselect 1::float4/0;\n\nselect 1/0::float4;\n\n\n--\n-- Test psql's reporting of syntax error location\n--\n\nxxx",
+            "name": "errors.sql"
+        },
+        {
+            "query": "CREATE foo",
+            "name": "errors.sql"
+        },
+        {
+            "query": "CREATE TABLE",
+            "name": "errors.sql"
+        },
+        {
+            "query": "CREATE TABLE\n\\g\n\nINSERT INTO foo VALUES(123) foo",
+            "name": "errors.sql"
+        },
+        {
+            "query": "INSERT INTO 123\nVALUES(123)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "INSERT INTO foo\nVALUES(123) 123",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- with a tab\nCREATE TABLE foo\n  (id INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY,\n\tid3 INTEGER NOT NUL,\n   id4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- long line to be truncated on the left\nCREATE TABLE foo(id INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY, id3 INTEGER NOT NUL,\nid4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- long line to be truncated on the right\nCREATE TABLE foo(\nid3 INTEGER NOT NUL, id4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL, id INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- long line to be truncated both ways\nCREATE TABLE foo(id INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY, id3 INTEGER NOT NUL, id4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- long line to be truncated on the left, many lines\nCREATE\nTEMPORARY\nTABLE\nfoo(id INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY, id3 INTEGER NOT NUL,\nid4 INT4\nUNIQUE\nNOT\nNULL,\nid5 TEXT\nUNIQUE\nNOT\nNULL)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- long line to be truncated on the right, many lines\nCREATE\nTEMPORARY\nTABLE\nfoo(\nid3 INTEGER NOT NUL, id4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL, id INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- long line to be truncated both ways, many lines\nCREATE\nTEMPORARY\nTABLE\nfoo\n(id\nINT4\nUNIQUE NOT NULL, idx INT4 UNIQUE NOT NULL, idy INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY, id3 INTEGER NOT NUL, id4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL,\nidz INT4 UNIQUE NOT NULL,\nidv INT4 UNIQUE NOT NULL)",
+            "name": "errors.sql"
+        },
+        {
+            "query": "-- more than 10 lines...\nCREATE\nTEMPORARY\nTABLE\nfoo\n(id\nINT4\nUNIQUE\nNOT\nNULL\n,\nidm\nINT4\nUNIQUE\nNOT\nNULL,\nidx INT4 UNIQUE NOT NULL, idy INT4 UNIQUE NOT NULL, id2 TEXT NOT NULL PRIMARY KEY, id3 INTEGER NOT NUL, id4 INT4 UNIQUE NOT NULL, id5 TEXT UNIQUE NOT NULL,\nidz INT4 UNIQUE NOT NULL,\nidv\nINT4\nUNIQUE\nNOT\nNULL)",
+            "name": "errors.sql"
+        }
+    ]
+}

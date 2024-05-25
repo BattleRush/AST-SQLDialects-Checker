@@ -1,0 +1,20 @@
+{
+    "name": "large_quoted_string_constant.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE j2 (id INT, json VARCHAR, src VARCHAR);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO j2(id,json,src)\n    VALUES(3,'[\n    {\n        \"id\": \"0001\",\n        \"type\": \"donut\",\n        \"name\": \"Cake\",\n        \"ppu\": 0.55,\n        \"batters\":\n            {\n                \"batter\":\n                    [\n                        { \"id\": \"1001\", \"type\": \"Regular\" },\n                        { \"id\": \"1002\", \"type\": \"Chocolate\" },\n                        { \"id\": \"1003\", \"type\": \"Blueberry\" },\n                        { \"id\": \"1004\", \"type\": \"Devil''s Food\" }\n                    ]\n            },\n        \"topping\":\n            [\n                { \"id\": \"5001\", \"type\": \"None\" },\n                { \"id\": \"5002\", \"type\": \"Glazed\" },\n                { \"id\": \"5005\", \"type\": \"Sugar\" },\n                { \"id\": \"5007\", \"type\": \"Powdered Sugar\" },\n                { \"id\": \"5006\", \"type\": \"Chocolate with Sprinkles\" },\n                { \"id\": \"5003\", \"type\": \"Chocolate\" },\n                { \"id\": \"5004\", \"type\": \"Maple\" }\n            ]\n    },\n    {\n        \"id\": \"0002\",\n        \"type\": \"donut\",\n        \"name\": \"Raised\",\n        \"ppu\": 0.55,\n        \"batters\":\n            {\n                \"batter\":\n                    [\n                        { \"id\": \"1001\", \"type\": \"Regular\" }\n                    ]\n            },\n        \"topping\":\n            [\n                { \"id\": \"5001\", \"type\": \"None\" },\n                { \"id\": \"5002\", \"type\": \"Glazed\" },\n                { \"id\": \"5005\", \"type\": \"Sugar\" },\n                { \"id\": \"5003\", \"type\": \"Chocolate\" },\n                { \"id\": \"5004\", \"type\": \"Maple\" }\n            ]\n    },\n    {\n        \"id\": \"0003\",\n        \"type\": \"donut\",\n        \"name\": \"Old Fashioned\",\n        \"ppu\": 0.55,\n        \"batters\":\n            {\n                \"batter\":\n                    [\n                        { \"id\": \"1001\", \"type\": \"Regular\" },\n                        { \"id\": \"1002\", \"type\": \"Chocolate\" }\n                    ]\n            },\n        \"topping\":\n            [\n                { \"id\": \"5001\", \"type\": \"None\" },\n                { \"id\": \"5002\", \"type\": \"Glazed\" },\n                { \"id\": \"5003\", \"type\": \"Chocolate\" },\n                { \"id\": \"5004\", \"type\": \"Maple\" }\n            ]\n    }\n    ]','https://adobe.github.io/Spry/samples/data_region/JSONDataSetSample.html');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT len(json) FROM j2;",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,95 @@
+{
+    "name": "attach_did_you_mean.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "ATTACH DATABASE ':memory:' AS db1;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE hello(i INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE db1.test(a INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE SCHEMA db1.myschema",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE db1.myschema.blablabla(i INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM blablabla;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "USE db1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM blablabla",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM myschema.blablabla",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM hello;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM memory.hello",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "USE db1.myschema",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM blablabla",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM db1.main.test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM hello;",
+            "expected_result": ""
+        }
+    ]
+}

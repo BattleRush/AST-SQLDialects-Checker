@@ -1,0 +1,70 @@
+{
+    "name": "test_incorrect_dates.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE dates(i DATE)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('blabla')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1993-20-14')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1993-08-99')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1993-02-29')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1900-02-29')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1992-02-29')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('2000-02-29')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('02-02-1992')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1900a01a01')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1900-1-1')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('-100000000-01-01')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO dates VALUES ('1000000000-01-01')",
+            "expected_result": ""
+        }
+    ]
+}

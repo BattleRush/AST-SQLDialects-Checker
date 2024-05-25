@@ -1,0 +1,75 @@
+{
+    "name": "test_null.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 3 + NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL + 3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL + NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 1 + (NULL + NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 4 / 0",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test (a INTEGER, b INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO test VALUES (11, 22), (NULL, 21), (13, 22)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a FROM test",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT cast(a AS BIGINT) FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a / 0 FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a / (a - a) FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a + b FROM test",
+            "expected_result": ""
+        }
+    ]
+}

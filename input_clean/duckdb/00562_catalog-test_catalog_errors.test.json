@@ -1,0 +1,95 @@
+{
+    "name": "test_catalog_errors.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE VIEW vintegers AS SELECT 42;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE OR REPLACE VIEW integers AS SELECT 42;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP VIEW integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE blabla",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE blabla RENAME COLUMN i TO k",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE IF EXISTS vintegers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE INDEX i_index ON integers(i);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE INDEX i_index ON integers(i);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE INDEX IF NOT EXISTS i_index ON integers(i);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP INDEX i_index",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP INDEX i_index",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP INDEX IF EXISTS i_index",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE UNIQUE INDEX i_index ON integers(i);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE UNIQUE INDEX i_index ON integers(i);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE UNIQUE INDEX IF NOT EXISTS i_index ON integers(i);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE integers;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP INDEX i_index",
+            "expected_result": ""
+        }
+    ]
+}

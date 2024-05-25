@@ -1,0 +1,75 @@
+{
+    "name": "case_insensitive_binder.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE \"MyTable\"(i integer);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM mytable;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM MyTable;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM \"MyTable\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable ADD COLUMN j INTEGER;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE MyTable RENAME TO \"MyOtherTable\"",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE MyOtherTable;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE \"ABC\"(i integer);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE \"AbC\"(i integer);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM \"ABC\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM abc; -- error: which table did I mean?",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE abc ADD COLUMN j INTEGER;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "ALTER TABLE \"ABC\" ADD COLUMN \"J\" INTEGER;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE abc",
+            "expected_result": ""
+        }
+    ]
+}

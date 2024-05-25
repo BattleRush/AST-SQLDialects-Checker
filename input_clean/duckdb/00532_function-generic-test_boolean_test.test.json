@@ -1,0 +1,100 @@
+{
+    "name": "test_boolean_test.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select true is true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select false is true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select null is true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 42 is true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 0 is true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select true is not true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select false is not true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select null is not true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 42 is not true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 0 is not true",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select null is null",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 42 is null",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select null is not null",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 42 is not null",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select null is unknown",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 42 is unknown",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select null is not unknown",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select 42 is not unknown",
+            "expected_result": ""
+        }
+    ]
+}

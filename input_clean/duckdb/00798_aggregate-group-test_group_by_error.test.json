@@ -1,0 +1,25 @@
+{
+    "name": "test_group_by_error.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl(i INT)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM tbl GROUP BY DEFAULT",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM tbl GROUP BY SUM(41)",
+            "expected_result": ""
+        }
+    ]
+}

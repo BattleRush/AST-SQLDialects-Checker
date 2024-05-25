@@ -1,0 +1,10 @@
+{
+    "name": "subquery_single_column.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SELECT (SELECT 42, 84)",
+            "expected_result": ""
+        }
+    ]
+}

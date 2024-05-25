@@ -1,0 +1,61 @@
+{
+    "name": "02788_fix_logical_error_in_sorting.sql",
+    "tests": [
+        {
+            "query": "SET allow_deprecated_functions = 1;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS session_events;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS event_types;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE session_events\n(\n    clientId UInt64,\n    sessionId String,\n    pageId UInt64,\n    eventNumber UInt64,\n    timestamp UInt64,\n    type LowCardinality(String),\n    data String\n)\nENGINE = MergeTree\nPARTITION BY toYYYYMM(toDate(pageId / 1000))\nORDER BY (clientId, sessionId, pageId, timestamp);",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE event_types\n(\n    type String,\n    active Int16\n)\nENGINE = MergeTree\nPARTITION BY substring(type, 1, 1)\nORDER BY (type, active);",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nSYSTEM STOP MERGES session_events;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\nSYSTEM STOP MERGES event_types;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO session_events SELECT\n    141,\n    '693de636-6d9b-47b7-b52a-33bd303b6255',\n    1686053240314,\n    number,\n    number,\n    toString(number % 10),\n    ''\nFROM numbers_mt(100000);",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO session_events SELECT\n    141,\n    '693de636-6d9b-47b7-b52a-33bd303b6255',\n    1686053240314,\n    number,\n    number,\n    toString(number % 10),\n    ''\nFROM numbers_mt(100000);",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO event_types SELECT\n    toString(number % 10),\n    number % 2\nFROM numbers(20);",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nSET optimize_sorting_by_input_stream_properties = 1;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\n-- We check only that no exception was thrown\nEXPLAIN PIPELINE\nSELECT\n    pageId,\n    [prev_active_ts, timestamp] AS inactivity_timestamps,\n    timestamp - prev_active_ts AS inactive_duration,\n    timestamp\nFROM\n(\n    SELECT\n        pageId,\n        timestamp,\n        neighbor(timestamp, -1) AS prev_active_ts\n    FROM session_events\n    WHERE (type IN (\n        SELECT type\n        FROM event_types\n        WHERE active = 1\n    )) AND (sessionId = '693de636-6d9b-47b7-b52a-33bd303b6255') AND (session_events.clientId = 141) AND (pageId = 1686053240314)\n    ORDER BY timestamp ASC\n)\nWHERE runningDifference(timestamp) >= 500\nORDER BY timestamp ASC\nFORMAT Null;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE session_events;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        },
+        {
+            "query": "\nDROP TABLE event_types;",
+            "name": "02788_fix_logical_error_in_sorting.sql"
+        }
+    ]
+}

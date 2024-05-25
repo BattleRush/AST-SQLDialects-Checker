@@ -1,0 +1,45 @@
+{
+    "name": "pivot_enum.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE OR REPLACE TABLE monthly_sales(empid INT, amount INT, month TEXT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO monthly_sales VALUES\n    (1, 10000, 'JAN'),\n    (1, 400, 'JAN'),\n    (2, 4500, 'JAN'),\n    (2, 35000, 'JAN'),\n    (1, 5000, 'FEB'),\n    (1, 3000, 'FEB'),\n    (2, 200, 'FEB'),\n    (2, 90500, 'FEB'),\n    (1, 6000, 'MAR'),\n    (1, 5000, 'MAR'),\n    (2, 2500, 'MAR'),\n    (2, 9500, 'MAR'),\n    (1, 8000, 'APR'),\n    (1, 10000, 'APR'),\n    (2, 800, 'APR'),\n    (2, 4500, 'APR');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TYPE unique_months AS ENUM (SELECT DISTINCT month FROM monthly_sales ORDER BY\n\tCASE month WHEN 'JAN' THEN 1 WHEN 'FEB' THEN 2 WHEN 'MAR' THEN 3 ELSE 4 END);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT *\n  FROM monthly_sales\n    PIVOT(SUM(amount) FOR MONTH IN unique_months)\n      AS p\n  ORDER BY EMPID;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT *\n  FROM monthly_sales\n    PIVOT(SUM(amount) FOR MONTH IN unique_monthsx)\n      AS p\n  ORDER BY EMPID;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TYPE not_an_enum AS VARCHAR;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT *\n  FROM monthly_sales\n    PIVOT(SUM(amount) FOR MONTH IN not_an_enum)\n      AS p\n  ORDER BY EMPID;",
+            "expected_result": ""
+        }
+    ]
+}

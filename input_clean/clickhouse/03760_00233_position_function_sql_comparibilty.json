@@ -1,0 +1,61 @@
+{
+    "name": "00233_position_function_sql_comparibilty.sql",
+    "tests": [
+        {
+            "query": "SET send_logs_level = 'fatal';",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 1 = position('' in '');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 1 = position('' in 'abc');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 0 = position('abc' in '');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 1 = position('abc' in 'abc');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 2 = position('bc' in 'abc');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 3 = position('c' in 'abc');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\n\nselect 1 = position('' in '');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 1 = position('' in '\u0430\u0431\u0432');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 0 = position('\u0430\u0431\u0432' in '');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 1 = position('\u0430\u0431\u0432' in '\u0430\u0431\u0432');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 3 = position('\u0431\u0432' in '\u0430\u0431\u0432');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\nselect 5 = position('\u0432' in '\u0430\u0431\u0432');",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        },
+        {
+            "query": "\n\nselect 6 = position('/' IN s) FROM (SELECT 'Hello/World' AS s);",
+            "name": "00233_position_function_sql_comparibilty.sql"
+        }
+    ]
+}

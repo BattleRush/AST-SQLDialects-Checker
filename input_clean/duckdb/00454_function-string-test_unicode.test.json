@@ -1,0 +1,50 @@
+{
+    "name": "test_unicode.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select UNICODE(NULL), UNICODE(''), UNICODE('$'), UNICODE('\u00a2'), UNICODE('\u20ac'), UNICODE('\ud800\udf48')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE strings(a STRING, b STRING)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO strings VALUES ('', 'Zero'), ('$', NULL), ('\u00a2','Two'), ('\u20ac', NULL), ('\ud800\udf48','Four')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select UNICODE(a) FROM strings",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select UNICODE(b) FROM strings",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select UNICODE(a) FROM strings WHERE b IS NOT NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select UNICODE()",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select UNICODE(1, 2)",
+            "expected_result": ""
+        }
+    ]
+}

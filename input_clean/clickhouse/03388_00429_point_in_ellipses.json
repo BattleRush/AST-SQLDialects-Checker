@@ -1,0 +1,17 @@
+{
+    "name": "00429_point_in_ellipses.sql",
+    "tests": [
+        {
+            "query": "\nSELECT pointInEllipses(33.3, 55.3, 33.4, 55.1, 1.0, 1.0) AS distance;",
+            "name": "00429_point_in_ellipses.sql"
+        },
+        {
+            "query": "\nSELECT pointInEllipses(33.3 + v, 55.3 + v, 33.4, 55.1, 1.0, 1.0) AS distance from\n(\n\tselect number + 0.1 as v from system.numbers limit 1\n);",
+            "name": "00429_point_in_ellipses.sql"
+        },
+        {
+            "query": "\nSELECT pointInEllipses(33.3, 55.3, 33.4, 55.1, 0.1, 0.2) AS distance;",
+            "name": "00429_point_in_ellipses.sql"
+        }
+    ]
+}

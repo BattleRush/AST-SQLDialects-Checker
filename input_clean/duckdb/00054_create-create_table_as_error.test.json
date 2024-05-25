@@ -1,0 +1,15 @@
+{
+    "name": "create_table_as_error.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl AS EXECUTE tbl;",
+            "expected_result": ""
+        }
+    ]
+}

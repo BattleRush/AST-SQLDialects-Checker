@@ -1,0 +1,35 @@
+{
+    "name": "test_decimal_2411.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE decimals(i DECIMAL(38,1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE decimals2(i DECIMAL(38,1))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO decimals VALUES (4642275147320176030871715840)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO decimals2 VALUES (4642275147320176030871715840)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select count(*) from decimals inner join decimals2 on (decimals.i = decimals2.i)",
+            "expected_result": ""
+        }
+    ]
+}

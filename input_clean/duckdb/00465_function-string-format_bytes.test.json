@@ -1,0 +1,135 @@
+{
+    "name": "format_bytes.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(0);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1023);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1024);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT pg_size_pretty(1024);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1024*1024-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1024*1024);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1024*1024 + 555555);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1024*1024*1024-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1e9::BIGINT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(pow(1024,3)::BIGINT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(pow(1024.0,4)::BIGINT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes((pow(1024.0,4) - 1)::BIGINT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1e15::BIGINT);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(9223372036854775807);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(NULL);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(-1);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT format_bytes(-9223372036854775808);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT formatReadableDecimalSize(500);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT formatReadableSize(500);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT formatReadableDecimalSize(500*1000);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT formatReadableSize(500*1000);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT formatReadableDecimalSize(500*1000*1000);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT formatReadableSize(500*1000*1000);",
+            "expected_result": ""
+        }
+    ]
+}

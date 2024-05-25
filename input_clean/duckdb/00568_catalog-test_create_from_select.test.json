@@ -1,0 +1,50 @@
+{
+    "name": "test_create_from_select.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (3), (4), (5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers SELECT i+3 FROM integers;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE integers2 AS SELECT i, i+2 AS j FROM integers;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers2 ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT i FROM integers2 ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT j FROM integers2 ORDER BY i",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,225 @@
+{
+    "name": "case_insensitive_using.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "create table A as select 1 as \"X\", 2 as \"Y\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table B as select 1 as \"X\", 3 as \"Z\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select * from A join B using(X);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select * from A join B using(\"X\");",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE \"A\"",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE \"B\"",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table A as select 1 as \"X\", 2 as \"Y\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table B as select 1 as X, 3 as \"Z\";",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select * from A join B using(X);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "select * from A join B using(X);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE \"A\"",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE \"B\"",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table A as select 1 as \"hello\", 2 as x;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table B as select 1 as \"HELLO\", 3 as x2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table C as select 1 as \"hEllO\", 4 as x3;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table D as select 1 as \"HElLo\", 5 as x4;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "create table E as select 1 as \"heLLo\", 6 as x5;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (hello, \"HELLO\");",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (hello) JOIN c USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (hello) JOIN c USING (\"HELLO\")",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (hello) JOIN c USING (hello) JOIN d USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (\"HELLO\") JOIN c USING (\"HeLLo\") JOIN d USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a JOIN b USING (hello) JOIN c USING (hello) JOIN d USING (hello) JOIN e USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a FULL OUTER JOIN b USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a FULL OUTER JOIN b USING (hello) FULL OUTER JOIN c USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a FULL OUTER JOIN b USING (hello) FULL OUTER JOIN c USING (hello) FULL OUTER JOIN d USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a FULL OUTER JOIN b USING (hello) FULL OUTER JOIN c USING (hello) FULL OUTER JOIN d USING (hello) FULL OUTER JOIN e USING (hello)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL JOIN b",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL JOIN b NATURAL JOIN c",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL JOIN b NATURAL JOIN c NATURAL JOIN d",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL JOIN b NATURAL JOIN c NATURAL JOIN d NATURAL JOIN e",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (a NATURAL JOIN b NATURAL JOIN c) NATURAL JOIN (d NATURAL JOIN e)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL FULL OUTER JOIN b",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL FULL OUTER JOIN b NATURAL FULL OUTER JOIN c",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL FULL OUTER JOIN b NATURAL FULL OUTER JOIN c NATURAL FULL OUTER JOIN d",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM a NATURAL FULL OUTER JOIN b NATURAL FULL OUTER JOIN c NATURAL FULL OUTER JOIN d NATURAL FULL OUTER JOIN e",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (a NATURAL FULL OUTER JOIN b NATURAL FULL OUTER JOIN c) NATURAL FULL OUTER JOIN (d NATURAL FULL OUTER JOIN e)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (SELECT 1 \"hello\", 2 \"hello\") NATURAL JOIN (SELECT 1 \"hello\", 2 \"hello\")",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (SELECT 1 \"hello\", 2 \"HeLlO\") NATURAL JOIN (SELECT 1 \"hello\", 2 \"HeLlO\")",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (SELECT 1 \"hello\", 2 \"hello\") t1, (SELECT 1 \"hello\", 2 \"hello\") t2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (SELECT 1 \"hello\", 2 \"hello\") t1 JOIN (SELECT 1 \"hello\", 2 \"hello\") t2 USING (hello);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (SELECT 1 \"hello\", 2 \"HeLlO\") t1 JOIN (SELECT 1 \"hello\", 2 \"HeLlO\") t2 USING (hello);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT hello FROM (a JOIN b USING (hello)), (d JOIN e USING (hello))",
+            "expected_result": ""
+        }
+    ]
+}

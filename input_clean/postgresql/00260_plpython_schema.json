@@ -1,0 +1,49 @@
+{
+    "name": "plpython_schema.sql",
+    "tests": [
+        {
+            "query": "CREATE TABLE users (\n\tfname text not null,\n\tlname text not null,\n\tusername text,\n\tuserid serial,\n\tPRIMARY KEY(lname, fname)\n\t)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE INDEX users_username_idx ON users(username)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE INDEX users_fname_idx ON users(fname)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE INDEX users_lname_idx ON users(lname)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE INDEX users_userid_idx ON users(userid)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE TABLE taxonomy (\n\tid serial primary key,\n\tname text unique\n\t)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE TABLE entry (\n\taccession text not null primary key,\n\teid serial unique,\n\ttxid int2 not null references taxonomy(id)\n\t)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE TABLE sequences (\n\teid int4 not null references entry(eid),\n\tpid serial primary key,\n\tproduct text not null,\n\tsequence text not null,\n\tmultipart bool default 'false'\n\t)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE INDEX sequences_product_idx ON sequences(product)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE TABLE xsequences (\n\tpid int4 not null references sequences(pid),\n\tsequence text not null\n\t)",
+            "name": "plpython_schema.sql"
+        },
+        {
+            "query": "CREATE INDEX xsequences_pid_idx ON xsequences(pid)",
+            "name": "plpython_schema.sql"
+        }
+    ]
+}

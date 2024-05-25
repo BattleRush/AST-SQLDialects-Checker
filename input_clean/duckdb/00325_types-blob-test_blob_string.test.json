@@ -1,0 +1,40 @@
+{
+    "name": "test_blob_string.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE blobs (b BYTEA);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO blobs VALUES ('aaaaaaaaaa')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO blobs SELECT b||b||b||b||b||b||b||b||b||b FROM blobs WHERE OCTET_LENGTH(b)=(SELECT MAX(OCTET_LENGTH(b)) FROM blobs)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO blobs SELECT b||b||b||b||b||b||b||b||b||b FROM blobs WHERE OCTET_LENGTH(b)=(SELECT MAX(OCTET_LENGTH(b)) FROM blobs)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO blobs SELECT b||b||b||b||b||b||b||b||b||b FROM blobs WHERE OCTET_LENGTH(b)=(SELECT MAX(OCTET_LENGTH(b)) FROM blobs)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT OCTET_LENGTH(b) FROM blobs ORDER BY 1",
+            "expected_result": ""
+        }
+    ]
+}

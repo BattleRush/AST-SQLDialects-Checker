@@ -1,0 +1,13 @@
+{
+    "name": "02871_join_on_system_errors.sql",
+    "tests": [
+        {
+            "query": "\n-- Unique table alias to distinguish between errors from different queries\nSELECT * FROM (SELECT 1 as a) t\nJOIN (SELECT 2 as a) `89467d35-77c2-4f82-ae7a-f093ff40f4cd`\nON t.a = `89467d35-77c2-4f82-ae7a-f093ff40f4cd`.a\n;",
+            "name": "02871_join_on_system_errors.sql"
+        },
+        {
+            "query": "\n\nSELECT *\nFROM system.errors\nWHERE name = 'UNKNOWN_IDENTIFIER'\nAND last_error_time > now() - 1\nAND last_error_message LIKE '%Missing columns%89467d35-77c2-4f82-ae7a-f093ff40f4cd%'\n;",
+            "name": "02871_join_on_system_errors.sql"
+        }
+    ]
+}

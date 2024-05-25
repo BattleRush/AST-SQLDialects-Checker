@@ -1,0 +1,60 @@
+{
+    "name": "like_unicode.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE t0 (c0 VARCHAR);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO t0 VALUES ('\u7968'),('t'),('%'),('\u4e11'),('\u591a'), ('\ud83e\udd86');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT count(*) FROM t0 WHERE t0.c0 LIKE '_';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT count(*) FROM t0 WHERE t0.c0 ILIKE '_';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '\ud83e\udd86a\ud83e\udd86' LIKE '_a_'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '\ud83e\udd86a\ud83e\udd86' ILIKE '_A_'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT 'BaB' ILIKE '_A_'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '\ud83e\udd86\ud83e\udd86' ILIKE '_'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '\ud83e\udd86\ud83e\udd86' ILIKE '__'",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT '\ud83e\udd86\ud83e\udd86' ILIKE '___'",
+            "expected_result": ""
+        }
+    ]
+}
