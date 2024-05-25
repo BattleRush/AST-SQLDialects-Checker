@@ -1,0 +1,57 @@
+{
+    "name": "02343_create_empty_as_select.sql",
+    "tests": [
+        {
+            "query": "\ndrop table if exists t;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\ndrop table if exists mv;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\n\ncreate table t engine=Memory empty;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": " -- { clientError SYNTAX_ERROR }\ncreate table t engine=Memory empty as;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": " -- { clientError SYNTAX_ERROR }\ncreate table t engine=Memory as;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": " -- { clientError SYNTAX_ERROR }\ncreate table t engine=Memory empty as select 1;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\n\nshow create table t;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\nselect count() from t;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\n\ncreate materialized view mv engine=Memory empty as select 1;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\nshow create mv;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\nselect count() from mv;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\n\ndrop table t;",
+            "name": "02343_create_empty_as_select.sql"
+        },
+        {
+            "query": "\ndrop table mv;",
+            "name": "02343_create_empty_as_select.sql"
+        }
+    ]
+}

@@ -1,0 +1,53 @@
+{
+    "name": "00098_e_union_all.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS data2013;",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS data2015;",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE data2013 (name String, value UInt32) ENGINE = Memory;",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\nCREATE TABLE data2015 (data_name String, data_value UInt32) ENGINE = Memory;",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data2013(name,value) VALUES('Alice', 1000);",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2013(name,value) VALUES('Bob', 2000);",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2013(name,value) VALUES('Carol', 5000);",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data2015(data_name, data_value) VALUES('Foo', 42);",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2015(data_name, data_value) VALUES('Bar', 1);",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\n\nSELECT X FROM (SELECT name AS X FROM data2013 UNION ALL SELECT data_name FROM data2015) ORDER BY X ASC;",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE data2013;",
+            "name": "00098_e_union_all.sql"
+        },
+        {
+            "query": "\nDROP TABLE data2015;",
+            "name": "00098_e_union_all.sql"
+        }
+    ]
+}

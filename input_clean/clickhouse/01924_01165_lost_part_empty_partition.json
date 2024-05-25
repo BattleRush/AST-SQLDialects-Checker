@@ -1,0 +1,129 @@
+{
+    "name": "01165_lost_part_empty_partition.sql",
+    "tests": [
+        {
+            "query": "-- Tags: zookeeper\n\ncreate table rmt1 (d DateTime, n int) engine=ReplicatedMergeTree('/test/01165/{database}/rmt', '1') order by n partition by toYYYYMMDD(d);",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ncreate table rmt2 (d DateTime, n int) engine=ReplicatedMergeTree('/test/01165/{database}/rmt', '2') order by n partition by toYYYYMMDD(d);",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\nsystem stop replicated sends rmt1;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ninsert into rmt1 values (now(), arrayJoin([1, 2]));",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": " -- { clientError 36 }\ninsert into rmt1(n) select * from system.numbers limit arrayJoin([1, 2]);",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": " -- { serverError 36, 440 }\ninsert into rmt1 values (now(), rand());",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ndrop table rmt1;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\nsystem sync replica rmt2;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\nselect lost_part_count from system.replicas where database = currentDatabase() and table = 'rmt2';",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ndrop table rmt2;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\nSYSTEM FLUSH LOGS;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\nselect count() from system.text_log where logger_name like '%' || currentDatabase() || '%' and message ilike '%table with non-zero lost_part_count equal to%';",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\n\ncreate table rmt1 (d DateTime, n int) engine=ReplicatedMergeTree('/test/01165/{database}/rmt', '1') order by n partition by tuple();",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ncreate table rmt2 (d DateTime, n int) engine=ReplicatedMergeTree('/test/01165/{database}/rmt', '2') order by n partition by tuple();",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\nsystem stop replicated sends rmt1;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ninsert into rmt1 values (now(), rand());",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ndrop table rmt1;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\nsystem sync replica rmt2;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\nselect lost_part_count from system.replicas where database = currentDatabase() and table = 'rmt2';",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ndrop table rmt2;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\nSYSTEM FLUSH LOGS;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\nselect count() from system.text_log where logger_name like '%' || currentDatabase() || '%' and message ilike '%table with non-zero lost_part_count equal to%';",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\n\ncreate table rmt1 (n UInt8, m Int32, d Date, t DateTime) engine=ReplicatedMergeTree('/test/01165/{database}/rmt', '1') order by n partition by (n, m, d, t);",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ncreate table rmt2 (n UInt8, m Int32, d Date, t DateTime) engine=ReplicatedMergeTree('/test/01165/{database}/rmt', '2') order by n partition by (n, m, d, t);",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\nsystem stop replicated sends rmt1;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ninsert into rmt1 values (rand(), rand(), now(), now());",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ninsert into rmt1 values (rand(), rand(), now(), now());",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ninsert into rmt1 values (rand(), rand(), now(), now());",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ndrop table rmt1;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\n\nsystem sync replica rmt2;",
+            "name": "01165_lost_part_empty_partition.sql"
+        },
+        {
+            "query": "\ndrop table rmt2;",
+            "name": "01165_lost_part_empty_partition.sql"
+        }
+    ]
+}

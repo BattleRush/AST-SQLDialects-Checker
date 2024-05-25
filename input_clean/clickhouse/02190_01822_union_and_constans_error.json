@@ -1,0 +1,21 @@
+{
+    "name": "01822_union_and_constans_error.sql",
+    "tests": [
+        {
+            "query": "drop table if exists t0;",
+            "name": "01822_union_and_constans_error.sql"
+        },
+        {
+            "query": "\nCREATE TABLE t0 (c0 String) ENGINE = Log();",
+            "name": "01822_union_and_constans_error.sql"
+        },
+        {
+            "query": "\n\nSELECT isNull(t0.c0) OR COUNT('\\n?pVa')\nFROM t0\nGROUP BY t0.c0\nHAVING isNull(t0.c0)\nUNION ALL\nSELECT isNull(t0.c0) OR COUNT('\\n?pVa')\nFROM t0\nGROUP BY t0.c0\nHAVING NOT isNull(t0.c0)\nUNION ALL\nSELECT isNull(t0.c0) OR COUNT('\\n?pVa')\nFROM t0\nGROUP BY t0.c0\nHAVING isNull(isNull(t0.c0))\nSETTINGS aggregate_functions_null_for_empty = 1, enable_optimize_predicate_expression = 0;",
+            "name": "01822_union_and_constans_error.sql"
+        },
+        {
+            "query": "\n\ndrop table if exists t0;",
+            "name": "01822_union_and_constans_error.sql"
+        }
+    ]
+}

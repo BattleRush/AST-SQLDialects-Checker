@@ -1,0 +1,25 @@
+{
+    "name": "00864_union_all_supertype.sql",
+    "tests": [
+        {
+            "query": "SET joined_subquery_requires_alias = 0;",
+            "name": "00864_union_all_supertype.sql"
+        },
+        {
+            "query": "\n\nselect toTypeName(key), toTypeName(value) from (\n    select 1 as key, '' as value\n    union all\n    select toUInt64(2) as key, toNullable('') as value\n);",
+            "name": "00864_union_all_supertype.sql"
+        },
+        {
+            "query": "\n\nselect toTypeName(key), toTypeName(value) from (\n    select toDecimal64(2, 8) as key, toNullable('') as value\n    union all\n    select toDecimal32(2, 4) as key, toFixedString('', 1) as value\n);",
+            "name": "00864_union_all_supertype.sql"
+        },
+        {
+            "query": "\n\nselect * from (\n    select 'v1' as c1, null as c2\n    union all\n    select 'v2' as c1, '' as c2\n) ALL FULL JOIN (\n    select 'v1' as c1, 'w1' as c2\n) using c1,c2\norder by c1, c2;",
+            "name": "00864_union_all_supertype.sql"
+        },
+        {
+            "query": "\n\nselect key, s1.value, s2.value\nfrom (\n    select 'key1' as key, 'value1' as value\n) s1\nall left join (\n    select 'key1' as key, '' as value\n    union all\n    select 'key2' as key, toNullable('') as value\n) s2\nusing key;",
+            "name": "00864_union_all_supertype.sql"
+        }
+    ]
+}

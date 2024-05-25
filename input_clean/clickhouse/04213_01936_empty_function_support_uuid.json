@@ -1,0 +1,57 @@
+{
+    "name": "01936_empty_function_support_uuid.sql",
+    "tests": [
+        {
+            "query": "SELECT empty(toUUID('00000000-0000-0000-0000-000000000000'));",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nSELECT notEmpty(toUUID('00000000-0000-0000-0000-000000000000'));",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nSELECT uniqIf(uuid, empty(uuid)), uniqIf(uuid, notEmpty(uuid))\nFROM\n(\n    SELECT toUUID('00000000-0000-0000-0000-000000000002') AS uuid\n    UNION ALL\n    SELECT toUUID('00000000-0000-0000-0000-000000000000') AS uuid\n    UNION ALL\n    SELECT toUUID('00000000-0000-0000-0000-000000000001') AS uuid\n);",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS users;",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS orders;",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE users (user_id UUID) ENGINE = Memory;",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nCREATE TABLE orders (order_id UUID, user_id UUID) ENGINE = Memory;",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO users VALUES ('00000000-0000-0000-0000-000000000001');",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nINSERT INTO users VALUES ('00000000-0000-0000-0000-000000000002');",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nINSERT INTO orders VALUES ('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001');",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\n\nSELECT\n    uniq(user_id) AS users,\n    uniqIf(order_id, notEmpty(order_id)) AS orders\nFROM\n(\n    SELECT * FROM users\n) t1 ALL LEFT JOIN (\n    SELECT * FROM orders\n) t2 USING (user_id);",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE users;",
+            "name": "01936_empty_function_support_uuid.sql"
+        },
+        {
+            "query": "\nDROP TABLE orders;",
+            "name": "01936_empty_function_support_uuid.sql"
+        }
+    ]
+}

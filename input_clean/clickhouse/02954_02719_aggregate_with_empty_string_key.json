@@ -1,0 +1,29 @@
+{
+    "name": "02719_aggregate_with_empty_string_key.sql",
+    "tests": [
+        {
+            "query": "drop table if exists test ;",
+            "name": "02719_aggregate_with_empty_string_key.sql"
+        },
+        {
+            "query": "\ncreate table test(str Nullable(String), i Int64) engine=Memory();",
+            "name": "02719_aggregate_with_empty_string_key.sql"
+        },
+        {
+            "query": "\ninsert into test values(null, 1),('', 2),('s', 1);",
+            "name": "02719_aggregate_with_empty_string_key.sql"
+        },
+        {
+            "query": "\nselect '-----------String------------';",
+            "name": "02719_aggregate_with_empty_string_key.sql"
+        },
+        {
+            "query": "\nselect str, max(i) from test group by str order by str nulls first;",
+            "name": "02719_aggregate_with_empty_string_key.sql"
+        },
+        {
+            "query": "\n\ndrop table test;",
+            "name": "02719_aggregate_with_empty_string_key.sql"
+        }
+    ]
+}

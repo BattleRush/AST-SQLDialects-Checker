@@ -1,0 +1,277 @@
+{
+    "name": "insert",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "insert-11.1",
+            "query": "CREATE TABLE t11a AS SELECT '123456789' AS x;"
+        },
+        {
+            "name": "insert-11.1",
+            "query": "CREATE TABLE t11b (a INTEGER PRIMARY KEY, b, c);"
+        },
+        {
+            "name": "insert-11.1",
+            "query": "INSERT INTO t11b SELECT x, x, x FROM t11a;"
+        },
+        {
+            "name": "insert-11.1",
+            "query": "SELECT quote(a), quote(b), quote(c) FROM t11b;"
+        },
+        {
+            "name": "insert-12.1",
+            "query": "CREATE TABLE t12a(a,b,c,d,e,f,g);"
+        },
+        {
+            "name": "insert-12.1",
+            "query": "INSERT INTO t12a VALUES(101,102,103,104,105,106,107);"
+        },
+        {
+            "name": "insert-12.1",
+            "query": "CREATE TABLE t12b(x);"
+        },
+        {
+            "name": "insert-12.1",
+            "query": "INSERT INTO t12b(x,rowid,x,x,x,x,x) SELECT * FROM t12a;"
+        },
+        {
+            "name": "insert-12.1",
+            "query": "SELECT rowid, x FROM t12b;"
+        },
+        {
+            "name": "insert-12.2",
+            "query": "CREATE TABLE tab1( value INTEGER);"
+        },
+        {
+            "name": "insert-12.2",
+            "query": "INSERT INTO tab1 (value, _rowid_) values( 11, 1);"
+        },
+        {
+            "name": "insert-12.2",
+            "query": "INSERT INTO tab1 (value, _rowid_) SELECT 22,999;"
+        },
+        {
+            "name": "insert-12.2",
+            "query": "SELECT * FROM tab1;"
+        },
+        {
+            "name": "insert-12.3",
+            "query": "CREATE TABLE t12c(a, b DEFAULT 'xyzzy', c);"
+        },
+        {
+            "name": "insert-12.3",
+            "query": "INSERT INTO t12c(a, rowid, c) SELECT 'one', 999, 'two';"
+        },
+        {
+            "name": "insert-12.3",
+            "query": "SELECT * FROM t12c;"
+        },
+        {
+            "name": "insert-13.1",
+            "query": "DROP TABLE IF EXISTS t13;"
+        },
+        {
+            "name": "insert-13.1",
+            "query": "CREATE TABLE t13(a INTEGER PRIMARY KEY,b UNIQUE);"
+        },
+        {
+            "name": "insert-13.1",
+            "query": "CREATE INDEX t13x1 ON t13(-b=b);"
+        },
+        {
+            "name": "insert-13.1",
+            "query": "INSERT INTO t13 VALUES(1,5),(6,2);"
+        },
+        {
+            "name": "insert-13.1",
+            "query": "REPLACE INTO t13 SELECT b,0 FROM t13;"
+        },
+        {
+            "name": "insert-13.1",
+            "query": "SELECT * FROM t13 ORDER BY +b;"
+        },
+        {
+            "name": "insert-14.1",
+            "query": "DROP TABLE IF EXISTS t14;"
+        },
+        {
+            "name": "insert-14.1",
+            "query": "CREATE TABLE t14(x INTEGER PRIMARY KEY);"
+        },
+        {
+            "name": "insert-14.1",
+            "query": "INSERT INTO t14 VALUES(CASE WHEN 1 THEN null END);"
+        },
+        {
+            "name": "insert-14.1",
+            "query": "SELECT x FROM t14;"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "DROP TABLE IF EXISTS t1;"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "DROP TABLE IF EXISTS t2;"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT);"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "CREATE INDEX i1 ON t1(b);"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "CREATE TABLE t2(a, b);"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "INSERT INTO t2 VALUES(4, randomblob(31000));"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "INSERT INTO t2 VALUES(4, randomblob(32000));"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "INSERT INTO t2 VALUES(4, randomblob(33000));"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "REPLACE INTO t1 SELECT a, b FROM t2;"
+        },
+        {
+            "name": "insert-15.1",
+            "query": "SELECT a, length(b) FROM t1;"
+        },
+        {
+            "name": "insert-16.2",
+            "query": "SELECT * FROM t0;"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "CREATE TABLE t2(a INTEGER PRIMARY KEY, b);"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "CREATE UNIQUE INDEX t2b ON t2(b);"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "INSERT INTO t2(a,b) VALUES(1,1),(2,2),(3,3),(4,4);"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "CREATE TABLE fire(x);"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "CREATE TRIGGER t2r1 AFTER DELETE ON t2 BEGIN\nINSERT INTO fire VALUES(old.a);"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "END;"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "UPDATE OR REPLACE t2 SET a=4, b=3 WHERE a=1;"
+        },
+        {
+            "name": "insert-17.5",
+            "query": "SELECT *, 'x' FROM t2 ORDER BY a;"
+        },
+        {
+            "name": "insert-17.6",
+            "query": "SELECT x FROM fire ORDER BY x;"
+        },
+        {
+            "name": "insert-17.7",
+            "query": "DELETE FROM t2;"
+        },
+        {
+            "name": "insert-17.7",
+            "query": "DELETE FROM fire;"
+        },
+        {
+            "name": "insert-17.7",
+            "query": "INSERT INTO t2(a,b) VALUES(1,1),(2,2),(3,3),(4,4);"
+        },
+        {
+            "name": "insert-17.7",
+            "query": "UPDATE OR REPLACE t2 SET a=1, b=3 WHERE a=1;"
+        },
+        {
+            "name": "insert-17.7",
+            "query": "SELECT *, 'x' FROM t2 ORDER BY a;"
+        },
+        {
+            "name": "insert-17.8",
+            "query": "SELECT x FROM fire ORDER BY x;"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "CREATE TABLE t3(a INTEGER PRIMARY KEY, b INT, c INT, d INT);"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "CREATE UNIQUE INDEX t3bpi ON t3(b) WHERE c<=d;"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "CREATE UNIQUE INDEX t3d ON t3(d);"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "INSERT INTO t3(a,b,c,d) VALUES(1,1,1,1),(2,1,3,2),(3,4,5,6);"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "CREATE TRIGGER t3r1 AFTER DELETE ON t3 BEGIN\nSELECT 'hi';"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "END;"
+        },
+        {
+            "name": "insert-17.10",
+            "query": "REPLACE INTO t3(a,b,c,d) VALUES(4,4,8,9);"
+        },
+        {
+            "name": "insert-17.11",
+            "query": "SELECT *, 'x' FROM t3 ORDER BY a;"
+        },
+        {
+            "name": "insert-17.12",
+            "query": "REPLACE INTO t3(a,b,c,d) VALUES(5,1,11,2);"
+        },
+        {
+            "name": "insert-17.12",
+            "query": "SELECT *, 'x' FROM t3 ORDER BY a;"
+        },
+        {
+            "name": "insert-17.13",
+            "query": "DELETE FROM t3;"
+        },
+        {
+            "name": "insert-17.13",
+            "query": "INSERT INTO t3(a,b,c,d) VALUES(1,1,1,1),(2,1,3,2),(3,4,5,6);"
+        },
+        {
+            "name": "insert-17.13",
+            "query": "DROP TRIGGER t3r1;"
+        },
+        {
+            "name": "insert-17.13",
+            "query": "CREATE TRIGGER t3r1 AFTER DELETE ON t3 BEGIN\nINSERT INTO t3(b,c,d) VALUES(old.b,old.c,old.d);"
+        },
+        {
+            "name": "insert-17.13",
+            "query": "END;"
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+    "name": "01559_aggregate_null_for_empty_fix.sql",
+    "tests": [
+        {
+            "query": "SELECT MAX(aggr)\nFROM\n(\n\tSELECT MAX(-1) AS aggr\n\tFROM system.one\n\tWHERE NOT 1\n\tUNION ALL\n\tSELECT MAX(-1) AS aggr\n\tFROM system.one\n\tWHERE 1\n\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MaX(aggr)\nFROM\n(\n    SELECT mAX(-1) AS aggr\n    FROM system.one\n    WHERE NOT 1\n    UNION ALL\n    SELECT MAx(-1) AS aggr\n    FROM system.one\n    WHERE 1\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MaX(aggr)\nFROM\n(\n    SELECT mAX(-1) AS aggr\n    FROM system.one\n    WHERE NOT 1\n    UNION ALL\n    SELECT max(-1) AS aggr\n    FROM system.one\n    WHERE 1\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MaX(aggr)\nFROM\n(\n    SELECT mAX(-1) AS aggr\n    FROM system.one\n    WHERE NOT 1\n    UNION ALL\n    SELECT max(-1) AS aggr\n    FROM system.one\n    WHERE not 1\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSET aggregate_functions_null_for_empty=1;",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MAX(aggr)\nFROM\n(\n\tSELECT MAX(-1) AS aggr\n\tFROM system.one\n\tWHERE NOT 1\n\tUNION ALL\n\tSELECT MAX(-1) AS aggr\n\tFROM system.one\n\tWHERE 1\n\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MaX(aggr)\nFROM\n(\n    SELECT mAX(-1) AS aggr\n    FROM system.one\n    WHERE NOT 1\n    UNION ALL\n    SELECT MAx(-1) AS aggr\n    FROM system.one\n    WHERE 1\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MaX(aggr)\nFROM\n(\n    SELECT mAX(-1) AS aggr\n    FROM system.one\n    WHERE NOT 1\n    UNION ALL\n    SELECT max(-1) AS aggr\n    FROM system.one\n    WHERE 1\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        },
+        {
+            "query": "\nSELECT MaX(aggr)\nFROM\n(\n    SELECT mAX(-1) AS aggr\n    FROM system.one\n    WHERE NOT 1\n    UNION ALL\n    SELECT max(-1) AS aggr\n    FROM system.one\n    WHERE not 1\n);",
+            "name": "01559_aggregate_null_for_empty_fix.sql"
+        }
+    ]
+}

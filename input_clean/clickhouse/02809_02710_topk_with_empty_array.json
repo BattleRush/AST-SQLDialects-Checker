@@ -1,0 +1,9 @@
+{
+    "name": "02710_topk_with_empty_array.sql",
+    "tests": [
+        {
+            "query": "SELECT topK(emptyArrayInt16());",
+            "name": "02710_topk_with_empty_array.sql"
+        }
+    ]
+}

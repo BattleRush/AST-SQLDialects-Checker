@@ -1,0 +1,61 @@
+{
+    "name": "01037_zookeeper_check_table_empty_pk.sql",
+    "tests": [
+        {
+            "query": "-- Tags: zookeeper\n\nSET insert_keeper_fault_injection_probability=0;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": " -- disable fault injection;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": " part ids are non-deterministic in case of insert retries\nSET check_query_single_value_result = 0;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\nSET send_logs_level = 'fatal';",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS mt_without_pk SYNC;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE mt_without_pk (SomeField1 Int64, SomeField2 Double) ENGINE = MergeTree() ORDER BY tuple();",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO mt_without_pk VALUES (1, 2);",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nCHECK TABLE mt_without_pk SETTINGS max_threads = 1;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS mt_without_pk SYNC;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS replicated_mt_without_pk SYNC;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE replicated_mt_without_pk (SomeField1 Int64, SomeField2 Double) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_01037/replicated_mt_without_pk', '1') ORDER BY tuple();",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO replicated_mt_without_pk VALUES (1, 2);",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nCHECK TABLE replicated_mt_without_pk SETTINGS max_threads = 1;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS replicated_mt_without_pk SYNC;",
+            "name": "01037_zookeeper_check_table_empty_pk.sql"
+        }
+    ]
+}

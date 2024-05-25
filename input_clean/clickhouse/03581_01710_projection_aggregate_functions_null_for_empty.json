@@ -1,0 +1,25 @@
+{
+    "name": "01710_projection_aggregate_functions_null_for_empty.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS t1;",
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE t1 (c0 Int32, PRIMARY KEY (c0)) ENGINE=MergeTree;",
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nINSERT INTO t1 VALUES (1554690688);",
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT MIN(t1.c0) FROM t1 SETTINGS aggregate_functions_null_for_empty = 1;",
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS t1;",
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+        }
+    ]
+}

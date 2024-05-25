@@ -1,0 +1,181 @@
+{
+    "name": "select_implicit.sql",
+    "tests": [
+        {
+            "query": "--\n-- SELECT_IMPLICIT\n-- Test cases for queries with ordering terms missing from the target list.\n-- This used to be called \"junkfilter.sql\".\n-- The parser uses the term \"resjunk\" to handle these cases.\n-- - thomas 1998-07-09\n--\n\n-- load test data\nCREATE TABLE test_missing_target (a int, b int, c char(8), d char)",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (0, 1, 'XXXX', 'A')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (1, 2, 'ABAB', 'b')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (2, 2, 'ABAB', 'c')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (3, 3, 'BBBB', 'D')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (4, 3, 'BBBB', 'e')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (5, 3, 'bbbb', 'F')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (6, 4, 'cccc', 'g')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (7, 4, 'cccc', 'h')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (8, 4, 'CCCC', 'I')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "INSERT INTO test_missing_target VALUES (9, 4, 'CCCC', 'j')",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/ existing GROUP BY target\nSELECT c, count(*) FROM test_missing_target GROUP BY test_missing_target.c ORDER BY c",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target using a relation name in GROUP BY clause\nSELECT count(*) FROM test_missing_target GROUP BY test_missing_target.c ORDER BY c",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target and w/o existing a different ORDER BY target\n--   failure expected\nSELECT count(*) FROM test_missing_target GROUP BY a ORDER BY b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target and w/o existing same ORDER BY target\nSELECT count(*) FROM test_missing_target GROUP BY b ORDER BY b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/ existing GROUP BY target using a relation name in target\nSELECT test_missing_target.b, count(*)\n  FROM test_missing_target GROUP BY b ORDER BY b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target\nSELECT c FROM test_missing_target ORDER BY a",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing ORDER BY target\nSELECT count(*) FROM test_missing_target GROUP BY b ORDER BY b desc",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group using reference number\nSELECT count(*) FROM test_missing_target ORDER BY 1 desc",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   order using reference number\nSELECT c, count(*) FROM test_missing_target GROUP BY 1 ORDER BY 1",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group using reference number out of range\n--   failure expected\nSELECT c, count(*) FROM test_missing_target GROUP BY 3",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/o existing GROUP BY and ORDER BY target under ambiguous condition\n--   failure expected\nSELECT count(*) FROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY b ORDER BY b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   order w/ target under ambiguous condition\n--   failure NOT expected\nSELECT a, a FROM test_missing_target\n\tORDER BY a",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   order expression w/ target under ambiguous condition\n--   failure NOT expected\nSELECT a/2, a/2 FROM test_missing_target\n\tORDER BY a/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group expression w/ target under ambiguous condition\n--   failure NOT expected\nSELECT a/2, a/2 FROM test_missing_target\n\tGROUP BY a/2 ORDER BY a/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/ existing GROUP BY target under ambiguous condition\nSELECT x.b, count(*) FROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY x.b ORDER BY x.b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/o existing GROUP BY target under ambiguous condition\nSELECT count(*) FROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY x.b ORDER BY x.b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/o existing GROUP BY target under ambiguous condition\n--   into a table\nCREATE TABLE test_missing_target2 AS\nSELECT count(*)\nFROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY x.b ORDER BY x.b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "SELECT * FROM test_missing_target2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--  Functions and expressions\n\n--   w/ existing GROUP BY target\nSELECT a%2, count(b) FROM test_missing_target\nGROUP BY test_missing_target.a%2\nORDER BY test_missing_target.a%2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target using a relation name in GROUP BY clause\nSELECT count(c) FROM test_missing_target\nGROUP BY lower(test_missing_target.c)\nORDER BY lower(test_missing_target.c)",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target and w/o existing a different ORDER BY target\n--   failure expected\nSELECT count(a) FROM test_missing_target GROUP BY a ORDER BY b",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target and w/o existing same ORDER BY target\nSELECT count(b) FROM test_missing_target GROUP BY b/2 ORDER BY b/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/ existing GROUP BY target using a relation name in target\nSELECT lower(test_missing_target.c), count(c)\n  FROM test_missing_target GROUP BY lower(c) ORDER BY lower(c)",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing GROUP BY target\nSELECT a FROM test_missing_target ORDER BY upper(d)",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   w/o existing ORDER BY target\nSELECT count(b) FROM test_missing_target\n\tGROUP BY (b + 1) / 2 ORDER BY (b + 1) / 2 desc",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/o existing GROUP BY and ORDER BY target under ambiguous condition\n--   failure expected\nSELECT count(x.a) FROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY b/2 ORDER BY b/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/ existing GROUP BY target under ambiguous condition\nSELECT x.b/2, count(x.b) FROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY x.b/2 ORDER BY x.b/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/o existing GROUP BY target under ambiguous condition\n--   failure expected due to ambiguous b in count(b)\nSELECT count(b) FROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY x.b/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   group w/o existing GROUP BY target under ambiguous condition\n--   into a table\nCREATE TABLE test_missing_target3 AS\nSELECT count(x.b)\nFROM test_missing_target x, test_missing_target y\n\tWHERE x.a = y.a\n\tGROUP BY x.b/2 ORDER BY x.b/2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "SELECT * FROM test_missing_target3",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "--   Cleanup\nDROP TABLE test_missing_target",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "DROP TABLE test_missing_target2",
+            "name": "select_implicit.sql"
+        },
+        {
+            "query": "DROP TABLE test_missing_target3",
+            "name": "select_implicit.sql"
+        }
+    ]
+}

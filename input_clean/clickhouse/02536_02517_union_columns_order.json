@@ -1,0 +1,13 @@
+{
+    "name": "02517_union_columns_order.sql",
+    "tests": [
+        {
+            "query": "CREATE TABLE t1 (c0 Int32, PRIMARY KEY (c0)) ENGINE = MergeTree;",
+            "name": "02517_union_columns_order.sql"
+        },
+        {
+            "query": "\nSELECT DISTINCT *\nFROM\n(\n    SELECT DISTINCT\n        cos(sign(exp(t1.c0))),\n        -min2(pow(t1.c0, t1.c0), intDiv(t1.c0, t1.c0)),\n        t1.c0,\n        t1.c0,\n        erf(abs(-t1.c0))\n    FROM t1\n    WHERE t1.c0 > 0\n    UNION ALL\n    SELECT DISTINCT\n        cos(sign(exp(t1.c0))),\n        -min2(pow(t1.c0, t1.c0), intDiv(t1.c0, t1.c0)),\n        t1.c0,\n        t1.c0,\n        erf(abs(-t1.c0))\n    FROM t1\n    WHERE NOT (t1.c0 > 0)\n    UNION ALL\n    SELECT DISTINCT\n        cos(sign(exp(t1.c0))),\n        -min2(pow(t1.c0, t1.c0), intDiv(t1.c0, t1.c0)),\n        t1.c0,\n        t1.c0,\n        erf(abs(-t1.c0))\n    FROM t1\n    WHERE t1.c0 > (0 IS NULL)\n);",
+            "name": "02517_union_columns_order.sql"
+        }
+    ]
+}

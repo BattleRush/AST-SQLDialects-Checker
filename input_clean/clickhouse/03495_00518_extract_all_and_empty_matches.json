@@ -1,0 +1,9 @@
+{
+    "name": "00518_extract_all_and_empty_matches.sql",
+    "tests": [
+        {
+            "query": "SELECT\n    '{\"a\":\"1\",\"b\":\"2\",\"c\":\"\",\"d\":\"4\"}' AS json,\n    extractAll(json, '\"([^\"]*)\":') AS keys,\n    extractAll(json, ':\"([^\"]*)\"') AS values;",
+            "name": "00518_extract_all_and_empty_matches.sql"
+        }
+    ]
+}

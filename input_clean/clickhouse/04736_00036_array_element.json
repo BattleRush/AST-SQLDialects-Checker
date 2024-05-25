@@ -1,0 +1,105 @@
+{
+    "name": "00036_array_element.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nCREATE TABLE array_element_test (arr Array(Int32), id Int32) ENGINE = Memory;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\ninsert into array_element_test VALUES ([11,12,13], 2), ([11,12], 3), ([11,12,13], -1), ([11,12], -2), ([11,12], -3), ([11], 0);",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nselect arr[id] from array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nCREATE TABLE array_element_test (arr Array(Int32), id UInt32) ENGINE = Memory;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\ninsert into array_element_test VALUES ([11,12,13], 2), ([11,12], 3), ([11,12,13], 1), ([11,12], 4), ([11], 0);",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nselect arr[id] from array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nCREATE TABLE array_element_test (arr Array(String), id Int32) ENGINE = Memory;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\ninsert into array_element_test VALUES (['Abc','Df','Q'], 2), (['Abc','DEFQ'], 3), (['ABC','Q','ERT'], -1), (['Ab','ber'], -2), (['AB','asd'], -3), (['A'], 0);",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nselect arr[id] from array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nCREATE TABLE array_element_test (arr Array(String), id UInt32) ENGINE = Memory;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\ninsert into array_element_test VALUES (['Abc','Df','Q'], 2), (['Abc','DEFQ'], 3), (['ABC','Q','ERT'], 1), (['Ab','ber'], 4), (['A'], 0);",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nselect arr[id] from array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nCREATE TABLE array_element_test (id UInt32) ENGINE = Memory;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\ninsert into array_element_test VALUES (2), (1), (4), (3), (0);",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nselect [1, 2, 3] as arr, arr[id] from array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nCREATE TABLE array_element_test (id Int32) ENGINE = Memory;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\ninsert into array_element_test VALUES (-2), (1), (-4), (3), (2), (-1), (4), (-3), (0);",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\nselect [1, 2, 3] as arr, arr[id] from array_element_test;",
+            "name": "00036_array_element.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE array_element_test;",
+            "name": "00036_array_element.sql"
+        }
+    ]
+}

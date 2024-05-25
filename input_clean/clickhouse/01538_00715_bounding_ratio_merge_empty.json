@@ -1,0 +1,37 @@
+{
+    "name": "00715_bounding_ratio_merge_empty.sql",
+    "tests": [
+        {
+            "query": "drop table if exists rate_test;",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\ndrop table if exists rate_test2;",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\n\ncreate table rate_test (timestamp UInt32, event UInt32) engine=Memory;",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\ninsert into rate_test values (0,1000),(1,1001),(2,1002),(3,1003),(4,1004),(5,1005),(6,1006),(7,1007),(8,1008);",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\n\ncreate table rate_test2 (timestamp UInt32, event UInt32) engine=Memory;",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT boundingRatioMerge(state) FROM (\n  select boundingRatioState(timestamp, event) as state from rate_test\n  UNION ALL\n  SELECT boundingRatioState(timestamp, event) FROM rate_test2 WHERE 1=0\n);",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\n\ndrop table if exists rate_test;",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        },
+        {
+            "query": "\ndrop table if exists rate_test2;",
+            "name": "00715_bounding_ratio_merge_empty.sql"
+        }
+    ]
+}

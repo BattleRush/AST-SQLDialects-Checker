@@ -1,0 +1,13 @@
+{
+    "name": "01212_empty_join_and_totals.sql",
+    "tests": [
+        {
+            "query": "select * from system.one t1\njoin system.one t2\non t1.dummy = t2.dummy\nlimit 0\nFORMAT TabSeparated;",
+            "name": "01212_empty_join_and_totals.sql"
+        },
+        {
+            "query": "\n\nselect * from system.one t1\njoin system.one t2\non t1.dummy = t2.dummy\nwhere t2.dummy > 0\nFORMAT TabSeparated;",
+            "name": "01212_empty_join_and_totals.sql"
+        }
+    ]
+}

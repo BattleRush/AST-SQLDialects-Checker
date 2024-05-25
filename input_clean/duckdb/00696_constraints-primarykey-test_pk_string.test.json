@@ -1,0 +1,50 @@
+{
+    "name": "test_pk_string.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE numbers(i varchar PRIMARY KEY, j INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO numbers VALUES ('1', 4), ('1', 5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO numbers VALUES ('1', 4), ('2', 5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM numbers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO numbers VALUES ('6', 6), ('1', 4);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO numbers VALUES ('6', 6);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM numbers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO numbers VALUES (NULL, 4);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE numbers SET i=NULL;",
+            "expected_result": ""
+        }
+    ]
+}

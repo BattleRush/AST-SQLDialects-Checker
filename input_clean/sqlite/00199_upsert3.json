@@ -1,0 +1,57 @@
+{
+    "name": "upsert3",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upsert3-100",
+            "query": "CREATE TABLE t1(k int, v text);"
+        },
+        {
+            "name": "upsert3-100",
+            "query": "CREATE UNIQUE INDEX x1 ON t1(k, v);"
+        },
+        {
+            "name": "upsert3-130",
+            "query": "INSERT INTO t1 VALUES(0, 'abcdefghij')\nON CONFLICT(k,v) DO NOTHING;"
+        },
+        {
+            "name": "upsert3-130",
+            "query": "SELECT * FROM t1;"
+        },
+        {
+            "name": "upsert3-140",
+            "query": "INSERT INTO t1 VALUES(0, 'abcdefghij')\nON CONFLICT(v,k) DO NOTHING;"
+        },
+        {
+            "name": "upsert3-140",
+            "query": "SELECT * FROM t1;"
+        },
+        {
+            "name": "upsert3-200",
+            "query": "CREATE TABLE excluded(a INT, b INT, c INT DEFAULT 0);"
+        },
+        {
+            "name": "upsert3-200",
+            "query": "CREATE UNIQUE INDEX excludedab ON excluded(a,b);"
+        },
+        {
+            "name": "upsert3-200",
+            "query": "INSERT INTO excluded(a,b) VALUES(1,2),(1,2),(3,4),(1,2),(5,6),(3,4)\nON CONFLICT(b,a) DO UPDATE SET c=excluded.c+1;"
+        },
+        {
+            "name": "upsert3-200",
+            "query": "SELECT *, 'x' FROM excluded ORDER BY a;"
+        },
+        {
+            "name": "upsert3-210",
+            "query": "INSERT INTO excluded AS base(a,b,c) VALUES(1,2,8),(1,2,3)\nON CONFLICT(b,a) DO UPDATE SET c=excluded.c+1 WHERE base.c<excluded.c;"
+        },
+        {
+            "name": "upsert3-210",
+            "query": "SELECT *, 'x' FROM excluded ORDER BY a;"
+        }
+    ]
+}

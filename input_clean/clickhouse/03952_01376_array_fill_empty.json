@@ -1,0 +1,21 @@
+{
+    "name": "01376_array_fill_empty.sql",
+    "tests": [
+        {
+            "query": "SELECT arrayFill(x -> (x < 10), []);",
+            "name": "01376_array_fill_empty.sql"
+        },
+        {
+            "query": "\nSELECT arrayFill(x -> (x < 10), emptyArrayUInt8());",
+            "name": "01376_array_fill_empty.sql"
+        },
+        {
+            "query": "\nSELECT arrayFill(x -> 1, []);",
+            "name": "01376_array_fill_empty.sql"
+        },
+        {
+            "query": "\nSELECT arrayFill(x -> 0, []);",
+            "name": "01376_array_fill_empty.sql"
+        }
+    ]
+}

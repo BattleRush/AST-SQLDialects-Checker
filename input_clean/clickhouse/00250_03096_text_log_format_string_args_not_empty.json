@@ -1,0 +1,33 @@
+{
+    "name": "03096_text_log_format_string_args_not_empty.sql",
+    "tests": [
+        {
+            "query": "set allow_experimental_analyzer = true;",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        },
+        {
+            "query": "\n\nselect count;",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        },
+        {
+            "query": " -- { serverError 47 }\n\nselect conut();",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        },
+        {
+            "query": " -- { serverError 46 }\n\nsystem flush logs;",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        },
+        {
+            "query": "\n\nselect count() > 0 from system.text_log where message_format_string = 'Peak memory usage{}: {}.' and value1 is not null and value2 like '% MiB';",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        },
+        {
+            "query": "\n\nselect count() > 0 from system.text_log where level = 'Error' and message_format_string = 'Unknown {}{} identifier \\'{}\\' in scope {}{}' and value1 = 'expression' and value3 = 'count' and value4 = 'SELECT count';",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        },
+        {
+            "query": "\n\nselect count() > 0 from system.text_log where level = 'Error' and message_format_string = 'Function with name \\'{}\\' does not exist. In scope {}{}' and value1 = 'conut' and value2 = 'SELECT conut()' and value3 ilike '%\\'count\\'%';",
+            "name": "03096_text_log_format_string_args_not_empty.sql"
+        }
+    ]
+}

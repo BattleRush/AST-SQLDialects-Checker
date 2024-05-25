@@ -1,0 +1,29 @@
+{
+    "name": "00648_replacing_empty_set_from_prewhere.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS final_test;",
+            "name": "00648_replacing_empty_set_from_prewhere.sql"
+        },
+        {
+            "query": "\nset allow_deprecated_syntax_for_merge_tree=1;",
+            "name": "00648_replacing_empty_set_from_prewhere.sql"
+        },
+        {
+            "query": "\nCREATE TABLE final_test (id String, version Date) ENGINE = ReplacingMergeTree(version, id, 8192);",
+            "name": "00648_replacing_empty_set_from_prewhere.sql"
+        },
+        {
+            "query": "\nINSERT INTO final_test (id, version) VALUES ('2018-01-01', '2018-01-01');",
+            "name": "00648_replacing_empty_set_from_prewhere.sql"
+        },
+        {
+            "query": "\nSELECT * FROM final_test FINAL PREWHERE id == '2018-01-02';",
+            "name": "00648_replacing_empty_set_from_prewhere.sql"
+        },
+        {
+            "query": "\nDROP TABLE final_test;",
+            "name": "00648_replacing_empty_set_from_prewhere.sql"
+        }
+    ]
+}

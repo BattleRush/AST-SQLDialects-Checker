@@ -1,0 +1,9 @@
+{
+    "name": "02984_topk_empty_merge.sql",
+    "tests": [
+        {
+            "query": "-- https://github.com/ClickHouse/ClickHouse/issues/59107\nSELECT topK('102.4') FROM remote('127.0.0.{1,2}', view(SELECT NULL FROM system.one WHERE dummy = 1));",
+            "name": "02984_topk_empty_merge.sql"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "name": "02233_with_total_empty_chunk.sql",
+    "tests": [
+        {
+            "query": "SET allow_experimental_analyzer = 1;",
+            "name": "02233_with_total_empty_chunk.sql"
+        },
+        {
+            "query": "\n\nSELECT (NULL, NULL, NULL, NULL, NULL, NULL, NULL) FROM numbers(0) GROUP BY number WITH TOTALS HAVING sum(number) <= arrayJoin([]) -- { serverError 59 };",
+            "name": "02233_with_total_empty_chunk.sql"
+        }
+    ]
+}

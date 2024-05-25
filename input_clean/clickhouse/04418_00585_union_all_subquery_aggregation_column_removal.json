@@ -1,0 +1,65 @@
+{
+    "name": "00585_union_all_subquery_aggregation_column_removal.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS clicks;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS transactions;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE clicks (domain String) ENGINE = Memory;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\nCREATE TABLE transactions (domain String) ENGINE = Memory;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO clicks VALUES ('facebook.com'), ('meta.ua'), ('google.com');",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\nINSERT INTO transactions VALUES ('facebook.com'), ('meta.ua'), ('baidu.com');",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n    UNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\nFORMAT JSONEachRow;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\nUNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\nFORMAT JSONEachRow;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT DISTINCT * FROM\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n    UNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n\nUNION ALL\n\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\nUNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n);",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT DISTINCT total, domain FROM\n(\nSELECT\n    sum(total_count) AS total, \n    sum(facebookHits) AS facebook,\n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n    UNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n\nUNION ALL\n\nSELECT\n    sum(total_count) AS total, \n    max(facebookHits) AS facebook,\n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\nUNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n)\nORDER BY domain, total;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT * FROM\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n    UNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n) js1\nALL FULL OUTER JOIN\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\nUNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n) js2\nUSING (total, domain)\nORDER BY total, domain;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT total FROM\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n    UNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n) js1\nALL FULL OUTER JOIN\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\nUNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n) js2\nUSING (total, domain)\nORDER BY total, domain;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nSELECT domain FROM\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n    UNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n) js1\nALL FULL OUTER JOIN\n(\nSELECT\n    sum(total_count) AS total, \n    domain\nFROM\n(\n    SELECT\n        COUNT(*) AS total_count, \n        SUM(if(domain = 'facebook.com', 1, 0)) AS facebookHits, \n        domain\n    FROM clicks \n    GROUP BY domain\nUNION ALL \n    SELECT\n        COUNT(*) AS total_count, \n        toUInt64(0) AS facebookHits, \n        domain\n    FROM transactions \n    GROUP BY domain\n) \nGROUP BY domain\nORDER BY domain\nLIMIT 10\n) js2\nUSING (total, domain)\nORDER BY total, domain;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\n\n\nDROP TABLE clicks;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        },
+        {
+            "query": "\nDROP TABLE transactions;",
+            "name": "00585_union_all_subquery_aggregation_column_removal.sql"
+        }
+    ]
+}

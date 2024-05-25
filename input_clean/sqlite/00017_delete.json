@@ -1,0 +1,301 @@
+{
+    "name": "delete",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "delete-10.0",
+            "query": "CREATE TABLE t1(a INT UNIQUE, b INT);"
+        },
+        {
+            "name": "delete-10.0",
+            "query": "INSERT INTO t1(a,b) VALUES('1','2');"
+        },
+        {
+            "name": "delete-10.0",
+            "query": "SELECT * FROM t1 WHERE a='1' AND b='2';"
+        },
+        {
+            "name": "delete-10.1",
+            "query": "DELETE FROM t1 WHERE a='1' AND b='2';"
+        },
+        {
+            "name": "delete-10.2",
+            "query": "SELECT * FROM t1 WHERE a='1' AND b='2';"
+        },
+        {
+            "name": "delete-11.0",
+            "query": "CREATE TABLE t11(a INTEGER PRIMARY KEY, b INT);"
+        },
+        {
+            "name": "delete-11.0",
+            "query": "WITH RECURSIVE cnt(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM cnt WHERE x<20)\nINSERT INTO t11(a,b) SELECT x, (x*17)%100 FROM cnt;"
+        },
+        {
+            "name": "delete-11.0",
+            "query": "SELECT * FROM t11;"
+        },
+        {
+            "name": "delete-11.1",
+            "query": "DELETE FROM t11 AS xyz\nWHERE EXISTS(SELECT 1 FROM t11 WHERE t11.a>xyz.a AND t11.b<=xyz.b);"
+        },
+        {
+            "name": "delete-11.1",
+            "query": "SELECT * FROM t11;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "delete-12.0",
+            "query": "CREATE TABLE t0(vkey INTEGER, pkey INTEGER,c1 INTEGER);"
+        },
+        {
+            "name": "delete-12.0",
+            "query": "INSERT INTO t0 VALUES(2,1,-20),(2,2,NULL),(2,3,0),(8,4,95);"
+        },
+        {
+            "name": "delete-12.0",
+            "query": "DELETE FROM t0 WHERE NOT (\n(t0.vkey <= t0.c1) AND\n(t0.vkey <> (SELECT vkey FROM t0 ORDER BY vkey LIMIT 1 OFFSET 2))\n);"
+        },
+        {
+            "name": "delete-12.0",
+            "query": "SELECT * FROM t0;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "PRAGMA auto_vacuum = 0;"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "PRAGMA synchronous = normal;"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "CREATE TABLE t1(a, b, c);"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "INSERT INTO t1 VALUES(1, 2, 3);"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "INSERT INTO t1 VALUES(4, 5, 6);"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "INSERT INTO t1 VALUES(7, 8, 9);"
+        },
+        {
+            "name": "walvfs-1.0",
+            "query": "PRAGMA wal_checkpoint;"
+        },
+        {
+            "name": "walvfs-1.2",
+            "query": "PRAGMA synchronous = normal;"
+        },
+        {
+            "name": "walvfs-1.2",
+            "query": "INSERT INTO t1 VALUES(13, 14, 15);"
+        },
+        {
+            "name": "walvfs-1.2",
+            "query": "INSERT INTO t1 VALUES(16, 17, 18);"
+        },
+        {
+            "name": "walvfs-1.2",
+            "query": "PRAGMA wal_checkpoint;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-2.0",
+            "query": "PRAGMA journal_size_limit = 10000;"
+        },
+        {
+            "name": "walvfs-2.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-2.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-2.0",
+            "query": "WITH s(i) AS (\nSELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20\n)\nINSERT INTO t1 SELECT randomblob(750) FROM s;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-3.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-3.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-3.0",
+            "query": "WITH s(i) AS (\nSELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20\n)\nINSERT INTO t1 SELECT randomblob(750) FROM s;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-5.0",
+            "query": "PRAGMA auto_vacuum = 0;"
+        },
+        {
+            "name": "walvfs-5.0",
+            "query": "PRAGMA page_size = 1024;"
+        },
+        {
+            "name": "walvfs-5.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-5.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-5.0",
+            "query": "WITH s(i) AS (\nSELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20\n)\nINSERT INTO t1 SELECT randomblob(750) FROM s;"
+        },
+        {
+            "name": "walvfs-5.1",
+            "query": "SELECT count(*) FROM t1;"
+        },
+        {
+            "name": "walvfs-5.3",
+            "query": "SELECT count(*) FROM t1;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-6.0",
+            "query": "PRAGMA auto_vacuum = 0;"
+        },
+        {
+            "name": "walvfs-6.0",
+            "query": "PRAGMA page_size = 1024;"
+        },
+        {
+            "name": "walvfs-6.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-6.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-6.0",
+            "query": "WITH s(i) AS (\nSELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20\n)\nINSERT INTO t1 SELECT randomblob(750) FROM s;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-7.0",
+            "query": "PRAGMA auto_vacuum = 0;"
+        },
+        {
+            "name": "walvfs-7.0",
+            "query": "PRAGMA page_size = 1024;"
+        },
+        {
+            "name": "walvfs-7.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-7.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-7.0",
+            "query": "WITH s(i) AS (\nSELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20\n)\nINSERT INTO t1 SELECT randomblob(750) FROM s;"
+        },
+        {
+            "name": "walvfs-7.1",
+            "query": "PRAGMA wal_checkpoint;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-8.0",
+            "query": "PRAGMA auto_vacuum = 0;"
+        },
+        {
+            "name": "walvfs-8.0",
+            "query": "PRAGMA page_size = 1024;"
+        },
+        {
+            "name": "walvfs-8.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-8.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-8.0",
+            "query": "WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20 )\nINSERT INTO t1 SELECT randomblob(75) FROM s;"
+        },
+        {
+            "name": "walvfs-8.1",
+            "query": "SELECT count(*) FROM t1;"
+        },
+        {
+            "name": "walvfs-8.3",
+            "query": "PRAGMA wal_checkpoint;"
+        },
+        {
+            "name": "walvfs-8.3",
+            "query": "SELECT count(*) FROM t1;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "walvfs-9.0",
+            "query": "PRAGMA auto_vacuum = 0;"
+        },
+        {
+            "name": "walvfs-9.0",
+            "query": "PRAGMA page_size = 1024;"
+        },
+        {
+            "name": "walvfs-9.0",
+            "query": "CREATE TABLE t1(x);"
+        },
+        {
+            "name": "walvfs-9.0",
+            "query": "PRAGMA journal_mode = wal;"
+        },
+        {
+            "name": "walvfs-9.0",
+            "query": "WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20 )\nINSERT INTO t1 SELECT randomblob(75) FROM s;"
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "name": "02816_has_token_empty.sql",
+    "tests": [
+        {
+            "query": "SELECT hasTokenCaseInsensitive('K(G', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT hasTokenCaseInsensitive('Hello', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT hasTokenCaseInsensitive('', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT hasTokenCaseInsensitive('', 'Hello');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": "\nSELECT hasTokenCaseInsensitiveOrNull('Hello', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": "\nSELECT hasTokenCaseInsensitiveOrNull('', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": "\nSELECT hasToken('Hello', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT hasToken('', 'Hello');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": "\nSELECT hasToken('', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT hasTokenOrNull('', '');",
+            "name": "02816_has_token_empty.sql"
+        },
+        {
+            "query": "\nSELECT hasTokenOrNull('Hello', '');",
+            "name": "02816_has_token_empty.sql"
+        }
+    ]
+}

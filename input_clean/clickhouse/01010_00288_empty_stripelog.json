@@ -1,0 +1,29 @@
+{
+    "name": "00288_empty_stripelog.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS stripelog;",
+            "name": "00288_empty_stripelog.sql"
+        },
+        {
+            "query": "\nCREATE TABLE stripelog (x UInt8) ENGINE = StripeLog;",
+            "name": "00288_empty_stripelog.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM stripelog ORDER BY x;",
+            "name": "00288_empty_stripelog.sql"
+        },
+        {
+            "query": "\nINSERT INTO stripelog VALUES (1), (2);",
+            "name": "00288_empty_stripelog.sql"
+        },
+        {
+            "query": "\nSELECT * FROM stripelog ORDER BY x;",
+            "name": "00288_empty_stripelog.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE stripelog;",
+            "name": "00288_empty_stripelog.sql"
+        }
+    ]
+}

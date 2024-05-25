@@ -1,0 +1,277 @@
+{
+    "name": "skipscan2",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "skipscan2-1.1",
+            "query": "CREATE TABLE people(\nname TEXT PRIMARY KEY,\nrole TEXT NOT NULL,\nheight INT NOT NULL, -- in cm\nCHECK( role IN ('student','teacher') )\n);"
+        },
+        {
+            "name": "skipscan2-1.1",
+            "query": "CREATE INDEX people_idx1 ON people(role, height);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Alice','student',156);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Bob','student',161);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Cindy','student',155);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('David','student',181);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Emily','teacher',158);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Fred','student',163);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Ginny','student',169);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Harold','student',172);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Imma','student',179);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Jack','student',181);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Karen','student',163);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Logan','student',177);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Megan','teacher',159);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Nathan','student',163);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Olivia','student',161);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Patrick','teacher',180);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Quiana','student',182);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Robert','student',159);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Sally','student',166);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Tom','student',171);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Ursula','student',170);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Vance','student',179);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Willma','student',175);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Xavier','teacher',185);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Yvonne','student',149);"
+        },
+        {
+            "name": "skipscan2-1.2",
+            "query": "INSERT INTO people VALUES('Zach','student',170);"
+        },
+        {
+            "name": "skipscan2-1.3",
+            "query": "SELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.3eqp",
+            "query": "EXPLAIN QUERY PLAN\nSELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.4",
+            "query": "ANALYZE;"
+        },
+        {
+            "name": "skipscan2-1.4",
+            "query": "-- We do not have enough people above to actually force the use\n-- of a skip-scan.  So make a manual adjustment to the stat1 table\n-- to make it seem like there are many more.\nUPDATE sqlite_stat1 SET stat='10000 5000 20' WHERE idx='people_idx1';"
+        },
+        {
+            "name": "skipscan2-1.4",
+            "query": "UPDATE sqlite_stat1 SET stat='10000 1' WHERE idx='sqlite_autoindex_people_1';"
+        },
+        {
+            "name": "skipscan2-1.4",
+            "query": "ANALYZE sqlite_master;"
+        },
+        {
+            "name": "skipscan2-1.5",
+            "query": "SELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.5eqp",
+            "query": "EXPLAIN QUERY PLAN\nSELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.6",
+            "query": "SELECT name FROM people\nWHERE role IN (SELECT DISTINCT role FROM people)\nAND height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.7",
+            "query": "SELECT name FROM people WHERE role='teacher' AND height>=180\nUNION ALL\nSELECT name FROM people WHERE role='student' AND height>=180\nORDER BY 1;"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Angie','student',166);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Brad','student',176);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Claire','student',168);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Donald','student',162);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Elaine','student',177);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Frazier','student',159);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Grace','student',179);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "INSERT INTO people VALUES('Horace','student',166);"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "ANALYZE;"
+        },
+        {
+            "name": "skipscan2-1.8",
+            "query": "SELECT stat FROM sqlite_stat1 WHERE idx='people_idx1';"
+        },
+        {
+            "name": "skipscan2-1.9",
+            "query": "SELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.9eqp",
+            "query": "EXPLAIN QUERY PLAN\nSELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.10",
+            "query": "INSERT INTO people VALUES('Ingrad','student',155);"
+        },
+        {
+            "name": "skipscan2-1.10",
+            "query": "INSERT INTO people VALUES('Jacob','student',179);"
+        },
+        {
+            "name": "skipscan2-1.10",
+            "query": "ANALYZE;"
+        },
+        {
+            "name": "skipscan2-1.10",
+            "query": "SELECT stat FROM sqlite_stat1 WHERE idx='people_idx1';"
+        },
+        {
+            "name": "skipscan2-1.11",
+            "query": "SELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-1.11eqp",
+            "query": "EXPLAIN QUERY PLAN\nSELECT name FROM people WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-2.1",
+            "query": "CREATE TABLE peoplew(\nname TEXT PRIMARY KEY,\nrole TEXT NOT NULL,\nheight INT NOT NULL, -- in cm\nCHECK( role IN ('student','teacher') )\n) WITHOUT ROWID;"
+        },
+        {
+            "name": "skipscan2-2.1",
+            "query": "CREATE INDEX peoplew_idx1 ON peoplew(role, height);"
+        },
+        {
+            "name": "skipscan2-2.1",
+            "query": "INSERT INTO peoplew(name,role,height)\nSELECT name, role, height FROM  people;"
+        },
+        {
+            "name": "skipscan2-2.1",
+            "query": "SELECT name FROM peoplew WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-2.2",
+            "query": "SELECT name FROM peoplew\nWHERE role IN (SELECT DISTINCT role FROM peoplew)\nAND height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-2.2",
+            "query": "SELECT name FROM peoplew WHERE role='teacher' AND height>=180\nUNION ALL\nSELECT name FROM peoplew WHERE role='student' AND height>=180\nORDER BY 1;"
+        },
+        {
+            "name": "skipscan2-2.4",
+            "query": "ANALYZE;"
+        },
+        {
+            "name": "skipscan2-2.5",
+            "query": "SELECT name FROM peoplew WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-2.5eqp",
+            "query": "EXPLAIN QUERY PLAN\nSELECT name FROM peoplew WHERE height>=180 ORDER BY +name;"
+        },
+        {
+            "name": "skipscan2-3.1",
+            "query": "CREATE TABLE t3(a, b, c, PRIMARY KEY(a, b)) WITHOUT ROWID;"
+        },
+        {
+            "name": "skipscan2-3.3eqp",
+            "query": "EXPLAIN QUERY PLAN\nSELECT * FROM t3 WHERE b=42;"
+        }
+    ]
+}

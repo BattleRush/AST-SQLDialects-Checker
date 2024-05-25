@@ -1,0 +1,120 @@
+{
+    "name": "test_unique_multi_column.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SET default_null_order='nulls_first';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TEMPORARY TABLE integers(i INTEGER, j INTEGER)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE UNIQUE INDEX uidx ON integers (i,j)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (3, 4), (2, 5)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6, 6), (3, 4);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE integers SET i=77 WHERE i IS NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers ORDER BY i, j",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE integers SET i=77 WHERE i IS NULL AND j=7",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers ORDER BY i, j",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (NULL, 6), (NULL, 7)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES  (3, 4)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE integers",
+            "expected_result": ""
+        }
+    ]
+}

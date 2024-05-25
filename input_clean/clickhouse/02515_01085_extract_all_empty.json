@@ -1,0 +1,9 @@
+{
+    "name": "01085_extract_all_empty.sql",
+    "tests": [
+        {
+            "query": "SELECT extractAll('\\0', '');",
+            "name": "01085_extract_all_empty.sql"
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+{
+    "name": "test_any_value_noninlined.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE tbl(a INTEGER, b VARCHAR)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO tbl VALUES (1, NULL), (2, 'thisisalongstring'), (3, 'thisisalsoalongstring')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(b) FROM tbl",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(b) FROM tbl WHERE a=2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(b) FROM tbl WHERE a=1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(b) FROM tbl WHERE a=1 GROUP BY a",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(b) FROM tbl WHERE a=0",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(b) FROM tbl WHERE a=0 GROUP BY b",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a, ANY_VALUE(b) FROM tbl GROUP BY a ORDER BY a",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT ANY_VALUE(i) FROM (VALUES (NULL::INT32)) tbl(i)",
+            "expected_result": ""
+        }
+    ]
+}

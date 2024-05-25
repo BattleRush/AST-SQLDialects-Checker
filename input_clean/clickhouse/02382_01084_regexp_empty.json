@@ -1,0 +1,29 @@
+{
+    "name": "01084_regexp_empty.sql",
+    "tests": [
+        {
+            "query": "\nDROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "01084_regexp_empty.sql"
+        },
+        {
+            "query": "\nCREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "01084_regexp_empty.sql"
+        },
+        {
+            "query": "\nUSE {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "01084_regexp_empty.sql"
+        },
+        {
+            "query": "\nCREATE TABLE t (x UInt8) ENGINE = Memory;",
+            "name": "01084_regexp_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM merge('', '');",
+            "name": "01084_regexp_empty.sql"
+        },
+        {
+            "query": "\n\nDROP DATABASE {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "01084_regexp_empty.sql"
+        }
+    ]
+}

@@ -1,0 +1,115 @@
+{
+    "name": "test_unique_string.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TEMPORARY TABLE integers(i INTEGER, j VARCHAR)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE UNIQUE INDEX \"uidx\" ON \"integers\" (\"j\")",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (3, '4'), (2, '5')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6, '6'), (3, '4');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE integers SET j='77' WHERE j IS NULL",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers ORDER BY i, j",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "UPDATE integers SET j='7777777777777777777777777777' WHERE j IS NULL AND i=6",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6,NULL), (7,NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES  (3, '4')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES  (3, '4')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE integers",
+            "expected_result": ""
+        }
+    ]
+}

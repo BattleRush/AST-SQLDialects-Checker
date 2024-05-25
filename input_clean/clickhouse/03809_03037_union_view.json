@@ -1,0 +1,37 @@
+{
+    "name": "03037_union_view.sql",
+    "tests": [
+        {
+            "query": "-- https://github.com/ClickHouse/ClickHouse/issues/55803\nSET allow_experimental_analyzer=1;",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS broken_table;",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS broken_view;",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE broken_table\n(\n    start DateTime64(6),\n    end DateTime64(6),\n)\nENGINE = ReplacingMergeTree(start)\nORDER BY (start);",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\n\nCREATE VIEW broken_view as\nSELECT\n  t.start as start,\n  t.end as end,\n  cast(datediff('second', t.start, t.end) as float) as total_sec\nFROM broken_table t FINAL\nUNION ALL\nSELECT\n  null as start,\n  null as end,\n  null as total_sec;",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\n\nSELECT v.start, v.total_sec\nFROM broken_view v FINAL\nWHERE v.start IS NOT NULL;",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS broken_table;",
+            "name": "03037_union_view.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS broken_view;",
+            "name": "03037_union_view.sql"
+        }
+    ]
+}

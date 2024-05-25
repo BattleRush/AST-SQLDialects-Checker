@@ -1,0 +1,61 @@
+{
+    "name": "incrblobfault",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "CREATE TABLE blob(x INTEGER PRIMARY KEY, v BLOB);"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob VALUES(1, 'hello world');"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob VALUES(2, 'world hello');"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        },
+        {
+            "name": "incrblobfault-1.0",
+            "query": "INSERT INTO blob SELECT NULL, v FROM blob;"
+        }
+    ]
+}

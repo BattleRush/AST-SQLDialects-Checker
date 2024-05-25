@@ -1,0 +1,40 @@
+{
+    "name": "string_agg.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SET default_null_order='nulls_first';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "pragma enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "pragma verify_parallelism",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE strings(\n\tg INTEGER,\n\tx VARCHAR,\n\ty VARCHAR\n);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO strings VALUES\n\t(1,'a','/'),\n\t(1,'b','-'),\n\t(2,'i','/'),\n\t(2,NULL,'-'),\n\t(2,'j','+'),\n\t(3,'p','/'),\n\t(4,'x','/'),\n\t(4,'y','-'),\n\t(4,'z','+');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT g, STRING_AGG(DISTINCT y, ',' ORDER BY y DESC) FILTER (WHERE g < 4)\nFROM strings\nGROUP BY g\nORDER BY 1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT g, count(y), STRING_AGG(DISTINCT y, ',' ORDER BY y DESC) FILTER (WHERE g < 4), sum(1)\nFROM strings\nGROUP BY g\nORDER BY 1",
+            "expected_result": ""
+        }
+    ]
+}

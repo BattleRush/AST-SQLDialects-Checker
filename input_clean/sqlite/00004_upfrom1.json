@@ -1,0 +1,401 @@
+{
+    "name": "upfrom1",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "DROP TABLE IF EXISTS t2;"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "CREATE TABLE t2(a INTEGER PRIMARY KEY, b INTEGER, c INTEGER) WITHOUT ROWID;"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "INSERT INTO t2 VALUES(1, 2, 3);"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "INSERT INTO t2 VALUES(4, 5, 6);"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "INSERT INTO t2 VALUES(7, 8, 9);"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "DROP TABLE IF EXISTS chng;"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "CREATE TABLE chng(a INTEGER, b INTEGER, c INTEGER);"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "INSERT INTO chng VALUES(1, 100, 1000);"
+        },
+        {
+            "name": "upfrom1-1.1.0",
+            "query": "INSERT INTO chng VALUES(7, 700, 7000);"
+        },
+        {
+            "name": "upfrom1-1.1.1",
+            "query": "SELECT * FROM t2;"
+        },
+        {
+            "name": "upfrom1-1.1.2",
+            "query": "UPDATE t2 SET b = chng.b, c = chng.c FROM chng WHERE chng.a = t2.a;"
+        },
+        {
+            "name": "upfrom1-1.1.2",
+            "query": "SELECT * FROM t2 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.1.3",
+            "query": "DELETE FROM t2;"
+        },
+        {
+            "name": "upfrom1-1.1.3",
+            "query": "INSERT INTO t2 VALUES(1, 2, 3);"
+        },
+        {
+            "name": "upfrom1-1.1.3",
+            "query": "INSERT INTO t2 VALUES(4, 5, 6);"
+        },
+        {
+            "name": "upfrom1-1.1.3",
+            "query": "INSERT INTO t2 VALUES(7, 8, 9);"
+        },
+        {
+            "name": "upfrom1-1.1.4",
+            "query": "UPDATE t2 SET (b, c) = (SELECT b, c FROM chng WHERE a=t2.a)\nWHERE a IN (SELECT a FROM chng);"
+        },
+        {
+            "name": "upfrom1-1.1.4",
+            "query": "SELECT * FROM t2 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "DROP TABLE IF EXISTS t3;"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "CREATE TABLE t3(a INTEGER PRIMARY KEY, b INTEGER, c TEXT) WITHOUT ROWID;"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "INSERT INTO t3 VALUES(1, 1, 'one');"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "INSERT INTO t3 VALUES(2, 2, 'two');"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "INSERT INTO t3 VALUES(3, 3, 'three');"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "DROP TABLE IF EXISTS t4;"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "CREATE TABLE t4(x TEXT);"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "INSERT INTO t4 VALUES('five');"
+        },
+        {
+            "name": "upfrom1-1.1.5",
+            "query": "SELECT * FROM t3 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.1.6",
+            "query": "UPDATE t3 SET c=x FROM t4;"
+        },
+        {
+            "name": "upfrom1-1.1.6",
+            "query": "SELECT * FROM t3 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "DROP TABLE IF EXISTS t2;"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "CREATE TABLE t2(a INTEGER PRIMARY KEY, b INTEGER, c INTEGER);"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "INSERT INTO t2 VALUES(1, 2, 3);"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "INSERT INTO t2 VALUES(4, 5, 6);"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "INSERT INTO t2 VALUES(7, 8, 9);"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "DROP TABLE IF EXISTS chng;"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "CREATE TABLE chng(a INTEGER, b INTEGER, c INTEGER);"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "INSERT INTO chng VALUES(1, 100, 1000);"
+        },
+        {
+            "name": "upfrom1-1.2.0",
+            "query": "INSERT INTO chng VALUES(7, 700, 7000);"
+        },
+        {
+            "name": "upfrom1-1.2.1",
+            "query": "SELECT * FROM t2;"
+        },
+        {
+            "name": "upfrom1-1.2.2",
+            "query": "UPDATE t2 SET b = chng.b, c = chng.c FROM chng WHERE chng.a = t2.a;"
+        },
+        {
+            "name": "upfrom1-1.2.2",
+            "query": "SELECT * FROM t2 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.2.3",
+            "query": "DELETE FROM t2;"
+        },
+        {
+            "name": "upfrom1-1.2.3",
+            "query": "INSERT INTO t2 VALUES(1, 2, 3);"
+        },
+        {
+            "name": "upfrom1-1.2.3",
+            "query": "INSERT INTO t2 VALUES(4, 5, 6);"
+        },
+        {
+            "name": "upfrom1-1.2.3",
+            "query": "INSERT INTO t2 VALUES(7, 8, 9);"
+        },
+        {
+            "name": "upfrom1-1.2.4",
+            "query": "UPDATE t2 SET (b, c) = (SELECT b, c FROM chng WHERE a=t2.a)\nWHERE a IN (SELECT a FROM chng);"
+        },
+        {
+            "name": "upfrom1-1.2.4",
+            "query": "SELECT * FROM t2 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "DROP TABLE IF EXISTS t3;"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "CREATE TABLE t3(a INTEGER PRIMARY KEY, b INTEGER, c TEXT);"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "INSERT INTO t3 VALUES(1, 1, 'one');"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "INSERT INTO t3 VALUES(2, 2, 'two');"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "INSERT INTO t3 VALUES(3, 3, 'three');"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "DROP TABLE IF EXISTS t4;"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "CREATE TABLE t4(x TEXT);"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "INSERT INTO t4 VALUES('five');"
+        },
+        {
+            "name": "upfrom1-1.2.5",
+            "query": "SELECT * FROM t3 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-1.2.6",
+            "query": "UPDATE t3 SET c=x FROM t4;"
+        },
+        {
+            "name": "upfrom1-1.2.6",
+            "query": "SELECT * FROM t3 ORDER BY a;"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "DROP TABLE IF EXISTS t5;"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "DROP TABLE IF EXISTS m1;"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "DROP TABLE IF EXISTS m2;"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "CREATE TABLE t5(a INTEGER PRIMARY KEY, b TEXT, c TEXT);"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "CREATE TABLE m1(x INTEGER PRIMARY KEY, y TEXT);"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "CREATE TABLE m2(u INTEGER PRIMARY KEY, v TEXT);"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO t5 VALUES(1, 'one', 'ONE');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO t5 VALUES(2, 'two', 'TWO');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO t5 VALUES(3, 'three', 'THREE');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO t5 VALUES(4, 'four', 'FOUR');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO m1 VALUES(1, 'i');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO m1 VALUES(2, 'ii');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO m1 VALUES(3, 'iii');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO m2 VALUES(1, 'I');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO m2 VALUES(3, 'II');"
+        },
+        {
+            "name": "upfrom1-2.1",
+            "query": "INSERT INTO m2 VALUES(4, 'III');"
+        },
+        {
+            "name": "upfrom1-2.2",
+            "query": "UPDATE t5 SET b=y, c=v FROM m1 LEFT JOIN m2 ON (x=u) WHERE x=a;"
+        },
+        {
+            "name": "upfrom1-2.2",
+            "query": "SELECT * FROM t5 ORDER BY a;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom1-3.1",
+            "query": "CREATE TABLE t0(a);"
+        },
+        {
+            "name": "upfrom1-3.1",
+            "query": "CREATE TABLE t1(b);"
+        },
+        {
+            "name": "upfrom1-3.1",
+            "query": "UPDATE t1 SET b=sum(a) FROM t0;"
+        },
+        {
+            "name": "upfrom1-3.1",
+            "query": "SELECT * FROM t0, t1;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom1-4.1",
+            "query": "CREATE TABLE t1(x INT);"
+        },
+        {
+            "name": "upfrom1-4.1",
+            "query": "INSERT INTO t1 VALUES(1);"
+        },
+        {
+            "name": "upfrom1-4.1",
+            "query": "CREATE TABLE t2(y INT);"
+        },
+        {
+            "name": "upfrom1-4.1",
+            "query": "INSERT INTO t2 VALUES(2);"
+        },
+        {
+            "name": "upfrom1-4.1",
+            "query": "WITH t1 AS (SELECT y+100 AS x FROM t2)\nUPDATE t1 SET x=(SELECT x FROM t1);"
+        },
+        {
+            "name": "upfrom1-4.1",
+            "query": "SELECT x, y FROM t1, t2;"
+        },
+        {
+            "name": "upfrom1-4.2",
+            "query": "WITH t1 AS (SELECT y+100 AS x FROM t2)\nUPDATE t1 SET x=x+y FROM t2;"
+        },
+        {
+            "name": "upfrom1-4.2",
+            "query": "SELECT x, y FROM t1, t2;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "CREATE TABLE t1(a);"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "INSERT INTO t1(a) VALUES(5);"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "CREATE VIEW t2 AS SELECT a FROM t1 UNION ALL SELECT a FROM t1;"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "CREATE TABLE t3(b,c);"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "INSERT INTO t3(b,c) VALUES(1,2);"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "UPDATE t3 SET (c,b) = (SELECT 3,4) FROM t1, t2;"
+        },
+        {
+            "name": "upfrom1-5.1",
+            "query": "SELECT * FROM t3;"
+        }
+    ]
+}

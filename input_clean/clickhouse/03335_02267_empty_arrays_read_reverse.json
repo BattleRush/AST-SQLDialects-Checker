@@ -1,0 +1,33 @@
+{
+    "name": "02267_empty_arrays_read_reverse.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS t_02267;",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE t_02267\n(\n    a Array(String),\n    b UInt32,\n    c Array(String)\n)\nENGINE = MergeTree\nORDER BY b\nSETTINGS index_granularity = 500, index_granularity_bytes = '10Mi';",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO t_02267 (b, a, c) SELECT 0, ['x'],  ['1','2','3','4','5','6'] FROM numbers(1) ;",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        },
+        {
+            "query": "\nINSERT INTO t_02267 (b, a, c) SELECT 1, [],     ['1','2','3','4','5','6'] FROM numbers(300000);",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        },
+        {
+            "query": "\n\nOPTIMIZE TABLE t_02267 FINAL;",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM t_02267 WHERE hasAll(a, ['x'])\nORDER BY b DESC\nSETTINGS max_threads=1, max_block_size=1000;",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS t_02267;",
+            "name": "02267_empty_arrays_read_reverse.sql"
+        }
+    ]
+}

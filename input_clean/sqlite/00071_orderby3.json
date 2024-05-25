@@ -1,0 +1,97 @@
+{
+    "name": "orderby3",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "CREATE TABLE t1(a INTEGER PRIMARY KEY);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "CREATE TABLE t2(b INTEGER PRIMARY KEY, c INTEGER);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "CREATE TABLE t3(d INTEGER);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "INSERT INTO t1 VALUES(1),(2),(3);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "INSERT INTO t2 VALUES(3, 1);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "INSERT INTO t2 VALUES(4, 2);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "INSERT INTO t2 VALUES(5, 3);"
+        },
+        {
+            "name": "orderby3-1.0",
+            "query": "INSERT INTO t3 VALUES(4),(3),(5);"
+        },
+        {
+            "name": "orderby3-1.1.asc",
+            "query": "SELECT t1.a\nFROM t1, t2, t3\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.1.desc",
+            "query": "SELECT t1.a\nFROM t1, t2, t3\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        },
+        {
+            "name": "orderby3-1.123.asc",
+            "query": "SELECT t1.a\nFROM t1 CROSS JOIN t2 CROSS JOIN t3\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.123.desc",
+            "query": "SELECT t1.a\nFROM t1 CROSS JOIN t2 CROSS JOIN t3\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        },
+        {
+            "name": "orderby3-1.132.asc",
+            "query": "SELECT t1.a\nFROM t1 CROSS JOIN t3 CROSS JOIN t2\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.132.desc",
+            "query": "SELECT t1.a\nFROM t1 CROSS JOIN t3 CROSS JOIN t2\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        },
+        {
+            "name": "orderby3-1.213.asc",
+            "query": "SELECT t1.a\nFROM t2 CROSS JOIN t1 CROSS JOIN t3\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.213.desc",
+            "query": "SELECT t1.a\nFROM t2 CROSS JOIN t1 CROSS JOIN t3\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        },
+        {
+            "name": "orderby3-1.231.asc",
+            "query": "SELECT t1.a\nFROM t2 CROSS JOIN t3 CROSS JOIN t1\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.231.desc",
+            "query": "SELECT t1.a\nFROM t2 CROSS JOIN t3 CROSS JOIN t1\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        },
+        {
+            "name": "orderby3-1.312.asc",
+            "query": "SELECT t1.a\nFROM t3 CROSS JOIN t1 CROSS JOIN t2\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.312.desc",
+            "query": "SELECT t1.a\nFROM t3 CROSS JOIN t1 CROSS JOIN t2\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        },
+        {
+            "name": "orderby3-1.321.asc",
+            "query": "SELECT t1.a\nFROM t3 CROSS JOIN t2 CROSS JOIN t1\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a;"
+        },
+        {
+            "name": "orderby3-1.321.desc",
+            "query": "SELECT t1.a\nFROM t3 CROSS JOIN t2 CROSS JOIN t1\nWHERE t1.a=t2.c AND t2.b=t3.d\nORDER BY t1.a DESC;"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "name": "02431_single_value_or_null_empty.sql",
+    "tests": [
+        {
+            "query": "select singleValueOrNull(number) from numbers(0) with totals;",
+            "name": "02431_single_value_or_null_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT\n        0.5 IN (\n        SELECT singleValueOrNull(*)\n        FROM\n            (\n                SELECT 1048577\n                FROM numbers(0)\n            )\nWITH TOTALS\n    ),\n    NULL,\n    NULL NOT IN (\nSELECT\n    2147483647,\n    1024 IN (\n    SELECT\n    [NULL, 2147483648, NULL, NULL],\n    number\n    FROM numbers(7, 100)\n    ),\n    [NULL, NULL, NULL, NULL, NULL],\n    number\nFROM numbers(1048576)\nWHERE NULL\n    ),\n    NULL NOT IN (\nSELECT number\nFROM numbers(0)\n    )\nGROUP BY NULL\nWITH CUBE;",
+            "name": "02431_single_value_or_null_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT anyHeavy('1') FROM (SELECT anyHeavy(1));",
+            "name": "02431_single_value_or_null_empty.sql"
+        }
+    ]
+}

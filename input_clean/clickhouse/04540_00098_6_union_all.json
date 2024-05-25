@@ -1,0 +1,9 @@
+{
+    "name": "00098_6_union_all.sql",
+    "tests": [
+        {
+            "query": "SELECT X FROM (SELECT 3 AS X UNION ALL SELECT 2 AS X UNION ALL SELECT 1 AS X) ORDER BY X ASC;",
+            "name": "00098_6_union_all.sql"
+        }
+    ]
+}

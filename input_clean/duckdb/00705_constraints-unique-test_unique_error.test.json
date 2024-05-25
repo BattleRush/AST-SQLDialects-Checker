@@ -1,0 +1,25 @@
+{
+    "name": "test_unique_error.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TEMPORARY TABLE integers(i INTEGER, j VARCHAR)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (3, '4'), (2, '4')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE UNIQUE INDEX uidx ON integers (j)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "DROP TABLE integers",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "name": "01747_transform_empty_arrays.sql",
+    "tests": [
+        {
+            "query": "SELECT *\nFROM\n(\n    WITH\n\n        (\n            SELECT groupArray(a)\n            FROM\n            (\n                SELECT 1 AS a\n            )\n        ) AS keys,\n\n        (\n            SELECT groupArray(a)\n            FROM\n            (\n                SELECT 2 AS a\n            )\n        ) AS values\n    SELECT *\n    FROM\n    (\n        SELECT 1 AS a\n    )\n    WHERE transform(a, keys, values, 0)\n) AS wrap;",
+            "name": "01747_transform_empty_arrays.sql"
+        }
+    ]
+}

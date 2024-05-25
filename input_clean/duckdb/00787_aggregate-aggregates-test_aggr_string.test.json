@@ -1,0 +1,70 @@
+{
+    "name": "test_aggr_string.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "SET default_null_order='nulls_first';",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT NULL as a, NULL as b, NULL as c, NULL as d, 1 as id UNION SELECT '\u041a\u0438\u0440\u0438\u043b\u043b' as a, 'M\u00fcller' as b, '\u6211\u662f\u8c01' as c, 'ASCII' as d, 2 as id ORDER BY 1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test (a INTEGER, s VARCHAR);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO test VALUES (11, 'hello'), (12, 'world'), (11, NULL)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*), COUNT(s) FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a, COUNT(*), COUNT(s) FROM test GROUP BY a ORDER BY a;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT s, SUM(a) FROM test GROUP BY s ORDER BY s;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO test VALUES (11, 'hello'), (12, 'world')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT COUNT(*), COUNT(s), COUNT(DISTINCT s) FROM test;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a, COUNT(*), COUNT(s), COUNT(DISTINCT s) FROM test GROUP BY a ORDER BY a;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT a, COUNT(*), COUNT(s), COUNT(DISTINCT s) FROM test WHERE s IS NOT NULL GROUP BY a ORDER BY a;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE test_strings(s VARCHAR);\nINSERT INTO test_strings VALUES ('aaaaaaaahello'), ('bbbbbbbbbbbbbbbbbbbbhello'), ('ccccccccccccccchello'), ('aaaaaaaaaaaaaaaaaaaaaaaahello');;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT MIN(s), MAX(s) FROM test_strings;",
+            "expected_result": ""
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "name": "00068_empty_tiny_log.sql",
+    "tests": [
+        {
+            "query": "CREATE TABLE IF NOT EXISTS empty_tiny_log(A UInt8) Engine = TinyLog;",
+            "name": "00068_empty_tiny_log.sql"
+        },
+        {
+            "query": "\n\nSELECT A FROM empty_tiny_log;",
+            "name": "00068_empty_tiny_log.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE empty_tiny_log;",
+            "name": "00068_empty_tiny_log.sql"
+        }
+    ]
+}

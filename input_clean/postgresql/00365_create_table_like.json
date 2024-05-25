@@ -1,0 +1,137 @@
+{
+    "name": "create_table_like.sql",
+    "tests": [
+        {
+            "query": "/* Test inheritance of structure (LIKE) */\nCREATE TABLE inhx (xx text DEFAULT 'text')",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/*\n * Test double inheritance\n *\n * Ensure that defaults are NOT included unless\n * INCLUDING DEFAULTS is specified\n */\nCREATE TABLE ctla (aa TEXT)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE ctlb (bb TEXT) INHERITS (ctla)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE foo (LIKE nonexistent)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE inhe (ee text, LIKE inhx) inherits (ctlb)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "INSERT INTO inhe VALUES ('ee-col1', 'ee-col2', DEFAULT, 'ee-col4')",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "SELECT * FROM inhe",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Columns aa, bb, xx value NULL, ee */\nSELECT * FROM inhx",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Empty set since LIKE inherits structure only */\nSELECT * FROM ctlb",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Has ee entry */\nSELECT * FROM ctla",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Has ee entry */\n\nCREATE TABLE inhf (LIKE inhx, LIKE inhx)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Throw error */\n\nCREATE TABLE inhf (LIKE inhx INCLUDING DEFAULTS INCLUDING CONSTRAINTS)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "INSERT INTO inhf DEFAULT VALUES",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "SELECT * FROM inhf",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Single entry with value 'text' */\n\nALTER TABLE inhx add constraint foo CHECK (xx = 'text')",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "ALTER TABLE inhx ADD PRIMARY KEY (xx)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE inhg (LIKE inhx)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* Doesn't copy constraint */\nINSERT INTO inhg VALUES ('foo');\nDROP TABLE inhg;\nCREATE TABLE inhg (x text, LIKE inhx INCLUDING CONSTRAINTS, y text); /* Copies constraints */\nINSERT INTO inhg VALUES ('x', 'text', 'y'); /* Succeeds */\nINSERT INTO inhg VALUES ('x', 'text', 'y'); /* Succeeds -- Unique constraints not copied */\nINSERT INTO inhg VALUES ('x', 'foo',  'y');  /* fails due to constraint */\nSELECT * FROM inhg; /* Two records with three columns in order x=x, xx=text, y=y */\nDROP TABLE inhg;\n\nCREATE TABLE test_like_id_1 (a bigint GENERATED ALWAYS AS IDENTITY, b text);\n\\d test_like_id_1\nINSERT INTO test_like_id_1 (b) VALUES ('b1');\nSELECT * FROM test_like_id_1;\nCREATE TABLE test_like_id_2 (LIKE test_like_id_1);\n\\d test_like_id_2\nINSERT INTO test_like_id_2 (b) VALUES ('b2');\nSELECT * FROM test_like_id_2;  -- identity was not copied\nCREATE TABLE test_like_id_3 (LIKE test_like_id_1 INCLUDING IDENTITY);\n\\d test_like_id_3\nINSERT INTO test_like_id_3 (b) VALUES ('b3');\nSELECT * FROM test_like_id_3;  -- identity was copied and applied\nDROP TABLE test_like_id_1, test_like_id_2, test_like_id_3;\n\nCREATE TABLE test_like_gen_1 (a int, b int GENERATED ALWAYS AS (a * 2) STORED);\n\\d test_like_gen_1\nINSERT INTO test_like_gen_1 (a) VALUES (1);\nSELECT * FROM test_like_gen_1;\nCREATE TABLE test_like_gen_2 (LIKE test_like_gen_1);\n\\d test_like_gen_2\nINSERT INTO test_like_gen_2 (a) VALUES (1);\nSELECT * FROM test_like_gen_2;\nCREATE TABLE test_like_gen_3 (LIKE test_like_gen_1 INCLUDING GENERATED);\n\\d test_like_gen_3\nINSERT INTO test_like_gen_3 (a) VALUES (1);\nSELECT * FROM test_like_gen_3;\nDROP TABLE test_like_gen_1, test_like_gen_2, test_like_gen_3;\n\n-- also test generated column with a \"forward\" reference (bug #16342)\nCREATE TABLE test_like_4 (b int DEFAULT 42,\n  c int GENERATED ALWAYS AS (a * 2) STORED,\n  a int CHECK (a > 0));\n\\d test_like_4\nCREATE TABLE test_like_4a (LIKE test_like_4);\nCREATE TABLE test_like_4b (LIKE test_like_4 INCLUDING DEFAULTS);\nCREATE TABLE test_like_4c (LIKE test_like_4 INCLUDING GENERATED);\nCREATE TABLE test_like_4d (LIKE test_like_4 INCLUDING DEFAULTS INCLUDING GENERATED);\n\\d test_like_4a\nINSERT INTO test_like_4a (a) VALUES(11);\nSELECT a, b, c FROM test_like_4a;\n\\d test_like_4b\nINSERT INTO test_like_4b (a) VALUES(11);\nSELECT a, b, c FROM test_like_4b;\n\\d test_like_4c\nINSERT INTO test_like_4c (a) VALUES(11);\nSELECT a, b, c FROM test_like_4c;\n\\d test_like_4d\nINSERT INTO test_like_4d (a) VALUES(11);\nSELECT a, b, c FROM test_like_4d;\n\n-- Test renumbering of Vars when combining LIKE with inheritance\nCREATE TABLE test_like_5 (x point, y point, z point);\nCREATE TABLE test_like_5x (p int CHECK (p > 0),\n   q int GENERATED ALWAYS AS (p * 2) STORED);\nCREATE TABLE test_like_5c (LIKE test_like_4 INCLUDING ALL)\n  INHERITS (test_like_5, test_like_5x);\n\\d test_like_5c\n\nDROP TABLE test_like_4, test_like_4a, test_like_4b, test_like_4c, test_like_4d;\nDROP TABLE test_like_5, test_like_5x, test_like_5c;\n\nCREATE TABLE inhg (x text, LIKE inhx INCLUDING INDEXES, y text); /* copies indexes */\nINSERT INTO inhg VALUES (5, 10);\nINSERT INTO inhg VALUES (20, 10); -- should fail\nDROP TABLE inhg;\n/* Multiple primary keys creation should fail */\nCREATE TABLE inhg (x text, LIKE inhx INCLUDING INDEXES, PRIMARY KEY(x)); /* fails */\nCREATE TABLE inhz (xx text DEFAULT 'text', yy int UNIQUE);\nCREATE UNIQUE INDEX inhz_xx_idx on inhz (xx) WHERE xx <> 'test';\n/* Ok to create multiple unique indexes */\nCREATE TABLE inhg (x text UNIQUE, LIKE inhz INCLUDING INDEXES);\nINSERT INTO inhg (xx, yy, x) VALUES ('test', 5, 10);\nINSERT INTO inhg (xx, yy, x) VALUES ('test', 10, 15);\nINSERT INTO inhg (xx, yy, x) VALUES ('foo', 10, 15); -- should fail\nDROP TABLE inhg;\nDROP TABLE inhz;\n\n/* Use primary key imported by LIKE for self-referential FK constraint */\nCREATE TABLE inhz (x text REFERENCES inhz, LIKE inhx INCLUDING INDEXES);\n\\d inhz\nDROP TABLE inhz;\n\n-- including storage and comments\nCREATE TABLE ctlt1 (a text CHECK (length(a) > 2) PRIMARY KEY, b text);\nCREATE INDEX ctlt1_b_key ON ctlt1 (b);\nCREATE INDEX ctlt1_fnidx ON ctlt1 ((a || b));\nCREATE STATISTICS ctlt1_a_b_stat ON a,b FROM ctlt1;\nCREATE STATISTICS ctlt1_expr_stat ON (a || b) FROM ctlt1;\nCOMMENT ON STATISTICS ctlt1_a_b_stat IS 'ab stats';\nCOMMENT ON STATISTICS ctlt1_expr_stat IS 'ab expr stats';\nCOMMENT ON COLUMN ctlt1.a IS 'A';\nCOMMENT ON COLUMN ctlt1.b IS 'B';\nCOMMENT ON CONSTRAINT ctlt1_a_check ON ctlt1 IS 't1_a_check';\nCOMMENT ON INDEX ctlt1_pkey IS 'index pkey';\nCOMMENT ON INDEX ctlt1_b_key IS 'index b_key';\nALTER TABLE ctlt1 ALTER COLUMN a SET STORAGE MAIN;\n\nCREATE TABLE ctlt2 (c text);\nALTER TABLE ctlt2 ALTER COLUMN c SET STORAGE EXTERNAL;\nCOMMENT ON COLUMN ctlt2.c IS 'C';\n\nCREATE TABLE ctlt3 (a text CHECK (length(a) < 5), c text CHECK (length(c) < 7));\nALTER TABLE ctlt3 ALTER COLUMN c SET STORAGE EXTERNAL;\nALTER TABLE ctlt3 ALTER COLUMN a SET STORAGE MAIN;\nCREATE INDEX ctlt3_fnidx ON ctlt3 ((a || c));\nCOMMENT ON COLUMN ctlt3.a IS 'A3';\nCOMMENT ON COLUMN ctlt3.c IS 'C';\nCOMMENT ON CONSTRAINT ctlt3_a_check ON ctlt3 IS 't3_a_check';\n\nCREATE TABLE ctlt4 (a text, c text);\nALTER TABLE ctlt4 ALTER COLUMN c SET STORAGE EXTERNAL;\n\nCREATE TABLE ctlt12_storage (LIKE ctlt1 INCLUDING STORAGE, LIKE ctlt2 INCLUDING STORAGE);\n\\d+ ctlt12_storage\nCREATE TABLE ctlt12_comments (LIKE ctlt1 INCLUDING COMMENTS, LIKE ctlt2 INCLUDING COMMENTS);\n\\d+ ctlt12_comments\nCREATE TABLE ctlt1_inh (LIKE ctlt1 INCLUDING CONSTRAINTS INCLUDING COMMENTS) INHERITS (ctlt1);\n\\d+ ctlt1_inh\nSELECT description FROM pg_description, pg_constraint c WHERE classoid = 'pg_constraint'::regclass AND objoid = c.oid AND c.conrelid = 'ctlt1_inh'::regclass;\nCREATE TABLE ctlt13_inh () INHERITS (ctlt1, ctlt3);\n\\d+ ctlt13_inh\nCREATE TABLE ctlt13_like (LIKE ctlt3 INCLUDING CONSTRAINTS INCLUDING INDEXES INCLUDING COMMENTS INCLUDING STORAGE) INHERITS (ctlt1);\n\\d+ ctlt13_like\nSELECT description FROM pg_description, pg_constraint c WHERE classoid = 'pg_constraint'::regclass AND objoid = c.oid AND c.conrelid = 'ctlt13_like'::regclass;\n\nCREATE TABLE ctlt_all (LIKE ctlt1 INCLUDING ALL);\n\\d+ ctlt_all\nSELECT c.relname, objsubid, description FROM pg_description, pg_index i, pg_class c WHERE classoid = 'pg_class'::regclass AND objoid = i.indexrelid AND c.oid = i.indexrelid AND i.indrelid = 'ctlt_all'::regclass ORDER BY c.relname, objsubid;\nSELECT s.stxname, objsubid, description FROM pg_description, pg_statistic_ext s WHERE classoid = 'pg_statistic_ext'::regclass AND objoid = s.oid AND s.stxrelid = 'ctlt_all'::regclass ORDER BY s.stxname, objsubid;\n\nCREATE TABLE inh_error1 () INHERITS (ctlt1, ctlt4);\nCREATE TABLE inh_error2 (LIKE ctlt4 INCLUDING STORAGE) INHERITS (ctlt1);\n\n-- Check that LIKE isn't confused by a system catalog of the same name\nCREATE TABLE pg_attrdef (LIKE ctlt1 INCLUDING ALL)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "\\d+ public.pg_attrdef\nDROP TABLE public.pg_attrdef",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "-- Check that LIKE isn't confused when new table masks the old, either\nBEGIN;\nCREATE SCHEMA ctl_schema;\nSET LOCAL search_path = ctl_schema, public;\nCREATE TABLE ctlt1 (LIKE ctlt1 INCLUDING ALL);\n\\d+ ctlt1\nROLLBACK;\n\nDROP TABLE ctlt1, ctlt2, ctlt3, ctlt4, ctlt12_storage, ctlt12_comments, ctlt1_inh, ctlt13_inh, ctlt13_like, ctlt_all, ctla, ctlb CASCADE;\n\n-- LIKE must respect NO INHERIT property of constraints\nCREATE TABLE noinh_con_copy (a int CHECK (a > 0) NO INHERIT);\nCREATE TABLE noinh_con_copy1 (LIKE noinh_con_copy INCLUDING CONSTRAINTS);\n\\d noinh_con_copy1\n\n-- fail, as partitioned tables don't allow NO INHERIT constraints\nCREATE TABLE noinh_con_copy1_parted (LIKE noinh_con_copy INCLUDING ALL)\n  PARTITION BY LIST (a)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "DROP TABLE noinh_con_copy, noinh_con_copy1",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "/* LIKE with other relation kinds */\n\nCREATE TABLE ctlt4 (a int, b text)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE SEQUENCE ctlseq1",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE ctlt10 (LIKE ctlseq1)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "-- fail\n\nCREATE VIEW ctlv1 AS SELECT * FROM ctlt4",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE ctlt11 (LIKE ctlv1)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE ctlt11a (LIKE ctlv1 INCLUDING ALL)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TYPE ctlty1 AS (a int, b text)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "CREATE TABLE ctlt12 (LIKE ctlty1)",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "DROP SEQUENCE ctlseq1",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "DROP TYPE ctlty1",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "DROP VIEW ctlv1",
+            "name": "create_table_like.sql"
+        },
+        {
+            "query": "DROP TABLE IF EXISTS ctlt4, ctlt10, ctlt11, ctlt11a, ctlt12",
+            "name": "create_table_like.sql"
+        }
+    ]
+}

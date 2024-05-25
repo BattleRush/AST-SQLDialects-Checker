@@ -1,0 +1,93 @@
+{
+    "name": "02573_insert_null_as_default_null_as_empty_nested.sql",
+    "tests": [
+        {
+            "query": "-- { echo }\n--- ensure that input_format_null_as_default allow writes to Nullable columns too\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login Nullable(String))))', '{\"payload\" : {\"pull_request\": {\"merged_by\": {\"login\": \"root\"}}}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login Nullable(String))))', '{\"payload\" : {\"pull_request\": {\"merged_by\": null}}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\n--- tuple\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login String)))', '{\"payload\" : {\"pull_request\": {\"merged_by\": {\"login\": \"root\"}}}}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login String)))', '{\"payload\" : {\"pull_request\": {\"merged_by\": {\"login\": \"root\"}}}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login String)))', '{\"payload\" : {}}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login String)))', '{\"payload\" : {}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login String)))', '{\"payload\" : {\"pull_request\": {\"merged_by\": null}}}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": " -- { serverError CANNOT_PARSE_INPUT_ASSERTION_FAILED }\nselect * from format(JSONEachRow, 'payload Tuple(pull_request Tuple(merged_by Tuple(login String)))', '{\"payload\" : {\"pull_request\": {\"merged_by\": null}}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\n--- map\nset input_format_json_try_infer_named_tuples_from_objects=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nset input_format_json_read_objects_as_strings=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, '{\"payload\" : {\"pull_request\": {\"merged_by\": {\"login\": \"root\"}}}}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, '{\"payload\" : {\"pull_request\": {\"merged_by\": {\"login\": \"root\"}}}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Map(String, String)', '{\"payload\" : {}}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Map(String, String)', '{\"payload\" : {}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Map(String, Map(String, Map(String, String)))', '{\"payload\" : {\"pull_request\": {\"merged_by\": null}}}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": " -- { serverError CANNOT_PARSE_INPUT_ASSERTION_FAILED }\nselect * from format(JSONEachRow, 'payload Map(String, Map(String, Map(String, String)))', '{\"payload\" : {\"pull_request\": {\"merged_by\": null}}}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\n--- array\nselect * from format(JSONEachRow, 'payload Array(String)', '{\"payload\" : [\"root\"]}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Array(String)', '{\"payload\" : [\"root\"]}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Array(String)', '{\"payload\" : []}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Array(String)', '{\"payload\" : []}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": "\nselect * from format(JSONEachRow, 'payload Array(String)', '{\"payload\" : null}') settings input_format_null_as_default=0;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        },
+        {
+            "query": " -- { serverError CANNOT_READ_ARRAY_FROM_TEXT }\nselect * from format(JSONEachRow, 'payload Array(String)', '{\"payload\" : null}') settings input_format_null_as_default=1;",
+            "name": "02573_insert_null_as_default_null_as_empty_nested.sql"
+        }
+    ]
+}

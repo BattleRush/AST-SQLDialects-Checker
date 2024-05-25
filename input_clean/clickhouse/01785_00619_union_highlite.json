@@ -1,0 +1,33 @@
+{
+    "name": "00619_union_highlite.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS union;",
+            "name": "00619_union_highlite.sql"
+        },
+        {
+            "query": "\n\ncreate view union as select 1 as test union all select 2;",
+            "name": "00619_union_highlite.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM union ORDER BY test;",
+            "name": "00619_union_highlite.sql"
+        },
+        {
+            "query": "\n\nDETACH TABLE union;",
+            "name": "00619_union_highlite.sql"
+        },
+        {
+            "query": "\nATTACH TABLE union;",
+            "name": "00619_union_highlite.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM union ORDER BY test;",
+            "name": "00619_union_highlite.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE union;",
+            "name": "00619_union_highlite.sql"
+        }
+    ]
+}

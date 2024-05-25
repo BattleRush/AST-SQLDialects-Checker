@@ -1,0 +1,25 @@
+{
+    "name": "02983_empty_map.sql",
+    "tests": [
+        {
+            "query": "--https://github.com/ClickHouse/ClickHouse/issues/59402\nCREATE TABLE t1\n(\n    f1 Int32,\n    f2 Map(LowCardinality(String),LowCardinality(String)),\n    f3 Map(String,String),\n    f4 Map(Int32,Int32)\n)\nENGINE=Memory AS\nSELECT 1 as f1,\n       map(number%2,number%10) as f2,\n       f2 as f3,\n       f2 as f4\nfrom numbers(1000111);",
+            "name": "02983_empty_map.sql"
+        },
+        {
+            "query": "\n\nSET max_block_size=10;",
+            "name": "02983_empty_map.sql"
+        },
+        {
+            "query": "\n\n-- { echoOn }\nSELECT f1, f2['2'], count() FROM t1 GROUP BY 1,2 order by 1,2;",
+            "name": "02983_empty_map.sql"
+        },
+        {
+            "query": "\nSELECT f1, f3['2'], count() FROM t1 GROUP BY 1,2 order by 1,2;",
+            "name": "02983_empty_map.sql"
+        },
+        {
+            "query": "\nSELECT f1, f4[2], count() FROM t1 GROUP BY 1,2 order by 1,2;",
+            "name": "02983_empty_map.sql"
+        }
+    ]
+}

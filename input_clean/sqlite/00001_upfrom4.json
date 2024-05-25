@@ -1,0 +1,237 @@
+{
+    "name": "upfrom4",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "DROP TABLE IF EXISTS t5;"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "DROP TABLE IF EXISTS m1;"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "DROP TABLE IF EXISTS m2;"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "CREATE TABLE t5(a INTEGER PRIMARY KEY, b TEXT, c TEXT);"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "CREATE TABLE m1(x INTEGER PRIMARY KEY, y TEXT);"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "CREATE TABLE m2(u INTEGER PRIMARY KEY, v TEXT);"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO t5 VALUES(1, 'one', 'ONE');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO t5 VALUES(2, 'two', 'TWO');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO t5 VALUES(3, 'three', 'THREE');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO t5 VALUES(4, 'four', 'FOUR');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO m1 VALUES(1, 'i');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO m1 VALUES(2, 'ii');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO m1 VALUES(3, 'iii');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO m2 VALUES(1, 'I');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO m2 VALUES(3, 'II');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "INSERT INTO m2 VALUES(4, 'III');"
+        },
+        {
+            "name": "upfrom4-100",
+            "query": "SELECT * FROM t5;"
+        },
+        {
+            "name": "upfrom4-110",
+            "query": "BEGIN;"
+        },
+        {
+            "name": "upfrom4-110",
+            "query": "UPDATE t5 SET b=y, c=v FROM m1 LEFT JOIN m2 ON (x=u) WHERE x=a;"
+        },
+        {
+            "name": "upfrom4-110",
+            "query": "SELECT * FROM t5 ORDER BY a;"
+        },
+        {
+            "name": "upfrom4-110",
+            "query": "ROLLBACK;"
+        },
+        {
+            "name": "upfrom4-120",
+            "query": "BEGIN;"
+        },
+        {
+            "name": "upfrom4-120",
+            "query": "UPDATE t5 SET b=y, c=v FROM m2 RIGHT JOIN m1 ON (x=u) WHERE x=a;"
+        },
+        {
+            "name": "upfrom4-120",
+            "query": "SELECT * FROM t5 ORDER BY a;"
+        },
+        {
+            "name": "upfrom4-120",
+            "query": "ROLLBACK;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "CREATE TABLE t1(a INT PRIMARY KEY, b INT, c INT);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "INSERT INTO t1(a) VALUES(1),(2),(8),(19);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "CREATE TABLE c1(x INTEGER PRIMARY KEY, b INT);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "INSERT INTO c1(x,b) VALUES(1,1),(8,8),(17,17),(NULL,NULL);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "CREATE TABLE c2(x INT,c INT);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "INSERT INTO c2(x,c) VALUES(2,2),(8,8),(NULL,NULL);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "CREATE TABLE dual(dummy TEXT);"
+        },
+        {
+            "name": "upfrom4-200",
+            "query": "INSERT INTO dual VALUES('X');"
+        },
+        {
+            "name": "upfrom4-210",
+            "query": "BEGIN;"
+        },
+        {
+            "name": "upfrom4-210",
+            "query": "SELECT * FROM t1 ORDER BY a;"
+        },
+        {
+            "name": "upfrom4-210",
+            "query": "UPDATE t1 SET b=c1.b, c=c2.c\nFROM dual, c1 NATURAL RIGHT JOIN c2\nWHERE x=a;"
+        },
+        {
+            "name": "upfrom4-210",
+            "query": "SELECT * FROM t1 ORDER BY a;"
+        },
+        {
+            "name": "upfrom4-210",
+            "query": "ROLLBACK;"
+        },
+        {
+            "name": "upfrom4-300",
+            "query": "CREATE TABLE t2(x);"
+        },
+        {
+            "name": "upfrom4-300",
+            "query": "CREATE TRIGGER AFTER INSERT ON t2 BEGIN\nUPDATE t1 SET b=c1.b, c=c2.c\nFROM dual, c1 NATURAL RIGHT JOIN c2\nWHERE x=a;"
+        },
+        {
+            "name": "upfrom4-300",
+            "query": "END;"
+        },
+        {
+            "name": "upfrom4-310",
+            "query": "BEGIN;"
+        },
+        {
+            "name": "upfrom4-310",
+            "query": "SELECT * FROM t1 ORDER BY a;"
+        },
+        {
+            "name": "upfrom4-310",
+            "query": "INSERT INTO t2(x) VALUES(1);"
+        },
+        {
+            "name": "upfrom4-310",
+            "query": "SELECT * FROM t1 ORDER BY a;"
+        },
+        {
+            "name": "upfrom4-310",
+            "query": "ROLLBACK;"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "CREATE TABLE t2(x,y,z PRIMARY KEY) WITHOUT ROWID;"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "INSERT INTO t2 VALUES(89,-89,6);"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "CREATE TABLE t1(a INT,b TEXT,c TEXT,d REAL) STRICT;"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "INSERT INTO t1 VALUES(1,'xyz','def',4.5);"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "CREATE TRIGGER t1tr BEFORE UPDATE ON t1 BEGIN\nINSERT INTO t1(a,b) VALUES(1000,'uvw');"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "UPDATE t1 SET b=NULL FROM (SELECT CAST(a AS varchar) FROM t1 ORDER BY b) NATURAL LEFT FULL JOIN t1 AS text;"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "END;"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "UPDATE t1 SET b=b|100;"
+        },
+        {
+            "name": "upfrom4-400",
+            "query": "SELECT * FROM t1 ORDER BY a;"
+        }
+    ]
+}

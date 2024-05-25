@@ -1,0 +1,45 @@
+{
+    "name": "01514_empty_buffer_different_types.sql",
+    "tests": [
+        {
+            "query": "set send_logs_level = 'error';",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS merge_tree_table1;",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\nCREATE TABLE merge_tree_table1 (`s` LowCardinality(String), x UInt32) ENGINE = MergeTree ORDER BY x settings index_granularity = 1;",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\nCREATE TABLE buffer_table1 ( `s` String , x UInt32) ENGINE = Buffer(currentDatabase(), 'merge_tree_table1', 16, 10, 60, 10, 1000, 1048576, 2097152);",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\nSELECT s FROM buffer_table1;",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\n\ninsert into merge_tree_table1 values ('a', 1);",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\nselect s from buffer_table1 where x = 1;",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\nselect s from buffer_table1 where x = 2;",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS merge_tree_table1;",
+            "name": "01514_empty_buffer_different_types.sql"
+        },
+        {
+            "query": "\nDROP TABLE buffer_table1;",
+            "name": "01514_empty_buffer_different_types.sql"
+        }
+    ]
+}

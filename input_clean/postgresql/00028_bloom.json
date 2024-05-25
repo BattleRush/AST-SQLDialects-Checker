@@ -1,0 +1,233 @@
+{
+    "name": "bloom.sql",
+    "tests": [
+        {
+            "query": "CREATE EXTENSION bloom",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "CREATE TABLE tst (\n\ti\tint4,\n\tt\ttext\n)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "INSERT INTO tst SELECT i%10, substr(encode(sha256(i::text::bytea), 'hex'), 1, 1) FROM generate_series(1,2000) i",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "CREATE INDEX bloomidx ON tst USING bloom (i, t) WITH (col1 = 3)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "ALTER INDEX bloomidx SET (length=80)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_seqscan=on",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_bitmapscan=off",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_indexscan=off",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_seqscan=off",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_bitmapscan=on",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_indexscan=on",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF) SELECT count(*) FROM tst WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF) SELECT count(*) FROM tst WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF) SELECT count(*) FROM tst WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "DELETE FROM tst",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "INSERT INTO tst SELECT i%10, substr(encode(sha256(i::text::bytea), 'hex'), 1, 1) FROM generate_series(1,2000) i",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "VACUUM ANALYZE tst",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "DELETE FROM tst WHERE i > 1 OR t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "VACUUM tst",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "INSERT INTO tst SELECT i%10, substr(encode(sha256(i::text::bytea), 'hex'), 1, 1) FROM generate_series(1,2000) i",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "VACUUM FULL tst",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tst WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "-- Try an unlogged table too\n\nCREATE UNLOGGED TABLE tstu (\n\ti\tint4,\n\tt\ttext\n)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "INSERT INTO tstu SELECT i%10, substr(encode(sha256(i::text::bytea), 'hex'), 1, 1) FROM generate_series(1,2000) i",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "CREATE INDEX bloomidxu ON tstu USING bloom (i, t) WITH (col2 = 4)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_seqscan=off",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_bitmapscan=on",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SET enable_indexscan=on",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF) SELECT count(*) FROM tstu WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF) SELECT count(*) FROM tstu WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "EXPLAIN (COSTS OFF) SELECT count(*) FROM tstu WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tstu WHERE i = 7",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tstu WHERE t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT count(*) FROM tstu WHERE i = 7 AND t = '5'",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "RESET enable_seqscan",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "RESET enable_bitmapscan",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "RESET enable_indexscan",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "-- Run amvalidator function on our opclasses\nSELECT opcname, amvalidate(opc.oid)\nFROM pg_opclass opc JOIN pg_am am ON am.oid = opcmethod\nWHERE amname = 'bloom'\nORDER BY 1",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "--\n-- relation options\n--\nDROP INDEX bloomidx",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "CREATE INDEX bloomidx ON tst USING bloom (i, t) WITH (length=7, col1=4)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "SELECT reloptions FROM pg_class WHERE oid = 'bloomidx'::regclass",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "-- check for min and max values\n\\set VERBOSITY terse\nCREATE INDEX bloomidx2 ON tst USING bloom (i, t) WITH (length=0)",
+            "name": "bloom.sql"
+        },
+        {
+            "query": "CREATE INDEX bloomidx2 ON tst USING bloom (i, t) WITH (col1=0)",
+            "name": "bloom.sql"
+        }
+    ]
+}

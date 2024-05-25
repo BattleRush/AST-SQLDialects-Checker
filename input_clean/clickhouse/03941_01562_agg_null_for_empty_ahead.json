@@ -1,0 +1,89 @@
+{
+    "name": "01562_agg_null_for_empty_ahead.sql",
+    "tests": [
+        {
+            "query": "SELECT sumMerge(s) FROM (SELECT sumState(number) s FROM numbers(0));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\nSELECT sumMerge(s) FROM (SELECT sumState(number) s FROM numbers(1));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumMerge(s) FROM (SELECT sumMergeState(n) s FROM (SELECT sumState(number) n FROM numbers(0)));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\nSELECT sumMerge(s) FROM (SELECT sumMergeState(n) s FROM (SELECT sumState(number) n FROM numbers(1)));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumIf(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumIf(1, 1);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\n-- should return Null even if we donn't set aggregate_functions_null_for_empty\nSELECT sumIfOrNull(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\nSELECT sumOrNullIf(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT nullIf(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT nullIf(1, 1);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSET aggregate_functions_null_for_empty=1;",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumMerge(s) FROM (SELECT sumState(number) s FROM numbers(0));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\nSELECT sumMerge(s) FROM (SELECT sumState(number) s FROM numbers(1));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumMerge(s) FROM (SELECT sumMergeState(n) s FROM (SELECT sumState(number) n FROM numbers(0)));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\nSELECT sumMerge(s) FROM (SELECT sumMergeState(n) s FROM (SELECT sumState(number) n FROM numbers(1)));",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumIf(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumIf(1, 1);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT sumIfOrNull(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\nSELECT sumOrNullIf(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT nullIf(1, 0);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        },
+        {
+            "query": "\n\nSELECT nullIf(1, 1);",
+            "name": "01562_agg_null_for_empty_ahead.sql"
+        }
+    ]
+}

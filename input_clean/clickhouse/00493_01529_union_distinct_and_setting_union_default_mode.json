@@ -1,0 +1,129 @@
+{
+    "name": "01529_union_distinct_and_setting_union_default_mode.sql",
+    "tests": [
+        {
+            "query": "SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSET union_default_mode='DISTINCT';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\n(((((((SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\n(((((((SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'a' UNION ALL SELECT 'a' UNION ALL SELECT 'a' UNION SELECT 'a';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'a' UNION ALL (SELECT 'a' UNION ALL SELECT 'a' UNION SELECT 'a');",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'a' UNION SELECT 'a' UNION SELECT 'a' UNION ALL SELECT'a';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION SELECT 1 UNION SELECT 1 UNION ALL SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'all' UNION SELECT 'all' UNION ALL SELECT 'all';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION SELECT 1 UNION SELECT 1 UNION DISTINCT SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION SELECT 1 UNION ALL SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION (SELECT 1 UNION ALL SELECT 1 UNION SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1);",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION  ALL (SELECT 1 UNION ALL SELECT 1 UNION SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1);",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1)))))));",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL SELECT 1)))))));",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM (SELECT 1 UNION ALL (SELECT 1 UNION SELECT 1 UNION ALL (SELECT 1 UNION ALL SELECT 1)));",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSET union_default_mode='ALL';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\n(((((((SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1) UNION SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\n(((((((SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1) UNION ALL SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'a' UNION ALL SELECT 'a' UNION ALL SELECT 'a' UNION SELECT 'a';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'a' UNION ALL (SELECT 'a' UNION ALL SELECT 'a' UNION SELECT 'a');",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'a' UNION SELECT 'a' UNION SELECT 'a' UNION ALL SELECT'a';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION SELECT 1 UNION SELECT 1 UNION ALL SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 'all' UNION SELECT 'all' UNION ALL SELECT 'all';",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION SELECT 1 UNION SELECT 1 UNION DISTINCT SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION SELECT 1 UNION ALL SELECT 1;",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION (SELECT 1 UNION ALL SELECT 1 UNION SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1);",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION  ALL (SELECT 1 UNION ALL SELECT 1 UNION SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1);",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1 UNION (SELECT 1)))))));",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL (SELECT 1 UNION ALL(SELECT 1 UNION ALL (SELECT 1 UNION ALL SELECT 1)))))));",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM (SELECT 1 UNION ALL (SELECT 1 UNION SELECT 1 UNION ALL (SELECT 1 UNION ALL SELECT 1)));",
+            "name": "01529_union_distinct_and_setting_union_default_mode.sql"
+        }
+    ]
+}

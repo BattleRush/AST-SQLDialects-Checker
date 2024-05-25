@@ -1,0 +1,17 @@
+{
+    "name": "00990_metric_log_table_not_empty.sql",
+    "tests": [
+        {
+            "query": "select sleep(2) format Null;",
+            "name": "00990_metric_log_table_not_empty.sql"
+        },
+        {
+            "query": " --More than collect_interval_milliseconds\n\nsystem flush logs;",
+            "name": "00990_metric_log_table_not_empty.sql"
+        },
+        {
+            "query": "\n\nselect count()>0 from system.metric_log\n;",
+            "name": "00990_metric_log_table_not_empty.sql"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "name": "00570_empty_array_is_const.sql",
+    "tests": [
+        {
+            "query": "SELECT dumpColumnStructure([]);",
+            "name": "00570_empty_array_is_const.sql"
+        },
+        {
+            "query": "\nSELECT dumpColumnStructure([[[]]]);",
+            "name": "00570_empty_array_is_const.sql"
+        },
+        {
+            "query": "\nSELECT DISTINCT dumpColumnStructure([[], [1]]) FROM numbers(2);",
+            "name": "00570_empty_array_is_const.sql"
+        }
+    ]
+}

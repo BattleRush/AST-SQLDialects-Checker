@@ -1,0 +1,169 @@
+{
+    "name": "tid.sql",
+    "tests": [
+        {
+            "query": "-- basic tests for the TID data type\n\nSELECT\n  '(0,0)'::tid as tid00,\n  '(0,1)'::tid as tid01,\n  '(-1,0)'::tid as tidm10,\n  '(4294967295,65535)'::tid as tidmax",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT '(4294967296,1)'::tid",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- error\nSELECT '(1,65536)'::tid",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- error\n\n-- Also try it with non-error-throwing API\nSELECT pg_input_is_valid('(0)', 'tid')",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT * FROM pg_input_error_info('(0)', 'tid')",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT pg_input_is_valid('(0,-1)', 'tid')",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT * FROM pg_input_error_info('(0,-1)', 'tid')",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- tests for functions related to TID handling\n\nCREATE TABLE tid_tab (a int)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- min() and max() for TIDs\nINSERT INTO tid_tab VALUES (1), (2)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT min(ctid) FROM tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT max(ctid) FROM tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "TRUNCATE tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- Tests for currtid2() with various relation kinds\n\n-- Materialized view\nCREATE MATERIALIZED VIEW tid_matview AS SELECT a FROM tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_matview'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- fails\nINSERT INTO tid_tab VALUES (1)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "REFRESH MATERIALIZED VIEW tid_matview",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_matview'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- ok\nDROP MATERIALIZED VIEW tid_matview",
+            "name": "tid.sql"
+        },
+        {
+            "query": "TRUNCATE tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- Sequence\nCREATE SEQUENCE tid_seq",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_seq'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- ok\nDROP SEQUENCE tid_seq",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- Index, fails with incorrect relation type\nCREATE INDEX tid_ind ON tid_tab(a)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_ind'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- fails\nDROP INDEX tid_ind",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- Partitioned table, no storage\nCREATE TABLE tid_part (a int) PARTITION BY RANGE (a)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_part'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- fails\nDROP TABLE tid_part",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- Views\n-- ctid not defined in the view\nCREATE VIEW tid_view_no_ctid AS SELECT a FROM tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_view_no_ctid'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- fails\nDROP VIEW tid_view_no_ctid",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- ctid fetched directly from the source table.\nCREATE VIEW tid_view_with_ctid AS SELECT ctid, a FROM tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_view_with_ctid'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- fails\nINSERT INTO tid_tab VALUES (1)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_view_with_ctid'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- ok\nDROP VIEW tid_view_with_ctid",
+            "name": "tid.sql"
+        },
+        {
+            "query": "TRUNCATE tid_tab",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- ctid attribute with incorrect data type\nCREATE VIEW tid_view_fake_ctid AS SELECT 1 AS ctid, 2 AS a",
+            "name": "tid.sql"
+        },
+        {
+            "query": "SELECT currtid2('tid_view_fake_ctid'::text, '(0,1)'::tid)",
+            "name": "tid.sql"
+        },
+        {
+            "query": "-- fails\nDROP VIEW tid_view_fake_ctid",
+            "name": "tid.sql"
+        },
+        {
+            "query": "DROP TABLE tid_tab CASCADE",
+            "name": "tid.sql"
+        }
+    ]
+}

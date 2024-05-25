@@ -1,0 +1,17 @@
+{
+    "name": "02554_format_json_columns_for_empty.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS json_columns;",
+            "name": "02554_format_json_columns_for_empty.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE json_columns (n UInt32, s String) ENGINE = MergeTree order by n;",
+            "name": "02554_format_json_columns_for_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM json_columns FORMAT JSONColumns;",
+            "name": "02554_format_json_columns_for_empty.sql"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "name": "02410_csv_empty_fields_inference.sql",
+    "tests": [
+        {
+            "query": "desc format(CSV, ',,,');",
+            "name": "02410_csv_empty_fields_inference.sql"
+        },
+        {
+            "query": "\ndesc format(CSV, '123,,abv,')\n;",
+            "name": "02410_csv_empty_fields_inference.sql"
+        }
+    ]
+}

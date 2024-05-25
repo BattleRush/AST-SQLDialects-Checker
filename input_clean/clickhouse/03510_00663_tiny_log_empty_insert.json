@@ -1,0 +1,45 @@
+{
+    "name": "00663_tiny_log_empty_insert.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS empty;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS data;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE empty (value Int8) ENGINE = TinyLog;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\nCREATE TABLE data (value Int8) ENGINE = TinyLog;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data SELECT * FROM empty;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\nSELECT * FROM data;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data SELECT 1;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\nSELECT * FROM data;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE empty;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        },
+        {
+            "query": "\nDROP TABLE data;",
+            "name": "00663_tiny_log_empty_insert.sql"
+        }
+    ]
+}

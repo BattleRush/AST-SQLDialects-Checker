@@ -1,0 +1,35 @@
+{
+    "name": "test_pk_multi_column.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER, j VARCHAR, PRIMARY KEY(i, j))",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (3, 'hello'), (3, 'world')",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6, 'bla'), (3, 'hello');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (6, 'bla');",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM integers",
+            "expected_result": ""
+        }
+    ]
+}

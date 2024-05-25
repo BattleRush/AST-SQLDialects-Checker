@@ -1,0 +1,25 @@
+{
+    "name": "01030_final_mark_empty_primary_key.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS empty_pk;",
+            "name": "01030_final_mark_empty_primary_key.sql"
+        },
+        {
+            "query": "\nCREATE TABLE empty_pk (x UInt64) ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 256, index_granularity_bytes = '10Mi';",
+            "name": "01030_final_mark_empty_primary_key.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO empty_pk SELECT number FROM numbers(100000);",
+            "name": "01030_final_mark_empty_primary_key.sql"
+        },
+        {
+            "query": "\n\nSELECT sum(x) from empty_pk;",
+            "name": "01030_final_mark_empty_primary_key.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE empty_pk;",
+            "name": "01030_final_mark_empty_primary_key.sql"
+        }
+    ]
+}

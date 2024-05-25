@@ -1,0 +1,173 @@
+{
+    "name": "01290_empty_array_index_analysis.sql",
+    "tests": [
+        {
+            "query": "drop table if exists count_lc_test;",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE count_lc_test\n(\n    `s` LowCardinality(String),\n    `arr` Array(LowCardinality(String)),\n    `num` UInt64\n)\nENGINE = MergeTree\nORDER BY (s, arr);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO count_lc_test(num, arr) VALUES (1,[]),(2,['a']),(3,['a','b','c']),(4,['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nSELECT '--- notEmpty';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where notEmpty(arr);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- empty';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where empty(arr);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- = []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr = [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- != []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr != [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- > []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr > [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- < []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr < [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- >= []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr >= [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- <= []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr <= [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '---';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE count_lc_test;",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\n\ndrop table if exists count_lc_test;",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE count_lc_test\n(\n    `s` LowCardinality(String),\n    `arr` Array(String),\n    `num` UInt64\n)\nENGINE = MergeTree\nORDER BY (s, arr);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO count_lc_test(num, arr) VALUES (1,[]),(2,['a']),(3,['a','b','c']),(4,['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nSELECT '--- notEmpty';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where notEmpty(arr);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- empty';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where empty(arr);",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- = []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr = [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- != []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr != [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- > []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr > [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- < []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr < [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- >= []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr >= [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '--- <= []';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nselect * from count_lc_test where arr <= [];",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\nSELECT '---';",
+            "name": "01290_empty_array_index_analysis.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE count_lc_test;",
+            "name": "01290_empty_array_index_analysis.sql"
+        }
+    ]
+}

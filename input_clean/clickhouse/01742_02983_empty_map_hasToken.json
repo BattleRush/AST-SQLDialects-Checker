@@ -1,0 +1,65 @@
+{
+    "name": "02983_empty_map_hasToken.sql",
+    "tests": [
+        {
+            "query": "-- https://github.com/ClickHouse/ClickHouse/issues/60223\n\nCREATE TABLE test\n(\n    t String,\n    id String,\n    h Map(String, String)   \n)\nENGINE = MergeTree\nORDER BY (t, id) SETTINGS index_granularity = 4096 ;",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\n\ninsert into test values ('xxx', 'x', {'content-type':'text/plain','user-agent':'bulk-tests'});",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\ninsert into test values ('xxx', 'y', {'content-type':'application/json','user-agent':'bulk-tests'});",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\ninsert into test select 'xxx', number, map('content-type', 'x' ) FROM numbers(1e2);",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\n\noptimize table test final;",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\n\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'bulk')  WHERE hasToken(h['user-agent'], 'tests') and t = 'xxx';",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'tests') WHERE hasToken(h['user-agent'], 'bulk')  and t = 'xxx';",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test WHERE hasToken(h['user-agent'], 'bulk') and hasToken(h['user-agent'], 'tests') and t = 'xxx';",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'bulk') and hasToken(h['user-agent'], 'tests') and t = 'xxx';",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'bulk') and hasToken(h['user-agent'], 'tests') WHERE t = 'xxx';",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'tests') and hasToken(h['user-agent'], 'bulk') WHERE t = 'xxx';",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'tests') and hasToken(h['user-agent'], 'bulk');",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'bulk') and hasToken(h['user-agent'], 'tests');",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test WHERE hasToken(h['user-agent'], 'tests') and hasToken(h['user-agent'], 'bulk');",
+            "name": "02983_empty_map_hasToken.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM test WHERE hasToken(h['user-agent'], 'bulk') and hasToken(h['user-agent'], 'tests');",
+            "name": "02983_empty_map_hasToken.sql"
+        }
+    ]
+}

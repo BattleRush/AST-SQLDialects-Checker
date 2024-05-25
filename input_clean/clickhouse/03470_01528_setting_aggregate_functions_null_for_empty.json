@@ -1,0 +1,101 @@
+{
+    "name": "01528_setting_aggregate_functions_null_for_empty.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE defaults\n(\n\tn Int8\n)ENGINE = Memory();",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT sum(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT sumOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT count(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT countOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSET aggregate_functions_null_for_empty=1;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT sum(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT sumOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT count(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT countOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO defaults SELECT * FROM numbers(10);",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSET aggregate_functions_null_for_empty=0;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT sum(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT sumOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT count(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT countOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSET aggregate_functions_null_for_empty=1;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nSELECT sum(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT sumOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT count(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\nSELECT countOrNull(n) FROM defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\n\nEXPLAIN SYNTAX SELECT sumIf(1, number > 0) FROM numbers(10) WHERE 0;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE defaults;",
+            "name": "01528_setting_aggregate_functions_null_for_empty.sql"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "name": "01430_moving_sum_empty_state.sql",
+    "tests": [
+        {
+            "query": "SELECT groupArrayMovingSum(10)(0) FROM remote('127.0.0.{1,2}', numbers(0))\n;",
+            "name": "01430_moving_sum_empty_state.sql"
+        }
+    ]
+}

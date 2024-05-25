@@ -1,0 +1,13 @@
+{
+    "name": "00073_merge_sorting_empty_array_joined.sql",
+    "tests": [
+        {
+            "query": "SET max_block_size = 1;",
+            "name": "00073_merge_sorting_empty_array_joined.sql"
+        },
+        {
+            "query": "\nSELECT number, arr FROM (SELECT number, arrayFilter(x -> x = 0, [1]) AS arr FROM system.numbers LIMIT 10) ARRAY JOIN arr ORDER BY number;",
+            "name": "00073_merge_sorting_empty_array_joined.sql"
+        }
+    ]
+}

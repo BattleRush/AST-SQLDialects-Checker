@@ -1,0 +1,13 @@
+{
+    "name": "00144_empty_regexp.sql",
+    "tests": [
+        {
+            "query": "SELECT match(materialize('Hello'), '');",
+            "name": "00144_empty_regexp.sql"
+        },
+        {
+            "query": "\nSELECT match('Hello', '');",
+            "name": "00144_empty_regexp.sql"
+        }
+    ]
+}

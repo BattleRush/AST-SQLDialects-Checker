@@ -1,0 +1,49 @@
+{
+    "name": "00071_insert_fewer_columns.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS insert_fewer_columns;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nCREATE TABLE insert_fewer_columns (a UInt8, b UInt8) ENGINE = Memory;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nINSERT INTO insert_fewer_columns (a) VALUES (1), (2);",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nSELECT * FROM insert_fewer_columns;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\n\n-- Test position arguments in insert.\nDROP TABLE IF EXISTS insert_fewer_columns_2;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nCREATE TABLE insert_fewer_columns_2 (b UInt8, a UInt8) ENGINE = Memory;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nINSERT INTO insert_fewer_columns_2 SELECT * FROM insert_fewer_columns;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nSELECT a, b FROM insert_fewer_columns;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nSELECT a, b FROM insert_fewer_columns_2;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS insert_fewer_columns_2;",
+            "name": "00071_insert_fewer_columns.sql"
+        },
+        {
+            "query": "\nDROP TABLE insert_fewer_columns;",
+            "name": "00071_insert_fewer_columns.sql"
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+    "name": "01720_engine_file_empty_if_not_exists.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS file_engine_table;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE file_engine_table (id UInt32) ENGINE=File(TSV);",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM file_engine_table;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": " --{ serverError 107 }\n\nSET engine_file_empty_if_not_exists=0;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM file_engine_table;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": " --{ serverError 107 }\n\nSET engine_file_empty_if_not_exists=1;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": "\n\nSELECT * FROM file_engine_table;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": "\n\nSET engine_file_empty_if_not_exists=0;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        },
+        {
+            "query": "\nDROP TABLE file_engine_table;",
+            "name": "01720_engine_file_empty_if_not_exists.sql"
+        }
+    ]
+}

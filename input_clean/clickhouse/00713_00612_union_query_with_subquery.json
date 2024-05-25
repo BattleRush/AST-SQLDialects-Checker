@@ -1,0 +1,17 @@
+{
+    "name": "00612_union_query_with_subquery.sql",
+    "tests": [
+        {
+            "query": "SELECT * FROM ((SELECT * FROM system.numbers LIMIT 1) UNION ALL SELECT * FROM system.numbers LIMIT 2 UNION ALL (SELECT * FROM system.numbers LIMIT 3)) ORDER BY number;",
+            "name": "00612_union_query_with_subquery.sql"
+        },
+        {
+            "query": "\nSELECT * FROM (SELECT * FROM system.numbers LIMIT 1 UNION ALL (SELECT * FROM system.numbers LIMIT 2 UNION ALL (SELECT * FROM system.numbers LIMIT 3))) ORDER BY number;",
+            "name": "00612_union_query_with_subquery.sql"
+        },
+        {
+            "query": "\nselect count() from view(select 1 union all (select 2 union all select 3));",
+            "name": "00612_union_query_with_subquery.sql"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "name": "01497_extract_all_groups_empty_match.sql",
+    "tests": [
+        {
+            "query": "SELECT extractAllGroupsVertical('@#$%^&*', '(\\w*)');",
+            "name": "01497_extract_all_groups_empty_match.sql"
+        },
+        {
+            "query": "\nSELECT extractAllGroupsHorizontal('@#$%^&*', '(\\w*)');",
+            "name": "01497_extract_all_groups_empty_match.sql"
+        }
+    ]
+}

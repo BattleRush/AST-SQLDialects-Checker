@@ -1,0 +1,125 @@
+{
+    "name": "test_distinct_on.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "PRAGMA enable_verification",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "CREATE TABLE integers(i INTEGER, j INTEGER, k INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integers VALUES (2, 3, 5), (4, 5, 6), (2, 7, 6)",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (i) i, j FROM integers WHERE i <> 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (j) i, j FROM integers WHERE i <> 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (j, i) i, j FROM integers WHERE i <> 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (j + 1, i * 3) i, j FROM integers WHERE i <> 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (1) i, j FROM integers ORDER BY i",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (1) i, j FROM integers ORDER BY i LIMIT 1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (1) i, j FROM integers ORDER BY i LIMIT 1 OFFSET 1",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (2) i, j FROM integers ORDER BY 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (2) j, k FROM integers ORDER BY 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (3) i, j, k FROM integers ORDER BY 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (3) i, j, k FROM integers ORDER BY 3",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (2) j, (SELECT i FROM integers) FROM integers ORDER BY 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (2) j, (SELECT DISTINCT ON (i) i FROM integers ORDER BY 1) FROM integers ORDER BY 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (i) i, j FROM integers ORDER BY j",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT * FROM (SELECT DISTINCT ON (i) i, j FROM integers) tbl1 WHERE i <> 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (i) i, j FROM integers ORDER BY k",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (i) i, j, k FROM integers ORDER BY k",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (integers.i) i, j FROM integers ORDER BY 1, 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (i) integers.i, integers.j FROM integers ORDER BY 1, 2",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (integers.i) integers.i, integers.j FROM integers ORDER BY i, j",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT DISTINCT ON (2) i FROM integers",
+            "expected_result": ""
+        }
+    ]
+}

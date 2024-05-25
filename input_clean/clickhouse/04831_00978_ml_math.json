@@ -1,0 +1,9 @@
+{
+    "name": "00978_ml_math.sql",
+    "tests": [
+        {
+            "query": "SELECT\n    round(sigmoid(x), 5), round(sigmoid(toFloat32(x)), 5), round(sigmoid(toFloat64(x)), 5),\n    round(tanh(x), 5), round(TANH(toFloat32(x)), 5), round(TANh(toFloat64(x)), 5)\nFROM (SELECT arrayJoin([-1, 0, 1]) AS x);",
+            "name": "00978_ml_math.sql"
+        }
+    ]
+}

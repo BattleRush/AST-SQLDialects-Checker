@@ -1,0 +1,41 @@
+{
+    "name": "01136_multiple_sets.sql",
+    "tests": [
+        {
+            "query": "drop table if exists test;",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\n\ncreate table test (project LowCardinality(String)) engine=MergeTree() order by project;",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\ninsert into test values ('val1'), ('val2'), ('val3');",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\n\nselect sum(project in ('val1', 'val2')) from test;",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\nset force_primary_key = 1;",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\nselect sum(project in ('val1', 'val2')) from test where project in ('val1', 'val2');",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\nselect count() from test where project in ('val1', 'val2');",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\nselect project in ('val1', 'val2') from test where project in ('val1', 'val2');",
+            "name": "01136_multiple_sets.sql"
+        },
+        {
+            "query": "\n\ndrop table test;",
+            "name": "01136_multiple_sets.sql"
+        }
+    ]
+}

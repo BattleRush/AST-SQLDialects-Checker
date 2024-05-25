@@ -1,0 +1,69 @@
+{
+    "name": "00145_empty_likes.sql",
+    "tests": [
+        {
+            "query": "SELECT materialize('Hello') LIKE '';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '%%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '%%%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '%_%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '_';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '_%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT materialize('Hello') LIKE '%_';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\n\nSELECT 'Hello' LIKE '';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '%%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '%%%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '%_%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '_';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '_%';",
+            "name": "00145_empty_likes.sql"
+        },
+        {
+            "query": "\nSELECT 'Hello' LIKE '%_';",
+            "name": "00145_empty_likes.sql"
+        }
+    ]
+}

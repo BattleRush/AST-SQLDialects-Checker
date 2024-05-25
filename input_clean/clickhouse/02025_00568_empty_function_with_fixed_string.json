@@ -1,0 +1,33 @@
+{
+    "name": "00568_empty_function_with_fixed_string.sql",
+    "tests": [
+        {
+            "query": "SELECT toFixedString('', 4) AS str, empty(str) AS is_empty;",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        },
+        {
+            "query": "\nSELECT toFixedString('\\0abc', 4) AS str, empty(str) AS is_empty;",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE IF EXISTS defaulted;",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        },
+        {
+            "query": "\nCREATE TABLE defaulted (v6 FixedString(16)) ENGINE=Memory;",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        },
+        {
+            "query": "\nINSERT INTO defaulted SELECT toFixedString('::0', 16) FROM numbers(32768);",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        },
+        {
+            "query": "\nSELECT count(), notEmpty(v6) e FROM defaulted GROUP BY e;",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        },
+        {
+            "query": "\nDROP TABLE defaulted;",
+            "name": "00568_empty_function_with_fixed_string.sql"
+        }
+    ]
+}

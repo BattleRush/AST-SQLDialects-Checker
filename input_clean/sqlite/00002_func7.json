@@ -1,0 +1,301 @@
+{
+    "name": "func7",
+    "tests": [
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        },
+        {
+            "name": "func7-100",
+            "query": "SELECT ceil(99.9), ceiling(-99.01), floor(17), floor(-17.99);"
+        },
+        {
+            "name": "func7-110",
+            "query": "SELECT quote(ceil(NULL)), ceil('-99.99');"
+        },
+        {
+            "name": "func7-200",
+            "query": "SELECT round(ln(5),2), log(100.0), log(100), log(2,'256');"
+        },
+        {
+            "name": "func7-210",
+            "query": "SELECT ln(-5), log(-5,100.0);"
+        },
+        {
+            "name": "func7-pg-100",
+            "query": "SELECT abs(-17.4);"
+        },
+        {
+            "name": "func7-pg-110",
+            "query": "SELECT ceil(42.2);"
+        },
+        {
+            "name": "func7-pg-120",
+            "query": "SELECT ceil(-42.2);"
+        },
+        {
+            "name": "func7-pg-130",
+            "query": "SELECT round(exp(1.0),7);"
+        },
+        {
+            "name": "func7-pg-140",
+            "query": "SELECT floor(42.8);"
+        },
+        {
+            "name": "func7-pg-150",
+            "query": "SELECT floor(-42.8);"
+        },
+        {
+            "name": "func7-pg-160",
+            "query": "SELECT round(ln(2.0),7);"
+        },
+        {
+            "name": "func7-pg-170",
+            "query": "SELECT log(100.0);"
+        },
+        {
+            "name": "func7-pg-180",
+            "query": "SELECT log10(1000.0);"
+        },
+        {
+            "name": "func7-pg-181",
+            "query": "SELECT format('%.30f', log10(100.0) );"
+        },
+        {
+            "name": "func7-pg-182",
+            "query": "SELECT format('%.30f', ln(exp(2.0)) );"
+        },
+        {
+            "name": "func7-pg-190",
+            "query": "SELECT log(2.0, 64.0);"
+        },
+        {
+            "name": "func7-pg-200",
+            "query": "SELECT mod(9,4);"
+        },
+        {
+            "name": "func7-pg-210",
+            "query": "SELECT round(pi(),7);"
+        },
+        {
+            "name": "func7-pg-220",
+            "query": "SELECT power(9,3);"
+        },
+        {
+            "name": "func7-pg-230",
+            "query": "SELECT round(radians(45.0),7);"
+        },
+        {
+            "name": "func7-pg-240",
+            "query": "SELECT round(42.4);"
+        },
+        {
+            "name": "func7-pg-250",
+            "query": "SELECT round(42.4382,2);"
+        },
+        {
+            "name": "func7-pg-260",
+            "query": "SELECT sign(-8.4);"
+        },
+        {
+            "name": "func7-pg-270",
+            "query": "SELECT round( sqrt(2), 7);"
+        },
+        {
+            "name": "func7-pg-280",
+            "query": "SELECT trunc(42.8), trunc(-42.8);"
+        },
+        {
+            "name": "func7-pg-300",
+            "query": "SELECT acos(1);"
+        },
+        {
+            "name": "func7-pg-301",
+            "query": "SELECT degrees(acos(0.5));"
+        },
+        {
+            "name": "func7-pg-310",
+            "query": "SELECT round( asin(1), 7);"
+        },
+        {
+            "name": "func7-pg-311",
+            "query": "SELECT degrees( asin(0.5) );"
+        },
+        {
+            "name": "func7-pg-320",
+            "query": "SELECT round( atan(1), 7);"
+        },
+        {
+            "name": "func7-pg-321",
+            "query": "SELECT degrees( atan(1) );"
+        },
+        {
+            "name": "func7-pg-330",
+            "query": "SELECT round( atan2(1,0), 7);"
+        },
+        {
+            "name": "func7-pg-331",
+            "query": "SELECT degrees( atan2(1,0) );"
+        },
+        {
+            "name": "func7-pg-400",
+            "query": "SELECT cos(0);"
+        },
+        {
+            "name": "func7-pg-401",
+            "query": "SELECT cos( radians(60.0) );"
+        },
+        {
+            "name": "func7-pg-400",
+            "query": "SELECT cos(0);"
+        },
+        {
+            "name": "func7-pg-410",
+            "query": "SELECT round( sin(1), 7);"
+        },
+        {
+            "name": "func7-pg-411",
+            "query": "SELECT sin( radians(30) );"
+        },
+        {
+            "name": "func7-pg-420",
+            "query": "SELECT round( tan(1), 7);"
+        },
+        {
+            "name": "func7-pg-421",
+            "query": "SELECT tan( radians(45) );"
+        },
+        {
+            "name": "func7-pg-500",
+            "query": "SELECT round( sinh(1), 7);"
+        },
+        {
+            "name": "func7-pg-510",
+            "query": "SELECT round( cosh(0), 7);"
+        },
+        {
+            "name": "func7-pg-520",
+            "query": "SELECT round( tanh(1), 7);"
+        },
+        {
+            "name": "func7-pg-530",
+            "query": "SELECT round( asinh(1), 7);"
+        },
+        {
+            "name": "func7-pg-540",
+            "query": "SELECT round( acosh(1), 7);"
+        },
+        {
+            "name": "func7-pg-550",
+            "query": "SELECT round( atanh(0.5), 7);"
+        },
+        {
+            "name": "func7-mysql-100",
+            "query": "SELECT acos(1);"
+        },
+        {
+            "name": "func7-mysql-110",
+            "query": "SELECT acos(1.0001);"
+        },
+        {
+            "name": "func7-mysql-120",
+            "query": "SELECT round( acos(0.0), 7);"
+        },
+        {
+            "name": "func7-mysql-130",
+            "query": "SELECT round( asin(0.2), 7);"
+        },
+        {
+            "name": "func7-mysql-140",
+            "query": "SELECT asin('foo');"
+        },
+        {
+            "name": "func7-mysql-150",
+            "query": "SELECT round( atan(2), 7), round( atan(-2), 7);"
+        },
+        {
+            "name": "func7-mysql-160",
+            "query": "SELECT round( atan2(-2,2), 7), round( atan2(pi(),0), 7);"
+        },
+        {
+            "name": "func7-mysql-170",
+            "query": "SELECT ceiling(1.23), ceiling(-1.23);"
+        },
+        {
+            "name": "func7-mysql-180",
+            "query": "SELECT cos(pi());"
+        },
+        {
+            "name": "func7-mysql-190",
+            "query": "SELECT degrees(pi()), degrees(pi()/2);"
+        },
+        {
+            "name": "func7-mysql-190",
+            "query": "SELECT round( exp(2), 7), round( exp(-2), 7), exp(0);"
+        },
+        {
+            "name": "func7-mysql-200",
+            "query": "SELECT floor(1.23), floor(-1.23);"
+        },
+        {
+            "name": "func7-mysql-210",
+            "query": "SELECT round(ln(2),7), quote(ln(-2));"
+        },
+        {
+            "name": "func7-mysql-230",
+            "query": "SELECT log(2,65536), log(10,100), quote(log(1,100)), quote(log(0,100));"
+        },
+        {
+            "name": "func7-mysql-240",
+            "query": "SELECT log2(65536), quote(log2(-100)), quote(log2(0));"
+        },
+        {
+            "name": "func7-mysql-250",
+            "query": "SELECT round(log10(2),7), log10(100), quote(log10(-100));"
+        },
+        {
+            "name": "func7-mysql-260",
+            "query": "SELECT mod(234,10), 253%7, mod(29,9), 29%9;"
+        },
+        {
+            "name": "func7-mysql-270",
+            "query": "SELECT mod(34.5,3);"
+        },
+        {
+            "name": "func7-mysql-280",
+            "query": "SELECT pow(2,2), pow(2,-2);"
+        },
+        {
+            "name": "func7-mysql-281",
+            "query": "SELECT power(2,2), power(2,-2);"
+        },
+        {
+            "name": "func7-mysql-290",
+            "query": "SELECT round(radians(90),7);"
+        },
+        {
+            "name": "func7-mysql-300",
+            "query": "SELECT sign(-32), sign(0), sign(234);"
+        },
+        {
+            "name": "func7-mysql-310",
+            "query": "SELECT sin(pi()) BETWEEN -1.0e-15 AND 1.0e-15;"
+        },
+        {
+            "name": "func7-mysql-320",
+            "query": "SELECT sqrt(4), round(sqrt(20),7), quote(sqrt(-16));"
+        },
+        {
+            "name": "func7-mysql-330",
+            "query": "SELECT tan(pi()) BETWEEN -1.0e-15 AND 1.0e-15;"
+        },
+        {
+            "name": "func7-mysql-331",
+            "query": "SELECT round(tan(pi()+1),7);"
+        },
+        {
+            "name": "reset_db",
+            "query": "reset_db"
+        }
+    ]
+}

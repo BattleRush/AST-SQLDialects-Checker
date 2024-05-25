@@ -1,0 +1,60 @@
+{
+    "name": "test_group_on_expression.test",
+    "tests": [
+        {
+            "name": "",
+            "query": "CREATE TABLE integer(i INTEGER, j INTEGER);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "INSERT INTO integer VALUES (3, 4), (3, 5), (3, 7);",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT j * 2 FROM integer GROUP BY j * 2 ORDER BY j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT integer.j * 2 FROM integer GROUP BY j * 2 ORDER BY j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT j * 2 FROM integer GROUP BY integer.j * 2 ORDER BY j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT j * 2 FROM integer GROUP BY j * 2 ORDER BY integer.j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT integer.j * 2 FROM integer GROUP BY j * 2 ORDER BY integer.j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT j * 2 FROM integer GROUP BY integer.j * 2 ORDER BY integer.j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT integer.j * 2 FROM integer GROUP BY integer.j * 2 ORDER BY j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT integer.j * 2 FROM integer GROUP BY integer.j * 2 ORDER BY integer.j * 2;",
+            "expected_result": ""
+        },
+        {
+            "name": "",
+            "query": "SELECT j * 2 AS i FROM integer GROUP BY j * 2 ORDER BY i;",
+            "expected_result": ""
+        }
+    ]
+}

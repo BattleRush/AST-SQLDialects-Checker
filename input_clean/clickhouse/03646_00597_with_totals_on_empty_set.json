@@ -1,0 +1,29 @@
+{
+    "name": "00597_with_totals_on_empty_set.sql",
+    "tests": [
+        {
+            "query": "SELECT count() FROM numbers(10) WHERE number = -1 WITH TOTALS FORMAT Vertical;",
+            "name": "00597_with_totals_on_empty_set.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
+            "name": "00597_with_totals_on_empty_set.sql"
+        },
+        {
+            "query": "\nSELECT number, count() FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
+            "name": "00597_with_totals_on_empty_set.sql"
+        },
+        {
+            "query": "\nSELECT groupArray(number) FROM numbers(10) WHERE number = -1 WITH TOTALS FORMAT Vertical;",
+            "name": "00597_with_totals_on_empty_set.sql"
+        },
+        {
+            "query": "\nSELECT groupArray(number) FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
+            "name": "00597_with_totals_on_empty_set.sql"
+        },
+        {
+            "query": "\nSELECT number, groupArray(number) FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
+            "name": "00597_with_totals_on_empty_set.sql"
+        }
+    ]
+}

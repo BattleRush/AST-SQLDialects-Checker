@@ -1,0 +1,69 @@
+{
+    "name": "02716_drop_if_empty.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS data_02716_1;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS data_02716_2;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS {CLICKHOUSE_DATABASE_1:Identifier}.data_02716_3;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nDROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE data_02716_1 (v UInt64) ENGINE = MergeTree ORDER BY v;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nCREATE TABLE data_02716_2 (v UInt64) ENGINE = MergeTree ORDER BY v;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\n\nCREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nCREATE TABLE {CLICKHOUSE_DATABASE_1:Identifier}.data_02716_3 (v UInt64) ENGINE = MergeTree ORDER BY v;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data_02716_1 SELECT * FROM system.numbers LIMIT 1;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\n\n-- { echoOn }\nDROP TABLE IF EMPTY data_02716_2;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EMPTY data_02716_1;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": " -- { serverError TABLE_NOT_EMPTY }\nTRUNCATE TABLE data_02716_1;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EMPTY data_02716_1;",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nDROP DATABASE IF EMPTY {CLICKHOUSE_DATABASE_1:Identifier};",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": " -- { serverError NOT_IMPLEMENTED }\n\nSELECT count() FROM system.tables WHERE database = {CLICKHOUSE_DATABASE_1:String};",
+            "name": "02716_drop_if_empty.sql"
+        },
+        {
+            "query": "\nSELECT count() FROM system.tables WHERE database = 'default' AND name IN ('data_02716_1', 'data_02716_2');",
+            "name": "02716_drop_if_empty.sql"
+        }
+    ]
+}

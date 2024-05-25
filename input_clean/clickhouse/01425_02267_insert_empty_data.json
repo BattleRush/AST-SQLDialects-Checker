@@ -1,0 +1,29 @@
+{
+    "name": "02267_insert_empty_data.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS t;",
+            "name": "02267_insert_empty_data.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE t (n UInt32) ENGINE=Memory;",
+            "name": "02267_insert_empty_data.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO t VALUES;",
+            "name": "02267_insert_empty_data.sql"
+        },
+        {
+            "query": " -- { clientError 108 }\n\nset throw_if_no_data_to_insert = 0;",
+            "name": "02267_insert_empty_data.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO t VALUES;",
+            "name": "02267_insert_empty_data.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE t;",
+            "name": "02267_insert_empty_data.sql"
+        }
+    ]
+}

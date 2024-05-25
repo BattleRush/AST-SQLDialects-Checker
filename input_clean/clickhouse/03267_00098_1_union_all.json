@@ -1,0 +1,81 @@
+{
+    "name": "00098_1_union_all.sql",
+    "tests": [
+        {
+            "query": "DROP TABLE IF EXISTS data2013;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS data2014;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nDROP TABLE IF EXISTS data2015;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nCREATE TABLE data2013 (name String, value UInt32) ENGINE = Memory;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nCREATE TABLE data2014 (name String, value UInt32) ENGINE = Memory;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nCREATE TABLE data2015 (data_name String, data_value UInt32) ENGINE = Memory;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data2013(name,value) VALUES('Alice', 1000);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2013(name,value) VALUES('Bob', 2000);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2013(name,value) VALUES('Carol', 5000);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data2014(name,value) VALUES('Alice', 2000);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2014(name,value) VALUES('Bob', 2000);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2014(name,value) VALUES('Dennis', 35000);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nINSERT INTO data2015(data_name, data_value) VALUES('Foo', 42);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nINSERT INTO data2015(data_name, data_value) VALUES('Bar', 1);",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nSELECT val FROM\n(SELECT value AS val FROM data2013 WHERE name = 'Alice'\nUNION ALL\nSELECT value AS val FROM data2014 WHERE name = 'Alice')\nORDER BY val ASC;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nSELECT val, name FROM\n(SELECT value AS val, value AS val_1, name FROM data2013 WHERE name = 'Alice'\nUNION ALL\nSELECT value AS val, value, name FROM data2014 WHERE name = 'Alice')\nORDER BY val ASC;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\n\nDROP TABLE data2013;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nDROP TABLE data2014;",
+            "name": "00098_1_union_all.sql"
+        },
+        {
+            "query": "\nDROP TABLE data2015;",
+            "name": "00098_1_union_all.sql"
+        }
+    ]
+}
