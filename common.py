@@ -59,10 +59,15 @@ def load_json(file):
         return json.load(f)
     
     
-def get_files(database):
+def get_files(database, clean=False):
     all_tests = []
     # in folder input/database/ get all json files
-    for root, dirs, files in os.walk(f"input/{database}"):
+    folder = f"input/{database}"
+    
+    if clean:
+        folder = f"input_clean/{database}"
+        
+    for root, dirs, files in os.walk(folder):
         for file in files:
             if file.endswith(".json"):
                 all_tests.append(os.path.join(root, file))
@@ -75,8 +80,8 @@ def get_files(database):
                 
     return all_tests
 
-def load_all_json(database):
-    all_tests = get_files(database)
+def load_all_json(database, clean=False):
+    all_tests = get_files(database, clean)
     parsed_tests = []
     for test in all_tests:
         parsed_tests.append(load_json(test))

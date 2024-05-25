@@ -45,12 +45,14 @@ def clean_dbs():
     clickhouse_processor.reset_db()
     abspath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "./docker/")
 
-    shell_command = f"""#!/bin/bash
-cd {abspath}
+    shell_command = f"""
+cd docker
 docker compose down -t 0 -v
 docker compose up -d
 """
-    subprocess.run(shell_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=PIPE)
+
+    os.system(shell_command)
+    #subprocess.run(shell_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=PIPE)
 
     time.sleep(2)
 
@@ -73,12 +75,12 @@ list_of_dbms = ["postgresql", "sqlite", "clickhouse", "duckdb"]
 
 clean_dbs()
 
-skip = 400
-take = 300
+skip = 0
+take = 1000
 
 for current_db in list_of_dbms:
     print("Loading tests for", current_db)
-    all_tests = load_all_json(current_db)
+    all_tests = load_all_json(current_db, True)
     print("Found", len(all_tests), "tests")
     
     time.sleep(1)

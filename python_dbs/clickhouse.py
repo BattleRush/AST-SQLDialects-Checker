@@ -10,7 +10,7 @@ from subprocess import PIPE
 class ClickhouseProcessor:
     def __init__(self):
         self.client = None
-        self.init_connection()
+        #self.init_connection()
 
     def init_connection(self):
         if self.client is not None:

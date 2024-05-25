@@ -14,7 +14,7 @@ class PostgresProcessor:
     
     def __init__(self):
         self.client = None
-        self.init_connection()
+        #self.init_connection()
 
     def reset_db(self):
         print("[-] Resetting Postgres")
