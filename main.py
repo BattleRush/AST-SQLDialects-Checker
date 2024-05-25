@@ -167,6 +167,13 @@ for current_db in list_of_dbms:
                 if current_db == target_db:
                     continue # skip for now the same DBs
                 
+                # it clickhouse is the source db check if the query contains create table
+                # and replace with create temporary table
+                # this is a workaround for many tests from other dbs failing in clickhouse
+                if current_db == "clickhouse":
+                    if "CREATE TABLE" in query:
+                        query = query.replace("CREATE TABLE", "CREATE TEMPORARY TABLE")
+                
                 target_success = False
                 target_result = None
                 target_db_error = ""
