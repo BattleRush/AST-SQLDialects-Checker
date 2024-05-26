@@ -19,23 +19,11 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- Ensure ALIAS columns are not selected by asterisk';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select * from aliases_test;"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS arrays';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select d1, a1, a2, a3, a4, a5, a6 from aliases_test;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS nested columns';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -55,15 +43,7 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join, but request the original columns';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select d1, a1 from aliases_test array join d1 as d2, a1 as a2;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join, do not use the result';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -72,10 +52,6 @@
         {
             "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array from aliases_test array join d1 as d2, a1 as a1;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS arrays, array joining one at a time';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -107,10 +83,6 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS arrays, array joining one at a time and aliasing result with original name';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, d1, a1, a2, a3, a4, a5, a6 from aliases_test array join d1 as d1;"
         },
         {
@@ -136,10 +108,6 @@
         {
             "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, d1, a1, a2, a3, a4, a5, a6 from aliases_test array join a6 as a6;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS arrays and array join result, aliased as `joined`';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -171,10 +139,6 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS nested columns, array joining one at a time';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, struct.d1, struct.a1, struct.a2, struct.a3, struct.a4, struct.a5, struct.a6 from aliases_test array join struct.d1;"
         },
         {
@@ -200,10 +164,6 @@
         {
             "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, struct.d1, struct.a1, struct.a2, struct.a3, struct.a4, struct.a5, struct.a6 from aliases_test array join struct.a6;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS nested columns, array joining one at a time and aliasing result with original name';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -235,10 +195,6 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- select DEFAULT and ALIAS nested columns and array join result, aliased as `joined`';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, struct.d1, struct.a1, struct.a2, struct.a3, struct.a4, struct.a5, struct.a6, joined from aliases_test array join struct.d1 as joined;"
         },
         {
@@ -267,15 +223,7 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, struct.d1, struct.a1, struct.a2, struct.a3, struct.a4, struct.a5, struct.a6 from aliases_test array join struct;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table not using the result';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -283,15 +231,7 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table, aliasing with original name';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, struct.d1, struct.a1, struct.a2, struct.a3, struct.a4, struct.a5, struct.a6 from aliases_test array join struct as struct;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table, aliasing with original name not using the result';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
@@ -299,23 +239,11 @@
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table, aliasing as `class`';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array, class.d1, class.a1, class.a2, class.a3, class.a4, class.a5, class.a6 from aliases_test array join struct as class;"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table, aliasing as `class` and not using the result';"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
             "query": "select array from aliases_test array join struct as class;"
-        },
-        {
-            "name": "00261_storage_aliases_and_array_join.sql",
-            "query": "select '-- array join whole nested table, aliasing as `class` but requesting the original columns';"
         },
         {
             "name": "00261_storage_aliases_and_array_join.sql",

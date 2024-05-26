@@ -73,7 +73,7 @@ list_of_dbms = ["postgresql", "sqlite", "clickhouse", "duckdb"]
 clean_dbs()
 
 skip = 0
-take = 2
+take = 20000
 
 for current_db in list_of_dbms:
     

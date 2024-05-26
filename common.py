@@ -33,17 +33,23 @@ def compare_dataframes(df1, df2):
     if shape_equal:
         for i in range(df1.shape[0]):
             for j in range(df1.shape[1]):
-                if df1.iat[i, j] != df2.iat[i, j]:
-                    
-                    # sometimes we get obj back as last resort check that str comparison
-                    # works for all types
-                    value1_str = str(df1.iat[i, j])
-                    value2_str = str(df2.iat[i, j])
-                    
-                    if value1_str != value2_str:
-                        print(f"Values not equal at {i}, {j}")
-                        values_equal = False
-                        break
+                try:
+                    if df1.iat[i, j] != df2.iat[i, j]:
+                        
+                        # sometimes we get obj back as last resort check that str comparison
+                        # works for all types
+                        value1_str = str(df1.iat[i, j])
+                        value2_str = str(df2.iat[i, j])
+                        
+                        if value1_str != value2_str:
+                            #print(f"Values not equal at {i}, {j}")
+                            values_equal = False
+                            break
+                except Exception as e:
+                    print(f"Error comparing values at {i}, {j}")
+                    print(e)
+                    values_equal = False
+                    break
             if not values_equal:
                 break
     

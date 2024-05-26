@@ -43,23 +43,22 @@ def parse_clickhouse():
                 with open(query_file, 'r', encoding="utf-8", errors='ignore') as qfile:
                     query = qfile.read()
                     
-                #print(file)
-                #print(query)
-                    
-                
-                #query_result = client.execute(query)
-                #df = pd.DataFrame(query_result, columns=[x.name for x in query_result])
-                #df = client.query_df(query)
-                
-                #print(df)
-                
-                #exit
 
                 #queries = query.split(";")
                 queries = re.split(r";\s*\n", query)
                 
                 # remove empty queries or that are only whitespace or newlines
                 queries = [q for q in queries if q.strip()]
+                
+                # remove any queries if they start with "SELECT '--"" check non case sensitive
+                
+                cleaned_queries = []
+                
+                for q in queries:
+                    if not q.lower().startswith("select '--"):
+                        cleaned_queries.append(q)
+                        
+                queries = cleaned_queries
                 
                 tests = []
                 for q in queries:

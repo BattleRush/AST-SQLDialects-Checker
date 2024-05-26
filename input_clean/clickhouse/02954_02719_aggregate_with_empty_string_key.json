@@ -15,10 +15,6 @@
         },
         {
             "name": "02719_aggregate_with_empty_string_key.sql",
-            "query": "select '-----------String------------';"
-        },
-        {
-            "name": "02719_aggregate_with_empty_string_key.sql",
             "query": "select str, max(i) from test group by str order by str nulls first;"
         },
         {

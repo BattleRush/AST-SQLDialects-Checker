@@ -1,6 +1,8 @@
 
 import json
 import time
+
+import numpy as np
 #from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.sqlite import SQLiteProcessor
 from python_dbs.postgres import PostgresProcessor
@@ -155,6 +157,31 @@ for root, dirs, files in os.walk("output"):
                 font-weight: bold;
             }
 
+            /* Apply this CSS only to the table with class 'summary' */
+            table.summary th:nth-child(4n+3) {
+                border-right: 4px solid d3d3d3; /* thicker red border on the right for header */
+            }
+
+            table.summary th:nth-child(4n+4) {
+                border-left: 4px solid d3d3d3; /* thicker red border on the left for header */
+            }
+
+            table.summary td:nth-child(4n+3) {
+                border-right: 4px solid #fff; /* thicker and grayish border on the right for body */
+            }
+
+            table.summary td:nth-child(4n+4) {
+                border-left: 4px solid #fff; /* thicker and grayish border on the left for body */
+            }
+            
+            /* Apply this CSS only to the table with class 'detailed' */
+            table.detailed th:nth-child(2n+6) {
+                border-right: 4px solid d3d3d3; /* thicker red border on the right for header */
+            }
+
+            table.detailed td:nth-child(2n+6) {
+                border-right: 4px solid #fff; /* thicker and grayish border on the right for body */
+            }
 
 
             </style>
@@ -237,7 +264,7 @@ for root, dirs, files in os.walk("output"):
                 
                 html += "<h1>Report for " + source_db + "</h1>"
                 
-                html += "<table style='width:1200px'>"
+                html += "<table style='width:1200px' class='summary'>"
                 html += "<tr>"
                 html += "<th>Test Name</th>"
                 html += "<th>Queries</th>"
@@ -251,6 +278,10 @@ for root, dirs, files in os.walk("output"):
                     html += f"<th>{db} Shape Match</th>"
                     html += f"<th>{db} Result Match</th>"
                 html += "</tr>"
+                
+                success_info = []
+                
+                all_total_queries = sum([len(test_report["queries"]) for test_report in reports])
                 
                 for test_report in reports:
                     total_queries = len(test_report["queries"])
@@ -270,7 +301,7 @@ for root, dirs, files in os.walk("output"):
                     
                     html += f"<td><a href='#{target_id}' onclick='{js_open}'>{test_report['test_name']}</a></td>"
                     html += f"<td>{len(test_report['queries'])}</td>"
-                    html += f"<td style='background-color: {color_for_percentage(source_success_percentage)}'>{source_success_count} ({source_success_percentage:.2f}%)</td>"
+                    html += f"<td style='background-color: {color_for_percentage(source_success_percentage)}'>{source_success_count}/{total_queries} ({source_success_percentage:.2f}%)</td>"
                     
                     for db in list_of_dbms:
                         if db == source_db:
@@ -278,12 +309,12 @@ for root, dirs, files in os.walk("output"):
                         
                         target_success_count = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["success"]])
                         target_success_count_percentage = target_success_count / total_queries * 100
-                        html += f"<td style='background-color: {color_for_percentage(target_success_count_percentage)}'>{target_success_count} ({target_success_count_percentage:.2f}%)</td>"
+                        html += f"<td style='background-color: {color_for_percentage(target_success_count_percentage)}'>{target_success_count}/{total_queries} ({target_success_count_percentage:.2f}%)</td>"
                     
                         count_success_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and query_report["source_success"] == target_report["success"]])
                         # count shape match only where success matches
-                        count_shape_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["shape_equal"]])
-                        count_result_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["values_equal"]])
+                        count_shape_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["shape_equal"] and query_report["source_success"] == target_report["success"]])
+                        count_result_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["values_equal"] and target_report["success"] == query_report["source_success"]])
                         
                         if count_success_match == 0:
                             count_success_match_percentage = 0
@@ -291,16 +322,62 @@ for root, dirs, files in os.walk("output"):
                             count_result_match_percentage = 0
                         else:
                             count_success_match_percentage = count_success_match / total_queries * 100
-                            count_shape_match_percentage = count_shape_match / count_success_match * 100
+                            count_shape_match_percentage = count_shape_match / total_queries * 100
                             count_result_match_percentage = count_result_match / count_success_match * 100
                         
                         # display achieved count/total count (percentage)
                         html += f"<td style='background-color: {color_for_percentage(count_success_match_percentage)}'>{count_success_match}/{total_queries} ({count_success_match_percentage:.2f}%)</td>"
-                        html += f"<td style='background-color: {color_for_percentage(count_shape_match_percentage)}'>{count_shape_match}/{count_success_match} ({count_shape_match_percentage:.2f}%)</td>"
+                        html += f"<td style='background-color: {color_for_percentage(count_shape_match_percentage)}'>{count_shape_match}/{total_queries} ({count_shape_match_percentage:.2f}%)</td>"
                         html += f"<td style='background-color: {color_for_percentage(count_result_match_percentage)}'>{count_result_match}/{count_success_match} ({count_result_match_percentage:.2f}%)</td>"
                     
+                    
+                        success_info.append({
+                          "db": db,
+                          "total_queries": total_queries,
+                          "source_success_count": source_success_count,
+                          "source_success_percentage": source_success_percentage,
+                          "target_success_count": target_success_count,
+                          "target_success_count_percentage": target_success_count_percentage,
+                          "count_success_match": count_success_match,
+                          "count_success_match_percentage": count_success_match_percentage,
+                          "count_shape_match": count_shape_match,
+                          "count_shape_match_percentage": count_shape_match_percentage,
+                          "count_result_match": count_result_match,
+                          "count_result_match_percentage": count_result_match_percentage
+                        })
+                        
                     html += "</tr>"
                     
+                # total row
+                html += "<tr>"
+                html += "<td><b>Total</b></td>"
+                html += f"<td><b>{sum([len(test_report['queries']) for test_report in reports])}</b></td>"
+                total_percentage = sum([sum([1 for query_report in test_report['queries'] if query_report['source_success']]) for test_report in reports]) / all_total_queries * 100
+                html += f"<td style='background-color: {color_for_percentage(total_percentage)}'><b>{sum([sum([1 for query_report in test_report['queries'] if query_report['source_success']]) for test_report in reports])}/{all_total_queries} ({total_percentage:.2f}%)</b></td>"
+                
+                for db in list_of_dbms:
+                    if db == source_db:
+                        continue
+                    
+                    # sum over success_info
+                    total_success_count = sum([x["target_success_count"] for x in success_info if x["db"] == db])
+                    total_success_count_percentage = total_success_count / all_total_queries * 100
+                    
+                    total_count_success_match = sum([x["count_success_match"] for x in success_info if x["db"] == db])
+                    total_count_success_match_percentage = total_count_success_match / all_total_queries * 100
+                    
+                    total_count_shape_match = sum([x["count_shape_match"] for x in success_info if x["db"] == db])
+                    total_count_shape_match_percentage = total_count_shape_match / total_count_success_match * 100
+                    
+                    total_count_result_match = sum([x["count_result_match"] for x in success_info if x["db"] == db])
+                    total_count_result_match_percentage = total_count_result_match / total_count_success_match * 100
+                    
+                    html += f"<td style='background-color: {color_for_percentage(total_success_count_percentage)}'><b>{total_success_count}/{all_total_queries} ({total_success_count_percentage:.2f}%)</b></td>"
+                    html += f"<td style='background-color: {color_for_percentage(total_count_success_match_percentage)}'><b>{total_count_success_match}/{all_total_queries} ({total_count_success_match_percentage:.2f}%)</b></td>"
+                    html += f"<td style='background-color: {color_for_percentage(total_count_shape_match_percentage)}'><b>{total_count_shape_match}/{total_count_success_match} ({total_count_shape_match_percentage:.2f}%)</b></td>"
+                    html += f"<td style='background-color: {color_for_percentage(total_count_result_match_percentage)}'><b>{total_count_result_match}/{total_count_success_match} ({total_count_result_match_percentage:.2f}%)</b></td>"
+                
+                
                 html += "</table>"
                 
                 for test_report in reports:
@@ -309,7 +386,7 @@ for root, dirs, files in os.walk("output"):
                     html += f"<h2 onclick='toggleContent(this)' style='cursor: pointer;' id='{element_id}'>{test_report['test_name']} ({len(test_report['queries'])}) Success: {source_success_count}</h2>"
                     
                     html += "<div style='display: none;'>"
-                    html += "<table>"
+                    html += "<table class='detailed'>"
                     html += "<tr>"
                     html += "<th>Nr</th>"
                     html += "<th>Query</th>"
@@ -322,6 +399,7 @@ for root, dirs, files in os.walk("output"):
                             continue
                         
                         html += f"<th>{db} Success</th>"
+                        html += f"<th>{db} Values Equal</th>"
                     html += "</tr>"
                     
                     query_count = 0
@@ -340,6 +418,8 @@ for root, dirs, files in os.walk("output"):
                                 continue
                             
                             html += f"<td style='background-color: {'green' if target_report['success'] else 'red'}'>{target_report['success']}</td>"
+                            value_equal = target_report["values_equal"] and target_report["success"] == query_report["source_success"]
+                            html += f"<td style='background-color: {'green' if value_equal else 'red'}'>{value_equal}</td>"
                         
                         html += "</tr>"
                         

@@ -3,10 +3,6 @@
     "tests": [
         {
             "name": "01018_empty_aggregation_filling.sql",
-            "query": "SELECT '--- Int Empty ---';"
-        },
-        {
-            "name": "01018_empty_aggregation_filling.sql",
             "query": "SELECT arrayReduce('avgOrDefault', arrayPopBack([1]));"
         },
         {
@@ -76,10 +72,6 @@
         {
             "name": "01018_empty_aggregation_filling.sql",
             "query": "SELECT maxOrNullIfMerge(state) FROM (SELECT maxOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
-        },
-        {
-            "name": "01018_empty_aggregation_filling.sql",
-            "query": "SELECT '--- Int Non-empty ---';"
         },
         {
             "name": "01018_empty_aggregation_filling.sql",
@@ -155,10 +147,6 @@
         },
         {
             "name": "01018_empty_aggregation_filling.sql",
-            "query": "SELECT '--- Other Types Empty ---';"
-        },
-        {
-            "name": "01018_empty_aggregation_filling.sql",
             "query": "SELECT arrayReduce('maxOrDefault', arrayPopBack(['hello']));"
         },
         {
@@ -196,10 +184,6 @@
         {
             "name": "01018_empty_aggregation_filling.sql",
             "query": "SELECT arrayReduce('maxOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));"
-        },
-        {
-            "name": "01018_empty_aggregation_filling.sql",
-            "query": "SELECT '--- Other Types Non-empty ---';"
         },
         {
             "name": "01018_empty_aggregation_filling.sql",

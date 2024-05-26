@@ -15,15 +15,7 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- notEmpty';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where notEmpty(arr);"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- empty';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -31,15 +23,7 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- = []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr = [];"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- != []';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -47,15 +31,7 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- > []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr > [];"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- < []';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -63,23 +39,11 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- >= []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr >= [];"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- <= []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr <= [];"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '---';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -99,15 +63,7 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- notEmpty';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where notEmpty(arr);"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- empty';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -115,15 +71,7 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- = []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr = [];"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- != []';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -131,15 +79,7 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- > []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr > [];"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- < []';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
@@ -147,23 +87,11 @@
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- >= []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr >= [];"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '--- <= []';"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
             "query": "select * from count_lc_test where arr <= [];"
-        },
-        {
-            "name": "01290_empty_array_index_analysis.sql",
-            "query": "SELECT '---';"
         },
         {
             "name": "01290_empty_array_index_analysis.sql",
