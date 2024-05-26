@@ -20,6 +20,11 @@ for root, dirs, files in os.walk("output"):
             file_name = file.split(".")[0]
             html_file = file_name + ".html"
             
+            # if the html file exists do not process the json file
+            if os.path.exists(os.path.join("output", html_file)):
+                print("Skipping", file)
+                continue
+            
             print("Processing", file)
 
             # load from progress report json 
