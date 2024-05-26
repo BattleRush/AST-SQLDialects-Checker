@@ -19,3 +19,5 @@ This project leverages the existing test suites for popular DBMSs such as Sqlite
 - 03 - Run the tester against the aggregated test cases from all DBMSs. You can do so by running the `03_main.py` Python script. The evaluation might take a while, as it frequently stops and restarts Docker containers between each run. After the execution is completed, an HTML report is stored inside the `output/` folder.
 - 04 - To generate the HTML report, run the `04_generate_html.py` Python script. The script will generate a report based on the output of the previous step and store it in the `output/` folder.
 - The file `00_repull.py` is a helper script that can be used to repull the test cases content into the `input_clean/` folder. This is useful when a parser has been updated and the test cases need to be updated or to verify that no test case from a wrong database ended in the wrong database folder in the `input_clean/` folder.
+
+The file `report_html_and_json.tar.gz` contains the HTML report and the JSON file with the raw data of the report and can be extracted to the `output/` folder.
