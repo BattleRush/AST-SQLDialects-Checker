@@ -236,8 +236,10 @@ for current_db in list_of_dbms:
             
 print("All tests passed")
 
+cuttent_date_formatted = time.strftime("%Y-%m-%d_%H-%M-%S")
+
 # save the progress report to a file
-with open(f"output/progress_report_{skip}_{skip + take}.json", "w") as f:
+with open(f"output/progress_report_{cuttent_date_formatted}.json", "w") as f:
     json.dump(progress_report, f, indent=4)
     
 # also output the result as csv table
