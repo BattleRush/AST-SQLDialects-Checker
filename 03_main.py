@@ -169,25 +169,21 @@ for current_db in list_of_dbms:
                 if current_db == target_db:
                     continue # skip for now the same DBs
                 
-                # it clickhouse is the target db check if the query contains create table
+                # If clickhouse is the target db check if the query contains create table
                 # and replace with create temporary table
-                # this is a workaround for many tests from other dbs failing in clickhouse
+                # This is a workaround for many tests from other dbs failing in clickhouse
                 if target_db == "clickhouse":
                     if "CREATE TABLE" in query:
                         query = query.replace("CREATE TABLE", "CREATE TEMPORARY TABLE")
                 elif current_db == "clickhouse":
                     if "CREATE TABLE" in query:
-                        #print("Query: ", query)
+                        
                         # remove ENGINE = up to the next semicolon
                         # this makes create table likely to pass in other dbs
                         if "ENGINE =" in query:
                             parts = query.split("ENGINE =")
                             if len(parts) > 1:
-                                query = parts[0] + parts[1][parts[1].index(";") + 1:]
-                                #print("New query: ", query)
-                            #else:
-                                #print("Error: Could not remove ENGINE from query: ", query)
-                                               
+                                query = parts[0] + parts[1][parts[1].index(";") + 1:]                             
 
                 target_success = False
                 target_result = None
