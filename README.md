@@ -1,6 +1,15 @@
 # Understanding the Difference Between SQL Dialects using DBMS Test Suites Report
 *Authors: Albert Cerfeda, Karlo Piskor*
 
+## PostgreSQL Summary
+![PostgreSQL](./images/postgres_summary.png)
+
+## SQLite Summary
+![SQLITE](./images/sqlite_summary.png)
+
+## Detailed view of a single test case query
+![Detailed](./images/details.png)
+
 This project leverages the existing test suites for popular DBMSs such as Sqlite, Clickhouse, PostgreSQL, DuckDB and cross-evaluation for assessing the differences and intricacies of SQL dialects.
 ### Reproduction package
 - 00 - Make sure to clone all submodules, namely the Sqlite, Clickhouse, PostgreSQL and DuckDB codebases. After doing so, replace the `tester.tcl` file inside of the SQLite submodule with out modified one. Our verison intercepts SQL queries and outputs them to a log file for us to retrieve later on [See [SQLITE.md](./SQLITE.md)].
