@@ -17,7 +17,6 @@ import os
 sqlite_processor = SQLiteProcessor()
 postgres_processor = PostgresProcessor()
 clickhouse_processor = ClickhouseProcessor()
-clickhouse_postgresql_processor = None #ClickhousePostgreProcessor()
 duckdb_processor = DuckdbProcessor()
 
 
@@ -31,8 +30,6 @@ def run_query(db_name, query):
         return postgres_processor.run_query(query)
     elif db_name == "duckdb":
         return duckdb_processor.run_query(query)
-    elif db_name == "clickhouse_postgresql":
-        return clickhouse_postgresql_processor.run_query(query)
     else:
         raise Exception(f"Unknown db name: {db_name}")
 
