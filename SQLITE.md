@@ -1,4 +1,6 @@
-replace tester.tcl the do_execsql_test function with the following code
+# SQLite shenanigans
+Replace the `do_execsql_test` function body inside `tester.tcl` in the SQLite submodule with the following snippet:
+
 
 ```tcl
 proc do_execsql_test {args} {
@@ -45,14 +47,14 @@ proc do_execsql_test {args} {
 }
 ```
 
-then run
 
-
+Finally run: 
 ```bash
-
 ./configure
 make
 make testfixture
 tclsh ./test/testrunner.tcl all
-
 ```
+
+
+Ciao
