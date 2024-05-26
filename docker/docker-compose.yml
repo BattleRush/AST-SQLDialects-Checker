@@ -21,6 +21,3 @@ services:
       - ./clickhouse/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
     ports:
       - 8123:8123
-      - 9000:9000
-      - 9004:9004
-      - 9005:9005
