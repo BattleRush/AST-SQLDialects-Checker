@@ -7,7 +7,6 @@ from python_dbs.sqlite import SQLiteProcessor
 from python_dbs.postgres import PostgresProcessor
 from python_dbs.clickhouse import ClickhouseProcessor
 from python_dbs.duckdb import DuckdbProcessor
-from python_dbs.clickhouse_postgresql import ClickhousePostgreProcessor
 from collections import defaultdict
 import subprocess
 from subprocess import PIPE

@@ -3,14 +3,7 @@ import json
 import time
 
 import numpy as np
-#from python_dbs.clickhouse import ClickhouseProcessor
-from python_dbs.sqlite import SQLiteProcessor
-from python_dbs.postgres import PostgresProcessor
-from python_dbs.clickhouse import ClickhouseProcessor
-from python_dbs.duckdb import DuckdbProcessor
-from python_dbs.clickhouse_postgresql import ClickhousePostgreProcessor
 from collections import defaultdict
-import subprocess
 from subprocess import PIPE
 import os
 
@@ -263,9 +256,9 @@ for root, dirs, files in os.walk("output"):
                 # create a table for each test_report create a row and then add columns name, success count source and then success count for each target db
                 
                 html += "<h1>Report for " + source_db + "</h1>"
-                
+                # make the first line stickly but only until we scrolled to the end of this table
                 html += "<table style='width:1200px' class='summary'>"
-                html += "<tr>"
+                html += "<tr style='position: sticky; top: 0; background-color: white;'>"
                 html += "<th>Test Name</th>"
                 html += "<th>Queries</th>"
                 html += "<th>Source Success</th>"
@@ -387,7 +380,8 @@ for root, dirs, files in os.walk("output"):
                     
                     html += "<div style='display: none;'>"
                     html += "<table class='detailed'>"
-                    html += "<tr>"
+                    # make the first line stickly but only until we scrolled to the end of this table
+                    html += "<tr style='position: sticky; top: 0; background-color: white;'>" 
                     html += "<th>Nr</th>"
                     html += "<th>Query</th>"
                     html += "<th>Source Shape</th>"
@@ -428,7 +422,8 @@ for root, dirs, files in os.walk("output"):
                         html += f"<td colspan='100%'>"  # Spanning all columns for the detailed information
                         html += "<div>"
                         # make table row with the details
-                        html += "<table>"
+                        
+                        html += "<table class='query_detailed'>"
                         
                         first = True
                         for target_report in query_report["target_dbs"]:
@@ -454,9 +449,9 @@ for root, dirs, files in os.walk("output"):
                                 html += f"<td>{query_report['source_exception']}</td>"
                                 html += f"<td>{query_report['source_result_html']}</td>"
                                 html += f"<td>{query_report['source_shape']}</td>"
-                                html += f"<td>{query_report['source_datatypes']}</td>"
-                                html += f"<td></td>"
-                                html += f"<td></td>"
+                                html += f"<td style='border: 1px solid #dddddd;'>{query_report['source_datatypes']}</td>"
+                                html += f"<td style='border: 1px solid #dddddd;'></td>"
+                                html += f"<td style='border: 1px solid #dddddd;'></td>"
                                 html += f"<td></td>"
                                 html += f"<td></td>"
                                 html += "</tr>"
@@ -469,9 +464,9 @@ for root, dirs, files in os.walk("output"):
                             html += f"<td>{target_report['error']}</td>"
                             html += f"<td>{target_report['result_html']}</td>"
                             html += f"<td>{target_report['shape']}</td>"
-                            html += f"<td>{target_report['data_types']}</td>"
-                            html += f"<td>{target_report['shape_equal']}</td>"
-                            html += f"<td>{target_report['columns_equal']}</td>"
+                            html += f"<td style='border: 1px solid #dddddd;'>{target_report['data_types']}</td>"
+                            html += f"<td style='border: 1px solid #dddddd;'>{target_report['shape_equal']}</td>"
+                            html += f"<td style='border: 1px solid #dddddd;'>{target_report['columns_equal']}</td>"
                             html += f"<td>{target_report['dtypes_equal']}</td>"
                             html += f"<td>{target_report['values_equal']}</td>"
                             html += "</tr>"
