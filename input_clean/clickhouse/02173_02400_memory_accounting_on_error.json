@@ -2,16 +2,12 @@
     "name": "02400_memory_accounting_on_error.sql",
     "tests": [
         {
-            "query": "-- max_block_size to avoid randomization\nSELECT * FROM generateRandom('i Array(Int8)', 1, 1, 1048577) LIMIT 65536 SETTINGS max_memory_usage='1Gi', max_block_size=65505, log_queries=1;",
-            "name": "02400_memory_accounting_on_error.sql"
+            "name": "02400_memory_accounting_on_error.sql",
+            "query": "-- max_block_size to avoid randomization\nSELECT * FROM generateRandom('i Array(Int8)', 1, 1, 1048577) LIMIT 65536 SETTINGS max_memory_usage='1Gi', max_block_size=65505, log_queries=1; -- { serverError MEMORY_LIMIT_EXCEEDED }\nSYSTEM FLUSH LOGS;"
         },
         {
-            "query": " -- { serverError MEMORY_LIMIT_EXCEEDED }\nSYSTEM FLUSH LOGS;",
-            "name": "02400_memory_accounting_on_error.sql"
-        },
-        {
-            "query": "\nSELECT * FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND memory_usage > 100e6 FORMAT JSONEachRow;",
-            "name": "02400_memory_accounting_on_error.sql"
+            "name": "02400_memory_accounting_on_error.sql",
+            "query": "SELECT * FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND memory_usage > 100e6 FORMAT JSONEachRow;"
         }
     ]
 }

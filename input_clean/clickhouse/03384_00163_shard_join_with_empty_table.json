@@ -2,28 +2,28 @@
     "name": "00163_shard_join_with_empty_table.sql",
     "tests": [
         {
-            "query": "-- Tags: shard\n\nSET any_join_distinct_right_table_keys = 1;",
-            "name": "00163_shard_join_with_empty_table.sql"
+            "name": "00163_shard_join_with_empty_table.sql",
+            "query": "-- Tags: shard\n\nSET any_join_distinct_right_table_keys = 1;"
         },
         {
-            "query": "\nSET joined_subquery_requires_alias = 0;",
-            "name": "00163_shard_join_with_empty_table.sql"
+            "name": "00163_shard_join_with_empty_table.sql",
+            "query": "SET joined_subquery_requires_alias = 0;"
         },
         {
-            "query": "\n\nSELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.numbers))\n    ANY LEFT JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;",
-            "name": "00163_shard_join_with_empty_table.sql"
+            "name": "00163_shard_join_with_empty_table.sql",
+            "query": "SELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.numbers))\n    ANY LEFT JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;"
         },
         {
-            "query": "\n\nSELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT dummy + 2 AS number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.one))\n    ANY INNER JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;",
-            "name": "00163_shard_join_with_empty_table.sql"
+            "name": "00163_shard_join_with_empty_table.sql",
+            "query": "SELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT dummy + 2 AS number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.one))\n    ANY INNER JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;"
         },
         {
-            "query": "\n\nSELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.numbers))\n    GLOBAL ANY LEFT JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;",
-            "name": "00163_shard_join_with_empty_table.sql"
+            "name": "00163_shard_join_with_empty_table.sql",
+            "query": "SELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.numbers))\n    GLOBAL ANY LEFT JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;"
         },
         {
-            "query": "\n\nSELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT dummy + 2 AS number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.one))\n    GLOBAL ANY INNER JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;",
-            "name": "00163_shard_join_with_empty_table.sql"
+            "name": "00163_shard_join_with_empty_table.sql",
+            "query": "SELECT * FROM (\n    SELECT number, n, j1, j2\n    FROM (SELECT dummy + 2 AS number, number / 2 AS n FROM remote('127.0.0.{2,3}', system.one))\n    GLOBAL ANY INNER JOIN (SELECT number / 3 AS n, number AS j1, 'Hello' AS j2 FROM system.numbers LIMIT 0)\n    USING n LIMIT 10\n) ORDER BY number;"
         }
     ]
 }

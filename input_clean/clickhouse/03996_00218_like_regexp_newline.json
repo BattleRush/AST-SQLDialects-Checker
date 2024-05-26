@@ -2,48 +2,48 @@
     "name": "00218_like_regexp_newline.sql",
     "tests": [
         {
-            "query": "SELECT 'abcdef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abcdef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abctdef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abctdef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abc\\ndef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abc\\ndef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abc\\ntdef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abc\\ntdef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abct\\ndef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abct\\ndef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abc\\n\\ndef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abc\\n\\ndef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abc\\n\\ntdef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abc\\n\\ntdef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abc\\nt\\ndef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abc\\nt\\ndef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abct\\n\\ndef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abct\\n\\ndef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'ab\\ndef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'ab\\ndef' LIKE '%abc%def%';"
         },
         {
-            "query": "\nSELECT 'abc\\nef' LIKE '%abc%def%';",
-            "name": "00218_like_regexp_newline.sql"
+            "name": "00218_like_regexp_newline.sql",
+            "query": "SELECT 'abc\\nef' LIKE '%abc%def%';"
         }
     ]
 }

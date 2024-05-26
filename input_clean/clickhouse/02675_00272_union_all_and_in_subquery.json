@@ -2,12 +2,12 @@
     "name": "00272_union_all_and_in_subquery.sql",
     "tests": [
         {
-            "query": "SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 WHERE 1 IN (SELECT 1 WHERE 0);",
-            "name": "00272_union_all_and_in_subquery.sql"
+            "name": "00272_union_all_and_in_subquery.sql",
+            "query": "SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 WHERE 1 IN (SELECT 1 WHERE 0);"
         },
         {
-            "query": "\nSELECT 2 UNION ALL SELECT 2 UNION ALL SELECT 2 WHERE 1 IN (SELECT 1 WHERE 1);",
-            "name": "00272_union_all_and_in_subquery.sql"
+            "name": "00272_union_all_and_in_subquery.sql",
+            "query": "SELECT 2 UNION ALL SELECT 2 UNION ALL SELECT 2 WHERE 1 IN (SELECT 1 WHERE 1);"
         }
     ]
 }

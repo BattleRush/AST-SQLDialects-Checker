@@ -2,24 +2,24 @@
     "name": "01358_union_threads_bug.sql",
     "tests": [
         {
-            "query": "-- Tags: no-parallel, no-fasttest\n-- no-parallel: it checks the number of threads, which can be lowered in presence of other queries\n\nset log_queries = 1;",
-            "name": "01358_union_threads_bug.sql"
+            "name": "01358_union_threads_bug.sql",
+            "query": "-- Tags: no-parallel, no-fasttest\n-- no-parallel: it checks the number of threads, which can be lowered in presence of other queries\n\nset log_queries = 1;"
         },
         {
-            "query": "\nset max_threads = 16;",
-            "name": "01358_union_threads_bug.sql"
+            "name": "01358_union_threads_bug.sql",
+            "query": "set max_threads = 16;"
         },
         {
-            "query": "\n\nSELECT count() FROM (SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100);",
-            "name": "01358_union_threads_bug.sql"
+            "name": "01358_union_threads_bug.sql",
+            "query": "SELECT count() FROM (SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100);"
         },
         {
-            "query": "\n\nsystem flush logs;",
-            "name": "01358_union_threads_bug.sql"
+            "name": "01358_union_threads_bug.sql",
+            "query": "system flush logs;"
         },
         {
-            "query": "\nselect length(thread_ids) >= 16 from system.query_log where current_database = currentDatabase() AND event_date >= today() - 1 and query like '%SELECT count() FROM (SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100)%' and type = 'QueryFinish' order by query_start_time desc limit 1;",
-            "name": "01358_union_threads_bug.sql"
+            "name": "01358_union_threads_bug.sql",
+            "query": "select length(thread_ids) >= 16 from system.query_log where current_database = currentDatabase() AND event_date >= today() - 1 and query like '%SELECT count() FROM (SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100 UNION ALL SELECT number FROM numbers_mt(1000000) ORDER BY number DESC LIMIT 100)%' and type = 'QueryFinish' order by query_start_time desc limit 1;"
         }
     ]
 }

@@ -2,16 +2,8 @@
     "name": "01070_template_empty_file.sql",
     "tests": [
         {
-            "query": "select 1 format Template settings format_template_row='01070_nonexistent_file.txt';",
-            "name": "01070_template_empty_file.sql"
-        },
-        {
-            "query": " -- { clientError 107 }\nselect 1 format Template settings format_template_row='/dev/null';",
-            "name": "01070_template_empty_file.sql"
-        },
-        {
-            "query": " -- { clientError 474 }\n;",
-            "name": "01070_template_empty_file.sql"
+            "name": "01070_template_empty_file.sql",
+            "query": "select 1 format Template settings format_template_row='01070_nonexistent_file.txt'; -- { clientError 107 }\nselect 1 format Template settings format_template_row='/dev/null'; -- { clientError 474 }\n;"
         }
     ]
 }

@@ -2,16 +2,16 @@
     "name": "01881_union_header_mismatch_bug.sql",
     "tests": [
         {
-            "query": "select *\u3000from (\u3000select 'table' as table, toInt64(10) as rows, toInt64(101) as elements\u3000union all\u3000select 'another table' as table, toInt64(0) as rows, toInt64(0) as elements\u3000)\u3000where rows - elements <> 0;",
-            "name": "01881_union_header_mismatch_bug.sql"
+            "name": "01881_union_header_mismatch_bug.sql",
+            "query": "select *\u3000from (\u3000select 'table' as table, toInt64(10) as rows, toInt64(101) as elements\u3000union all\u3000select 'another table' as table, toInt64(0) as rows, toInt64(0) as elements\u3000)\u3000where rows - elements <> 0;"
         },
         {
-            "query": "\n\nSELECT\n    label,\n    number\nFROM\n(\n    SELECT\n        'a' AS label,\n        number\n    FROM\n    (\n        SELECT number\n        FROM numbers(10)\n    )\n    UNION ALL\n    SELECT\n        'b' AS label,\n        number\n    FROM\n    (\n        SELECT number\n        FROM numbers(10)\n    )\n)\nWHERE number IN\n(\n    SELECT number\n    FROM numbers(5)\n) order by label, number;",
-            "name": "01881_union_header_mismatch_bug.sql"
+            "name": "01881_union_header_mismatch_bug.sql",
+            "query": "SELECT\n    label,\n    number\nFROM\n(\n    SELECT\n        'a' AS label,\n        number\n    FROM\n    (\n        SELECT number\n        FROM numbers(10)\n    )\n    UNION ALL\n    SELECT\n        'b' AS label,\n        number\n    FROM\n    (\n        SELECT number\n        FROM numbers(10)\n    )\n)\nWHERE number IN\n(\n    SELECT number\n    FROM numbers(5)\n) order by label, number;"
         },
         {
-            "query": "\n\nSELECT NULL FROM\n(SELECT [1048575, NULL] AS ax, 2147483648 AS c) t1 ARRAY JOIN ax\nINNER JOIN (SELECT NULL AS c) t2 USING (c);",
-            "name": "01881_union_header_mismatch_bug.sql"
+            "name": "01881_union_header_mismatch_bug.sql",
+            "query": "SELECT NULL FROM\n(SELECT [1048575, NULL] AS ax, 2147483648 AS c) t1 ARRAY JOIN ax\nINNER JOIN (SELECT NULL AS c) t2 USING (c);"
         }
     ]
 }

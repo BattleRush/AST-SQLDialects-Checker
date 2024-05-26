@@ -2,8 +2,8 @@
     "name": "00098_8_union_all.sql",
     "tests": [
         {
-            "query": "SELECT DomainID FROM (SELECT DISTINCT 1 AS DomainID, 'abc' AS Domain UNION ALL SELECT 2 AS DomainID, 'def' AS Domain) ORDER BY DomainID ASC\n;",
-            "name": "00098_8_union_all.sql"
+            "name": "00098_8_union_all.sql",
+            "query": "SELECT DomainID FROM (SELECT DISTINCT 1 AS DomainID, 'abc' AS Domain UNION ALL SELECT 2 AS DomainID, 'def' AS Domain) ORDER BY DomainID ASC\n;"
         }
     ]
 }

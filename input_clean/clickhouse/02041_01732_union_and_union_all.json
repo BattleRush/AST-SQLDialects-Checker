@@ -2,12 +2,8 @@
     "name": "01732_union_and_union_all.sql",
     "tests": [
         {
-            "query": "select 1 UNION select 1 UNION ALL select 1;",
-            "name": "01732_union_and_union_all.sql"
-        },
-        {
-            "query": " -- { serverError 558 }\n;",
-            "name": "01732_union_and_union_all.sql"
+            "name": "01732_union_and_union_all.sql",
+            "query": "select 1 UNION select 1 UNION ALL select 1; -- { serverError 558 }\n;"
         }
     ]
 }

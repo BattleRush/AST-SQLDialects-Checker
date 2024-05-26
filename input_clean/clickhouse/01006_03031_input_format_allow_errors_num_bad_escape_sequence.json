@@ -2,8 +2,8 @@
     "name": "03031_input_format_allow_errors_num_bad_escape_sequence.sql",
     "tests": [
         {
-            "query": "select * from format(JSONEachRow, '{\"item\" : \"some string\"}, {\"item\":\"\\\\\\\\ \\ud83d\"}') settings input_format_allow_errors_num=1;",
-            "name": "03031_input_format_allow_errors_num_bad_escape_sequence.sql"
+            "name": "03031_input_format_allow_errors_num_bad_escape_sequence.sql",
+            "query": "select * from format(JSONEachRow, '{\"item\" : \"some string\"}, {\"item\":\"\\\\\\\\ \\ud83d\"}') settings input_format_allow_errors_num=1;"
         }
     ]
 }

@@ -2,184 +2,184 @@
     "name": "tidrangescan.sql",
     "tests": [
         {
-            "query": "-- tests for tidrangescans\n\nSET enable_seqscan TO off",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- tests for tidrangescans\n\nSET enable_seqscan TO off;"
         },
         {
-            "query": "CREATE TABLE tidrangescan(id integer, data text)",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "CREATE TABLE tidrangescan(id integer, data text);"
         },
         {
-            "query": "-- empty table\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid < '(1, 0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- empty table\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid < '(1, 0)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(1, 0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(1, 0)';"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid > '(9, 0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid > '(9, 0)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(9, 0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(9, 0)';"
         },
         {
-            "query": "-- insert enough tuples to fill at least two pages\nINSERT INTO tidrangescan SELECT i,repeat('x', 100) FROM generate_series(1,200) AS s(i)",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- insert enough tuples to fill at least two pages\nINSERT INTO tidrangescan SELECT i,repeat('x', 100) FROM generate_series(1,200) AS s(i);"
         },
         {
-            "query": "-- remove all tuples after the 10th tuple on each page.  Trying to ensure\n-- we get the same layout with all CPU architectures and smaller than standard\n-- page sizes.\nDELETE FROM tidrangescan\nWHERE substring(ctid::text FROM ',(\\d+)\\)')::integer > 10 OR substring(ctid::text FROM '\\((\\d+),')::integer > 2",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- remove all tuples after the 10th tuple on each page.  Trying to ensure\n-- we get the same layout with all CPU architectures and smaller than standard\n-- page sizes.\nDELETE FROM tidrangescan\nWHERE substring(ctid::text FROM ',(\\d+)\\)')::integer > 10 OR substring(ctid::text FROM '\\((\\d+),')::integer > 2;"
         },
         {
-            "query": "VACUUM tidrangescan",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "VACUUM tidrangescan;"
         },
         {
-            "query": "-- range scans with upper bound\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid < '(1,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- range scans with upper bound\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid < '(1,0)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(1,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(1,0)';"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid <= '(1,5)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid <= '(1,5)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid <= '(1,5)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid <= '(1,5)';"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid < '(0,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid < '(0,0)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(0,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(0,0)';"
         },
         {
-            "query": "-- range scans with lower bound\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid > '(2,8)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- range scans with lower bound\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid > '(2,8)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(2,8)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(2,8)';"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE '(2,8)' < ctid",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE '(2,8)' < ctid;"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE '(2,8)' < ctid",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE '(2,8)' < ctid;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid >= '(2,8)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid >= '(2,8)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid >= '(2,8)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid >= '(2,8)';"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid >= '(100,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid >= '(100,0)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid >= '(100,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid >= '(100,0)';"
         },
         {
-            "query": "-- range scans with both bounds\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid > '(1,4)' AND '(1,7)' >= ctid",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- range scans with both bounds\nEXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE ctid > '(1,4)' AND '(1,7)' >= ctid;"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(1,4)' AND '(1,7)' >= ctid",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(1,4)' AND '(1,7)' >= ctid;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE '(1,7)' >= ctid AND ctid > '(1,4)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT ctid FROM tidrangescan WHERE '(1,7)' >= ctid AND ctid > '(1,4)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE '(1,7)' >= ctid AND ctid > '(1,4)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE '(1,7)' >= ctid AND ctid > '(1,4)';"
         },
         {
-            "query": "-- extreme offsets\nSELECT ctid FROM tidrangescan WHERE ctid > '(0,65535)' AND ctid < '(1,0)' LIMIT 1",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- extreme offsets\nSELECT ctid FROM tidrangescan WHERE ctid > '(0,65535)' AND ctid < '(1,0)' LIMIT 1;"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(0,0)' LIMIT 1",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(0,0)' LIMIT 1;"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(4294967295,65535)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid > '(4294967295,65535)';"
         },
         {
-            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(0,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT ctid FROM tidrangescan WHERE ctid < '(0,0)';"
         },
         {
-            "query": "-- NULLs in the range cannot return tuples\nSELECT ctid FROM tidrangescan WHERE ctid >= (SELECT NULL::tid)",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- NULLs in the range cannot return tuples\nSELECT ctid FROM tidrangescan WHERE ctid >= (SELECT NULL::tid);"
         },
         {
-            "query": "-- rescans\nEXPLAIN (COSTS OFF)\nSELECT t.ctid,t2.c FROM tidrangescan t,\nLATERAL (SELECT count(*) c FROM tidrangescan t2 WHERE t2.ctid <= t.ctid) t2\nWHERE t.ctid < '(1,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- rescans\nEXPLAIN (COSTS OFF)\nSELECT t.ctid,t2.c FROM tidrangescan t,\nLATERAL (SELECT count(*) c FROM tidrangescan t2 WHERE t2.ctid <= t.ctid) t2\nWHERE t.ctid < '(1,0)';"
         },
         {
-            "query": "SELECT t.ctid,t2.c FROM tidrangescan t,\nLATERAL (SELECT count(*) c FROM tidrangescan t2 WHERE t2.ctid <= t.ctid) t2\nWHERE t.ctid < '(1,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "SELECT t.ctid,t2.c FROM tidrangescan t,\nLATERAL (SELECT count(*) c FROM tidrangescan t2 WHERE t2.ctid <= t.ctid) t2\nWHERE t.ctid < '(1,0)';"
         },
         {
-            "query": "-- cursors\n\n-- Ensure we get a TID Range scan without a Materialize node.\nEXPLAIN (COSTS OFF)\nDECLARE c SCROLL CURSOR FOR SELECT ctid FROM tidrangescan WHERE ctid < '(1,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "-- cursors\n\n-- Ensure we get a TID Range scan without a Materialize node.\nEXPLAIN (COSTS OFF)\nDECLARE c SCROLL CURSOR FOR SELECT ctid FROM tidrangescan WHERE ctid < '(1,0)';"
         },
         {
-            "query": "BEGIN",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "BEGIN;"
         },
         {
-            "query": "DECLARE c SCROLL CURSOR FOR SELECT ctid FROM tidrangescan WHERE ctid < '(1,0)'",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "DECLARE c SCROLL CURSOR FOR SELECT ctid FROM tidrangescan WHERE ctid < '(1,0)';"
         },
         {
-            "query": "FETCH NEXT c",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "FETCH NEXT c;"
         },
         {
-            "query": "FETCH NEXT c",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "FETCH NEXT c;"
         },
         {
-            "query": "FETCH PRIOR c",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "FETCH PRIOR c;"
         },
         {
-            "query": "FETCH FIRST c",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "FETCH FIRST c;"
         },
         {
-            "query": "FETCH LAST c",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "FETCH LAST c;"
         },
         {
-            "query": "COMMIT",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "DROP TABLE tidrangescan",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "DROP TABLE tidrangescan;"
         },
         {
-            "query": "RESET enable_seqscan",
-            "name": "tidrangescan.sql"
+            "name": "tidrangescan.sql",
+            "query": "RESET enable_seqscan;"
         }
     ]
 }

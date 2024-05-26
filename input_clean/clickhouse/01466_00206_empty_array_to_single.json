@@ -2,16 +2,16 @@
     "name": "00206_empty_array_to_single.sql",
     "tests": [
         {
-            "query": "SELECT emptyArrayToSingle(arrayFilter(x -> x != 99, arrayJoin([[1, 2], [99], [4, 5, 6]])));",
-            "name": "00206_empty_array_to_single.sql"
+            "name": "00206_empty_array_to_single.sql",
+            "query": "SELECT emptyArrayToSingle(arrayFilter(x -> x != 99, arrayJoin([[1, 2], [99], [4, 5, 6]])));"
         },
         {
-            "query": "\nSELECT emptyArrayToSingle(emptyArrayString()), emptyArrayToSingle(emptyArrayDate()), emptyArrayToSingle(arrayFilter(x -> 0, [now('Asia/Istanbul')]));",
-            "name": "00206_empty_array_to_single.sql"
+            "name": "00206_empty_array_to_single.sql",
+            "query": "SELECT emptyArrayToSingle(emptyArrayString()), emptyArrayToSingle(emptyArrayDate()), emptyArrayToSingle(arrayFilter(x -> 0, [now('Asia/Istanbul')]));"
         },
         {
-            "query": "\n\nSELECT\n    emptyArrayToSingle(range(number % 3)),\n    emptyArrayToSingle(arrayMap(x -> toString(x), range(number % 2))),\n    emptyArrayToSingle(arrayMap(x -> toDateTime('2015-01-01 00:00:00', 'UTC') + x, range(number % 5))),\n    emptyArrayToSingle(arrayMap(x -> toDate('2015-01-01') + x, range(number % 4))) FROM system.numbers LIMIT 10;",
-            "name": "00206_empty_array_to_single.sql"
+            "name": "00206_empty_array_to_single.sql",
+            "query": "SELECT\n    emptyArrayToSingle(range(number % 3)),\n    emptyArrayToSingle(arrayMap(x -> toString(x), range(number % 2))),\n    emptyArrayToSingle(arrayMap(x -> toDateTime('2015-01-01 00:00:00', 'UTC') + x, range(number % 5))),\n    emptyArrayToSingle(arrayMap(x -> toDate('2015-01-01') + x, range(number % 4))) FROM system.numbers LIMIT 10;"
         }
     ]
 }

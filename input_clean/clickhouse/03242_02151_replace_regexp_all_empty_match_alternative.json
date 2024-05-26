@@ -2,76 +2,76 @@
     "name": "02151_replace_regexp_all_empty_match_alternative.sql",
     "tests": [
         {
-            "query": "SELECT replaceRegexpAll(',,1,,', '^[,]*|[,]*$', '');",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(',,1,,', '^[,]*|[,]*$', '');"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(',,1', '^[,]*|[,]*$', '');",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(',,1', '^[,]*|[,]*$', '');"
         },
         {
-            "query": "\nSELECT replaceRegexpAll('1,,', '^[,]*|[,]*$', '');",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('1,,', '^[,]*|[,]*$', '');"
         },
         {
-            "query": "\n\nSELECT replaceRegexpAll(materialize(',,1,,'), '^[,]*|[,]*$', '');",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize(',,1,,'), '^[,]*|[,]*$', '');"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize(',,1'), '^[,]*|[,]*$', '');",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize(',,1'), '^[,]*|[,]*$', '');"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize('1,,'), '^[,]*|[,]*$', '');",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('1,,'), '^[,]*|[,]*$', '');"
         },
         {
-            "query": "\n\nSELECT replaceRegexpAll('a', 'z*', '') == 'a';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('a', 'z*', '') == 'a';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll('aa', 'z*', '') == 'aa';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('aa', 'z*', '') == 'aa';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll('aaq', 'z*', '') == 'aaq';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('aaq', 'z*', '') == 'aaq';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll('aazq', 'z*', '') == 'aaq';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('aazq', 'z*', '') == 'aaq';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll('aazzq', 'z*', '') == 'aaq';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('aazzq', 'z*', '') == 'aaq';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll('aazzqa', 'z*', '') == 'aaqa';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll('aazzqa', 'z*', '') == 'aaqa';"
         },
         {
-            "query": "\n\nSELECT replaceRegexpAll(materialize('a'), 'z*', '') == 'a';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('a'), 'z*', '') == 'a';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize('aa'), 'z*', '') == 'aa';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('aa'), 'z*', '') == 'aa';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize('aaq'), 'z*', '') == 'aaq';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('aaq'), 'z*', '') == 'aaq';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize('aazq'), 'z*', '') == 'aaq';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('aazq'), 'z*', '') == 'aaq';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize('aazzq'), 'z*', '') == 'aaq';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('aazzq'), 'z*', '') == 'aaq';"
         },
         {
-            "query": "\nSELECT replaceRegexpAll(materialize('aazzqa'), 'z*', '') == 'aaqa';",
-            "name": "02151_replace_regexp_all_empty_match_alternative.sql"
+            "name": "02151_replace_regexp_all_empty_match_alternative.sql",
+            "query": "SELECT replaceRegexpAll(materialize('aazzqa'), 'z*', '') == 'aaqa';"
         }
     ]
 }

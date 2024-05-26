@@ -2,88 +2,80 @@
     "name": "02500_prevent_drop_nested_if_empty_part.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS 02500_nested;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "DROP TABLE IF EXISTS 02500_nested;"
         },
         {
-            "query": "\n\nSET flatten_nested = 1;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "SET flatten_nested = 1;"
         },
         {
-            "query": "\n\nCREATE TABLE 02500_nested(nes Nested(a Int32, b Int32)) Engine=MergeTree ORDER BY tuple();",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "CREATE TABLE 02500_nested(nes Nested(a Int32, b Int32)) Engine=MergeTree ORDER BY tuple();"
         },
         {
-            "query": "\nINSERT INTO 02500_nested(nes.a, nes.b) VALUES ([1], [2]);",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "INSERT INTO 02500_nested(nes.a, nes.b) VALUES ([1], [2]);"
         },
         {
-            "query": "\nALTER TABLE 02500_nested ADD COLUMN z Int32;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "ALTER TABLE 02500_nested ADD COLUMN z Int32;"
         },
         {
-            "query": "\nALTER TABLE 02500_nested DROP COLUMN nes;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "ALTER TABLE 02500_nested DROP COLUMN nes; -- { serverError BAD_ARGUMENTS }\nDROP TABLE 02500_nested;"
         },
         {
-            "query": " -- { serverError BAD_ARGUMENTS }\nDROP TABLE 02500_nested;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "CREATE TABLE 02500_nested(nes Nested(a Int32, b Int32), z Int32) Engine=MergeTree ORDER BY tuple();"
         },
         {
-            "query": "\n\nCREATE TABLE 02500_nested(nes Nested(a Int32, b Int32), z Int32) Engine=MergeTree ORDER BY tuple();",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "INSERT INTO 02500_nested(nes.a, nes.b, z) VALUES ([1], [2], 2);"
         },
         {
-            "query": "\nINSERT INTO 02500_nested(nes.a, nes.b, z) VALUES ([1], [2], 2);",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "ALTER TABLE 02500_nested DROP COLUMN nes;"
         },
         {
-            "query": "\nALTER TABLE 02500_nested DROP COLUMN nes;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "DROP TABLE 02500_nested;"
         },
         {
-            "query": "\nDROP TABLE 02500_nested;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "SET flatten_nested = 0;"
         },
         {
-            "query": "\n\nSET flatten_nested = 0;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "CREATE TABLE 02500_nested(nes Nested(a Int32, b Int32)) Engine=MergeTree ORDER BY tuple();"
         },
         {
-            "query": "\n\nCREATE TABLE 02500_nested(nes Nested(a Int32, b Int32)) Engine=MergeTree ORDER BY tuple();",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "INSERT INTO 02500_nested(nes) VALUES ([(1, 2)]);"
         },
         {
-            "query": "\nINSERT INTO 02500_nested(nes) VALUES ([(1, 2)]);",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "ALTER TABLE 02500_nested ADD COLUMN z Int32;"
         },
         {
-            "query": "\nALTER TABLE 02500_nested ADD COLUMN z Int32;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "ALTER TABLE 02500_nested DROP COLUMN nes; -- { serverError BAD_ARGUMENTS }\nDROP TABLE 02500_nested;"
         },
         {
-            "query": "\nALTER TABLE 02500_nested DROP COLUMN nes;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "CREATE TABLE 02500_nested(nes Array(Tuple(a Int32, b Int32)), z Int32) Engine=MergeTree ORDER BY tuple();"
         },
         {
-            "query": " -- { serverError BAD_ARGUMENTS }\nDROP TABLE 02500_nested;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "INSERT INTO 02500_nested(nes, z) VALUES ([(1, 2)], 2);"
         },
         {
-            "query": "\n\nCREATE TABLE 02500_nested(nes Array(Tuple(a Int32, b Int32)), z Int32) Engine=MergeTree ORDER BY tuple();",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "ALTER TABLE 02500_nested DROP COLUMN nes;"
         },
         {
-            "query": "\nINSERT INTO 02500_nested(nes, z) VALUES ([(1, 2)], 2);",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
-        },
-        {
-            "query": "\nALTER TABLE 02500_nested DROP COLUMN nes;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
-        },
-        {
-            "query": "\nDROP TABLE 02500_nested;",
-            "name": "02500_prevent_drop_nested_if_empty_part.sql"
+            "name": "02500_prevent_drop_nested_if_empty_part.sql",
+            "query": "DROP TABLE 02500_nested;"
         }
     ]
 }

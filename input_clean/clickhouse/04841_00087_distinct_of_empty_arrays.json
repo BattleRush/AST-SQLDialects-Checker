@@ -2,8 +2,8 @@
     "name": "00087_distinct_of_empty_arrays.sql",
     "tests": [
         {
-            "query": "SELECT DISTINCT emptyArrayString() AS k FROM (SELECT * FROM system.numbers LIMIT 100000);",
-            "name": "00087_distinct_of_empty_arrays.sql"
+            "name": "00087_distinct_of_empty_arrays.sql",
+            "query": "SELECT DISTINCT emptyArrayString() AS k FROM (SELECT * FROM system.numbers LIMIT 100000);"
         }
     ]
 }

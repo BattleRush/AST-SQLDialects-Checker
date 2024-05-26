@@ -2,24 +2,20 @@
     "name": "03031_filter_float64_logical_error.sql",
     "tests": [
         {
-            "query": "CREATE TABLE 03031_test\n(\n    `id` UInt64,\n    `value_1` String,\n    `value_2` String,\n    `value_3` String,\n    INDEX value_1_idx value_1 TYPE bloom_filter GRANULARITY 1,\n    INDEX value_2_idx value_2 TYPE ngrambf_v1(3, 512, 2, 0) GRANULARITY 1,\n    INDEX value_3_idx value_3 TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1\n)\nENGINE = MergeTree\nORDER BY id;",
-            "name": "03031_filter_float64_logical_error.sql"
+            "name": "03031_filter_float64_logical_error.sql",
+            "query": "CREATE TABLE 03031_test\n(\n    `id` UInt64,\n    `value_1` String,\n    `value_2` String,\n    `value_3` String,\n    INDEX value_1_idx value_1 TYPE bloom_filter GRANULARITY 1,\n    INDEX value_2_idx value_2 TYPE ngrambf_v1(3, 512, 2, 0) GRANULARITY 1,\n    INDEX value_3_idx value_3 TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1\n)\nENGINE = MergeTree\nORDER BY id;"
         },
         {
-            "query": "\n\nINSERT INTO 03031_test SELECT\n    number,\n    toString(number),\n    toString(number),\n    toString(number)\nFROM numbers(10);",
-            "name": "03031_filter_float64_logical_error.sql"
+            "name": "03031_filter_float64_logical_error.sql",
+            "query": "INSERT INTO 03031_test SELECT\n    number,\n    toString(number),\n    toString(number),\n    toString(number)\nFROM numbers(10);"
         },
         {
-            "query": "\n\nSELECT\n    count('9223372036854775806'),\n    7\nFROM 03031_test\nPREWHERE (id = NULL) AND 1024\nWHERE 0.0001\nGROUP BY '0.03'\n    WITH ROLLUP\nSETTINGS force_primary_key = 1, force_data_skipping_indices = 'value_1_idx, value_2_idx', allow_experimental_analyzer=0;",
-            "name": "03031_filter_float64_logical_error.sql"
+            "name": "03031_filter_float64_logical_error.sql",
+            "query": "SELECT\n    count('9223372036854775806'),\n    7\nFROM 03031_test\nPREWHERE (id = NULL) AND 1024\nWHERE 0.0001\nGROUP BY '0.03'\n    WITH ROLLUP\nSETTINGS force_primary_key = 1, force_data_skipping_indices = 'value_1_idx, value_2_idx', allow_experimental_analyzer=0;"
         },
         {
-            "query": "\n\n\nSELECT\n    count('9223372036854775806'),\n    7\nFROM 03031_test\nPREWHERE (id = NULL) AND 1024\nWHERE 0.0001\nGROUP BY '0.03'\n    WITH ROLLUP\nSETTINGS force_primary_key = 1, force_data_skipping_indices = 'value_1_idx, value_2_idx', allow_experimental_analyzer=1;",
-            "name": "03031_filter_float64_logical_error.sql"
-        },
-        {
-            "query": " -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }\n;",
-            "name": "03031_filter_float64_logical_error.sql"
+            "name": "03031_filter_float64_logical_error.sql",
+            "query": "SELECT\n    count('9223372036854775806'),\n    7\nFROM 03031_test\nPREWHERE (id = NULL) AND 1024\nWHERE 0.0001\nGROUP BY '0.03'\n    WITH ROLLUP\nSETTINGS force_primary_key = 1, force_data_skipping_indices = 'value_1_idx, value_2_idx', allow_experimental_analyzer=1; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }\n;"
         }
     ]
 }

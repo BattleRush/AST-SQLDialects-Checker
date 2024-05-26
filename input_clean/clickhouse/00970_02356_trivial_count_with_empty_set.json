@@ -2,24 +2,24 @@
     "name": "02356_trivial_count_with_empty_set.sql",
     "tests": [
         {
-            "query": "drop table if exists test;",
-            "name": "02356_trivial_count_with_empty_set.sql"
+            "name": "02356_trivial_count_with_empty_set.sql",
+            "query": "drop table if exists test;"
         },
         {
-            "query": "\n\ncreate table test(a Int64) Engine=MergeTree order by tuple();",
-            "name": "02356_trivial_count_with_empty_set.sql"
+            "name": "02356_trivial_count_with_empty_set.sql",
+            "query": "create table test(a Int64) Engine=MergeTree order by tuple();"
         },
         {
-            "query": "\n\nset optimize_trivial_count_query=1, empty_result_for_aggregation_by_empty_set=1;",
-            "name": "02356_trivial_count_with_empty_set.sql"
+            "name": "02356_trivial_count_with_empty_set.sql",
+            "query": "set optimize_trivial_count_query=1, empty_result_for_aggregation_by_empty_set=1;"
         },
         {
-            "query": "\n\nselect count() from test;",
-            "name": "02356_trivial_count_with_empty_set.sql"
+            "name": "02356_trivial_count_with_empty_set.sql",
+            "query": "select count() from test;"
         },
         {
-            "query": "\n\ndrop table test;",
-            "name": "02356_trivial_count_with_empty_set.sql"
+            "name": "02356_trivial_count_with_empty_set.sql",
+            "query": "drop table test;"
         }
     ]
 }

@@ -2,28 +2,28 @@
     "name": "01825_type_json_empty_string.sql",
     "tests": [
         {
-            "query": "-- Tags: no-fasttest\n\nDROP TABLE IF EXISTS t_json_empty_str;",
-            "name": "01825_type_json_empty_string.sql"
+            "name": "01825_type_json_empty_string.sql",
+            "query": "-- Tags: no-fasttest\n\nDROP TABLE IF EXISTS t_json_empty_str;"
         },
         {
-            "query": "\nSET allow_experimental_object_type = 1;",
-            "name": "01825_type_json_empty_string.sql"
+            "name": "01825_type_json_empty_string.sql",
+            "query": "SET allow_experimental_object_type = 1;"
         },
         {
-            "query": "\n\nCREATE TABLE t_json_empty_str(id UInt32, o JSON) ENGINE = Memory;",
-            "name": "01825_type_json_empty_string.sql"
+            "name": "01825_type_json_empty_string.sql",
+            "query": "CREATE TABLE t_json_empty_str(id UInt32, o JSON) ENGINE = Memory;"
         },
         {
-            "query": "\n\nINSERT INTO t_json_empty_str VALUES (1, ''), (2, '{\"k1\": 1, \"k2\": \"v1\"}'), (3, '{}'), (4, '{\"k1\": 2}');",
-            "name": "01825_type_json_empty_string.sql"
+            "name": "01825_type_json_empty_string.sql",
+            "query": "INSERT INTO t_json_empty_str VALUES (1, ''), (2, '{\"k1\": 1, \"k2\": \"v1\"}'), (3, '{}'), (4, '{\"k1\": 2}');"
         },
         {
-            "query": "\n\nSELECT * FROM t_json_empty_str ORDER BY id;",
-            "name": "01825_type_json_empty_string.sql"
+            "name": "01825_type_json_empty_string.sql",
+            "query": "SELECT * FROM t_json_empty_str ORDER BY id;"
         },
         {
-            "query": "\n\nDROP TABLE t_json_empty_str;",
-            "name": "01825_type_json_empty_string.sql"
+            "name": "01825_type_json_empty_string.sql",
+            "query": "DROP TABLE t_json_empty_str;"
         }
     ]
 }

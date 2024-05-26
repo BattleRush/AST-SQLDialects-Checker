@@ -2,56 +2,56 @@
     "name": "00098_4_union_all.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS data2013;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "DROP TABLE IF EXISTS data2013;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS data2014;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "DROP TABLE IF EXISTS data2014;"
         },
         {
-            "query": "\n\nCREATE TABLE data2013 (name String, value UInt32) ENGINE = Memory;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "CREATE TABLE data2013 (name String, value UInt32) ENGINE = Memory;"
         },
         {
-            "query": "\nCREATE TABLE data2014 (name String, value UInt32) ENGINE = Memory;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "CREATE TABLE data2014 (name String, value UInt32) ENGINE = Memory;"
         },
         {
-            "query": "\n\nINSERT INTO data2013(name,value) VALUES('Alice', 1000);",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "INSERT INTO data2013(name,value) VALUES('Alice', 1000);"
         },
         {
-            "query": "\nINSERT INTO data2013(name,value) VALUES('Bob', 2000);",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "INSERT INTO data2013(name,value) VALUES('Bob', 2000);"
         },
         {
-            "query": "\nINSERT INTO data2013(name,value) VALUES('Carol', 5000);",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "INSERT INTO data2013(name,value) VALUES('Carol', 5000);"
         },
         {
-            "query": "\n\nINSERT INTO data2014(name,value) VALUES('Alice', 2000);",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "INSERT INTO data2014(name,value) VALUES('Alice', 2000);"
         },
         {
-            "query": "\nINSERT INTO data2014(name,value) VALUES('Bob', 2000);",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "INSERT INTO data2014(name,value) VALUES('Bob', 2000);"
         },
         {
-            "query": "\nINSERT INTO data2014(name,value) VALUES('Dennis', 35000);",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "INSERT INTO data2014(name,value) VALUES('Dennis', 35000);"
         },
         {
-            "query": "\n\nSELECT val FROM\n(SELECT value AS val FROM data2013 WHERE name = 'Alice'\nUNION ALL\nSELECT value AS val FROM data2014 WHERE name = 'Alice'\nUNION ALL\nSELECT value AS val FROM data2014 WHERE name = 'Dennis')\nORDER BY val ASC;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "SELECT val FROM\n(SELECT value AS val FROM data2013 WHERE name = 'Alice'\nUNION ALL\nSELECT value AS val FROM data2014 WHERE name = 'Alice'\nUNION ALL\nSELECT value AS val FROM data2014 WHERE name = 'Dennis')\nORDER BY val ASC;"
         },
         {
-            "query": "\n\nDROP TABLE data2013;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "DROP TABLE data2013;"
         },
         {
-            "query": "\nDROP TABLE data2014;",
-            "name": "00098_4_union_all.sql"
+            "name": "00098_4_union_all.sql",
+            "query": "DROP TABLE data2014;"
         }
     ]
 }

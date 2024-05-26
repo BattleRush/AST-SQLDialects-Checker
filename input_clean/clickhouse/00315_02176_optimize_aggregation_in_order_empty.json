@@ -2,28 +2,28 @@
     "name": "02176_optimize_aggregation_in_order_empty.sql",
     "tests": [
         {
-            "query": "drop table if exists data_02176;",
-            "name": "02176_optimize_aggregation_in_order_empty.sql"
+            "name": "02176_optimize_aggregation_in_order_empty.sql",
+            "query": "drop table if exists data_02176;"
         },
         {
-            "query": "\ncreate table data_02176 (key Int) Engine=MergeTree() order by key;",
-            "name": "02176_optimize_aggregation_in_order_empty.sql"
+            "name": "02176_optimize_aggregation_in_order_empty.sql",
+            "query": "create table data_02176 (key Int) Engine=MergeTree() order by key;"
         },
         {
-            "query": "\n\nset optimize_aggregation_in_order=1;",
-            "name": "02176_optimize_aggregation_in_order_empty.sql"
+            "name": "02176_optimize_aggregation_in_order_empty.sql",
+            "query": "set optimize_aggregation_in_order=1;"
         },
         {
-            "query": "\n\n-- { echoOn }\n\n-- regression for optimize_aggregation_in_order with empty result set\n-- that cause at first\n--   \"Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform\"\n-- at first and after\n--   \"Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform\"\nselect count() from remote('127.{1,2}', currentDatabase(), data_02176) where key = 0 group by key;",
-            "name": "02176_optimize_aggregation_in_order_empty.sql"
+            "name": "02176_optimize_aggregation_in_order_empty.sql",
+            "query": "-- { echoOn }\n\n-- regression for optimize_aggregation_in_order with empty result set\n-- that cause at first\n--   \"Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform\"\n-- at first and after\n--   \"Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform\"\nselect count() from remote('127.{1,2}', currentDatabase(), data_02176) where key = 0 group by key;"
         },
         {
-            "query": "\nselect count() from remote('127.{1,2}', currentDatabase(), data_02176) where key = 0 group by key settings distributed_aggregation_memory_efficient=0;",
-            "name": "02176_optimize_aggregation_in_order_empty.sql"
+            "name": "02176_optimize_aggregation_in_order_empty.sql",
+            "query": "select count() from remote('127.{1,2}', currentDatabase(), data_02176) where key = 0 group by key settings distributed_aggregation_memory_efficient=0;"
         },
         {
-            "query": "\n\n-- { echoOff }\ndrop table data_02176;",
-            "name": "02176_optimize_aggregation_in_order_empty.sql"
+            "name": "02176_optimize_aggregation_in_order_empty.sql",
+            "query": "-- { echoOff }\ndrop table data_02176;"
         }
     ]
 }

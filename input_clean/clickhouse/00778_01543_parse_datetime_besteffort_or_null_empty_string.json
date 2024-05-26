@@ -2,52 +2,52 @@
     "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
     "tests": [
         {
-            "query": "SELECT parseDateTimeBestEffortOrNull('2010-01-01');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2010-01-01');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('2010-01-01 01:01:01');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2010-01-01 01:01:01');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('2020-01-01 11:01:01 am');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2020-01-01 11:01:01 am');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('2020-01-01 11:01:01 pm');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2020-01-01 11:01:01 pm');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('2020-01-01 12:01:01 am');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2020-01-01 12:01:01 am');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('2020-01-01 12:01:01 pm');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2020-01-01 12:01:01 pm');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('2000-01-01 01:01:01');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('2000-01-01 01:01:01');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('20100');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('20100');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('0100:0100:0000');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('0100:0100:0000');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('x');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('x');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('');"
         },
         {
-            "query": "\nSELECT parseDateTimeBestEffortOrNull('       ');",
-            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql"
+            "name": "01543_parse_datetime_besteffort_or_null_empty_string.sql",
+            "query": "SELECT parseDateTimeBestEffortOrNull('       ');"
         }
     ]
 }

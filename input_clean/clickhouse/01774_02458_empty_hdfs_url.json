@@ -2,24 +2,8 @@
     "name": "02458_empty_hdfs_url.sql",
     "tests": [
         {
-            "query": "-- Tags: no-fasttest\nSELECT * FROM hdfsCluster('test_shard_localhost', '', 'TSV');",
-            "name": "02458_empty_hdfs_url.sql"
-        },
-        {
-            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT * FROM hdfsCluster('test_shard_localhost', ' ', 'TSV');",
-            "name": "02458_empty_hdfs_url.sql"
-        },
-        {
-            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT * FROM hdfsCluster('test_shard_localhost', '/', 'TSV');",
-            "name": "02458_empty_hdfs_url.sql"
-        },
-        {
-            "query": " -- { serverError BAD_ARGUMENTS }\nSELECT * FROM hdfsCluster('test_shard_localhost', 'http/', 'TSV');",
-            "name": "02458_empty_hdfs_url.sql"
-        },
-        {
-            "query": " -- { serverError BAD_ARGUMENTS }\n;",
-            "name": "02458_empty_hdfs_url.sql"
+            "name": "02458_empty_hdfs_url.sql",
+            "query": "-- Tags: no-fasttest\nSELECT * FROM hdfsCluster('test_shard_localhost', '', 'TSV'); -- { serverError BAD_ARGUMENTS }\nSELECT * FROM hdfsCluster('test_shard_localhost', ' ', 'TSV'); -- { serverError BAD_ARGUMENTS }\nSELECT * FROM hdfsCluster('test_shard_localhost', '/', 'TSV'); -- { serverError BAD_ARGUMENTS }\nSELECT * FROM hdfsCluster('test_shard_localhost', 'http/', 'TSV'); -- { serverError BAD_ARGUMENTS }\n;"
         }
     ]
 }

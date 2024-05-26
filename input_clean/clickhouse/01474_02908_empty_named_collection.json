@@ -2,16 +2,12 @@
     "name": "02908_empty_named_collection.sql",
     "tests": [
         {
-            "query": "-- Tags: no-parallel\n\nCREATE NAMED COLLECTION foobar03 AS a = 1;",
-            "name": "02908_empty_named_collection.sql"
+            "name": "02908_empty_named_collection.sql",
+            "query": "-- Tags: no-parallel\n\nCREATE NAMED COLLECTION foobar03 AS a = 1;"
         },
         {
-            "query": "\nALTER NAMED COLLECTION foobar03 DELETE b;",
-            "name": "02908_empty_named_collection.sql"
-        },
-        {
-            "query": " -- { serverError BAD_ARGUMENTS }\nDROP NAMED COLLECTION foobar03;",
-            "name": "02908_empty_named_collection.sql"
+            "name": "02908_empty_named_collection.sql",
+            "query": "ALTER NAMED COLLECTION foobar03 DELETE b; -- { serverError BAD_ARGUMENTS }\nDROP NAMED COLLECTION foobar03;"
         }
     ]
 }

@@ -2,492 +2,812 @@
     "name": "cluster.sql",
     "tests": [
         {
-            "query": "--\n--  CLUSTER\n--\n\nCREATE TABLE clstr_tst_s (rf_a SERIAL PRIMARY KEY,\n\tb INT)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "--\n--  CLUSTER\n--\n\nCREATE TABLE clstr_tst_s (rf_a SERIAL PRIMARY KEY,\n\tb INT);"
         },
         {
-            "query": "CREATE TABLE clstr_tst (a SERIAL PRIMARY KEY,\n\tb INT,\n\tc TEXT,\n\td TEXT,\n\tCONSTRAINT clstr_tst_con FOREIGN KEY (b) REFERENCES clstr_tst_s)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstr_tst (a SERIAL PRIMARY KEY,\n\tb INT,\n\tc TEXT,\n\td TEXT,\n\tCONSTRAINT clstr_tst_con FOREIGN KEY (b) REFERENCES clstr_tst_s);"
         },
         {
-            "query": "CREATE INDEX clstr_tst_b ON clstr_tst (b)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstr_tst_b ON clstr_tst (b);"
         },
         {
-            "query": "CREATE INDEX clstr_tst_c ON clstr_tst (c)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstr_tst_c ON clstr_tst (c);"
         },
         {
-            "query": "CREATE INDEX clstr_tst_c_b ON clstr_tst (c,b)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstr_tst_c_b ON clstr_tst (c,b);"
         },
         {
-            "query": "CREATE INDEX clstr_tst_b_c ON clstr_tst (b,c)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstr_tst_b_c ON clstr_tst (b,c);"
         },
         {
-            "query": "INSERT INTO clstr_tst_s (b) VALUES (0)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst_s (b) VALUES (0);"
         },
         {
-            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s;"
         },
         {
-            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s;"
         },
         {
-            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s;"
         },
         {
-            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s;"
         },
         {
-            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst_s (b) SELECT b FROM clstr_tst_s;"
         },
         {
-            "query": "CREATE TABLE clstr_tst_inh () INHERITS (clstr_tst)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstr_tst_inh () INHERITS (clstr_tst);"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (11, 'once')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (11, 'once');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (10, 'diez')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (10, 'diez');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (31, 'treinta y uno')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (31, 'treinta y uno');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (22, 'veintidos')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (22, 'veintidos');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (3, 'tres')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (3, 'tres');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (20, 'veinte')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (20, 'veinte');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (23, 'veintitres')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (23, 'veintitres');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (21, 'veintiuno')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (21, 'veintiuno');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (4, 'cuatro')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (4, 'cuatro');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (14, 'catorce')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (14, 'catorce');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (2, 'dos')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (2, 'dos');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (18, 'dieciocho')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (18, 'dieciocho');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (27, 'veintisiete')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (27, 'veintisiete');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (25, 'veinticinco')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (25, 'veinticinco');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (13, 'trece')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (13, 'trece');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (28, 'veintiocho')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (28, 'veintiocho');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (32, 'treinta y dos')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (32, 'treinta y dos');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (5, 'cinco')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (5, 'cinco');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (29, 'veintinueve')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (29, 'veintinueve');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (1, 'uno')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (1, 'uno');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (24, 'veinticuatro')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (24, 'veinticuatro');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (30, 'treinta')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (30, 'treinta');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (12, 'doce')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (12, 'doce');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (17, 'diecisiete')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (17, 'diecisiete');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (9, 'nueve')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (9, 'nueve');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (19, 'diecinueve')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (19, 'diecinueve');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (26, 'veintiseis')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (26, 'veintiseis');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (15, 'quince')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (15, 'quince');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (7, 'siete')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (7, 'siete');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (16, 'dieciseis')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (16, 'dieciseis');"
         },
         {
-            "query": "INSERT INTO clstr_tst (b, c) VALUES (8, 'ocho')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_tst (b, c) VALUES (8, 'ocho');"
         },
         {
-            "query": "-- This entry is needed to test that TOASTED values are copied correctly.\nINSERT INTO clstr_tst (b, c, d) VALUES (6, 'seis', repeat('xyzzy', 100000))",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- This entry is needed to test that TOASTED values are copied correctly.\nINSERT INTO clstr_tst (b, c, d) VALUES (6, 'seis', repeat('xyzzy', 100000));"
         },
         {
-            "query": "CLUSTER clstr_tst_c ON clstr_tst",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CLUSTER clstr_tst_c ON clstr_tst;"
         },
         {
-            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst;"
         },
         {
-            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst ORDER BY a",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst ORDER BY a;"
         },
         {
-            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst ORDER BY b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst ORDER BY b;"
         },
         {
-            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst ORDER BY c",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst ORDER BY c;"
         },
         {
-            "query": "-- Verify that inheritance link still works\nINSERT INTO clstr_tst_inh VALUES (0, 100, 'in child table')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Verify that inheritance link still works\nINSERT INTO clstr_tst_inh VALUES (0, 100, 'in child table');"
         },
         {
-            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT a,b,c,substring(d for 30), length(d) from clstr_tst;"
         },
         {
-            "query": "-- Verify that foreign key link still works\nINSERT INTO clstr_tst (b, c) VALUES (1111, 'this should fail')",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Verify that foreign key link still works\nINSERT INTO clstr_tst (b, c) VALUES (1111, 'this should fail');"
         },
         {
-            "query": "SELECT conname FROM pg_constraint WHERE conrelid = 'clstr_tst'::regclass\nORDER BY 1",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT conname FROM pg_constraint WHERE conrelid = 'clstr_tst'::regclass\nORDER BY 1;"
         },
         {
-            "query": "SELECT relname, relkind,\n    EXISTS(SELECT 1 FROM pg_class WHERE oid = c.reltoastrelid) AS hastoast\nFROM pg_class c WHERE relname LIKE 'clstr_tst%' ORDER BY relname",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT relname, relkind,\n    EXISTS(SELECT 1 FROM pg_class WHERE oid = c.reltoastrelid) AS hastoast\nFROM pg_class c WHERE relname LIKE 'clstr_tst%' ORDER BY relname;"
         },
         {
-            "query": "-- Verify that indisclustered is correctly set\nSELECT pg_class.relname FROM pg_index, pg_class, pg_class AS pg_class_2\nWHERE pg_class.oid=indexrelid\n\tAND indrelid=pg_class_2.oid\n\tAND pg_class_2.relname = 'clstr_tst'\n\tAND indisclustered",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Verify that indisclustered is correctly set\nSELECT pg_class.relname FROM pg_index, pg_class, pg_class AS pg_class_2\nWHERE pg_class.oid=indexrelid\n\tAND indrelid=pg_class_2.oid\n\tAND pg_class_2.relname = 'clstr_tst'\n\tAND indisclustered;"
         },
         {
-            "query": "-- Try changing indisclustered\nALTER TABLE clstr_tst CLUSTER ON clstr_tst_b_c",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Try changing indisclustered\nALTER TABLE clstr_tst CLUSTER ON clstr_tst_b_c;"
         },
         {
-            "query": "SELECT pg_class.relname FROM pg_index, pg_class, pg_class AS pg_class_2\nWHERE pg_class.oid=indexrelid\n\tAND indrelid=pg_class_2.oid\n\tAND pg_class_2.relname = 'clstr_tst'\n\tAND indisclustered",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT pg_class.relname FROM pg_index, pg_class, pg_class AS pg_class_2\nWHERE pg_class.oid=indexrelid\n\tAND indrelid=pg_class_2.oid\n\tAND pg_class_2.relname = 'clstr_tst'\n\tAND indisclustered;"
         },
         {
-            "query": "-- Try turning off all clustering\nALTER TABLE clstr_tst SET WITHOUT CLUSTER",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Try turning off all clustering\nALTER TABLE clstr_tst SET WITHOUT CLUSTER;"
         },
         {
-            "query": "SELECT pg_class.relname FROM pg_index, pg_class, pg_class AS pg_class_2\nWHERE pg_class.oid=indexrelid\n\tAND indrelid=pg_class_2.oid\n\tAND pg_class_2.relname = 'clstr_tst'\n\tAND indisclustered",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT pg_class.relname FROM pg_index, pg_class, pg_class AS pg_class_2\nWHERE pg_class.oid=indexrelid\n\tAND indrelid=pg_class_2.oid\n\tAND pg_class_2.relname = 'clstr_tst'\n\tAND indisclustered;"
         },
         {
-            "query": "-- Verify that toast tables are clusterable\nCLUSTER pg_toast.pg_toast_826 USING pg_toast_826_index",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Verify that toast tables are clusterable\nCLUSTER pg_toast.pg_toast_826 USING pg_toast_826_index;"
         },
         {
-            "query": "-- Verify that clustering all tables does in fact cluster the right ones\nCREATE USER regress_clstr_user",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Verify that clustering all tables does in fact cluster the right ones\nCREATE USER regress_clstr_user;"
         },
         {
-            "query": "CREATE TABLE clstr_1 (a INT PRIMARY KEY)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstr_1 (a INT PRIMARY KEY);"
         },
         {
-            "query": "CREATE TABLE clstr_2 (a INT PRIMARY KEY)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstr_2 (a INT PRIMARY KEY);"
         },
         {
-            "query": "CREATE TABLE clstr_3 (a INT PRIMARY KEY)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstr_3 (a INT PRIMARY KEY);"
         },
         {
-            "query": "ALTER TABLE clstr_1 OWNER TO regress_clstr_user",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "ALTER TABLE clstr_1 OWNER TO regress_clstr_user;"
         },
         {
-            "query": "ALTER TABLE clstr_3 OWNER TO regress_clstr_user",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "ALTER TABLE clstr_3 OWNER TO regress_clstr_user;"
         },
         {
-            "query": "GRANT SELECT ON clstr_2 TO regress_clstr_user",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "GRANT SELECT ON clstr_2 TO regress_clstr_user;"
         },
         {
-            "query": "INSERT INTO clstr_1 VALUES (2)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_1 VALUES (2);"
         },
         {
-            "query": "INSERT INTO clstr_1 VALUES (1)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_1 VALUES (1);"
         },
         {
-            "query": "INSERT INTO clstr_2 VALUES (2)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_2 VALUES (2);"
         },
         {
-            "query": "INSERT INTO clstr_2 VALUES (1)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_2 VALUES (1);"
         },
         {
-            "query": "INSERT INTO clstr_3 VALUES (2)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_3 VALUES (2);"
         },
         {
-            "query": "INSERT INTO clstr_3 VALUES (1)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_3 VALUES (1);"
         },
         {
-            "query": "-- \"CLUSTER <tablename>\" on a table that hasn't been clustered\nCLUSTER clstr_2;\n\nCLUSTER clstr_1_pkey ON clstr_1;\nCLUSTER clstr_2 USING clstr_2_pkey;\nSELECT * FROM clstr_1 UNION ALL\n  SELECT * FROM clstr_2 UNION ALL\n  SELECT * FROM clstr_3;\n\n-- revert to the original state\nDELETE FROM clstr_1;\nDELETE FROM clstr_2;\nDELETE FROM clstr_3;\nINSERT INTO clstr_1 VALUES (2);\nINSERT INTO clstr_1 VALUES (1);\nINSERT INTO clstr_2 VALUES (2);\nINSERT INTO clstr_2 VALUES (1);\nINSERT INTO clstr_3 VALUES (2);\nINSERT INTO clstr_3 VALUES (1);\n\n-- this user can only cluster clstr_1 and clstr_3, but the latter\n-- has not been clustered\nSET SESSION AUTHORIZATION regress_clstr_user;\nSET client_min_messages = ERROR;  -- order of \"skipping\" warnings may vary\nCLUSTER;\nRESET client_min_messages;\nSELECT * FROM clstr_1 UNION ALL\n  SELECT * FROM clstr_2 UNION ALL\n  SELECT * FROM clstr_3;\n\n-- cluster a single table using the indisclustered bit previously set\nDELETE FROM clstr_1;\nINSERT INTO clstr_1 VALUES (2);\nINSERT INTO clstr_1 VALUES (1);\nCLUSTER clstr_1;\nSELECT * FROM clstr_1;\n\n-- Test MVCC-safety of cluster. There isn't much we can do to verify the\n-- results with a single backend...\n\nCREATE TABLE clustertest (key int PRIMARY KEY)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- \"CLUSTER <tablename>\" on a table that hasn't been clustered\nCLUSTER clstr_2;"
         },
         {
-            "query": "INSERT INTO clustertest VALUES (10)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CLUSTER clstr_1_pkey ON clstr_1;"
         },
         {
-            "query": "INSERT INTO clustertest VALUES (20)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CLUSTER clstr_2 USING clstr_2_pkey;"
         },
         {
-            "query": "INSERT INTO clustertest VALUES (30)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_1 UNION ALL\n  SELECT * FROM clstr_2 UNION ALL\n  SELECT * FROM clstr_3;"
         },
         {
-            "query": "INSERT INTO clustertest VALUES (40)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- revert to the original state\nDELETE FROM clstr_1;"
         },
         {
-            "query": "INSERT INTO clustertest VALUES (50)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "DELETE FROM clstr_2;"
         },
         {
-            "query": "-- Use a transaction so that updates are not committed when CLUSTER sees 'em\nBEGIN;\n\n-- Test update where the old row version is found first in the scan\nUPDATE clustertest SET key = 100 WHERE key = 10;\n\n-- Test update where the new row version is found first in the scan\nUPDATE clustertest SET key = 35 WHERE key = 40;\n\n-- Test longer update chain\nUPDATE clustertest SET key = 60 WHERE key = 50;\nUPDATE clustertest SET key = 70 WHERE key = 60;\nUPDATE clustertest SET key = 80 WHERE key = 70;\n\nSELECT * FROM clustertest;\nCLUSTER clustertest_pkey ON clustertest;\nSELECT * FROM clustertest;\n\nCOMMIT;\n\nSELECT * FROM clustertest;\n\n-- check that temp tables can be clustered\ncreate temp table clstr_temp (col1 int primary key, col2 text);\ninsert into clstr_temp values (2, 'two'), (1, 'one');\ncluster clstr_temp using clstr_temp_pkey;\nselect * from clstr_temp;\ndrop table clstr_temp;\n\nRESET SESSION AUTHORIZATION;\n\n-- check clustering an empty table\nDROP TABLE clustertest;\nCREATE TABLE clustertest (f1 int PRIMARY KEY);\nCLUSTER clustertest USING clustertest_pkey;\nCLUSTER clustertest;\n\n-- Check that partitioned tables can be clustered\nCREATE TABLE clstrpart (a int) PARTITION BY RANGE (a);\nCREATE TABLE clstrpart1 PARTITION OF clstrpart FOR VALUES FROM (1) TO (10) PARTITION BY RANGE (a);\nCREATE TABLE clstrpart11 PARTITION OF clstrpart1 FOR VALUES FROM (1) TO (5);\nCREATE TABLE clstrpart12 PARTITION OF clstrpart1 FOR VALUES FROM (5) TO (10) PARTITION BY RANGE (a);\nCREATE TABLE clstrpart2 PARTITION OF clstrpart FOR VALUES FROM (10) TO (20);\nCREATE TABLE clstrpart3 PARTITION OF clstrpart DEFAULT PARTITION BY RANGE (a);\nCREATE TABLE clstrpart33 PARTITION OF clstrpart3 DEFAULT;\nCREATE INDEX clstrpart_only_idx ON ONLY clstrpart (a);\nCLUSTER clstrpart USING clstrpart_only_idx; -- fails\nDROP INDEX clstrpart_only_idx;\nCREATE INDEX clstrpart_idx ON clstrpart (a);\n-- Check that clustering sets new relfilenodes:\nCREATE TEMP TABLE old_cluster_info AS SELECT relname, level, relfilenode, relkind FROM pg_partition_tree('clstrpart'::regclass) AS tree JOIN pg_class c ON c.oid=tree.relid ;\nCLUSTER clstrpart USING clstrpart_idx;\nCREATE TEMP TABLE new_cluster_info AS SELECT relname, level, relfilenode, relkind FROM pg_partition_tree('clstrpart'::regclass) AS tree JOIN pg_class c ON c.oid=tree.relid ;\nSELECT relname, old.level, old.relkind, old.relfilenode = new.relfilenode FROM old_cluster_info AS old JOIN new_cluster_info AS new USING (relname) ORDER BY relname COLLATE \"C\";\n-- Partitioned indexes aren't and can't be marked un/clustered:\n\\d clstrpart\nCLUSTER clstrpart;\nALTER TABLE clstrpart SET WITHOUT CLUSTER;\nALTER TABLE clstrpart CLUSTER ON clstrpart_idx;\nDROP TABLE clstrpart;\n\n-- Ownership of partitions is checked\nCREATE TABLE ptnowner(i int unique) PARTITION BY LIST (i);\nCREATE INDEX ptnowner_i_idx ON ptnowner(i);\nCREATE TABLE ptnowner1 PARTITION OF ptnowner FOR VALUES IN (1);\nCREATE ROLE regress_ptnowner;\nCREATE TABLE ptnowner2 PARTITION OF ptnowner FOR VALUES IN (2);\nALTER TABLE ptnowner1 OWNER TO regress_ptnowner;\nSET SESSION AUTHORIZATION regress_ptnowner;\nCLUSTER ptnowner USING ptnowner_i_idx;\nRESET SESSION AUTHORIZATION;\nALTER TABLE ptnowner OWNER TO regress_ptnowner;\nCREATE TEMP TABLE ptnowner_oldnodes AS\n  SELECT oid, relname, relfilenode FROM pg_partition_tree('ptnowner') AS tree\n  JOIN pg_class AS c ON c.oid=tree.relid;\nSET SESSION AUTHORIZATION regress_ptnowner;\nCLUSTER ptnowner USING ptnowner_i_idx;\nRESET SESSION AUTHORIZATION;\nSELECT a.relname, a.relfilenode=b.relfilenode FROM pg_class a\n  JOIN ptnowner_oldnodes b USING (oid) ORDER BY a.relname COLLATE \"C\";\nDROP TABLE ptnowner;\nDROP ROLE regress_ptnowner;\n\n-- Test CLUSTER with external tuplesorting\n\ncreate table clstr_4 as select * from tenk1;\ncreate index cluster_sort on clstr_4 (hundred, thousand, tenthous);\n-- ensure we don't use the index in CLUSTER nor the checking SELECTs\nset enable_indexscan = off",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "DELETE FROM clstr_3;"
         },
         {
-            "query": "-- Use external sort:\nset maintenance_work_mem = '1MB'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_1 VALUES (2);"
         },
         {
-            "query": "cluster clstr_4 using cluster_sort",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_1 VALUES (1);"
         },
         {
-            "query": "select * from\n(select hundred, lag(hundred) over () as lhundred,\n        thousand, lag(thousand) over () as lthousand,\n        tenthous, lag(tenthous) over () as ltenthous from clstr_4) ss\nwhere row(hundred, thousand, tenthous) <= row(lhundred, lthousand, ltenthous)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_2 VALUES (2);"
         },
         {
-            "query": "reset enable_indexscan",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_2 VALUES (1);"
         },
         {
-            "query": "reset maintenance_work_mem",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_3 VALUES (2);"
         },
         {
-            "query": "-- test CLUSTER on expression index\nCREATE TABLE clstr_expression(id serial primary key, a int, b text COLLATE \"C\")",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_3 VALUES (1);"
         },
         {
-            "query": "INSERT INTO clstr_expression(a, b) SELECT g.i % 42, 'prefix'||g.i FROM generate_series(1, 133) g(i)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- this user can only cluster clstr_1 and clstr_3, but the latter\n-- has not been clustered\nSET SESSION AUTHORIZATION regress_clstr_user;"
         },
         {
-            "query": "CREATE INDEX clstr_expression_minus_a ON clstr_expression ((-a), b)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SET client_min_messages = ERROR;  -- order of \"skipping\" warnings may vary\nCLUSTER;"
         },
         {
-            "query": "CREATE INDEX clstr_expression_upper_b ON clstr_expression ((upper(b)))",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "RESET client_min_messages;"
         },
         {
-            "query": "-- verify indexes work before cluster\nBEGIN",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_1 UNION ALL\n  SELECT * FROM clstr_2 UNION ALL\n  SELECT * FROM clstr_3;"
         },
         {
-            "query": "SET LOCAL enable_seqscan = false",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- cluster a single table using the indisclustered bit previously set\nDELETE FROM clstr_1;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_1 VALUES (2);"
         },
         {
-            "query": "SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_1 VALUES (1);"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CLUSTER clstr_1;"
         },
         {
-            "query": "SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_1;"
         },
         {
-            "query": "COMMIT",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Test MVCC-safety of cluster. There isn't much we can do to verify the\n-- results with a single backend...\n\nCREATE TABLE clustertest (key int PRIMARY KEY);"
         },
         {
-            "query": "-- and after clustering on clstr_expression_minus_a\nCLUSTER clstr_expression USING clstr_expression_minus_a",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clustertest VALUES (10);"
         },
         {
-            "query": "WITH rows AS\n  (SELECT ctid, lag(a) OVER (ORDER BY ctid) AS la, a FROM clstr_expression)\nSELECT * FROM rows WHERE la < a",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clustertest VALUES (20);"
         },
         {
-            "query": "BEGIN",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clustertest VALUES (30);"
         },
         {
-            "query": "SET LOCAL enable_seqscan = false",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clustertest VALUES (40);"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "INSERT INTO clustertest VALUES (50);"
         },
         {
-            "query": "SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Use a transaction so that updates are not committed when CLUSTER sees 'em\nBEGIN;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Test update where the old row version is found first in the scan\nUPDATE clustertest SET key = 100 WHERE key = 10;"
         },
         {
-            "query": "SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Test update where the new row version is found first in the scan\nUPDATE clustertest SET key = 35 WHERE key = 40;"
         },
         {
-            "query": "COMMIT",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- Test longer update chain\nUPDATE clustertest SET key = 60 WHERE key = 50;"
         },
         {
-            "query": "-- and after clustering on clstr_expression_upper_b\nCLUSTER clstr_expression USING clstr_expression_upper_b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "UPDATE clustertest SET key = 70 WHERE key = 60;"
         },
         {
-            "query": "WITH rows AS\n  (SELECT ctid, lag(b) OVER (ORDER BY ctid) AS lb, b FROM clstr_expression)\nSELECT * FROM rows WHERE upper(lb) > upper(b)",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "UPDATE clustertest SET key = 80 WHERE key = 70;"
         },
         {
-            "query": "BEGIN",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clustertest;"
         },
         {
-            "query": "SET LOCAL enable_seqscan = false",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CLUSTER clustertest_pkey ON clustertest;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clustertest;"
         },
         {
-            "query": "SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3'",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clustertest;"
         },
         {
-            "query": "SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- check that temp tables can be clustered\ncreate temp table clstr_temp (col1 int primary key, col2 text);"
         },
         {
-            "query": "COMMIT",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "insert into clstr_temp values (2, 'two'), (1, 'one');"
         },
         {
-            "query": "-- clean up\nDROP TABLE clustertest",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "cluster clstr_temp using clstr_temp_pkey;"
         },
         {
-            "query": "DROP TABLE clstr_1",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "select * from clstr_temp;"
         },
         {
-            "query": "DROP TABLE clstr_2",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "drop table clstr_temp;"
         },
         {
-            "query": "DROP TABLE clstr_3",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "RESET SESSION AUTHORIZATION;"
         },
         {
-            "query": "DROP TABLE clstr_4",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "-- check clustering an empty table\nDROP TABLE clustertest;"
         },
         {
-            "query": "DROP TABLE clstr_expression",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clustertest (f1 int PRIMARY KEY);"
         },
         {
-            "query": "DROP USER regress_clstr_user",
-            "name": "cluster.sql"
+            "name": "cluster.sql",
+            "query": "CLUSTER clustertest USING clustertest_pkey;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CLUSTER clustertest;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- Check that partitioned tables can be clustered\nCREATE TABLE clstrpart (a int) PARTITION BY RANGE (a);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstrpart1 PARTITION OF clstrpart FOR VALUES FROM (1) TO (10) PARTITION BY RANGE (a);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstrpart11 PARTITION OF clstrpart1 FOR VALUES FROM (1) TO (5);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstrpart12 PARTITION OF clstrpart1 FOR VALUES FROM (5) TO (10) PARTITION BY RANGE (a);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstrpart2 PARTITION OF clstrpart FOR VALUES FROM (10) TO (20);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstrpart3 PARTITION OF clstrpart DEFAULT PARTITION BY RANGE (a);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE clstrpart33 PARTITION OF clstrpart3 DEFAULT;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstrpart_only_idx ON ONLY clstrpart (a);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CLUSTER clstrpart USING clstrpart_only_idx; -- fails\nDROP INDEX clstrpart_only_idx;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstrpart_idx ON clstrpart (a);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- Check that clustering sets new relfilenodes:\nCREATE TEMP TABLE old_cluster_info AS SELECT relname, level, relfilenode, relkind FROM pg_partition_tree('clstrpart'::regclass) AS tree JOIN pg_class c ON c.oid=tree.relid;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CLUSTER clstrpart USING clstrpart_idx;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TEMP TABLE new_cluster_info AS SELECT relname, level, relfilenode, relkind FROM pg_partition_tree('clstrpart'::regclass) AS tree JOIN pg_class c ON c.oid=tree.relid;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT relname, old.level, old.relkind, old.relfilenode = new.relfilenode FROM old_cluster_info AS old JOIN new_cluster_info AS new USING (relname) ORDER BY relname COLLATE \"C\";"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- Partitioned indexes aren't and can't be marked un/clustered:\n\\d clstrpart\nCLUSTER clstrpart;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "ALTER TABLE clstrpart SET WITHOUT CLUSTER;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "ALTER TABLE clstrpart CLUSTER ON clstrpart_idx;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE clstrpart;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- Ownership of partitions is checked\nCREATE TABLE ptnowner(i int unique) PARTITION BY LIST (i);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE INDEX ptnowner_i_idx ON ptnowner(i);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE ptnowner1 PARTITION OF ptnowner FOR VALUES IN (1);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE ROLE regress_ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TABLE ptnowner2 PARTITION OF ptnowner FOR VALUES IN (2);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "ALTER TABLE ptnowner1 OWNER TO regress_ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SET SESSION AUTHORIZATION regress_ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CLUSTER ptnowner USING ptnowner_i_idx;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "RESET SESSION AUTHORIZATION;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "ALTER TABLE ptnowner OWNER TO regress_ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE TEMP TABLE ptnowner_oldnodes AS\n  SELECT oid, relname, relfilenode FROM pg_partition_tree('ptnowner') AS tree\n  JOIN pg_class AS c ON c.oid=tree.relid;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SET SESSION AUTHORIZATION regress_ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CLUSTER ptnowner USING ptnowner_i_idx;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "RESET SESSION AUTHORIZATION;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT a.relname, a.relfilenode=b.relfilenode FROM pg_class a\n  JOIN ptnowner_oldnodes b USING (oid) ORDER BY a.relname COLLATE \"C\";"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP ROLE regress_ptnowner;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- Test CLUSTER with external tuplesorting\n\ncreate table clstr_4 as select * from tenk1;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "create index cluster_sort on clstr_4 (hundred, thousand, tenthous);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- ensure we don't use the index in CLUSTER nor the checking SELECTs\nset enable_indexscan = off;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- Use external sort:\nset maintenance_work_mem = '1MB';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "cluster clstr_4 using cluster_sort;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "select * from\n(select hundred, lag(hundred) over () as lhundred,\n        thousand, lag(thousand) over () as lthousand,\n        tenthous, lag(tenthous) over () as ltenthous from clstr_4) ss\nwhere row(hundred, thousand, tenthous) <= row(lhundred, lthousand, ltenthous);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "reset enable_indexscan;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "reset maintenance_work_mem;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- test CLUSTER on expression index\nCREATE TABLE clstr_expression(id serial primary key, a int, b text COLLATE \"C\");"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "INSERT INTO clstr_expression(a, b) SELECT g.i % 42, 'prefix'||g.i FROM generate_series(1, 133) g(i);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstr_expression_minus_a ON clstr_expression ((-a), b);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "CREATE INDEX clstr_expression_upper_b ON clstr_expression ((upper(b)));"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- verify indexes work before cluster\nBEGIN;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SET LOCAL enable_seqscan = false;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "COMMIT;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- and after clustering on clstr_expression_minus_a\nCLUSTER clstr_expression USING clstr_expression_minus_a;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "WITH rows AS\n  (SELECT ctid, lag(a) OVER (ORDER BY ctid) AS la, a FROM clstr_expression)\nSELECT * FROM rows WHERE la < a;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "BEGIN;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SET LOCAL enable_seqscan = false;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "COMMIT;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- and after clustering on clstr_expression_upper_b\nCLUSTER clstr_expression USING clstr_expression_upper_b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "WITH rows AS\n  (SELECT ctid, lag(b) OVER (ORDER BY ctid) AS lb, b FROM clstr_expression)\nSELECT * FROM rows WHERE upper(lb) > upper(b);"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "BEGIN;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SET LOCAL enable_seqscan = false;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_expression WHERE upper(b) = 'PREFIX3';"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "SELECT * FROM clstr_expression WHERE -a = -3 ORDER BY -a, b;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "COMMIT;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "-- clean up\nDROP TABLE clustertest;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE clstr_1;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE clstr_2;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE clstr_3;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE clstr_4;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP TABLE clstr_expression;"
+        },
+        {
+            "name": "cluster.sql",
+            "query": "DROP USER regress_clstr_user;"
         }
     ]
 }

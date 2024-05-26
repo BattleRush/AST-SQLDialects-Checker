@@ -2,36 +2,36 @@
     "name": "02000_default_from_default_empty_column.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS test;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "DROP TABLE IF EXISTS test;"
         },
         {
-            "query": "\n\nCREATE TABLE test (col Int8) ENGINE=MergeTree ORDER BY tuple()\nSETTINGS vertical_merge_algorithm_min_rows_to_activate=1,\n         vertical_merge_algorithm_min_columns_to_activate=1,\n         min_bytes_for_wide_part = 0;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "CREATE TABLE test (col Int8) ENGINE=MergeTree ORDER BY tuple()\nSETTINGS vertical_merge_algorithm_min_rows_to_activate=1,\n         vertical_merge_algorithm_min_columns_to_activate=1,\n         min_bytes_for_wide_part = 0;"
         },
         {
-            "query": "\n\n\nINSERT INTO test VALUES (1);",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "INSERT INTO test VALUES (1);"
         },
         {
-            "query": "\nALTER TABLE test ADD COLUMN s1 String;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "ALTER TABLE test ADD COLUMN s1 String;"
         },
         {
-            "query": "\nALTER TABLE test ADD COLUMN s2 String DEFAULT s1;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "ALTER TABLE test ADD COLUMN s2 String DEFAULT s1;"
         },
         {
-            "query": "\n\nOPTIMIZE TABLE test FINAL;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "OPTIMIZE TABLE test FINAL;"
         },
         {
-            "query": "\n\nSELECT * FROM test;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "SELECT * FROM test;"
         },
         {
-            "query": "\n\nDROP TABLE IF EXISTS test;",
-            "name": "02000_default_from_default_empty_column.sql"
+            "name": "02000_default_from_default_empty_column.sql",
+            "query": "DROP TABLE IF EXISTS test;"
         }
     ]
 }

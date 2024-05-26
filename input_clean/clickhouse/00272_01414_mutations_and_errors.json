@@ -2,48 +2,40 @@
     "name": "01414_mutations_and_errors.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS mutation_table;",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "DROP TABLE IF EXISTS mutation_table;"
         },
         {
-            "query": "\n\nCREATE TABLE mutation_table\n(\n    date Date,\n    key UInt64,\n    value String\n)\nENGINE = MergeTree()\nPARTITION BY date\nORDER BY tuple();",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "CREATE TABLE mutation_table\n(\n    date Date,\n    key UInt64,\n    value String\n)\nENGINE = MergeTree()\nPARTITION BY date\nORDER BY tuple();"
         },
         {
-            "query": "\n\nINSERT INTO mutation_table SELECT toDate('2019-10-01'), number, '42' FROM numbers(100);",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "INSERT INTO mutation_table SELECT toDate('2019-10-01'), number, '42' FROM numbers(100);"
         },
         {
-            "query": "\n\nINSERT INTO mutation_table SELECT toDate('2019-10-02'), number, 'Hello' FROM numbers(100);",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "INSERT INTO mutation_table SELECT toDate('2019-10-02'), number, 'Hello' FROM numbers(100);"
         },
         {
-            "query": "\n\nSELECT distinct(value) FROM mutation_table ORDER BY value;",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "SELECT distinct(value) FROM mutation_table ORDER BY value;"
         },
         {
-            "query": "\n\nALTER TABLE mutation_table MODIFY COLUMN value UInt64 SETTINGS mutations_sync = 2;",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "ALTER TABLE mutation_table MODIFY COLUMN value UInt64 SETTINGS mutations_sync = 2; --{serverError 341}\n\nSELECT distinct(value) FROM mutation_table ORDER BY value; --{serverError 6}\n\nKILL MUTATION where table = 'mutation_table' and database = currentDatabase();"
         },
         {
-            "query": " --{serverError 341}\n\nSELECT distinct(value) FROM mutation_table ORDER BY value;",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "ALTER TABLE mutation_table MODIFY COLUMN value String SETTINGS mutations_sync = 2;"
         },
         {
-            "query": " --{serverError 6}\n\nKILL MUTATION where table = 'mutation_table' and database = currentDatabase();",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "SELECT distinct(value) FROM mutation_table ORDER BY value;"
         },
         {
-            "query": "\n\nALTER TABLE mutation_table MODIFY COLUMN value String SETTINGS mutations_sync = 2;",
-            "name": "01414_mutations_and_errors.sql"
-        },
-        {
-            "query": "\n\nSELECT distinct(value) FROM mutation_table ORDER BY value;",
-            "name": "01414_mutations_and_errors.sql"
-        },
-        {
-            "query": "\n\nDROP TABLE IF EXISTS mutation_table;",
-            "name": "01414_mutations_and_errors.sql"
+            "name": "01414_mutations_and_errors.sql",
+            "query": "DROP TABLE IF EXISTS mutation_table;"
         }
     ]
 }

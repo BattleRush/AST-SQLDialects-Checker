@@ -2,28 +2,28 @@
     "name": "02016_agg_empty_result_bug_28880.sql",
     "tests": [
         {
-            "query": "SELECT count() AS cnt WHERE 0 HAVING cnt = 0;",
-            "name": "02016_agg_empty_result_bug_28880.sql"
+            "name": "02016_agg_empty_result_bug_28880.sql",
+            "query": "SELECT count() AS cnt WHERE 0 HAVING cnt = 0;"
         },
         {
-            "query": "\n\nselect cnt from (select count() cnt where 0) where cnt = 0;",
-            "name": "02016_agg_empty_result_bug_28880.sql"
+            "name": "02016_agg_empty_result_bug_28880.sql",
+            "query": "select cnt from (select count() cnt where 0) where cnt = 0;"
         },
         {
-            "query": "\n\nselect cnt from (select count() cnt from system.one where 0) where cnt = 0;",
-            "name": "02016_agg_empty_result_bug_28880.sql"
+            "name": "02016_agg_empty_result_bug_28880.sql",
+            "query": "select cnt from (select count() cnt from system.one where 0) where cnt = 0;"
         },
         {
-            "query": "\n\nselect sum from (select sum(dummy) sum from system.one where 0) where sum = 0;",
-            "name": "02016_agg_empty_result_bug_28880.sql"
+            "name": "02016_agg_empty_result_bug_28880.sql",
+            "query": "select sum from (select sum(dummy) sum from system.one where 0) where sum = 0;"
         },
         {
-            "query": "\n\nset aggregate_functions_null_for_empty=1;",
-            "name": "02016_agg_empty_result_bug_28880.sql"
+            "name": "02016_agg_empty_result_bug_28880.sql",
+            "query": "set aggregate_functions_null_for_empty=1;"
         },
         {
-            "query": "\nselect sum from (select sum(dummy) sum from system.one where 0) where sum is null;",
-            "name": "02016_agg_empty_result_bug_28880.sql"
+            "name": "02016_agg_empty_result_bug_28880.sql",
+            "query": "select sum from (select sum(dummy) sum from system.one where 0) where sum is null;"
         }
     ]
 }

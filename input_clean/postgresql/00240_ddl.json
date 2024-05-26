@@ -2,884 +2,968 @@
     "name": "ddl.sql",
     "tests": [
         {
-            "query": "-- predictability\nSET synchronous_commit = on",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- predictability\nSET synchronous_commit = on;"
         },
         {
-            "query": "SELECT 'init' FROM pg_create_logical_replication_slot('regression_slot', 'test_decoding')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT 'init' FROM pg_create_logical_replication_slot('regression_slot', 'test_decoding');"
         },
         {
-            "query": "-- fail because of an already existing slot\nSELECT 'init' FROM pg_create_logical_replication_slot('regression_slot', 'test_decoding')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- fail because of an already existing slot\nSELECT 'init' FROM pg_create_logical_replication_slot('regression_slot', 'test_decoding');"
         },
         {
-            "query": "-- fail because of an invalid name\nSELECT 'init' FROM pg_create_logical_replication_slot('Invalid Name', 'test_decoding')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- fail because of an invalid name\nSELECT 'init' FROM pg_create_logical_replication_slot('Invalid Name', 'test_decoding');"
         },
         {
-            "query": "-- fail twice because of an invalid parameter values\nSELECT 'init' FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', 'frakbar')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- fail twice because of an invalid parameter values\nSELECT 'init' FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', 'frakbar');"
         },
         {
-            "query": "SELECT 'init' FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'nonexistent-option', 'frakbar')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT 'init' FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'nonexistent-option', 'frakbar');"
         },
         {
-            "query": "SELECT 'init' FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', 'frakbar')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT 'init' FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', 'frakbar');"
         },
         {
-            "query": "-- succeed once\nSELECT pg_drop_replication_slot('regression_slot')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- succeed once\nSELECT pg_drop_replication_slot('regression_slot');"
         },
         {
-            "query": "-- fail\nSELECT pg_drop_replication_slot('regression_slot')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- fail\nSELECT pg_drop_replication_slot('regression_slot');"
         },
         {
-            "query": "-- check that we're detecting a streaming rep slot used for logical decoding\nSELECT 'init' FROM pg_create_physical_replication_slot('repl');\nSELECT data FROM pg_logical_slot_get_changes('repl', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');\nSELECT pg_drop_replication_slot('repl');\n\n\nSELECT 'init' FROM pg_create_logical_replication_slot('regression_slot', 'test_decoding');\n\n/* check whether status function reports us, only reproduceable columns */\nSELECT slot_name, plugin, slot_type, active,\n    NOT catalog_xmin IS NULL AS catalog_xmin_set,\n    xmin IS NULl  AS data_xmin_not_set,\n    pg_wal_lsn_diff(restart_lsn, '0/01000000') > 0 AS some_wal\nFROM pg_replication_slots;\n\n/*\n * Check that changes are handled correctly when interleaved with ddl\n */\nCREATE TABLE replication_example(id SERIAL PRIMARY KEY, somedata int, text varchar(120));\nBEGIN;\nINSERT INTO replication_example(somedata, text) VALUES (1, 1);\nINSERT INTO replication_example(somedata, text) VALUES (1, 2);\nCOMMIT;\n\nALTER TABLE replication_example ADD COLUMN bar int;\n\nINSERT INTO replication_example(somedata, text, bar) VALUES (2, 1, 4);\n\nBEGIN;\nINSERT INTO replication_example(somedata, text, bar) VALUES (2, 2, 4);\nINSERT INTO replication_example(somedata, text, bar) VALUES (2, 3, 4);\nINSERT INTO replication_example(somedata, text, bar) VALUES (2, 4, NULL);\nCOMMIT;\n\nALTER TABLE replication_example DROP COLUMN bar;\nINSERT INTO replication_example(somedata, text) VALUES (3, 1);\n\nBEGIN;\nINSERT INTO replication_example(somedata, text) VALUES (3, 2);\nINSERT INTO replication_example(somedata, text) VALUES (3, 3);\nCOMMIT;\n\nALTER TABLE replication_example RENAME COLUMN text TO somenum;\n\nINSERT INTO replication_example(somedata, somenum) VALUES (4, 1);\n\n-- collect all changes\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');\n\nALTER TABLE replication_example ALTER COLUMN somenum TYPE int4 USING (somenum::int4);\n-- check that this doesn't produce any changes from the heap rewrite\nSELECT count(data) FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that we're detecting a streaming rep slot used for logical decoding\nSELECT 'init' FROM pg_create_physical_replication_slot('repl');"
         },
         {
-            "query": "INSERT INTO replication_example(somedata, somenum) VALUES (5, 1)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('repl', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "BEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT pg_drop_replication_slot('repl');"
         },
         {
-            "query": "INSERT INTO replication_example(somedata, somenum) VALUES (6, 1)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT 'init' FROM pg_create_logical_replication_slot('regression_slot', 'test_decoding');"
         },
         {
-            "query": "ALTER TABLE replication_example ADD COLUMN zaphod1 int",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/* check whether status function reports us, only reproduceable columns */\nSELECT slot_name, plugin, slot_type, active,\n    NOT catalog_xmin IS NULL AS catalog_xmin_set,\n    xmin IS NULl  AS data_xmin_not_set,\n    pg_wal_lsn_diff(restart_lsn, '0/01000000') > 0 AS some_wal\nFROM pg_replication_slots;"
         },
         {
-            "query": "INSERT INTO replication_example(somedata, somenum, zaphod1) VALUES (6, 2, 1)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/*\n * Check that changes are handled correctly when interleaved with ddl\n */\nCREATE TABLE replication_example(id SERIAL PRIMARY KEY, somedata int, text varchar(120));"
         },
         {
-            "query": "ALTER TABLE replication_example ADD COLUMN zaphod2 int",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "BEGIN;"
         },
         {
-            "query": "INSERT INTO replication_example(somedata, somenum, zaphod2) VALUES (6, 3, 1)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text) VALUES (1, 1);"
         },
         {
-            "query": "INSERT INTO replication_example(somedata, somenum, zaphod1) VALUES (6, 4, 2)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text) VALUES (1, 2);"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "-- show changes\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_example ADD COLUMN bar int;"
         },
         {
-            "query": "-- ON CONFLICT DO UPDATE support\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text, bar) VALUES (2, 1, 4);"
         },
         {
-            "query": "INSERT INTO replication_example(id, somedata, somenum) SELECT i, i, i FROM generate_series(-15, 15) i\n  ON CONFLICT (id) DO UPDATE SET somenum = excluded.somenum + 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "BEGIN;"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text, bar) VALUES (2, 2, 4);"
         },
         {
-            "query": "/* display results */\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text, bar) VALUES (2, 3, 4);"
         },
         {
-            "query": "-- MERGE support\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text, bar) VALUES (2, 4, NULL);"
         },
         {
-            "query": "MERGE INTO replication_example t\n\tUSING (SELECT i as id, i as data, i as num FROM generate_series(-20, 5) i) s\n\tON t.id = s.id\n\tWHEN MATCHED AND t.id < 0 THEN\n\t\tUPDATE SET somenum = somenum + 1\n\tWHEN MATCHED AND t.id >= 0 THEN\n\t\tDELETE\n\tWHEN NOT MATCHED THEN\n\t\tINSERT VALUES (s.*)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_example DROP COLUMN bar;"
         },
         {
-            "query": "/* display results */\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text) VALUES (3, 1);"
         },
         {
-            "query": "CREATE TABLE tr_unique(id2 serial unique NOT NULL, data int)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "BEGIN;"
         },
         {
-            "query": "INSERT INTO tr_unique(data) VALUES(10)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text) VALUES (3, 2);"
         },
         {
-            "query": "ALTER TABLE tr_unique RENAME TO tr_pkey",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, text) VALUES (3, 3);"
         },
         {
-            "query": "ALTER TABLE tr_pkey ADD COLUMN id serial primary key",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1', 'include-rewrites', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_example RENAME COLUMN text TO somenum;"
         },
         {
-            "query": "INSERT INTO tr_pkey(data) VALUES(1)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, somenum) VALUES (4, 1);"
         },
         {
-            "query": "--show deletion with primary key\nDELETE FROM tr_pkey",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- collect all changes\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "/* display results */\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_example ALTER COLUMN somenum TYPE int4 USING (somenum::int4);"
         },
         {
-            "query": "/*\n * check that disk spooling works (also for logical messages)\n */\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that this doesn't produce any changes from the heap rewrite\nSELECT count(data) FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "CREATE TABLE tr_etoomuch (id serial primary key, data int)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, somenum) VALUES (5, 1);"
         },
         {
-            "query": "INSERT INTO tr_etoomuch(data) SELECT g.i FROM generate_series(1, 10234) g(i)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "BEGIN;"
         },
         {
-            "query": "SELECT 'tx logical msg' FROM pg_logical_emit_message(true, 'test', 'tx logical msg')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, somenum) VALUES (6, 1);"
         },
         {
-            "query": "DELETE FROM tr_etoomuch WHERE id < 5000",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_example ADD COLUMN zaphod1 int;"
         },
         {
-            "query": "UPDATE tr_etoomuch SET data = - data WHERE id > 5000",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, somenum, zaphod1) VALUES (6, 2, 1);"
         },
         {
-            "query": "CREATE TABLE tr_oddlength (id text primary key, data text)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_example ADD COLUMN zaphod2 int;"
         },
         {
-            "query": "INSERT INTO tr_oddlength VALUES('ab', 'foo')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, somenum, zaphod2) VALUES (6, 3, 1);"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(somedata, somenum, zaphod1) VALUES (6, 4, 2);"
         },
         {
-            "query": "/* display results, but hide most of the output */\nSELECT count(*), min(data), max(data)\nFROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')\nGROUP BY substring(data, 1, 24)\nORDER BY 1,2",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "-- check updates of primary keys work correctly\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- show changes\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "CREATE TABLE spoolme AS SELECT g.i FROM generate_series(1, 5000) g(i)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- ON CONFLICT DO UPDATE support\nBEGIN;"
         },
         {
-            "query": "UPDATE tr_etoomuch SET id = -id WHERE id = 5000",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO replication_example(id, somedata, somenum) SELECT i, i, i FROM generate_series(-15, 15) i\n  ON CONFLICT (id) DO UPDATE SET somenum = excluded.somenum + 1;"
         },
         {
-            "query": "UPDATE tr_oddlength SET id = 'x', data = 'quux'",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "UPDATE tr_oddlength SET id = 'yy', data = 'a'",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/* display results */\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "DELETE FROM spoolme",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- MERGE support\nBEGIN;"
         },
         {
-            "query": "DROP TABLE spoolme",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "MERGE INTO replication_example t\n\tUSING (SELECT i as id, i as data, i as num FROM generate_series(-20, 5) i) s\n\tON t.id = s.id\n\tWHEN MATCHED AND t.id < 0 THEN\n\t\tUPDATE SET somenum = somenum + 1\n\tWHEN MATCHED AND t.id >= 0 THEN\n\t\tDELETE\n\tWHEN NOT MATCHED THEN\n\t\tINSERT VALUES (s.*);"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SELECT data\nFROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')\nWHERE data ~ 'UPDATE'",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/* display results */\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "-- check that a large, spooled, upsert works\nINSERT INTO tr_etoomuch (id, data)\nSELECT g.i, -g.i FROM generate_series(8000, 12000) g(i)\nON CONFLICT(id) DO UPDATE SET data = EXCLUDED.data",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE TABLE tr_unique(id2 serial unique NOT NULL, data int);"
         },
         {
-            "query": "SELECT substring(data, 1, 29), count(*)\nFROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1') WITH ORDINALITY\nGROUP BY 1\nORDER BY min(ordinality)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_unique(data) VALUES(10);"
         },
         {
-            "query": "/*\n * check whether we decode subtransactions correctly in relation with each\n * other\n */\nCREATE TABLE tr_sub (id serial primary key, path text)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE tr_unique RENAME TO tr_pkey;"
         },
         {
-            "query": "-- toplevel, subtxn, toplevel, subtxn, subtxn\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE tr_pkey ADD COLUMN id serial primary key;"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-#1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1', 'include-rewrites', '1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_pkey(data) VALUES(1);"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-1-#1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "--show deletion with primary key\nDELETE FROM tr_pkey;"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-1-#2')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/* display results */\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "RELEASE SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/*\n * check that disk spooling works (also for logical messages)\n */\nBEGIN;"
         },
         {
-            "query": "SAVEPOINT b",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE TABLE tr_etoomuch (id serial primary key, data int);"
         },
         {
-            "query": "SAVEPOINT c",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_etoomuch(data) SELECT g.i FROM generate_series(1, 10234) g(i);"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-2-1-#1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT 'tx logical msg' FROM pg_logical_emit_message(true, 'test', 'tx logical msg');"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-2-1-#2')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM tr_etoomuch WHERE id < 5000;"
         },
         {
-            "query": "RELEASE SAVEPOINT c",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE tr_etoomuch SET data = - data WHERE id > 5000;"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-2-#1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE TABLE tr_oddlength (id text primary key, data text);"
         },
         {
-            "query": "RELEASE SAVEPOINT b",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_oddlength VALUES('ab', 'foo');"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/* display results, but hide most of the output */\nSELECT count(*), min(data), max(data)\nFROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')\nGROUP BY substring(data, 1, 24)\nORDER BY 1,2;"
         },
         {
-            "query": "-- check that we handle xlog assignments correctly\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check updates of primary keys work correctly\nBEGIN;"
         },
         {
-            "query": "-- nest 80 subtxns\nSAVEPOINT subtop",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE TABLE spoolme AS SELECT g.i FROM generate_series(1, 5000) g(i);"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE tr_etoomuch SET id = -id WHERE id = 5000;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE tr_oddlength SET id = 'x', data = 'quux';"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE tr_oddlength SET id = 'yy', data = 'a';"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM spoolme;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DROP TABLE spoolme;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data\nFROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')\nWHERE data ~ 'UPDATE';"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that a large, spooled, upsert works\nINSERT INTO tr_etoomuch (id, data)\nSELECT g.i, -g.i FROM generate_series(8000, 12000) g(i)\nON CONFLICT(id) DO UPDATE SET data = EXCLUDED.data;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT substring(data, 1, 29), count(*)\nFROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1') WITH ORDINALITY\nGROUP BY 1\nORDER BY min(ordinality);"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/*\n * check whether we decode subtransactions correctly in relation with each\n * other\n */\nCREATE TABLE tr_sub (id serial primary key, path text);"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- toplevel, subtxn, toplevel, subtxn, subtxn\nBEGIN;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-1-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-1-#2');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "RELEASE SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT b;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT c;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-2-1-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-2-1-#2');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "RELEASE SAVEPOINT c;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('1-top-2-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "RELEASE SAVEPOINT b;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that we handle xlog assignments correctly\nBEGIN;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- nest 80 subtxns\nSAVEPOINT subtop;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- assign xid by inserting\nINSERT INTO tr_sub(path) VALUES ('2-top-1...--#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('2-top-1...--#2');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('2-top-1...--#3');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "RELEASE SAVEPOINT subtop;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('2-top-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- make sure rollbacked subtransactions aren't decoded\nBEGIN;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('3-top-2-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('3-top-2-1-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT b;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('3-top-2-2-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ROLLBACK TO SAVEPOINT b;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('3-top-2-#2');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- test whether a known, but not yet logged toplevel xact, followed by a\n-- subxact commit is handled correctly\nBEGIN;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT pg_current_xact_id() != '0'; -- so no fixed xid appears in the outfile\nSAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('4-top-1-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "RELEASE SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- test whether a change in a subtransaction, in an unknown toplevel\n-- xact is handled correctly.\nBEGIN;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub(path) VALUES ('5-top-1-#1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that DDL in aborted subtransactions handled correctly\nCREATE TABLE tr_sub_ddl(data int);"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "BEGIN;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE tr_sub_ddl ALTER COLUMN data TYPE text;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub_ddl VALUES ('blah-blah');"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ROLLBACK TO SAVEPOINT a;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE tr_sub_ddl ALTER COLUMN data TYPE bigint;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO tr_sub_ddl VALUES(43);"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "COMMIT;"
         },
         {
-            "query": "SAVEPOINT a",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "-- assign xid by inserting\nINSERT INTO tr_sub(path) VALUES ('2-top-1...--#1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/*\n * Check whether treating a table as a catalog table works somewhat\n */\nCREATE TABLE replication_metadata (\n    id serial primary key,\n    relation name NOT NULL,\n    options text[]\n)\nWITH (user_catalog_table = true);"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('2-top-1...--#2')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('foo', ARRAY['a', 'b']);"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('2-top-1...--#3')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_metadata RESET (user_catalog_table);"
         },
         {
-            "query": "RELEASE SAVEPOINT subtop",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('bar', ARRAY['a', 'b']);"
         },
         {
-            "query": "INSERT INTO tr_sub(path) VALUES ('2-top-#1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_metadata SET (user_catalog_table = true);"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('blub', NULL);"
         },
         {
-            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- make sure rewrites don't work\nALTER TABLE replication_metadata ADD COLUMN rewritemeornot int;"
         },
         {
-            "query": "-- make sure rollbacked subtransactions aren't decoded\nBEGIN;\nINSERT INTO tr_sub(path) VALUES ('3-top-2-#1');\nSAVEPOINT a;\nINSERT INTO tr_sub(path) VALUES ('3-top-2-1-#1');\nSAVEPOINT b;\nINSERT INTO tr_sub(path) VALUES ('3-top-2-2-#1');\nROLLBACK TO SAVEPOINT b;\nINSERT INTO tr_sub(path) VALUES ('3-top-2-#2');\nCOMMIT;\n\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');\n\n-- test whether a known, but not yet logged toplevel xact, followed by a\n-- subxact commit is handled correctly\nBEGIN;\nSELECT pg_current_xact_id() != '0'; -- so no fixed xid appears in the outfile\nSAVEPOINT a;\nINSERT INTO tr_sub(path) VALUES ('4-top-1-#1');\nRELEASE SAVEPOINT a;\nCOMMIT;\n\n-- test whether a change in a subtransaction, in an unknown toplevel\n-- xact is handled correctly.\nBEGIN;\nSAVEPOINT a;\nINSERT INTO tr_sub(path) VALUES ('5-top-1-#1');\nCOMMIT;\n\n\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');\n\n-- check that DDL in aborted subtransactions handled correctly\nCREATE TABLE tr_sub_ddl(data int);\nBEGIN;\nSAVEPOINT a;\nALTER TABLE tr_sub_ddl ALTER COLUMN data TYPE text;\nINSERT INTO tr_sub_ddl VALUES ('blah-blah');\nROLLBACK TO SAVEPOINT a;\nALTER TABLE tr_sub_ddl ALTER COLUMN data TYPE bigint;\nINSERT INTO tr_sub_ddl VALUES(43);\nCOMMIT;\n\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');\n\n\n/*\n * Check whether treating a table as a catalog table works somewhat\n */\nCREATE TABLE replication_metadata (\n    id serial primary key,\n    relation name NOT NULL,\n    options text[]\n)\nWITH (user_catalog_table = true)\n;\n\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('foo', ARRAY['a', 'b']);\n\nALTER TABLE replication_metadata RESET (user_catalog_table);\n\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('bar', ARRAY['a', 'b']);\n\nALTER TABLE replication_metadata SET (user_catalog_table = true);\n\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('blub', NULL);\n\n-- make sure rewrites don't work\nALTER TABLE replication_metadata ADD COLUMN rewritemeornot int",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_metadata ALTER COLUMN rewritemeornot TYPE text;"
         },
         {
-            "query": "ALTER TABLE replication_metadata ALTER COLUMN rewritemeornot TYPE text",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE replication_metadata SET (user_catalog_table = false);"
         },
         {
-            "query": "ALTER TABLE replication_metadata SET (user_catalog_table = false)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('zaphod', NULL);"
         },
         {
-            "query": "\\d+ replication_metadata\n\nINSERT INTO replication_metadata(relation, options)\nVALUES ('zaphod', NULL)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
         },
         {
-            "query": "SELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "/*\n * check whether we handle updates/deletes correct with & without a pkey\n */\n\n/* we should handle the case without a key at all more gracefully */\nCREATE TABLE table_without_key(id serial, data int);"
         },
         {
-            "query": "/*\n * check whether we handle updates/deletes correct with & without a pkey\n */\n\n/* we should handle the case without a key at all more gracefully */\nCREATE TABLE table_without_key(id serial, data int)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO table_without_key(data) VALUES(1),(2);"
         },
         {
-            "query": "INSERT INTO table_without_key(data) VALUES(1),(2)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_without_key WHERE data = 1;"
         },
         {
-            "query": "DELETE FROM table_without_key WHERE data = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- won't log old keys\nUPDATE table_without_key SET data = 3 WHERE data = 2;"
         },
         {
-            "query": "-- won't log old keys\nUPDATE table_without_key SET data = 3 WHERE data = 2;\nUPDATE table_without_key SET id = -id;\nUPDATE table_without_key SET id = -id;\n-- should log the full old row now\nALTER TABLE table_without_key REPLICA IDENTITY FULL;\nUPDATE table_without_key SET data = 3 WHERE data = 2;\nUPDATE table_without_key SET id = -id;\nUPDATE table_without_key SET id = -id;\n-- ensure that FULL correctly deals with new columns\nALTER TABLE table_without_key ADD COLUMN new_column text;\nUPDATE table_without_key SET id = -id;\nUPDATE table_without_key SET id = -id, new_column = 'someval';\nDELETE FROM table_without_key WHERE data = 3;\n\nCREATE TABLE table_with_pkey(id serial primary key, data int);\nINSERT INTO table_with_pkey(data) VALUES(1), (2);\nDELETE FROM table_with_pkey WHERE data = 1;\n-- should log the old pkey\nUPDATE table_with_pkey SET data = 3 WHERE data = 2;\nUPDATE table_with_pkey SET id = -id;\nUPDATE table_with_pkey SET id = -id;\n-- check that we log nothing despite having a pkey\nALTER TABLE table_without_key REPLICA IDENTITY NOTHING;\nUPDATE table_with_pkey SET id = -id;\n-- check that we log everything despite having a pkey\nALTER TABLE table_without_key REPLICA IDENTITY FULL;\nUPDATE table_with_pkey SET id = -id;\nDELETE FROM table_with_pkey WHERE data = 3;\n\nCREATE TABLE table_with_unique_not_null(id serial unique, data int);\nALTER TABLE table_with_unique_not_null ALTER COLUMN id SET NOT NULL; --already set\n-- won't log anything, replica identity not setup\nINSERT INTO table_with_unique_not_null(data) VALUES(1), (2)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET id = -id;"
         },
         {
-            "query": "DELETE FROM table_with_unique_not_null WHERE data = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET id = -id;"
         },
         {
-            "query": "UPDATE table_with_unique_not_null SET data = 3 WHERE data = 2",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- should log the full old row now\nALTER TABLE table_without_key REPLICA IDENTITY FULL;"
         },
         {
-            "query": "UPDATE table_with_unique_not_null SET id = -id",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET data = 3 WHERE data = 2;"
         },
         {
-            "query": "UPDATE table_with_unique_not_null SET id = -id",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET id = -id;"
         },
         {
-            "query": "DELETE FROM table_with_unique_not_null WHERE data = 3",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET id = -id;"
         },
         {
-            "query": "-- should log old key\nALTER TABLE table_with_unique_not_null REPLICA IDENTITY USING INDEX table_with_unique_not_null_id_key",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- ensure that FULL correctly deals with new columns\nALTER TABLE table_without_key ADD COLUMN new_column text;"
         },
         {
-            "query": "INSERT INTO table_with_unique_not_null(data) VALUES(1), (2)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET id = -id;"
         },
         {
-            "query": "DELETE FROM table_with_unique_not_null WHERE data = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_without_key SET id = -id, new_column = 'someval';"
         },
         {
-            "query": "UPDATE table_with_unique_not_null SET data = 3 WHERE data = 2",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_without_key WHERE data = 3;"
         },
         {
-            "query": "UPDATE table_with_unique_not_null SET id = -id",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE TABLE table_with_pkey(id serial primary key, data int);"
         },
         {
-            "query": "UPDATE table_with_unique_not_null SET id = -id",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO table_with_pkey(data) VALUES(1), (2);"
         },
         {
-            "query": "DELETE FROM table_with_unique_not_null WHERE data = 3",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_with_pkey WHERE data = 1;"
         },
         {
-            "query": "-- check tables with dropped indexes used in REPLICA IDENTITY\n-- table with primary key\nCREATE TABLE table_dropped_index_with_pk (a int PRIMARY KEY, b int, c int)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- should log the old pkey\nUPDATE table_with_pkey SET data = 3 WHERE data = 2;"
         },
         {
-            "query": "CREATE UNIQUE INDEX table_dropped_index_with_pk_idx\n  ON table_dropped_index_with_pk(a)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_pkey SET id = -id;"
         },
         {
-            "query": "ALTER TABLE table_dropped_index_with_pk REPLICA IDENTITY\n  USING INDEX table_dropped_index_with_pk_idx",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_pkey SET id = -id;"
         },
         {
-            "query": "DROP INDEX table_dropped_index_with_pk_idx",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that we log nothing despite having a pkey\nALTER TABLE table_without_key REPLICA IDENTITY NOTHING;"
         },
         {
-            "query": "INSERT INTO table_dropped_index_with_pk VALUES (1,1,1), (2,2,2), (3,3,3)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_pkey SET id = -id;"
         },
         {
-            "query": "UPDATE table_dropped_index_with_pk SET a = 4 WHERE a = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check that we log everything despite having a pkey\nALTER TABLE table_without_key REPLICA IDENTITY FULL;"
         },
         {
-            "query": "UPDATE table_dropped_index_with_pk SET b = 5 WHERE a = 2",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_pkey SET id = -id;"
         },
         {
-            "query": "UPDATE table_dropped_index_with_pk SET b = 6, c = 7 WHERE a = 3",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_with_pkey WHERE data = 3;"
         },
         {
-            "query": "DELETE FROM table_dropped_index_with_pk WHERE b = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE TABLE table_with_unique_not_null(id serial unique, data int);"
         },
         {
-            "query": "DELETE FROM table_dropped_index_with_pk WHERE a = 3",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE table_with_unique_not_null ALTER COLUMN id SET NOT NULL; --already set\n-- won't log anything, replica identity not setup\nINSERT INTO table_with_unique_not_null(data) VALUES(1), (2);"
         },
         {
-            "query": "DROP TABLE table_dropped_index_with_pk",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_with_unique_not_null WHERE data = 1;"
         },
         {
-            "query": "-- table without primary key\nCREATE TABLE table_dropped_index_no_pk (a int NOT NULL, b int, c int)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_unique_not_null SET data = 3 WHERE data = 2;"
         },
         {
-            "query": "CREATE UNIQUE INDEX table_dropped_index_no_pk_idx\n  ON table_dropped_index_no_pk(a)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_unique_not_null SET id = -id;"
         },
         {
-            "query": "ALTER TABLE table_dropped_index_no_pk REPLICA IDENTITY\n  USING INDEX table_dropped_index_no_pk_idx",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_unique_not_null SET id = -id;"
         },
         {
-            "query": "DROP INDEX table_dropped_index_no_pk_idx",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_with_unique_not_null WHERE data = 3;"
         },
         {
-            "query": "INSERT INTO table_dropped_index_no_pk VALUES (1,1,1), (2,2,2), (3,3,3)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- should log old key\nALTER TABLE table_with_unique_not_null REPLICA IDENTITY USING INDEX table_with_unique_not_null_id_key;"
         },
         {
-            "query": "UPDATE table_dropped_index_no_pk SET a = 4 WHERE a = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO table_with_unique_not_null(data) VALUES(1), (2);"
         },
         {
-            "query": "UPDATE table_dropped_index_no_pk SET b = 5 WHERE a = 2",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_with_unique_not_null WHERE data = 1;"
         },
         {
-            "query": "UPDATE table_dropped_index_no_pk SET b = 6, c = 7 WHERE a = 3",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_unique_not_null SET data = 3 WHERE data = 2;"
         },
         {
-            "query": "DELETE FROM table_dropped_index_no_pk WHERE b = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_unique_not_null SET id = -id;"
         },
         {
-            "query": "DELETE FROM table_dropped_index_no_pk WHERE a = 3",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_with_unique_not_null SET id = -id;"
         },
         {
-            "query": "DROP TABLE table_dropped_index_no_pk",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_with_unique_not_null WHERE data = 3;"
         },
         {
-            "query": "-- check toast support\nBEGIN",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- check tables with dropped indexes used in REPLICA IDENTITY\n-- table with primary key\nCREATE TABLE table_dropped_index_with_pk (a int PRIMARY KEY, b int, c int);"
         },
         {
-            "query": "CREATE SEQUENCE toasttable_rand_seq START 79 INCREMENT 1499",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE UNIQUE INDEX table_dropped_index_with_pk_idx\n  ON table_dropped_index_with_pk(a);"
         },
         {
-            "query": "-- portable \"random\"\nCREATE TABLE toasttable(\n       id serial primary key,\n       toasted_col1 text,\n       rand1 float8 DEFAULT nextval('toasttable_rand_seq'),\n       toasted_col2 text,\n       rand2 float8 DEFAULT nextval('toasttable_rand_seq')\n       )",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE table_dropped_index_with_pk REPLICA IDENTITY\n  USING INDEX table_dropped_index_with_pk_idx;"
         },
         {
-            "query": "COMMIT",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DROP INDEX table_dropped_index_with_pk_idx;"
         },
         {
-            "query": "-- uncompressed external toast data\nINSERT INTO toasttable(toasted_col1) SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO table_dropped_index_with_pk VALUES (1,1,1), (2,2,2), (3,3,3);"
         },
         {
-            "query": "-- compressed external toast data\nINSERT INTO toasttable(toasted_col2) SELECT repeat(string_agg(to_char(g.i, 'FM0000'), ''), 50) FROM generate_series(1, 500) g(i)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_dropped_index_with_pk SET a = 4 WHERE a = 1;"
         },
         {
-            "query": "-- update of existing column\nUPDATE toasttable\n    SET toasted_col1 = (SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i))\nWHERE id = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_dropped_index_with_pk SET b = 5 WHERE a = 2;"
         },
         {
-            "query": "-- This output is extremely wide, and using aligned mode causes psql to\n-- produce 200kB of useless dashes. Turn that off temporarily to avoid it.\n\\pset format unaligned\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "UPDATE table_dropped_index_with_pk SET b = 6, c = 7 WHERE a = 3;"
         },
         {
-            "query": "\\pset format aligned\n\nINSERT INTO toasttable(toasted_col1) SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i)",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_dropped_index_with_pk WHERE b = 1;"
         },
         {
-            "query": "-- update of second column, first column unchanged\nUPDATE toasttable\n    SET toasted_col2 = (SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i))\nWHERE id = 1",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_dropped_index_with_pk WHERE a = 3;"
         },
         {
-            "query": "-- make sure we decode correctly even if the toast table is gone\nDROP TABLE toasttable",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DROP TABLE table_dropped_index_with_pk;"
         },
         {
-            "query": "\\pset format unaligned\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "-- table without primary key\nCREATE TABLE table_dropped_index_no_pk (a int NOT NULL, b int, c int);"
         },
         {
-            "query": "-- done, free logical replication slot\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "CREATE UNIQUE INDEX table_dropped_index_no_pk_idx\n  ON table_dropped_index_no_pk(a);"
         },
         {
-            "query": "\\pset format aligned\n\nSELECT pg_drop_replication_slot('regression_slot')",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "ALTER TABLE table_dropped_index_no_pk REPLICA IDENTITY\n  USING INDEX table_dropped_index_no_pk_idx;"
         },
         {
-            "query": "/* check that the slot is gone */\n\\x\nSELECT * FROM pg_replication_slots",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "DROP INDEX table_dropped_index_no_pk_idx;"
         },
         {
-            "query": "\\x",
-            "name": "ddl.sql"
+            "name": "ddl.sql",
+            "query": "INSERT INTO table_dropped_index_no_pk VALUES (1,1,1), (2,2,2), (3,3,3);"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "UPDATE table_dropped_index_no_pk SET a = 4 WHERE a = 1;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "UPDATE table_dropped_index_no_pk SET b = 5 WHERE a = 2;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "UPDATE table_dropped_index_no_pk SET b = 6, c = 7 WHERE a = 3;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_dropped_index_no_pk WHERE b = 1;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "DELETE FROM table_dropped_index_no_pk WHERE a = 3;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "DROP TABLE table_dropped_index_no_pk;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- check toast support\nBEGIN;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "CREATE SEQUENCE toasttable_rand_seq START 79 INCREMENT 1499; -- portable \"random\"\nCREATE TABLE toasttable(\n       id serial primary key,\n       toasted_col1 text,\n       rand1 float8 DEFAULT nextval('toasttable_rand_seq'),\n       toasted_col2 text,\n       rand2 float8 DEFAULT nextval('toasttable_rand_seq')\n       );"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "COMMIT;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- uncompressed external toast data\nINSERT INTO toasttable(toasted_col1) SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i);"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- compressed external toast data\nINSERT INTO toasttable(toasted_col2) SELECT repeat(string_agg(to_char(g.i, 'FM0000'), ''), 50) FROM generate_series(1, 500) g(i);"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- update of existing column\nUPDATE toasttable\n    SET toasted_col1 = (SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i))\nWHERE id = 1;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- This output is extremely wide, and using aligned mode causes psql to\n-- produce 200kB of useless dashes. Turn that off temporarily to avoid it.\n\\pset format unaligned\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "\\pset format aligned\n\nINSERT INTO toasttable(toasted_col1) SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i);"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- update of second column, first column unchanged\nUPDATE toasttable\n    SET toasted_col2 = (SELECT string_agg(g.i::text, '') FROM generate_series(1, 2000) g(i))\nWHERE id = 1;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- make sure we decode correctly even if the toast table is gone\nDROP TABLE toasttable;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "\\pset format unaligned\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "-- done, free logical replication slot\nSELECT data FROM pg_logical_slot_get_changes('regression_slot', NULL, NULL, 'include-xids', '0', 'skip-empty-xacts', '1');"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "\\pset format aligned\n\nSELECT pg_drop_replication_slot('regression_slot');"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "/* check that the slot is gone */\n\\x\nSELECT * FROM pg_replication_slots;"
+        },
+        {
+            "name": "ddl.sql",
+            "query": "\\x;"
         }
     ]
 }

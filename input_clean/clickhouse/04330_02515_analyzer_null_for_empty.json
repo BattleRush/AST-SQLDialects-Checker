@@ -2,16 +2,16 @@
     "name": "02515_analyzer_null_for_empty.sql",
     "tests": [
         {
-            "query": "SET allow_experimental_analyzer = 1;",
-            "name": "02515_analyzer_null_for_empty.sql"
+            "name": "02515_analyzer_null_for_empty.sql",
+            "query": "SET allow_experimental_analyzer = 1;"
         },
         {
-            "query": "\nSET aggregate_functions_null_for_empty = 1;",
-            "name": "02515_analyzer_null_for_empty.sql"
+            "name": "02515_analyzer_null_for_empty.sql",
+            "query": "SET aggregate_functions_null_for_empty = 1;"
         },
         {
-            "query": "\n\nSELECT max(aggr) FROM (SELECT max('92233720368547758.06') AS aggr FROM system.one);",
-            "name": "02515_analyzer_null_for_empty.sql"
+            "name": "02515_analyzer_null_for_empty.sql",
+            "query": "SELECT max(aggr) FROM (SELECT max('92233720368547758.06') AS aggr FROM system.one);"
         }
     ]
 }

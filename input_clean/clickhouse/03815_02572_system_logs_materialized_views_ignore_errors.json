@@ -2,60 +2,60 @@
     "name": "02572_system_logs_materialized_views_ignore_errors.sql",
     "tests": [
         {
-            "query": "-- Tags: no-parallel, no-replicated-database\n-- Tag no-parallel: due to attaching to system.query_log\n-- Tag no-replicated-database: Replicated database will has extra queries\n\n-- Attach MV to system.query_log and check that writing query_log will not fail\n\nset log_queries=1;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "-- Tags: no-parallel, no-replicated-database\n-- Tag no-parallel: due to attaching to system.query_log\n-- Tag no-replicated-database: Replicated database will has extra queries\n\n-- Attach MV to system.query_log and check that writing query_log will not fail\n\nset log_queries=1;"
         },
         {
-            "query": "\n\ndrop table if exists log_proxy_02572;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "drop table if exists log_proxy_02572;"
         },
         {
-            "query": "\ndrop table if exists push_to_logs_proxy_mv_02572;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "drop table if exists push_to_logs_proxy_mv_02572;"
         },
         {
-            "query": "\n\n-- create log tables\nsystem flush logs;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "-- create log tables\nsystem flush logs;"
         },
         {
-            "query": "\ncreate table log_proxy_02572 as system.query_log engine=Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "create table log_proxy_02572 as system.query_log engine=Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');"
         },
         {
-            "query": "\ncreate materialized view push_to_logs_proxy_mv_02572 to log_proxy_02572 as select * from system.query_log;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "create materialized view push_to_logs_proxy_mv_02572 to log_proxy_02572 as select * from system.query_log;"
         },
         {
-            "query": "\n\nselect 1 format Null;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "select 1 format Null;"
         },
         {
-            "query": "\nsystem flush logs;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "system flush logs;"
         },
         {
-            "query": "\nsystem flush logs;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "system flush logs;"
         },
         {
-            "query": "\n\ndrop table log_proxy_02572;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "drop table log_proxy_02572;"
         },
         {
-            "query": "\ndrop table push_to_logs_proxy_mv_02572;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "drop table push_to_logs_proxy_mv_02572;"
         },
         {
-            "query": "\n\nset log_queries=0;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "set log_queries=0;"
         },
         {
-            "query": "\n\nsystem flush logs;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "system flush logs;"
         },
         {
-            "query": "\n-- lower() to pass through clickhouse-test \"exception\" check\nselect replaceAll(query, '\\n', '\\\\n'), lower(type::String), errorCodeToName(exception_code)\n    from system.query_log\n    where current_database = currentDatabase()\n    order by event_time_microseconds\n    format CSV;",
-            "name": "02572_system_logs_materialized_views_ignore_errors.sql"
+            "name": "02572_system_logs_materialized_views_ignore_errors.sql",
+            "query": "-- lower() to pass through clickhouse-test \"exception\" check\nselect replaceAll(query, '\\n', '\\\\n'), lower(type::String), errorCodeToName(exception_code)\n    from system.query_log\n    where current_database = currentDatabase()\n    order by event_time_microseconds\n    format CSV;"
         }
     ]
 }

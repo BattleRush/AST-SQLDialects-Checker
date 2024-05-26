@@ -2,28 +2,28 @@
     "name": "02265_cross_join_empty_list.sql",
     "tests": [
         {
-            "query": "SELECT count(1) FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;",
-            "name": "02265_cross_join_empty_list.sql"
+            "name": "02265_cross_join_empty_list.sql",
+            "query": "SELECT count(1) FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;"
         },
         {
-            "query": "\nSELECT count(*) FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;",
-            "name": "02265_cross_join_empty_list.sql"
+            "name": "02265_cross_join_empty_list.sql",
+            "query": "SELECT count(*) FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;"
         },
         {
-            "query": "\nSELECT count() FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;",
-            "name": "02265_cross_join_empty_list.sql"
+            "name": "02265_cross_join_empty_list.sql",
+            "query": "SELECT count() FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;"
         },
         {
-            "query": "\nSELECT count(n1.number), count(n2.number), count(n3.number) FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;",
-            "name": "02265_cross_join_empty_list.sql"
+            "name": "02265_cross_join_empty_list.sql",
+            "query": "SELECT count(n1.number), count(n2.number), count(n3.number) FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3;"
         },
         {
-            "query": "\nSELECT * FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3 ORDER BY n1.number, n2.number, n3.number;",
-            "name": "02265_cross_join_empty_list.sql"
+            "name": "02265_cross_join_empty_list.sql",
+            "query": "SELECT * FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3 ORDER BY n1.number, n2.number, n3.number;"
         },
         {
-            "query": "\nSELECT n1.number, n2.number, n3.number FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3 ORDER BY n1.number, n2.number, n3.number;",
-            "name": "02265_cross_join_empty_list.sql"
+            "name": "02265_cross_join_empty_list.sql",
+            "query": "SELECT n1.number, n2.number, n3.number FROM numbers(2) AS n1, numbers(3) AS n2, numbers(4) AS n3 ORDER BY n1.number, n2.number, n3.number;"
         }
     ]
 }

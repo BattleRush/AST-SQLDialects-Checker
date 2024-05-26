@@ -2,36 +2,36 @@
     "name": "01851_fix_row_policy_empty_result.sql",
     "tests": [
         {
-            "query": "drop table if exists tbl;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "drop table if exists tbl;"
         },
         {
-            "query": "\ncreate table tbl (s String, i int) engine MergeTree order by i;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "create table tbl (s String, i int) engine MergeTree order by i;"
         },
         {
-            "query": "\n\ninsert into tbl values ('123', 123);",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "insert into tbl values ('123', 123);"
         },
         {
-            "query": "\n\ndrop row policy if exists filter on tbl;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "drop row policy if exists filter on tbl;"
         },
         {
-            "query": "\ncreate row policy filter on tbl using (s = 'non_existing_domain') to all;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "create row policy filter on tbl using (s = 'non_existing_domain') to all;"
         },
         {
-            "query": "\n\nselect * from tbl prewhere s = '123' where i = 123;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "select * from tbl prewhere s = '123' where i = 123;"
         },
         {
-            "query": "\n\ndrop row policy filter on tbl;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "drop row policy filter on tbl;"
         },
         {
-            "query": "\ndrop table tbl;",
-            "name": "01851_fix_row_policy_empty_result.sql"
+            "name": "01851_fix_row_policy_empty_result.sql",
+            "query": "drop table tbl;"
         }
     ]
 }

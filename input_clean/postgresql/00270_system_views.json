@@ -2,420 +2,416 @@
     "name": "system_views.sql",
     "tests": [
         {
-            "query": "/*\n * PostgreSQL System Views\n *\n * Copyright (c) 1996-2024, PostgreSQL Global Development Group\n *\n * src/backend/catalog/system_views.sql\n *\n * Note: this file is read in single-user -j mode, which means that the\n * command terminator is semicolon-newline-newline; whenever the backend\n * sees that, it stops and executes what it's got.  If you write a lot of\n * statements without empty lines between, they'll all get quoted to you\n * in any error message about one of them, so don't do that.  Also, you\n * cannot write a semicolon immediately followed by an empty line in a\n * string literal (including a function body!) or a multiline comment.\n */\n\nCREATE VIEW pg_roles AS\n    SELECT\n        rolname,\n        rolsuper,\n        rolinherit,\n        rolcreaterole,\n        rolcreatedb,\n        rolcanlogin,\n        rolreplication,\n        rolconnlimit,\n        '********'::text as rolpassword,\n        rolvaliduntil,\n        rolbypassrls,\n        setconfig as rolconfig,\n        pg_authid.oid\n    FROM pg_authid LEFT JOIN pg_db_role_setting s\n    ON (pg_authid.oid = setrole AND setdatabase = 0)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "/*\n * PostgreSQL System Views\n *\n * Copyright (c) 1996-2024, PostgreSQL Global Development Group\n *\n * src/backend/catalog/system_views.sql\n *\n * Note: this file is read in single-user -j mode, which means that the\n * command terminator is semicolon-newline-newline; whenever the backend\n * sees that, it stops and executes what it's got.  If you write a lot of\n * statements without empty lines between, they'll all get quoted to you\n * in any error message about one of them, so don't do that.  Also, you\n * cannot write a semicolon immediately followed by an empty line in a\n * string literal (including a function body!) or a multiline comment.\n */\n\nCREATE VIEW pg_roles AS\n    SELECT\n        rolname,\n        rolsuper,\n        rolinherit,\n        rolcreaterole,\n        rolcreatedb,\n        rolcanlogin,\n        rolreplication,\n        rolconnlimit,\n        '********'::text as rolpassword,\n        rolvaliduntil,\n        rolbypassrls,\n        setconfig as rolconfig,\n        pg_authid.oid\n    FROM pg_authid LEFT JOIN pg_db_role_setting s\n    ON (pg_authid.oid = setrole AND setdatabase = 0);"
         },
         {
-            "query": "CREATE VIEW pg_shadow AS\n    SELECT\n        rolname AS usename,\n        pg_authid.oid AS usesysid,\n        rolcreatedb AS usecreatedb,\n        rolsuper AS usesuper,\n        rolreplication AS userepl,\n        rolbypassrls AS usebypassrls,\n        rolpassword AS passwd,\n        rolvaliduntil AS valuntil,\n        setconfig AS useconfig\n    FROM pg_authid LEFT JOIN pg_db_role_setting s\n    ON (pg_authid.oid = setrole AND setdatabase = 0)\n    WHERE rolcanlogin",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_shadow AS\n    SELECT\n        rolname AS usename,\n        pg_authid.oid AS usesysid,\n        rolcreatedb AS usecreatedb,\n        rolsuper AS usesuper,\n        rolreplication AS userepl,\n        rolbypassrls AS usebypassrls,\n        rolpassword AS passwd,\n        rolvaliduntil AS valuntil,\n        setconfig AS useconfig\n    FROM pg_authid LEFT JOIN pg_db_role_setting s\n    ON (pg_authid.oid = setrole AND setdatabase = 0)\n    WHERE rolcanlogin;"
         },
         {
-            "query": "REVOKE ALL ON pg_shadow FROM public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_shadow FROM public;"
         },
         {
-            "query": "CREATE VIEW pg_group AS\n    SELECT\n        rolname AS groname,\n        oid AS grosysid,\n        ARRAY(SELECT member FROM pg_auth_members WHERE roleid = pg_authid.oid) AS grolist\n    FROM pg_authid\n    WHERE NOT rolcanlogin",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_group AS\n    SELECT\n        rolname AS groname,\n        oid AS grosysid,\n        ARRAY(SELECT member FROM pg_auth_members WHERE roleid = pg_authid.oid) AS grolist\n    FROM pg_authid\n    WHERE NOT rolcanlogin;"
         },
         {
-            "query": "CREATE VIEW pg_user AS\n    SELECT\n        usename,\n        usesysid,\n        usecreatedb,\n        usesuper,\n        userepl,\n        usebypassrls,\n        '********'::text as passwd,\n        valuntil,\n        useconfig\n    FROM pg_shadow",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_user AS\n    SELECT\n        usename,\n        usesysid,\n        usecreatedb,\n        usesuper,\n        userepl,\n        usebypassrls,\n        '********'::text as passwd,\n        valuntil,\n        useconfig\n    FROM pg_shadow;"
         },
         {
-            "query": "CREATE VIEW pg_policies AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        pol.polname AS policyname,\n        CASE\n            WHEN pol.polpermissive THEN\n                'PERMISSIVE'\n            ELSE\n                'RESTRICTIVE'\n        END AS permissive,\n        CASE\n            WHEN pol.polroles = '{0}' THEN\n                string_to_array('public', '')\n            ELSE\n                ARRAY\n                (\n                    SELECT rolname\n                    FROM pg_catalog.pg_authid\n                    WHERE oid = ANY (pol.polroles) ORDER BY 1\n                )\n        END AS roles,\n        CASE pol.polcmd\n            WHEN 'r' THEN 'SELECT'\n            WHEN 'a' THEN 'INSERT'\n            WHEN 'w' THEN 'UPDATE'\n            WHEN 'd' THEN 'DELETE'\n            WHEN '*' THEN 'ALL'\n        END AS cmd,\n        pg_catalog.pg_get_expr(pol.polqual, pol.polrelid) AS qual,\n        pg_catalog.pg_get_expr(pol.polwithcheck, pol.polrelid) AS with_check\n    FROM pg_catalog.pg_policy pol\n    JOIN pg_catalog.pg_class C ON (C.oid = pol.polrelid)\n    LEFT JOIN pg_catalog.pg_namespace N ON (N.oid = C.relnamespace)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_policies AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        pol.polname AS policyname,\n        CASE\n            WHEN pol.polpermissive THEN\n                'PERMISSIVE'\n            ELSE\n                'RESTRICTIVE'\n        END AS permissive,\n        CASE\n            WHEN pol.polroles = '{0}' THEN\n                string_to_array('public', '')\n            ELSE\n                ARRAY\n                (\n                    SELECT rolname\n                    FROM pg_catalog.pg_authid\n                    WHERE oid = ANY (pol.polroles) ORDER BY 1\n                )\n        END AS roles,\n        CASE pol.polcmd\n            WHEN 'r' THEN 'SELECT'\n            WHEN 'a' THEN 'INSERT'\n            WHEN 'w' THEN 'UPDATE'\n            WHEN 'd' THEN 'DELETE'\n            WHEN '*' THEN 'ALL'\n        END AS cmd,\n        pg_catalog.pg_get_expr(pol.polqual, pol.polrelid) AS qual,\n        pg_catalog.pg_get_expr(pol.polwithcheck, pol.polrelid) AS with_check\n    FROM pg_catalog.pg_policy pol\n    JOIN pg_catalog.pg_class C ON (C.oid = pol.polrelid)\n    LEFT JOIN pg_catalog.pg_namespace N ON (N.oid = C.relnamespace);"
         },
         {
-            "query": "CREATE VIEW pg_rules AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        R.rulename AS rulename,\n        pg_get_ruledef(R.oid) AS definition\n    FROM (pg_rewrite R JOIN pg_class C ON (C.oid = R.ev_class))\n        LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE R.rulename != '_RETURN'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_rules AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        R.rulename AS rulename,\n        pg_get_ruledef(R.oid) AS definition\n    FROM (pg_rewrite R JOIN pg_class C ON (C.oid = R.ev_class))\n        LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE R.rulename != '_RETURN';"
         },
         {
-            "query": "CREATE VIEW pg_views AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS viewname,\n        pg_get_userbyid(C.relowner) AS viewowner,\n        pg_get_viewdef(C.oid) AS definition\n    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind = 'v'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_views AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS viewname,\n        pg_get_userbyid(C.relowner) AS viewowner,\n        pg_get_viewdef(C.oid) AS definition\n    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind = 'v';"
         },
         {
-            "query": "CREATE VIEW pg_tables AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        pg_get_userbyid(C.relowner) AS tableowner,\n        T.spcname AS tablespace,\n        C.relhasindex AS hasindexes,\n        C.relhasrules AS hasrules,\n        C.relhastriggers AS hastriggers,\n        C.relrowsecurity AS rowsecurity\n    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n         LEFT JOIN pg_tablespace T ON (T.oid = C.reltablespace)\n    WHERE C.relkind IN ('r', 'p')",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_tables AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        pg_get_userbyid(C.relowner) AS tableowner,\n        T.spcname AS tablespace,\n        C.relhasindex AS hasindexes,\n        C.relhasrules AS hasrules,\n        C.relhastriggers AS hastriggers,\n        C.relrowsecurity AS rowsecurity\n    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n         LEFT JOIN pg_tablespace T ON (T.oid = C.reltablespace)\n    WHERE C.relkind IN ('r', 'p');"
         },
         {
-            "query": "CREATE VIEW pg_matviews AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS matviewname,\n        pg_get_userbyid(C.relowner) AS matviewowner,\n        T.spcname AS tablespace,\n        C.relhasindex AS hasindexes,\n        C.relispopulated AS ispopulated,\n        pg_get_viewdef(C.oid) AS definition\n    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n         LEFT JOIN pg_tablespace T ON (T.oid = C.reltablespace)\n    WHERE C.relkind = 'm'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_matviews AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS matviewname,\n        pg_get_userbyid(C.relowner) AS matviewowner,\n        T.spcname AS tablespace,\n        C.relhasindex AS hasindexes,\n        C.relispopulated AS ispopulated,\n        pg_get_viewdef(C.oid) AS definition\n    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n         LEFT JOIN pg_tablespace T ON (T.oid = C.reltablespace)\n    WHERE C.relkind = 'm';"
         },
         {
-            "query": "CREATE VIEW pg_indexes AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        I.relname AS indexname,\n        T.spcname AS tablespace,\n        pg_get_indexdef(I.oid) AS indexdef\n    FROM pg_index X JOIN pg_class C ON (C.oid = X.indrelid)\n         JOIN pg_class I ON (I.oid = X.indexrelid)\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n         LEFT JOIN pg_tablespace T ON (T.oid = I.reltablespace)\n    WHERE C.relkind IN ('r', 'm', 'p') AND I.relkind IN ('i', 'I')",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_indexes AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        I.relname AS indexname,\n        T.spcname AS tablespace,\n        pg_get_indexdef(I.oid) AS indexdef\n    FROM pg_index X JOIN pg_class C ON (C.oid = X.indrelid)\n         JOIN pg_class I ON (I.oid = X.indexrelid)\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n         LEFT JOIN pg_tablespace T ON (T.oid = I.reltablespace)\n    WHERE C.relkind IN ('r', 'm', 'p') AND I.relkind IN ('i', 'I');"
         },
         {
-            "query": "CREATE VIEW pg_sequences AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS sequencename,\n        pg_get_userbyid(C.relowner) AS sequenceowner,\n        S.seqtypid::regtype AS data_type,\n        S.seqstart AS start_value,\n        S.seqmin AS min_value,\n        S.seqmax AS max_value,\n        S.seqincrement AS increment_by,\n        S.seqcycle AS cycle,\n        S.seqcache AS cache_size,\n        CASE\n            WHEN has_sequence_privilege(C.oid, 'SELECT,USAGE'::text)\n                THEN pg_sequence_last_value(C.oid)\n            ELSE NULL\n        END AS last_value\n    FROM pg_sequence S JOIN pg_class C ON (C.oid = S.seqrelid)\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE NOT pg_is_other_temp_schema(N.oid)\n          AND relkind = 'S'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_sequences AS\n    SELECT\n        N.nspname AS schemaname,\n        C.relname AS sequencename,\n        pg_get_userbyid(C.relowner) AS sequenceowner,\n        S.seqtypid::regtype AS data_type,\n        S.seqstart AS start_value,\n        S.seqmin AS min_value,\n        S.seqmax AS max_value,\n        S.seqincrement AS increment_by,\n        S.seqcycle AS cycle,\n        S.seqcache AS cache_size,\n        CASE\n            WHEN has_sequence_privilege(C.oid, 'SELECT,USAGE'::text)\n                THEN pg_sequence_last_value(C.oid)\n            ELSE NULL\n        END AS last_value\n    FROM pg_sequence S JOIN pg_class C ON (C.oid = S.seqrelid)\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE NOT pg_is_other_temp_schema(N.oid)\n          AND relkind = 'S';"
         },
         {
-            "query": "CREATE VIEW pg_stats WITH (security_barrier) AS\n    SELECT\n        nspname AS schemaname,\n        relname AS tablename,\n        attname AS attname,\n        stainherit AS inherited,\n        stanullfrac AS null_frac,\n        stawidth AS avg_width,\n        stadistinct AS n_distinct,\n        CASE\n            WHEN stakind1 = 1 THEN stavalues1\n            WHEN stakind2 = 1 THEN stavalues2\n            WHEN stakind3 = 1 THEN stavalues3\n            WHEN stakind4 = 1 THEN stavalues4\n            WHEN stakind5 = 1 THEN stavalues5\n        END AS most_common_vals,\n        CASE\n            WHEN stakind1 = 1 THEN stanumbers1\n            WHEN stakind2 = 1 THEN stanumbers2\n            WHEN stakind3 = 1 THEN stanumbers3\n            WHEN stakind4 = 1 THEN stanumbers4\n            WHEN stakind5 = 1 THEN stanumbers5\n        END AS most_common_freqs,\n        CASE\n            WHEN stakind1 = 2 THEN stavalues1\n            WHEN stakind2 = 2 THEN stavalues2\n            WHEN stakind3 = 2 THEN stavalues3\n            WHEN stakind4 = 2 THEN stavalues4\n            WHEN stakind5 = 2 THEN stavalues5\n        END AS histogram_bounds,\n        CASE\n            WHEN stakind1 = 3 THEN stanumbers1[1]\n            WHEN stakind2 = 3 THEN stanumbers2[1]\n            WHEN stakind3 = 3 THEN stanumbers3[1]\n            WHEN stakind4 = 3 THEN stanumbers4[1]\n            WHEN stakind5 = 3 THEN stanumbers5[1]\n        END AS correlation,\n        CASE\n            WHEN stakind1 = 4 THEN stavalues1\n            WHEN stakind2 = 4 THEN stavalues2\n            WHEN stakind3 = 4 THEN stavalues3\n            WHEN stakind4 = 4 THEN stavalues4\n            WHEN stakind5 = 4 THEN stavalues5\n        END AS most_common_elems,\n        CASE\n            WHEN stakind1 = 4 THEN stanumbers1\n            WHEN stakind2 = 4 THEN stanumbers2\n            WHEN stakind3 = 4 THEN stanumbers3\n            WHEN stakind4 = 4 THEN stanumbers4\n            WHEN stakind5 = 4 THEN stanumbers5\n        END AS most_common_elem_freqs,\n        CASE\n            WHEN stakind1 = 5 THEN stanumbers1\n            WHEN stakind2 = 5 THEN stanumbers2\n            WHEN stakind3 = 5 THEN stanumbers3\n            WHEN stakind4 = 5 THEN stanumbers4\n            WHEN stakind5 = 5 THEN stanumbers5\n        END AS elem_count_histogram,\n        CASE\n            WHEN stakind1 = 6 THEN stavalues1\n            WHEN stakind2 = 6 THEN stavalues2\n            WHEN stakind3 = 6 THEN stavalues3\n            WHEN stakind4 = 6 THEN stavalues4\n            WHEN stakind5 = 6 THEN stavalues5\n        END AS range_length_histogram,\n        CASE\n            WHEN stakind1 = 6 THEN stanumbers1[1]\n            WHEN stakind2 = 6 THEN stanumbers2[1]\n            WHEN stakind3 = 6 THEN stanumbers3[1]\n            WHEN stakind4 = 6 THEN stanumbers4[1]\n            WHEN stakind5 = 6 THEN stanumbers5[1]\n        END AS range_empty_frac,\n        CASE\n            WHEN stakind1 = 7 THEN stavalues1\n            WHEN stakind2 = 7 THEN stavalues2\n            WHEN stakind3 = 7 THEN stavalues3\n            WHEN stakind4 = 7 THEN stavalues4\n            WHEN stakind5 = 7 THEN stavalues5\n            END AS range_bounds_histogram\n    FROM pg_statistic s JOIN pg_class c ON (c.oid = s.starelid)\n         JOIN pg_attribute a ON (c.oid = attrelid AND attnum = s.staattnum)\n         LEFT JOIN pg_namespace n ON (n.oid = c.relnamespace)\n    WHERE NOT attisdropped\n    AND has_column_privilege(c.oid, a.attnum, 'select')\n    AND (c.relrowsecurity = false OR NOT row_security_active(c.oid))",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stats WITH (security_barrier) AS\n    SELECT\n        nspname AS schemaname,\n        relname AS tablename,\n        attname AS attname,\n        stainherit AS inherited,\n        stanullfrac AS null_frac,\n        stawidth AS avg_width,\n        stadistinct AS n_distinct,\n        CASE\n            WHEN stakind1 = 1 THEN stavalues1\n            WHEN stakind2 = 1 THEN stavalues2\n            WHEN stakind3 = 1 THEN stavalues3\n            WHEN stakind4 = 1 THEN stavalues4\n            WHEN stakind5 = 1 THEN stavalues5\n        END AS most_common_vals,\n        CASE\n            WHEN stakind1 = 1 THEN stanumbers1\n            WHEN stakind2 = 1 THEN stanumbers2\n            WHEN stakind3 = 1 THEN stanumbers3\n            WHEN stakind4 = 1 THEN stanumbers4\n            WHEN stakind5 = 1 THEN stanumbers5\n        END AS most_common_freqs,\n        CASE\n            WHEN stakind1 = 2 THEN stavalues1\n            WHEN stakind2 = 2 THEN stavalues2\n            WHEN stakind3 = 2 THEN stavalues3\n            WHEN stakind4 = 2 THEN stavalues4\n            WHEN stakind5 = 2 THEN stavalues5\n        END AS histogram_bounds,\n        CASE\n            WHEN stakind1 = 3 THEN stanumbers1[1]\n            WHEN stakind2 = 3 THEN stanumbers2[1]\n            WHEN stakind3 = 3 THEN stanumbers3[1]\n            WHEN stakind4 = 3 THEN stanumbers4[1]\n            WHEN stakind5 = 3 THEN stanumbers5[1]\n        END AS correlation,\n        CASE\n            WHEN stakind1 = 4 THEN stavalues1\n            WHEN stakind2 = 4 THEN stavalues2\n            WHEN stakind3 = 4 THEN stavalues3\n            WHEN stakind4 = 4 THEN stavalues4\n            WHEN stakind5 = 4 THEN stavalues5\n        END AS most_common_elems,\n        CASE\n            WHEN stakind1 = 4 THEN stanumbers1\n            WHEN stakind2 = 4 THEN stanumbers2\n            WHEN stakind3 = 4 THEN stanumbers3\n            WHEN stakind4 = 4 THEN stanumbers4\n            WHEN stakind5 = 4 THEN stanumbers5\n        END AS most_common_elem_freqs,\n        CASE\n            WHEN stakind1 = 5 THEN stanumbers1\n            WHEN stakind2 = 5 THEN stanumbers2\n            WHEN stakind3 = 5 THEN stanumbers3\n            WHEN stakind4 = 5 THEN stanumbers4\n            WHEN stakind5 = 5 THEN stanumbers5\n        END AS elem_count_histogram,\n        CASE\n            WHEN stakind1 = 6 THEN stavalues1\n            WHEN stakind2 = 6 THEN stavalues2\n            WHEN stakind3 = 6 THEN stavalues3\n            WHEN stakind4 = 6 THEN stavalues4\n            WHEN stakind5 = 6 THEN stavalues5\n        END AS range_length_histogram,\n        CASE\n            WHEN stakind1 = 6 THEN stanumbers1[1]\n            WHEN stakind2 = 6 THEN stanumbers2[1]\n            WHEN stakind3 = 6 THEN stanumbers3[1]\n            WHEN stakind4 = 6 THEN stanumbers4[1]\n            WHEN stakind5 = 6 THEN stanumbers5[1]\n        END AS range_empty_frac,\n        CASE\n            WHEN stakind1 = 7 THEN stavalues1\n            WHEN stakind2 = 7 THEN stavalues2\n            WHEN stakind3 = 7 THEN stavalues3\n            WHEN stakind4 = 7 THEN stavalues4\n            WHEN stakind5 = 7 THEN stavalues5\n            END AS range_bounds_histogram\n    FROM pg_statistic s JOIN pg_class c ON (c.oid = s.starelid)\n         JOIN pg_attribute a ON (c.oid = attrelid AND attnum = s.staattnum)\n         LEFT JOIN pg_namespace n ON (n.oid = c.relnamespace)\n    WHERE NOT attisdropped\n    AND has_column_privilege(c.oid, a.attnum, 'select')\n    AND (c.relrowsecurity = false OR NOT row_security_active(c.oid));"
         },
         {
-            "query": "REVOKE ALL ON pg_statistic FROM public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_statistic FROM public;"
         },
         {
-            "query": "CREATE VIEW pg_stats_ext WITH (security_barrier) AS\n    SELECT cn.nspname AS schemaname,\n           c.relname AS tablename,\n           sn.nspname AS statistics_schemaname,\n           s.stxname AS statistics_name,\n           pg_get_userbyid(s.stxowner) AS statistics_owner,\n           ( SELECT array_agg(a.attname ORDER BY a.attnum)\n             FROM unnest(s.stxkeys) k\n                  JOIN pg_attribute a\n                       ON (a.attrelid = s.stxrelid AND a.attnum = k)\n           ) AS attnames,\n           pg_get_statisticsobjdef_expressions(s.oid) as exprs,\n           s.stxkind AS kinds,\n           sd.stxdinherit AS inherited,\n           sd.stxdndistinct AS n_distinct,\n           sd.stxddependencies AS dependencies,\n           m.most_common_vals,\n           m.most_common_val_nulls,\n           m.most_common_freqs,\n           m.most_common_base_freqs\n    FROM pg_statistic_ext s JOIN pg_class c ON (c.oid = s.stxrelid)\n         JOIN pg_statistic_ext_data sd ON (s.oid = sd.stxoid)\n         LEFT JOIN pg_namespace cn ON (cn.oid = c.relnamespace)\n         LEFT JOIN pg_namespace sn ON (sn.oid = s.stxnamespace)\n         LEFT JOIN LATERAL\n                   ( SELECT array_agg(values) AS most_common_vals,\n                            array_agg(nulls) AS most_common_val_nulls,\n                            array_agg(frequency) AS most_common_freqs,\n                            array_agg(base_frequency) AS most_common_base_freqs\n                     FROM pg_mcv_list_items(sd.stxdmcv)\n                   ) m ON sd.stxdmcv IS NOT NULL\n    WHERE pg_has_role(c.relowner, 'USAGE')\n    AND (c.relrowsecurity = false OR NOT row_security_active(c.oid))",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stats_ext WITH (security_barrier) AS\n    SELECT cn.nspname AS schemaname,\n           c.relname AS tablename,\n           sn.nspname AS statistics_schemaname,\n           s.stxname AS statistics_name,\n           pg_get_userbyid(s.stxowner) AS statistics_owner,\n           ( SELECT array_agg(a.attname ORDER BY a.attnum)\n             FROM unnest(s.stxkeys) k\n                  JOIN pg_attribute a\n                       ON (a.attrelid = s.stxrelid AND a.attnum = k)\n           ) AS attnames,\n           pg_get_statisticsobjdef_expressions(s.oid) as exprs,\n           s.stxkind AS kinds,\n           sd.stxdinherit AS inherited,\n           sd.stxdndistinct AS n_distinct,\n           sd.stxddependencies AS dependencies,\n           m.most_common_vals,\n           m.most_common_val_nulls,\n           m.most_common_freqs,\n           m.most_common_base_freqs\n    FROM pg_statistic_ext s JOIN pg_class c ON (c.oid = s.stxrelid)\n         JOIN pg_statistic_ext_data sd ON (s.oid = sd.stxoid)\n         LEFT JOIN pg_namespace cn ON (cn.oid = c.relnamespace)\n         LEFT JOIN pg_namespace sn ON (sn.oid = s.stxnamespace)\n         LEFT JOIN LATERAL\n                   ( SELECT array_agg(values) AS most_common_vals,\n                            array_agg(nulls) AS most_common_val_nulls,\n                            array_agg(frequency) AS most_common_freqs,\n                            array_agg(base_frequency) AS most_common_base_freqs\n                     FROM pg_mcv_list_items(sd.stxdmcv)\n                   ) m ON sd.stxdmcv IS NOT NULL\n    WHERE pg_has_role(c.relowner, 'USAGE')\n    AND (c.relrowsecurity = false OR NOT row_security_active(c.oid));"
         },
         {
-            "query": "CREATE VIEW pg_stats_ext_exprs WITH (security_barrier) AS\n    SELECT cn.nspname AS schemaname,\n           c.relname AS tablename,\n           sn.nspname AS statistics_schemaname,\n           s.stxname AS statistics_name,\n           pg_get_userbyid(s.stxowner) AS statistics_owner,\n           stat.expr,\n           sd.stxdinherit AS inherited,\n           (stat.a).stanullfrac AS null_frac,\n           (stat.a).stawidth AS avg_width,\n           (stat.a).stadistinct AS n_distinct,\n           (CASE\n               WHEN (stat.a).stakind1 = 1 THEN (stat.a).stavalues1\n               WHEN (stat.a).stakind2 = 1 THEN (stat.a).stavalues2\n               WHEN (stat.a).stakind3 = 1 THEN (stat.a).stavalues3\n               WHEN (stat.a).stakind4 = 1 THEN (stat.a).stavalues4\n               WHEN (stat.a).stakind5 = 1 THEN (stat.a).stavalues5\n           END) AS most_common_vals,\n           (CASE\n               WHEN (stat.a).stakind1 = 1 THEN (stat.a).stanumbers1\n               WHEN (stat.a).stakind2 = 1 THEN (stat.a).stanumbers2\n               WHEN (stat.a).stakind3 = 1 THEN (stat.a).stanumbers3\n               WHEN (stat.a).stakind4 = 1 THEN (stat.a).stanumbers4\n               WHEN (stat.a).stakind5 = 1 THEN (stat.a).stanumbers5\n           END) AS most_common_freqs,\n           (CASE\n               WHEN (stat.a).stakind1 = 2 THEN (stat.a).stavalues1\n               WHEN (stat.a).stakind2 = 2 THEN (stat.a).stavalues2\n               WHEN (stat.a).stakind3 = 2 THEN (stat.a).stavalues3\n               WHEN (stat.a).stakind4 = 2 THEN (stat.a).stavalues4\n               WHEN (stat.a).stakind5 = 2 THEN (stat.a).stavalues5\n           END) AS histogram_bounds,\n           (CASE\n               WHEN (stat.a).stakind1 = 3 THEN (stat.a).stanumbers1[1]\n               WHEN (stat.a).stakind2 = 3 THEN (stat.a).stanumbers2[1]\n               WHEN (stat.a).stakind3 = 3 THEN (stat.a).stanumbers3[1]\n               WHEN (stat.a).stakind4 = 3 THEN (stat.a).stanumbers4[1]\n               WHEN (stat.a).stakind5 = 3 THEN (stat.a).stanumbers5[1]\n           END) correlation,\n           (CASE\n               WHEN (stat.a).stakind1 = 4 THEN (stat.a).stavalues1\n               WHEN (stat.a).stakind2 = 4 THEN (stat.a).stavalues2\n               WHEN (stat.a).stakind3 = 4 THEN (stat.a).stavalues3\n               WHEN (stat.a).stakind4 = 4 THEN (stat.a).stavalues4\n               WHEN (stat.a).stakind5 = 4 THEN (stat.a).stavalues5\n           END) AS most_common_elems,\n           (CASE\n               WHEN (stat.a).stakind1 = 4 THEN (stat.a).stanumbers1\n               WHEN (stat.a).stakind2 = 4 THEN (stat.a).stanumbers2\n               WHEN (stat.a).stakind3 = 4 THEN (stat.a).stanumbers3\n               WHEN (stat.a).stakind4 = 4 THEN (stat.a).stanumbers4\n               WHEN (stat.a).stakind5 = 4 THEN (stat.a).stanumbers5\n           END) AS most_common_elem_freqs,\n           (CASE\n               WHEN (stat.a).stakind1 = 5 THEN (stat.a).stanumbers1\n               WHEN (stat.a).stakind2 = 5 THEN (stat.a).stanumbers2\n               WHEN (stat.a).stakind3 = 5 THEN (stat.a).stanumbers3\n               WHEN (stat.a).stakind4 = 5 THEN (stat.a).stanumbers4\n               WHEN (stat.a).stakind5 = 5 THEN (stat.a).stanumbers5\n           END) AS elem_count_histogram\n    FROM pg_statistic_ext s JOIN pg_class c ON (c.oid = s.stxrelid)\n         LEFT JOIN pg_statistic_ext_data sd ON (s.oid = sd.stxoid)\n         LEFT JOIN pg_namespace cn ON (cn.oid = c.relnamespace)\n         LEFT JOIN pg_namespace sn ON (sn.oid = s.stxnamespace)\n         JOIN LATERAL (\n             SELECT unnest(pg_get_statisticsobjdef_expressions(s.oid)) AS expr,\n                    unnest(sd.stxdexpr)::pg_statistic AS a\n         ) stat ON (stat.expr IS NOT NULL)\n    WHERE pg_has_role(c.relowner, 'USAGE')\n    AND (c.relrowsecurity = false OR NOT row_security_active(c.oid))",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stats_ext_exprs WITH (security_barrier) AS\n    SELECT cn.nspname AS schemaname,\n           c.relname AS tablename,\n           sn.nspname AS statistics_schemaname,\n           s.stxname AS statistics_name,\n           pg_get_userbyid(s.stxowner) AS statistics_owner,\n           stat.expr,\n           sd.stxdinherit AS inherited,\n           (stat.a).stanullfrac AS null_frac,\n           (stat.a).stawidth AS avg_width,\n           (stat.a).stadistinct AS n_distinct,\n           (CASE\n               WHEN (stat.a).stakind1 = 1 THEN (stat.a).stavalues1\n               WHEN (stat.a).stakind2 = 1 THEN (stat.a).stavalues2\n               WHEN (stat.a).stakind3 = 1 THEN (stat.a).stavalues3\n               WHEN (stat.a).stakind4 = 1 THEN (stat.a).stavalues4\n               WHEN (stat.a).stakind5 = 1 THEN (stat.a).stavalues5\n           END) AS most_common_vals,\n           (CASE\n               WHEN (stat.a).stakind1 = 1 THEN (stat.a).stanumbers1\n               WHEN (stat.a).stakind2 = 1 THEN (stat.a).stanumbers2\n               WHEN (stat.a).stakind3 = 1 THEN (stat.a).stanumbers3\n               WHEN (stat.a).stakind4 = 1 THEN (stat.a).stanumbers4\n               WHEN (stat.a).stakind5 = 1 THEN (stat.a).stanumbers5\n           END) AS most_common_freqs,\n           (CASE\n               WHEN (stat.a).stakind1 = 2 THEN (stat.a).stavalues1\n               WHEN (stat.a).stakind2 = 2 THEN (stat.a).stavalues2\n               WHEN (stat.a).stakind3 = 2 THEN (stat.a).stavalues3\n               WHEN (stat.a).stakind4 = 2 THEN (stat.a).stavalues4\n               WHEN (stat.a).stakind5 = 2 THEN (stat.a).stavalues5\n           END) AS histogram_bounds,\n           (CASE\n               WHEN (stat.a).stakind1 = 3 THEN (stat.a).stanumbers1[1]\n               WHEN (stat.a).stakind2 = 3 THEN (stat.a).stanumbers2[1]\n               WHEN (stat.a).stakind3 = 3 THEN (stat.a).stanumbers3[1]\n               WHEN (stat.a).stakind4 = 3 THEN (stat.a).stanumbers4[1]\n               WHEN (stat.a).stakind5 = 3 THEN (stat.a).stanumbers5[1]\n           END) correlation,\n           (CASE\n               WHEN (stat.a).stakind1 = 4 THEN (stat.a).stavalues1\n               WHEN (stat.a).stakind2 = 4 THEN (stat.a).stavalues2\n               WHEN (stat.a).stakind3 = 4 THEN (stat.a).stavalues3\n               WHEN (stat.a).stakind4 = 4 THEN (stat.a).stavalues4\n               WHEN (stat.a).stakind5 = 4 THEN (stat.a).stavalues5\n           END) AS most_common_elems,\n           (CASE\n               WHEN (stat.a).stakind1 = 4 THEN (stat.a).stanumbers1\n               WHEN (stat.a).stakind2 = 4 THEN (stat.a).stanumbers2\n               WHEN (stat.a).stakind3 = 4 THEN (stat.a).stanumbers3\n               WHEN (stat.a).stakind4 = 4 THEN (stat.a).stanumbers4\n               WHEN (stat.a).stakind5 = 4 THEN (stat.a).stanumbers5\n           END) AS most_common_elem_freqs,\n           (CASE\n               WHEN (stat.a).stakind1 = 5 THEN (stat.a).stanumbers1\n               WHEN (stat.a).stakind2 = 5 THEN (stat.a).stanumbers2\n               WHEN (stat.a).stakind3 = 5 THEN (stat.a).stanumbers3\n               WHEN (stat.a).stakind4 = 5 THEN (stat.a).stanumbers4\n               WHEN (stat.a).stakind5 = 5 THEN (stat.a).stanumbers5\n           END) AS elem_count_histogram\n    FROM pg_statistic_ext s JOIN pg_class c ON (c.oid = s.stxrelid)\n         LEFT JOIN pg_statistic_ext_data sd ON (s.oid = sd.stxoid)\n         LEFT JOIN pg_namespace cn ON (cn.oid = c.relnamespace)\n         LEFT JOIN pg_namespace sn ON (sn.oid = s.stxnamespace)\n         JOIN LATERAL (\n             SELECT unnest(pg_get_statisticsobjdef_expressions(s.oid)) AS expr,\n                    unnest(sd.stxdexpr)::pg_statistic AS a\n         ) stat ON (stat.expr IS NOT NULL)\n    WHERE pg_has_role(c.relowner, 'USAGE')\n    AND (c.relrowsecurity = false OR NOT row_security_active(c.oid));"
         },
         {
-            "query": "-- unprivileged users may read pg_statistic_ext but not pg_statistic_ext_data\nREVOKE ALL ON pg_statistic_ext_data FROM public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "-- unprivileged users may read pg_statistic_ext but not pg_statistic_ext_data\nREVOKE ALL ON pg_statistic_ext_data FROM public;"
         },
         {
-            "query": "CREATE VIEW pg_publication_tables AS\n    SELECT\n        P.pubname AS pubname,\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        ( SELECT array_agg(a.attname ORDER BY a.attnum)\n          FROM pg_attribute a\n          WHERE a.attrelid = GPT.relid AND\n                a.attnum = ANY(GPT.attrs)\n        ) AS attnames,\n        pg_get_expr(GPT.qual, GPT.relid) AS rowfilter\n    FROM pg_publication P,\n         LATERAL pg_get_publication_tables(P.pubname) GPT,\n         pg_class C JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.oid = GPT.relid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_publication_tables AS\n    SELECT\n        P.pubname AS pubname,\n        N.nspname AS schemaname,\n        C.relname AS tablename,\n        ( SELECT array_agg(a.attname ORDER BY a.attnum)\n          FROM pg_attribute a\n          WHERE a.attrelid = GPT.relid AND\n                a.attnum = ANY(GPT.attrs)\n        ) AS attnames,\n        pg_get_expr(GPT.qual, GPT.relid) AS rowfilter\n    FROM pg_publication P,\n         LATERAL pg_get_publication_tables(P.pubname) GPT,\n         pg_class C JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.oid = GPT.relid;"
         },
         {
-            "query": "CREATE VIEW pg_locks AS\n    SELECT * FROM pg_lock_status() AS L",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_locks AS\n    SELECT * FROM pg_lock_status() AS L;"
         },
         {
-            "query": "CREATE VIEW pg_cursors AS\n    SELECT * FROM pg_cursor() AS C",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_cursors AS\n    SELECT * FROM pg_cursor() AS C;"
         },
         {
-            "query": "CREATE VIEW pg_available_extensions AS\n    SELECT E.name, E.default_version, X.extversion AS installed_version,\n           E.comment\n      FROM pg_available_extensions() AS E\n           LEFT JOIN pg_extension AS X ON E.name = X.extname",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_available_extensions AS\n    SELECT E.name, E.default_version, X.extversion AS installed_version,\n           E.comment\n      FROM pg_available_extensions() AS E\n           LEFT JOIN pg_extension AS X ON E.name = X.extname;"
         },
         {
-            "query": "CREATE VIEW pg_available_extension_versions AS\n    SELECT E.name, E.version, (X.extname IS NOT NULL) AS installed,\n           E.superuser, E.trusted, E.relocatable,\n           E.schema, E.requires, E.comment\n      FROM pg_available_extension_versions() AS E\n           LEFT JOIN pg_extension AS X\n             ON E.name = X.extname AND E.version = X.extversion",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_available_extension_versions AS\n    SELECT E.name, E.version, (X.extname IS NOT NULL) AS installed,\n           E.superuser, E.trusted, E.relocatable,\n           E.schema, E.requires, E.comment\n      FROM pg_available_extension_versions() AS E\n           LEFT JOIN pg_extension AS X\n             ON E.name = X.extname AND E.version = X.extversion;"
         },
         {
-            "query": "CREATE VIEW pg_prepared_xacts AS\n    SELECT P.transaction, P.gid, P.prepared,\n           U.rolname AS owner, D.datname AS database\n    FROM pg_prepared_xact() AS P\n         LEFT JOIN pg_authid U ON P.ownerid = U.oid\n         LEFT JOIN pg_database D ON P.dbid = D.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_prepared_xacts AS\n    SELECT P.transaction, P.gid, P.prepared,\n           U.rolname AS owner, D.datname AS database\n    FROM pg_prepared_xact() AS P\n         LEFT JOIN pg_authid U ON P.ownerid = U.oid\n         LEFT JOIN pg_database D ON P.dbid = D.oid;"
         },
         {
-            "query": "CREATE VIEW pg_prepared_statements AS\n    SELECT * FROM pg_prepared_statement() AS P",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_prepared_statements AS\n    SELECT * FROM pg_prepared_statement() AS P;"
         },
         {
-            "query": "CREATE VIEW pg_seclabels AS\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    CASE WHEN rel.relkind IN ('r', 'p') THEN 'table'::text\n         WHEN rel.relkind = 'v' THEN 'view'::text\n         WHEN rel.relkind = 'm' THEN 'materialized view'::text\n         WHEN rel.relkind = 'S' THEN 'sequence'::text\n         WHEN rel.relkind = 'f' THEN 'foreign table'::text END AS objtype,\n    rel.relnamespace AS objnamespace,\n    CASE WHEN pg_table_is_visible(rel.oid)\n         THEN quote_ident(rel.relname)\n         ELSE quote_ident(nsp.nspname) || '.' || quote_ident(rel.relname)\n         END AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_class rel ON l.classoid = rel.tableoid AND l.objoid = rel.oid\n    JOIN pg_namespace nsp ON rel.relnamespace = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'column'::text AS objtype,\n    rel.relnamespace AS objnamespace,\n    CASE WHEN pg_table_is_visible(rel.oid)\n         THEN quote_ident(rel.relname)\n         ELSE quote_ident(nsp.nspname) || '.' || quote_ident(rel.relname)\n         END || '.' || att.attname AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_class rel ON l.classoid = rel.tableoid AND l.objoid = rel.oid\n    JOIN pg_attribute att\n         ON rel.oid = att.attrelid AND l.objsubid = att.attnum\n    JOIN pg_namespace nsp ON rel.relnamespace = nsp.oid\nWHERE\n    l.objsubid != 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    CASE pro.prokind\n            WHEN 'a' THEN 'aggregate'::text\n            WHEN 'f' THEN 'function'::text\n            WHEN 'p' THEN 'procedure'::text\n            WHEN 'w' THEN 'window'::text END AS objtype,\n    pro.pronamespace AS objnamespace,\n    CASE WHEN pg_function_is_visible(pro.oid)\n         THEN quote_ident(pro.proname)\n         ELSE quote_ident(nsp.nspname) || '.' || quote_ident(pro.proname)\n    END || '(' || pg_catalog.pg_get_function_arguments(pro.oid) || ')' AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_proc pro ON l.classoid = pro.tableoid AND l.objoid = pro.oid\n    JOIN pg_namespace nsp ON pro.pronamespace = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    CASE WHEN typ.typtype = 'd' THEN 'domain'::text\n    ELSE 'type'::text END AS objtype,\n    typ.typnamespace AS objnamespace,\n    CASE WHEN pg_type_is_visible(typ.oid)\n    THEN quote_ident(typ.typname)\n    ELSE quote_ident(nsp.nspname) || '.' || quote_ident(typ.typname)\n    END AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_type typ ON l.classoid = typ.tableoid AND l.objoid = typ.oid\n    JOIN pg_namespace nsp ON typ.typnamespace = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'large object'::text AS objtype,\n    NULL::oid AS objnamespace,\n    l.objoid::text AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_largeobject_metadata lom ON l.objoid = lom.oid\nWHERE\n    l.classoid = 'pg_catalog.pg_largeobject'::regclass AND l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'language'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(lan.lanname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_language lan ON l.classoid = lan.tableoid AND l.objoid = lan.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'schema'::text AS objtype,\n    nsp.oid AS objnamespace,\n    quote_ident(nsp.nspname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_namespace nsp ON l.classoid = nsp.tableoid AND l.objoid = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'event trigger'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(evt.evtname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_event_trigger evt ON l.classoid = evt.tableoid\n        AND l.objoid = evt.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'publication'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(p.pubname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_publication p ON l.classoid = p.tableoid AND l.objoid = p.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'subscription'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(s.subname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_subscription s ON l.classoid = s.tableoid AND l.objoid = s.oid\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'database'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(dat.datname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_database dat ON l.classoid = dat.tableoid AND l.objoid = dat.oid\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'tablespace'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(spc.spcname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_tablespace spc ON l.classoid = spc.tableoid AND l.objoid = spc.oid\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'role'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(rol.rolname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_authid rol ON l.classoid = rol.tableoid AND l.objoid = rol.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_seclabels AS\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    CASE WHEN rel.relkind IN ('r', 'p') THEN 'table'::text\n         WHEN rel.relkind = 'v' THEN 'view'::text\n         WHEN rel.relkind = 'm' THEN 'materialized view'::text\n         WHEN rel.relkind = 'S' THEN 'sequence'::text\n         WHEN rel.relkind = 'f' THEN 'foreign table'::text END AS objtype,\n    rel.relnamespace AS objnamespace,\n    CASE WHEN pg_table_is_visible(rel.oid)\n         THEN quote_ident(rel.relname)\n         ELSE quote_ident(nsp.nspname) || '.' || quote_ident(rel.relname)\n         END AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_class rel ON l.classoid = rel.tableoid AND l.objoid = rel.oid\n    JOIN pg_namespace nsp ON rel.relnamespace = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'column'::text AS objtype,\n    rel.relnamespace AS objnamespace,\n    CASE WHEN pg_table_is_visible(rel.oid)\n         THEN quote_ident(rel.relname)\n         ELSE quote_ident(nsp.nspname) || '.' || quote_ident(rel.relname)\n         END || '.' || att.attname AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_class rel ON l.classoid = rel.tableoid AND l.objoid = rel.oid\n    JOIN pg_attribute att\n         ON rel.oid = att.attrelid AND l.objsubid = att.attnum\n    JOIN pg_namespace nsp ON rel.relnamespace = nsp.oid\nWHERE\n    l.objsubid != 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    CASE pro.prokind\n            WHEN 'a' THEN 'aggregate'::text\n            WHEN 'f' THEN 'function'::text\n            WHEN 'p' THEN 'procedure'::text\n            WHEN 'w' THEN 'window'::text END AS objtype,\n    pro.pronamespace AS objnamespace,\n    CASE WHEN pg_function_is_visible(pro.oid)\n         THEN quote_ident(pro.proname)\n         ELSE quote_ident(nsp.nspname) || '.' || quote_ident(pro.proname)\n    END || '(' || pg_catalog.pg_get_function_arguments(pro.oid) || ')' AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_proc pro ON l.classoid = pro.tableoid AND l.objoid = pro.oid\n    JOIN pg_namespace nsp ON pro.pronamespace = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    CASE WHEN typ.typtype = 'd' THEN 'domain'::text\n    ELSE 'type'::text END AS objtype,\n    typ.typnamespace AS objnamespace,\n    CASE WHEN pg_type_is_visible(typ.oid)\n    THEN quote_ident(typ.typname)\n    ELSE quote_ident(nsp.nspname) || '.' || quote_ident(typ.typname)\n    END AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_type typ ON l.classoid = typ.tableoid AND l.objoid = typ.oid\n    JOIN pg_namespace nsp ON typ.typnamespace = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'large object'::text AS objtype,\n    NULL::oid AS objnamespace,\n    l.objoid::text AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_largeobject_metadata lom ON l.objoid = lom.oid\nWHERE\n    l.classoid = 'pg_catalog.pg_largeobject'::regclass AND l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'language'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(lan.lanname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_language lan ON l.classoid = lan.tableoid AND l.objoid = lan.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'schema'::text AS objtype,\n    nsp.oid AS objnamespace,\n    quote_ident(nsp.nspname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_namespace nsp ON l.classoid = nsp.tableoid AND l.objoid = nsp.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'event trigger'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(evt.evtname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_event_trigger evt ON l.classoid = evt.tableoid\n        AND l.objoid = evt.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, l.objsubid,\n    'publication'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(p.pubname) AS objname,\n    l.provider, l.label\nFROM\n    pg_seclabel l\n    JOIN pg_publication p ON l.classoid = p.tableoid AND l.objoid = p.oid\nWHERE\n    l.objsubid = 0\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'subscription'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(s.subname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_subscription s ON l.classoid = s.tableoid AND l.objoid = s.oid\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'database'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(dat.datname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_database dat ON l.classoid = dat.tableoid AND l.objoid = dat.oid\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'tablespace'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(spc.spcname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_tablespace spc ON l.classoid = spc.tableoid AND l.objoid = spc.oid\nUNION ALL\nSELECT\n    l.objoid, l.classoid, 0::int4 AS objsubid,\n    'role'::text AS objtype,\n    NULL::oid AS objnamespace,\n    quote_ident(rol.rolname) AS objname,\n    l.provider, l.label\nFROM\n    pg_shseclabel l\n    JOIN pg_authid rol ON l.classoid = rol.tableoid AND l.objoid = rol.oid;"
         },
         {
-            "query": "CREATE VIEW pg_settings AS\n    SELECT * FROM pg_show_all_settings() AS A",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_settings AS\n    SELECT * FROM pg_show_all_settings() AS A;"
         },
         {
-            "query": "CREATE RULE pg_settings_u AS\n    ON UPDATE TO pg_settings\n    WHERE new.name = old.name DO\n    SELECT set_config(old.name, new.setting, 'f')",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE RULE pg_settings_u AS\n    ON UPDATE TO pg_settings\n    WHERE new.name = old.name DO\n    SELECT set_config(old.name, new.setting, 'f');"
         },
         {
-            "query": "CREATE RULE pg_settings_n AS\n    ON UPDATE TO pg_settings\n    DO INSTEAD NOTHING",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE RULE pg_settings_n AS\n    ON UPDATE TO pg_settings\n    DO INSTEAD NOTHING;"
         },
         {
-            "query": "GRANT SELECT, UPDATE ON pg_settings TO PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "GRANT SELECT, UPDATE ON pg_settings TO PUBLIC;"
         },
         {
-            "query": "CREATE VIEW pg_file_settings AS\n   SELECT * FROM pg_show_all_file_settings() AS A",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_file_settings AS\n   SELECT * FROM pg_show_all_file_settings() AS A;"
         },
         {
-            "query": "REVOKE ALL ON pg_file_settings FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_file_settings FROM PUBLIC;"
         },
         {
-            "query": "REVOKE EXECUTE ON FUNCTION pg_show_all_file_settings() FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE EXECUTE ON FUNCTION pg_show_all_file_settings() FROM PUBLIC;"
         },
         {
-            "query": "CREATE VIEW pg_hba_file_rules AS\n   SELECT * FROM pg_hba_file_rules() AS A",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_hba_file_rules AS\n   SELECT * FROM pg_hba_file_rules() AS A;"
         },
         {
-            "query": "REVOKE ALL ON pg_hba_file_rules FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_hba_file_rules FROM PUBLIC;"
         },
         {
-            "query": "REVOKE EXECUTE ON FUNCTION pg_hba_file_rules() FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE EXECUTE ON FUNCTION pg_hba_file_rules() FROM PUBLIC;"
         },
         {
-            "query": "CREATE VIEW pg_ident_file_mappings AS\n   SELECT * FROM pg_ident_file_mappings() AS A",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_ident_file_mappings AS\n   SELECT * FROM pg_ident_file_mappings() AS A;"
         },
         {
-            "query": "REVOKE ALL ON pg_ident_file_mappings FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_ident_file_mappings FROM PUBLIC;"
         },
         {
-            "query": "REVOKE EXECUTE ON FUNCTION pg_ident_file_mappings() FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE EXECUTE ON FUNCTION pg_ident_file_mappings() FROM PUBLIC;"
         },
         {
-            "query": "CREATE VIEW pg_timezone_abbrevs AS\n    SELECT * FROM pg_timezone_abbrevs()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_timezone_abbrevs AS\n    SELECT * FROM pg_timezone_abbrevs();"
         },
         {
-            "query": "CREATE VIEW pg_timezone_names AS\n    SELECT * FROM pg_timezone_names()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_timezone_names AS\n    SELECT * FROM pg_timezone_names();"
         },
         {
-            "query": "CREATE VIEW pg_config AS\n    SELECT * FROM pg_config()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_config AS\n    SELECT * FROM pg_config();"
         },
         {
-            "query": "REVOKE ALL ON pg_config FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_config FROM PUBLIC;"
         },
         {
-            "query": "REVOKE EXECUTE ON FUNCTION pg_config() FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE EXECUTE ON FUNCTION pg_config() FROM PUBLIC;"
         },
         {
-            "query": "CREATE VIEW pg_shmem_allocations AS\n    SELECT * FROM pg_get_shmem_allocations()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_shmem_allocations AS\n    SELECT * FROM pg_get_shmem_allocations();"
         },
         {
-            "query": "REVOKE ALL ON pg_shmem_allocations FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_shmem_allocations FROM PUBLIC;"
         },
         {
-            "query": "GRANT SELECT ON pg_shmem_allocations TO pg_read_all_stats",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "GRANT SELECT ON pg_shmem_allocations TO pg_read_all_stats;"
         },
         {
-            "query": "REVOKE EXECUTE ON FUNCTION pg_get_shmem_allocations() FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE EXECUTE ON FUNCTION pg_get_shmem_allocations() FROM PUBLIC;"
         },
         {
-            "query": "GRANT EXECUTE ON FUNCTION pg_get_shmem_allocations() TO pg_read_all_stats",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "GRANT EXECUTE ON FUNCTION pg_get_shmem_allocations() TO pg_read_all_stats;"
         },
         {
-            "query": "CREATE VIEW pg_backend_memory_contexts AS\n    SELECT * FROM pg_get_backend_memory_contexts()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_backend_memory_contexts AS\n    SELECT * FROM pg_get_backend_memory_contexts();"
         },
         {
-            "query": "REVOKE ALL ON pg_backend_memory_contexts FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_backend_memory_contexts FROM PUBLIC;"
         },
         {
-            "query": "GRANT SELECT ON pg_backend_memory_contexts TO pg_read_all_stats",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "GRANT SELECT ON pg_backend_memory_contexts TO pg_read_all_stats;"
         },
         {
-            "query": "REVOKE EXECUTE ON FUNCTION pg_get_backend_memory_contexts() FROM PUBLIC",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE EXECUTE ON FUNCTION pg_get_backend_memory_contexts() FROM PUBLIC;"
         },
         {
-            "query": "GRANT EXECUTE ON FUNCTION pg_get_backend_memory_contexts() TO pg_read_all_stats",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "GRANT EXECUTE ON FUNCTION pg_get_backend_memory_contexts() TO pg_read_all_stats;"
         },
         {
-            "query": "-- Statistics views\n\nCREATE VIEW pg_stat_all_tables AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_numscans(C.oid) AS seq_scan,\n            pg_stat_get_lastscan(C.oid) AS last_seq_scan,\n            pg_stat_get_tuples_returned(C.oid) AS seq_tup_read,\n            sum(pg_stat_get_numscans(I.indexrelid))::bigint AS idx_scan,\n            max(pg_stat_get_lastscan(I.indexrelid)) AS last_idx_scan,\n            sum(pg_stat_get_tuples_fetched(I.indexrelid))::bigint +\n            pg_stat_get_tuples_fetched(C.oid) AS idx_tup_fetch,\n            pg_stat_get_tuples_inserted(C.oid) AS n_tup_ins,\n            pg_stat_get_tuples_updated(C.oid) AS n_tup_upd,\n            pg_stat_get_tuples_deleted(C.oid) AS n_tup_del,\n            pg_stat_get_tuples_hot_updated(C.oid) AS n_tup_hot_upd,\n            pg_stat_get_tuples_newpage_updated(C.oid) AS n_tup_newpage_upd,\n            pg_stat_get_live_tuples(C.oid) AS n_live_tup,\n            pg_stat_get_dead_tuples(C.oid) AS n_dead_tup,\n            pg_stat_get_mod_since_analyze(C.oid) AS n_mod_since_analyze,\n            pg_stat_get_ins_since_vacuum(C.oid) AS n_ins_since_vacuum,\n            pg_stat_get_last_vacuum_time(C.oid) as last_vacuum,\n            pg_stat_get_last_autovacuum_time(C.oid) as last_autovacuum,\n            pg_stat_get_last_analyze_time(C.oid) as last_analyze,\n            pg_stat_get_last_autoanalyze_time(C.oid) as last_autoanalyze,\n            pg_stat_get_vacuum_count(C.oid) AS vacuum_count,\n            pg_stat_get_autovacuum_count(C.oid) AS autovacuum_count,\n            pg_stat_get_analyze_count(C.oid) AS analyze_count,\n            pg_stat_get_autoanalyze_count(C.oid) AS autoanalyze_count\n    FROM pg_class C LEFT JOIN\n         pg_index I ON C.oid = I.indrelid\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm', 'p')\n    GROUP BY C.oid, N.nspname, C.relname",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "-- Statistics views\n\nCREATE VIEW pg_stat_all_tables AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_numscans(C.oid) AS seq_scan,\n            pg_stat_get_lastscan(C.oid) AS last_seq_scan,\n            pg_stat_get_tuples_returned(C.oid) AS seq_tup_read,\n            sum(pg_stat_get_numscans(I.indexrelid))::bigint AS idx_scan,\n            max(pg_stat_get_lastscan(I.indexrelid)) AS last_idx_scan,\n            sum(pg_stat_get_tuples_fetched(I.indexrelid))::bigint +\n            pg_stat_get_tuples_fetched(C.oid) AS idx_tup_fetch,\n            pg_stat_get_tuples_inserted(C.oid) AS n_tup_ins,\n            pg_stat_get_tuples_updated(C.oid) AS n_tup_upd,\n            pg_stat_get_tuples_deleted(C.oid) AS n_tup_del,\n            pg_stat_get_tuples_hot_updated(C.oid) AS n_tup_hot_upd,\n            pg_stat_get_tuples_newpage_updated(C.oid) AS n_tup_newpage_upd,\n            pg_stat_get_live_tuples(C.oid) AS n_live_tup,\n            pg_stat_get_dead_tuples(C.oid) AS n_dead_tup,\n            pg_stat_get_mod_since_analyze(C.oid) AS n_mod_since_analyze,\n            pg_stat_get_ins_since_vacuum(C.oid) AS n_ins_since_vacuum,\n            pg_stat_get_last_vacuum_time(C.oid) as last_vacuum,\n            pg_stat_get_last_autovacuum_time(C.oid) as last_autovacuum,\n            pg_stat_get_last_analyze_time(C.oid) as last_analyze,\n            pg_stat_get_last_autoanalyze_time(C.oid) as last_autoanalyze,\n            pg_stat_get_vacuum_count(C.oid) AS vacuum_count,\n            pg_stat_get_autovacuum_count(C.oid) AS autovacuum_count,\n            pg_stat_get_analyze_count(C.oid) AS analyze_count,\n            pg_stat_get_autoanalyze_count(C.oid) AS autoanalyze_count\n    FROM pg_class C LEFT JOIN\n         pg_index I ON C.oid = I.indrelid\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm', 'p')\n    GROUP BY C.oid, N.nspname, C.relname;"
         },
         {
-            "query": "CREATE VIEW pg_stat_xact_all_tables AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_xact_numscans(C.oid) AS seq_scan,\n            pg_stat_get_xact_tuples_returned(C.oid) AS seq_tup_read,\n            sum(pg_stat_get_xact_numscans(I.indexrelid))::bigint AS idx_scan,\n            sum(pg_stat_get_xact_tuples_fetched(I.indexrelid))::bigint +\n            pg_stat_get_xact_tuples_fetched(C.oid) AS idx_tup_fetch,\n            pg_stat_get_xact_tuples_inserted(C.oid) AS n_tup_ins,\n            pg_stat_get_xact_tuples_updated(C.oid) AS n_tup_upd,\n            pg_stat_get_xact_tuples_deleted(C.oid) AS n_tup_del,\n            pg_stat_get_xact_tuples_hot_updated(C.oid) AS n_tup_hot_upd,\n            pg_stat_get_xact_tuples_newpage_updated(C.oid) AS n_tup_newpage_upd\n    FROM pg_class C LEFT JOIN\n         pg_index I ON C.oid = I.indrelid\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm', 'p')\n    GROUP BY C.oid, N.nspname, C.relname",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_xact_all_tables AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_xact_numscans(C.oid) AS seq_scan,\n            pg_stat_get_xact_tuples_returned(C.oid) AS seq_tup_read,\n            sum(pg_stat_get_xact_numscans(I.indexrelid))::bigint AS idx_scan,\n            sum(pg_stat_get_xact_tuples_fetched(I.indexrelid))::bigint +\n            pg_stat_get_xact_tuples_fetched(C.oid) AS idx_tup_fetch,\n            pg_stat_get_xact_tuples_inserted(C.oid) AS n_tup_ins,\n            pg_stat_get_xact_tuples_updated(C.oid) AS n_tup_upd,\n            pg_stat_get_xact_tuples_deleted(C.oid) AS n_tup_del,\n            pg_stat_get_xact_tuples_hot_updated(C.oid) AS n_tup_hot_upd,\n            pg_stat_get_xact_tuples_newpage_updated(C.oid) AS n_tup_newpage_upd\n    FROM pg_class C LEFT JOIN\n         pg_index I ON C.oid = I.indrelid\n         LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm', 'p')\n    GROUP BY C.oid, N.nspname, C.relname;"
         },
         {
-            "query": "CREATE VIEW pg_stat_sys_tables AS\n    SELECT * FROM pg_stat_all_tables\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_sys_tables AS\n    SELECT * FROM pg_stat_all_tables\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_stat_xact_sys_tables AS\n    SELECT * FROM pg_stat_xact_all_tables\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_xact_sys_tables AS\n    SELECT * FROM pg_stat_xact_all_tables\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_stat_user_tables AS\n    SELECT * FROM pg_stat_all_tables\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_user_tables AS\n    SELECT * FROM pg_stat_all_tables\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_stat_xact_user_tables AS\n    SELECT * FROM pg_stat_xact_all_tables\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_xact_user_tables AS\n    SELECT * FROM pg_stat_xact_all_tables\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_statio_all_tables AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_blocks_fetched(C.oid) -\n                    pg_stat_get_blocks_hit(C.oid) AS heap_blks_read,\n            pg_stat_get_blocks_hit(C.oid) AS heap_blks_hit,\n            I.idx_blks_read AS idx_blks_read,\n            I.idx_blks_hit AS idx_blks_hit,\n            pg_stat_get_blocks_fetched(T.oid) -\n                    pg_stat_get_blocks_hit(T.oid) AS toast_blks_read,\n            pg_stat_get_blocks_hit(T.oid) AS toast_blks_hit,\n            X.idx_blks_read AS tidx_blks_read,\n            X.idx_blks_hit AS tidx_blks_hit\n    FROM pg_class C LEFT JOIN\n            pg_class T ON C.reltoastrelid = T.oid\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n            LEFT JOIN LATERAL (\n              SELECT sum(pg_stat_get_blocks_fetched(indexrelid) -\n                         pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_read,\n                     sum(pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_hit\n              FROM pg_index WHERE indrelid = C.oid ) I ON true\n            LEFT JOIN LATERAL (\n              SELECT sum(pg_stat_get_blocks_fetched(indexrelid) -\n                         pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_read,\n                     sum(pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_hit\n              FROM pg_index WHERE indrelid = T.oid ) X ON true\n    WHERE C.relkind IN ('r', 't', 'm')",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_all_tables AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_blocks_fetched(C.oid) -\n                    pg_stat_get_blocks_hit(C.oid) AS heap_blks_read,\n            pg_stat_get_blocks_hit(C.oid) AS heap_blks_hit,\n            I.idx_blks_read AS idx_blks_read,\n            I.idx_blks_hit AS idx_blks_hit,\n            pg_stat_get_blocks_fetched(T.oid) -\n                    pg_stat_get_blocks_hit(T.oid) AS toast_blks_read,\n            pg_stat_get_blocks_hit(T.oid) AS toast_blks_hit,\n            X.idx_blks_read AS tidx_blks_read,\n            X.idx_blks_hit AS tidx_blks_hit\n    FROM pg_class C LEFT JOIN\n            pg_class T ON C.reltoastrelid = T.oid\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n            LEFT JOIN LATERAL (\n              SELECT sum(pg_stat_get_blocks_fetched(indexrelid) -\n                         pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_read,\n                     sum(pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_hit\n              FROM pg_index WHERE indrelid = C.oid ) I ON true\n            LEFT JOIN LATERAL (\n              SELECT sum(pg_stat_get_blocks_fetched(indexrelid) -\n                         pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_read,\n                     sum(pg_stat_get_blocks_hit(indexrelid))::bigint\n                     AS idx_blks_hit\n              FROM pg_index WHERE indrelid = T.oid ) X ON true\n    WHERE C.relkind IN ('r', 't', 'm');"
         },
         {
-            "query": "CREATE VIEW pg_statio_sys_tables AS\n    SELECT * FROM pg_statio_all_tables\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_sys_tables AS\n    SELECT * FROM pg_statio_all_tables\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_statio_user_tables AS\n    SELECT * FROM pg_statio_all_tables\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_user_tables AS\n    SELECT * FROM pg_statio_all_tables\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_stat_all_indexes AS\n    SELECT\n            C.oid AS relid,\n            I.oid AS indexrelid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            I.relname AS indexrelname,\n            pg_stat_get_numscans(I.oid) AS idx_scan,\n            pg_stat_get_lastscan(I.oid) AS last_idx_scan,\n            pg_stat_get_tuples_returned(I.oid) AS idx_tup_read,\n            pg_stat_get_tuples_fetched(I.oid) AS idx_tup_fetch\n    FROM pg_class C JOIN\n            pg_index X ON C.oid = X.indrelid JOIN\n            pg_class I ON I.oid = X.indexrelid\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm')",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_all_indexes AS\n    SELECT\n            C.oid AS relid,\n            I.oid AS indexrelid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            I.relname AS indexrelname,\n            pg_stat_get_numscans(I.oid) AS idx_scan,\n            pg_stat_get_lastscan(I.oid) AS last_idx_scan,\n            pg_stat_get_tuples_returned(I.oid) AS idx_tup_read,\n            pg_stat_get_tuples_fetched(I.oid) AS idx_tup_fetch\n    FROM pg_class C JOIN\n            pg_index X ON C.oid = X.indrelid JOIN\n            pg_class I ON I.oid = X.indexrelid\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm');"
         },
         {
-            "query": "CREATE VIEW pg_stat_sys_indexes AS\n    SELECT * FROM pg_stat_all_indexes\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_sys_indexes AS\n    SELECT * FROM pg_stat_all_indexes\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_stat_user_indexes AS\n    SELECT * FROM pg_stat_all_indexes\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_user_indexes AS\n    SELECT * FROM pg_stat_all_indexes\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_statio_all_indexes AS\n    SELECT\n            C.oid AS relid,\n            I.oid AS indexrelid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            I.relname AS indexrelname,\n            pg_stat_get_blocks_fetched(I.oid) -\n                    pg_stat_get_blocks_hit(I.oid) AS idx_blks_read,\n            pg_stat_get_blocks_hit(I.oid) AS idx_blks_hit\n    FROM pg_class C JOIN\n            pg_index X ON C.oid = X.indrelid JOIN\n            pg_class I ON I.oid = X.indexrelid\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm')",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_all_indexes AS\n    SELECT\n            C.oid AS relid,\n            I.oid AS indexrelid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            I.relname AS indexrelname,\n            pg_stat_get_blocks_fetched(I.oid) -\n                    pg_stat_get_blocks_hit(I.oid) AS idx_blks_read,\n            pg_stat_get_blocks_hit(I.oid) AS idx_blks_hit\n    FROM pg_class C JOIN\n            pg_index X ON C.oid = X.indrelid JOIN\n            pg_class I ON I.oid = X.indexrelid\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind IN ('r', 't', 'm');"
         },
         {
-            "query": "CREATE VIEW pg_statio_sys_indexes AS\n    SELECT * FROM pg_statio_all_indexes\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_sys_indexes AS\n    SELECT * FROM pg_statio_all_indexes\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_statio_user_indexes AS\n    SELECT * FROM pg_statio_all_indexes\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_user_indexes AS\n    SELECT * FROM pg_statio_all_indexes\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_statio_all_sequences AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_blocks_fetched(C.oid) -\n                    pg_stat_get_blocks_hit(C.oid) AS blks_read,\n            pg_stat_get_blocks_hit(C.oid) AS blks_hit\n    FROM pg_class C\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind = 'S'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_all_sequences AS\n    SELECT\n            C.oid AS relid,\n            N.nspname AS schemaname,\n            C.relname AS relname,\n            pg_stat_get_blocks_fetched(C.oid) -\n                    pg_stat_get_blocks_hit(C.oid) AS blks_read,\n            pg_stat_get_blocks_hit(C.oid) AS blks_hit\n    FROM pg_class C\n            LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)\n    WHERE C.relkind = 'S';"
         },
         {
-            "query": "CREATE VIEW pg_statio_sys_sequences AS\n    SELECT * FROM pg_statio_all_sequences\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_sys_sequences AS\n    SELECT * FROM pg_statio_all_sequences\n    WHERE schemaname IN ('pg_catalog', 'information_schema') OR\n          schemaname ~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_statio_user_sequences AS\n    SELECT * FROM pg_statio_all_sequences\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast'",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_statio_user_sequences AS\n    SELECT * FROM pg_statio_all_sequences\n    WHERE schemaname NOT IN ('pg_catalog', 'information_schema') AND\n          schemaname !~ '^pg_toast';"
         },
         {
-            "query": "CREATE VIEW pg_stat_activity AS\n    SELECT\n            S.datid AS datid,\n            D.datname AS datname,\n            S.pid,\n            S.leader_pid,\n            S.usesysid,\n            U.rolname AS usename,\n            S.application_name,\n            S.client_addr,\n            S.client_hostname,\n            S.client_port,\n            S.backend_start,\n            S.xact_start,\n            S.query_start,\n            S.state_change,\n            S.wait_event_type,\n            S.wait_event,\n            S.state,\n            S.backend_xid,\n            s.backend_xmin,\n            S.query_id,\n            S.query,\n            S.backend_type\n    FROM pg_stat_get_activity(NULL) AS S\n        LEFT JOIN pg_database AS D ON (S.datid = D.oid)\n        LEFT JOIN pg_authid AS U ON (S.usesysid = U.oid)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_activity AS\n    SELECT\n            S.datid AS datid,\n            D.datname AS datname,\n            S.pid,\n            S.leader_pid,\n            S.usesysid,\n            U.rolname AS usename,\n            S.application_name,\n            S.client_addr,\n            S.client_hostname,\n            S.client_port,\n            S.backend_start,\n            S.xact_start,\n            S.query_start,\n            S.state_change,\n            S.wait_event_type,\n            S.wait_event,\n            S.state,\n            S.backend_xid,\n            s.backend_xmin,\n            S.query_id,\n            S.query,\n            S.backend_type\n    FROM pg_stat_get_activity(NULL) AS S\n        LEFT JOIN pg_database AS D ON (S.datid = D.oid)\n        LEFT JOIN pg_authid AS U ON (S.usesysid = U.oid);"
         },
         {
-            "query": "CREATE VIEW pg_stat_replication AS\n    SELECT\n            S.pid,\n            S.usesysid,\n            U.rolname AS usename,\n            S.application_name,\n            S.client_addr,\n            S.client_hostname,\n            S.client_port,\n            S.backend_start,\n            S.backend_xmin,\n            W.state,\n            W.sent_lsn,\n            W.write_lsn,\n            W.flush_lsn,\n            W.replay_lsn,\n            W.write_lag,\n            W.flush_lag,\n            W.replay_lag,\n            W.sync_priority,\n            W.sync_state,\n            W.reply_time\n    FROM pg_stat_get_activity(NULL) AS S\n        JOIN pg_stat_get_wal_senders() AS W ON (S.pid = W.pid)\n        LEFT JOIN pg_authid AS U ON (S.usesysid = U.oid)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_replication AS\n    SELECT\n            S.pid,\n            S.usesysid,\n            U.rolname AS usename,\n            S.application_name,\n            S.client_addr,\n            S.client_hostname,\n            S.client_port,\n            S.backend_start,\n            S.backend_xmin,\n            W.state,\n            W.sent_lsn,\n            W.write_lsn,\n            W.flush_lsn,\n            W.replay_lsn,\n            W.write_lag,\n            W.flush_lag,\n            W.replay_lag,\n            W.sync_priority,\n            W.sync_state,\n            W.reply_time\n    FROM pg_stat_get_activity(NULL) AS S\n        JOIN pg_stat_get_wal_senders() AS W ON (S.pid = W.pid)\n        LEFT JOIN pg_authid AS U ON (S.usesysid = U.oid);"
         },
         {
-            "query": "CREATE VIEW pg_stat_slru AS\n    SELECT\n            s.name,\n            s.blks_zeroed,\n            s.blks_hit,\n            s.blks_read,\n            s.blks_written,\n            s.blks_exists,\n            s.flushes,\n            s.truncates,\n            s.stats_reset\n    FROM pg_stat_get_slru() s",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_slru AS\n    SELECT\n            s.name,\n            s.blks_zeroed,\n            s.blks_hit,\n            s.blks_read,\n            s.blks_written,\n            s.blks_exists,\n            s.flushes,\n            s.truncates,\n            s.stats_reset\n    FROM pg_stat_get_slru() s;"
         },
         {
-            "query": "CREATE VIEW pg_stat_wal_receiver AS\n    SELECT\n            s.pid,\n            s.status,\n            s.receive_start_lsn,\n            s.receive_start_tli,\n            s.written_lsn,\n            s.flushed_lsn,\n            s.received_tli,\n            s.last_msg_send_time,\n            s.last_msg_receipt_time,\n            s.latest_end_lsn,\n            s.latest_end_time,\n            s.slot_name,\n            s.sender_host,\n            s.sender_port,\n            s.conninfo\n    FROM pg_stat_get_wal_receiver() s\n    WHERE s.pid IS NOT NULL",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_wal_receiver AS\n    SELECT\n            s.pid,\n            s.status,\n            s.receive_start_lsn,\n            s.receive_start_tli,\n            s.written_lsn,\n            s.flushed_lsn,\n            s.received_tli,\n            s.last_msg_send_time,\n            s.last_msg_receipt_time,\n            s.latest_end_lsn,\n            s.latest_end_time,\n            s.slot_name,\n            s.sender_host,\n            s.sender_port,\n            s.conninfo\n    FROM pg_stat_get_wal_receiver() s\n    WHERE s.pid IS NOT NULL;"
         },
         {
-            "query": "CREATE VIEW pg_stat_recovery_prefetch AS\n    SELECT\n            s.stats_reset,\n            s.prefetch,\n            s.hit,\n            s.skip_init,\n            s.skip_new,\n            s.skip_fpw,\n            s.skip_rep,\n            s.wal_distance,\n            s.block_distance,\n            s.io_depth\n     FROM pg_stat_get_recovery_prefetch() s",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_recovery_prefetch AS\n    SELECT\n            s.stats_reset,\n            s.prefetch,\n            s.hit,\n            s.skip_init,\n            s.skip_new,\n            s.skip_fpw,\n            s.skip_rep,\n            s.wal_distance,\n            s.block_distance,\n            s.io_depth\n     FROM pg_stat_get_recovery_prefetch() s;"
         },
         {
-            "query": "CREATE VIEW pg_stat_subscription AS\n    SELECT\n            su.oid AS subid,\n            su.subname,\n            st.worker_type,\n            st.pid,\n            st.leader_pid,\n            st.relid,\n            st.received_lsn,\n            st.last_msg_send_time,\n            st.last_msg_receipt_time,\n            st.latest_end_lsn,\n            st.latest_end_time\n    FROM pg_subscription su\n            LEFT JOIN pg_stat_get_subscription(NULL) st\n                      ON (st.subid = su.oid)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_subscription AS\n    SELECT\n            su.oid AS subid,\n            su.subname,\n            st.worker_type,\n            st.pid,\n            st.leader_pid,\n            st.relid,\n            st.received_lsn,\n            st.last_msg_send_time,\n            st.last_msg_receipt_time,\n            st.latest_end_lsn,\n            st.latest_end_time\n    FROM pg_subscription su\n            LEFT JOIN pg_stat_get_subscription(NULL) st\n                      ON (st.subid = su.oid);"
         },
         {
-            "query": "CREATE VIEW pg_stat_ssl AS\n    SELECT\n            S.pid,\n            S.ssl,\n            S.sslversion AS version,\n            S.sslcipher AS cipher,\n            S.sslbits AS bits,\n            S.ssl_client_dn AS client_dn,\n            S.ssl_client_serial AS client_serial,\n            S.ssl_issuer_dn AS issuer_dn\n    FROM pg_stat_get_activity(NULL) AS S\n    WHERE S.client_port IS NOT NULL",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_ssl AS\n    SELECT\n            S.pid,\n            S.ssl,\n            S.sslversion AS version,\n            S.sslcipher AS cipher,\n            S.sslbits AS bits,\n            S.ssl_client_dn AS client_dn,\n            S.ssl_client_serial AS client_serial,\n            S.ssl_issuer_dn AS issuer_dn\n    FROM pg_stat_get_activity(NULL) AS S\n    WHERE S.client_port IS NOT NULL;"
         },
         {
-            "query": "CREATE VIEW pg_stat_gssapi AS\n    SELECT\n            S.pid,\n            S.gss_auth AS gss_authenticated,\n            S.gss_princ AS principal,\n            S.gss_enc AS encrypted,\n            S.gss_delegation AS credentials_delegated\n    FROM pg_stat_get_activity(NULL) AS S\n    WHERE S.client_port IS NOT NULL",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_gssapi AS\n    SELECT\n            S.pid,\n            S.gss_auth AS gss_authenticated,\n            S.gss_princ AS principal,\n            S.gss_enc AS encrypted,\n            S.gss_delegation AS credentials_delegated\n    FROM pg_stat_get_activity(NULL) AS S\n    WHERE S.client_port IS NOT NULL;"
         },
         {
-            "query": "CREATE VIEW pg_replication_slots AS\n    SELECT\n            L.slot_name,\n            L.plugin,\n            L.slot_type,\n            L.datoid,\n            D.datname AS database,\n            L.temporary,\n            L.active,\n            L.active_pid,\n            L.xmin,\n            L.catalog_xmin,\n            L.restart_lsn,\n            L.confirmed_flush_lsn,\n            L.wal_status,\n            L.safe_wal_size,\n            L.two_phase,\n            L.inactive_since,\n            L.conflicting,\n            L.invalidation_reason,\n            L.failover,\n            L.synced\n    FROM pg_get_replication_slots() AS L\n            LEFT JOIN pg_database D ON (L.datoid = D.oid)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_replication_slots AS\n    SELECT\n            L.slot_name,\n            L.plugin,\n            L.slot_type,\n            L.datoid,\n            D.datname AS database,\n            L.temporary,\n            L.active,\n            L.active_pid,\n            L.xmin,\n            L.catalog_xmin,\n            L.restart_lsn,\n            L.confirmed_flush_lsn,\n            L.wal_status,\n            L.safe_wal_size,\n            L.two_phase,\n            L.inactive_since,\n            L.conflicting,\n            L.invalidation_reason,\n            L.failover,\n            L.synced\n    FROM pg_get_replication_slots() AS L\n            LEFT JOIN pg_database D ON (L.datoid = D.oid);"
         },
         {
-            "query": "CREATE VIEW pg_stat_replication_slots AS\n    SELECT\n            s.slot_name,\n            s.spill_txns,\n            s.spill_count,\n            s.spill_bytes,\n            s.stream_txns,\n            s.stream_count,\n            s.stream_bytes,\n            s.total_txns,\n            s.total_bytes,\n            s.stats_reset\n    FROM pg_replication_slots as r,\n        LATERAL pg_stat_get_replication_slot(slot_name) as s\n    WHERE r.datoid IS NOT NULL",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_replication_slots AS\n    SELECT\n            s.slot_name,\n            s.spill_txns,\n            s.spill_count,\n            s.spill_bytes,\n            s.stream_txns,\n            s.stream_count,\n            s.stream_bytes,\n            s.total_txns,\n            s.total_bytes,\n            s.stats_reset\n    FROM pg_replication_slots as r,\n        LATERAL pg_stat_get_replication_slot(slot_name) as s\n    WHERE r.datoid IS NOT NULL; -- excluding physical slots\n\nCREATE VIEW pg_stat_database AS\n    SELECT\n            D.oid AS datid,\n            D.datname AS datname,\n                CASE\n                    WHEN (D.oid = (0)::oid) THEN 0\n                    ELSE pg_stat_get_db_numbackends(D.oid)\n                END AS numbackends,\n            pg_stat_get_db_xact_commit(D.oid) AS xact_commit,\n            pg_stat_get_db_xact_rollback(D.oid) AS xact_rollback,\n            pg_stat_get_db_blocks_fetched(D.oid) -\n                    pg_stat_get_db_blocks_hit(D.oid) AS blks_read,\n            pg_stat_get_db_blocks_hit(D.oid) AS blks_hit,\n            pg_stat_get_db_tuples_returned(D.oid) AS tup_returned,\n            pg_stat_get_db_tuples_fetched(D.oid) AS tup_fetched,\n            pg_stat_get_db_tuples_inserted(D.oid) AS tup_inserted,\n            pg_stat_get_db_tuples_updated(D.oid) AS tup_updated,\n            pg_stat_get_db_tuples_deleted(D.oid) AS tup_deleted,\n            pg_stat_get_db_conflict_all(D.oid) AS conflicts,\n            pg_stat_get_db_temp_files(D.oid) AS temp_files,\n            pg_stat_get_db_temp_bytes(D.oid) AS temp_bytes,\n            pg_stat_get_db_deadlocks(D.oid) AS deadlocks,\n            pg_stat_get_db_checksum_failures(D.oid) AS checksum_failures,\n            pg_stat_get_db_checksum_last_failure(D.oid) AS checksum_last_failure,\n            pg_stat_get_db_blk_read_time(D.oid) AS blk_read_time,\n            pg_stat_get_db_blk_write_time(D.oid) AS blk_write_time,\n            pg_stat_get_db_session_time(D.oid) AS session_time,\n            pg_stat_get_db_active_time(D.oid) AS active_time,\n            pg_stat_get_db_idle_in_transaction_time(D.oid) AS idle_in_transaction_time,\n            pg_stat_get_db_sessions(D.oid) AS sessions,\n            pg_stat_get_db_sessions_abandoned(D.oid) AS sessions_abandoned,\n            pg_stat_get_db_sessions_fatal(D.oid) AS sessions_fatal,\n            pg_stat_get_db_sessions_killed(D.oid) AS sessions_killed,\n            pg_stat_get_db_stat_reset_time(D.oid) AS stats_reset\n    FROM (\n        SELECT 0 AS oid, NULL::name AS datname\n        UNION ALL\n        SELECT oid, datname FROM pg_database\n    ) D;"
         },
         {
-            "query": "-- excluding physical slots\n\nCREATE VIEW pg_stat_database AS\n    SELECT\n            D.oid AS datid,\n            D.datname AS datname,\n                CASE\n                    WHEN (D.oid = (0)::oid) THEN 0\n                    ELSE pg_stat_get_db_numbackends(D.oid)\n                END AS numbackends,\n            pg_stat_get_db_xact_commit(D.oid) AS xact_commit,\n            pg_stat_get_db_xact_rollback(D.oid) AS xact_rollback,\n            pg_stat_get_db_blocks_fetched(D.oid) -\n                    pg_stat_get_db_blocks_hit(D.oid) AS blks_read,\n            pg_stat_get_db_blocks_hit(D.oid) AS blks_hit,\n            pg_stat_get_db_tuples_returned(D.oid) AS tup_returned,\n            pg_stat_get_db_tuples_fetched(D.oid) AS tup_fetched,\n            pg_stat_get_db_tuples_inserted(D.oid) AS tup_inserted,\n            pg_stat_get_db_tuples_updated(D.oid) AS tup_updated,\n            pg_stat_get_db_tuples_deleted(D.oid) AS tup_deleted,\n            pg_stat_get_db_conflict_all(D.oid) AS conflicts,\n            pg_stat_get_db_temp_files(D.oid) AS temp_files,\n            pg_stat_get_db_temp_bytes(D.oid) AS temp_bytes,\n            pg_stat_get_db_deadlocks(D.oid) AS deadlocks,\n            pg_stat_get_db_checksum_failures(D.oid) AS checksum_failures,\n            pg_stat_get_db_checksum_last_failure(D.oid) AS checksum_last_failure,\n            pg_stat_get_db_blk_read_time(D.oid) AS blk_read_time,\n            pg_stat_get_db_blk_write_time(D.oid) AS blk_write_time,\n            pg_stat_get_db_session_time(D.oid) AS session_time,\n            pg_stat_get_db_active_time(D.oid) AS active_time,\n            pg_stat_get_db_idle_in_transaction_time(D.oid) AS idle_in_transaction_time,\n            pg_stat_get_db_sessions(D.oid) AS sessions,\n            pg_stat_get_db_sessions_abandoned(D.oid) AS sessions_abandoned,\n            pg_stat_get_db_sessions_fatal(D.oid) AS sessions_fatal,\n            pg_stat_get_db_sessions_killed(D.oid) AS sessions_killed,\n            pg_stat_get_db_stat_reset_time(D.oid) AS stats_reset\n    FROM (\n        SELECT 0 AS oid, NULL::name AS datname\n        UNION ALL\n        SELECT oid, datname FROM pg_database\n    ) D",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_database_conflicts AS\n    SELECT\n            D.oid AS datid,\n            D.datname AS datname,\n            pg_stat_get_db_conflict_tablespace(D.oid) AS confl_tablespace,\n            pg_stat_get_db_conflict_lock(D.oid) AS confl_lock,\n            pg_stat_get_db_conflict_snapshot(D.oid) AS confl_snapshot,\n            pg_stat_get_db_conflict_bufferpin(D.oid) AS confl_bufferpin,\n            pg_stat_get_db_conflict_startup_deadlock(D.oid) AS confl_deadlock,\n            pg_stat_get_db_conflict_logicalslot(D.oid) AS confl_active_logicalslot\n    FROM pg_database D;"
         },
         {
-            "query": "CREATE VIEW pg_stat_database_conflicts AS\n    SELECT\n            D.oid AS datid,\n            D.datname AS datname,\n            pg_stat_get_db_conflict_tablespace(D.oid) AS confl_tablespace,\n            pg_stat_get_db_conflict_lock(D.oid) AS confl_lock,\n            pg_stat_get_db_conflict_snapshot(D.oid) AS confl_snapshot,\n            pg_stat_get_db_conflict_bufferpin(D.oid) AS confl_bufferpin,\n            pg_stat_get_db_conflict_startup_deadlock(D.oid) AS confl_deadlock,\n            pg_stat_get_db_conflict_logicalslot(D.oid) AS confl_active_logicalslot\n    FROM pg_database D",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_user_functions AS\n    SELECT\n            P.oid AS funcid,\n            N.nspname AS schemaname,\n            P.proname AS funcname,\n            pg_stat_get_function_calls(P.oid) AS calls,\n            pg_stat_get_function_total_time(P.oid) AS total_time,\n            pg_stat_get_function_self_time(P.oid) AS self_time\n    FROM pg_proc P LEFT JOIN pg_namespace N ON (N.oid = P.pronamespace)\n    WHERE P.prolang != 12  -- fast check to eliminate built-in functions\n          AND pg_stat_get_function_calls(P.oid) IS NOT NULL;"
         },
         {
-            "query": "CREATE VIEW pg_stat_user_functions AS\n    SELECT\n            P.oid AS funcid,\n            N.nspname AS schemaname,\n            P.proname AS funcname,\n            pg_stat_get_function_calls(P.oid) AS calls,\n            pg_stat_get_function_total_time(P.oid) AS total_time,\n            pg_stat_get_function_self_time(P.oid) AS self_time\n    FROM pg_proc P LEFT JOIN pg_namespace N ON (N.oid = P.pronamespace)\n    WHERE P.prolang != 12  -- fast check to eliminate built-in functions\n          AND pg_stat_get_function_calls(P.oid) IS NOT NULL",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_xact_user_functions AS\n    SELECT\n            P.oid AS funcid,\n            N.nspname AS schemaname,\n            P.proname AS funcname,\n            pg_stat_get_xact_function_calls(P.oid) AS calls,\n            pg_stat_get_xact_function_total_time(P.oid) AS total_time,\n            pg_stat_get_xact_function_self_time(P.oid) AS self_time\n    FROM pg_proc P LEFT JOIN pg_namespace N ON (N.oid = P.pronamespace)\n    WHERE P.prolang != 12  -- fast check to eliminate built-in functions\n          AND pg_stat_get_xact_function_calls(P.oid) IS NOT NULL;"
         },
         {
-            "query": "CREATE VIEW pg_stat_xact_user_functions AS\n    SELECT\n            P.oid AS funcid,\n            N.nspname AS schemaname,\n            P.proname AS funcname,\n            pg_stat_get_xact_function_calls(P.oid) AS calls,\n            pg_stat_get_xact_function_total_time(P.oid) AS total_time,\n            pg_stat_get_xact_function_self_time(P.oid) AS self_time\n    FROM pg_proc P LEFT JOIN pg_namespace N ON (N.oid = P.pronamespace)\n    WHERE P.prolang != 12  -- fast check to eliminate built-in functions\n          AND pg_stat_get_xact_function_calls(P.oid) IS NOT NULL",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_archiver AS\n    SELECT\n        s.archived_count,\n        s.last_archived_wal,\n        s.last_archived_time,\n        s.failed_count,\n        s.last_failed_wal,\n        s.last_failed_time,\n        s.stats_reset\n    FROM pg_stat_get_archiver() s;"
         },
         {
-            "query": "CREATE VIEW pg_stat_archiver AS\n    SELECT\n        s.archived_count,\n        s.last_archived_wal,\n        s.last_archived_time,\n        s.failed_count,\n        s.last_failed_wal,\n        s.last_failed_time,\n        s.stats_reset\n    FROM pg_stat_get_archiver() s",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_bgwriter AS\n    SELECT\n        pg_stat_get_bgwriter_buf_written_clean() AS buffers_clean,\n        pg_stat_get_bgwriter_maxwritten_clean() AS maxwritten_clean,\n        pg_stat_get_buf_alloc() AS buffers_alloc,\n        pg_stat_get_bgwriter_stat_reset_time() AS stats_reset;"
         },
         {
-            "query": "CREATE VIEW pg_stat_bgwriter AS\n    SELECT\n        pg_stat_get_bgwriter_buf_written_clean() AS buffers_clean,\n        pg_stat_get_bgwriter_maxwritten_clean() AS maxwritten_clean,\n        pg_stat_get_buf_alloc() AS buffers_alloc,\n        pg_stat_get_bgwriter_stat_reset_time() AS stats_reset",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_checkpointer AS\n    SELECT\n        pg_stat_get_checkpointer_num_timed() AS num_timed,\n        pg_stat_get_checkpointer_num_requested() AS num_requested,\n        pg_stat_get_checkpointer_restartpoints_timed() AS restartpoints_timed,\n        pg_stat_get_checkpointer_restartpoints_requested() AS restartpoints_req,\n        pg_stat_get_checkpointer_restartpoints_performed() AS restartpoints_done,\n        pg_stat_get_checkpointer_write_time() AS write_time,\n        pg_stat_get_checkpointer_sync_time() AS sync_time,\n        pg_stat_get_checkpointer_buffers_written() AS buffers_written,\n        pg_stat_get_checkpointer_stat_reset_time() AS stats_reset;"
         },
         {
-            "query": "CREATE VIEW pg_stat_checkpointer AS\n    SELECT\n        pg_stat_get_checkpointer_num_timed() AS num_timed,\n        pg_stat_get_checkpointer_num_requested() AS num_requested,\n        pg_stat_get_checkpointer_restartpoints_timed() AS restartpoints_timed,\n        pg_stat_get_checkpointer_restartpoints_requested() AS restartpoints_req,\n        pg_stat_get_checkpointer_restartpoints_performed() AS restartpoints_done,\n        pg_stat_get_checkpointer_write_time() AS write_time,\n        pg_stat_get_checkpointer_sync_time() AS sync_time,\n        pg_stat_get_checkpointer_buffers_written() AS buffers_written,\n        pg_stat_get_checkpointer_stat_reset_time() AS stats_reset",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_io AS\nSELECT\n       b.backend_type,\n       b.object,\n       b.context,\n       b.reads,\n       b.read_time,\n       b.writes,\n       b.write_time,\n       b.writebacks,\n       b.writeback_time,\n       b.extends,\n       b.extend_time,\n       b.op_bytes,\n       b.hits,\n       b.evictions,\n       b.reuses,\n       b.fsyncs,\n       b.fsync_time,\n       b.stats_reset\nFROM pg_stat_get_io() b;"
         },
         {
-            "query": "CREATE VIEW pg_stat_io AS\nSELECT\n       b.backend_type,\n       b.object,\n       b.context,\n       b.reads,\n       b.read_time,\n       b.writes,\n       b.write_time,\n       b.writebacks,\n       b.writeback_time,\n       b.extends,\n       b.extend_time,\n       b.op_bytes,\n       b.hits,\n       b.evictions,\n       b.reuses,\n       b.fsyncs,\n       b.fsync_time,\n       b.stats_reset\nFROM pg_stat_get_io() b",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_wal AS\n    SELECT\n        w.wal_records,\n        w.wal_fpi,\n        w.wal_bytes,\n        w.wal_buffers_full,\n        w.wal_write,\n        w.wal_sync,\n        w.wal_write_time,\n        w.wal_sync_time,\n        w.stats_reset\n    FROM pg_stat_get_wal() w;"
         },
         {
-            "query": "CREATE VIEW pg_stat_wal AS\n    SELECT\n        w.wal_records,\n        w.wal_fpi,\n        w.wal_bytes,\n        w.wal_buffers_full,\n        w.wal_write,\n        w.wal_sync,\n        w.wal_write_time,\n        w.wal_sync_time,\n        w.stats_reset\n    FROM pg_stat_get_wal() w",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_progress_analyze AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        CAST(S.relid AS oid) AS relid,\n        CASE S.param1 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'acquiring sample rows'\n                      WHEN 2 THEN 'acquiring inherited sample rows'\n                      WHEN 3 THEN 'computing statistics'\n                      WHEN 4 THEN 'computing extended statistics'\n                      WHEN 5 THEN 'finalizing analyze'\n                      END AS phase,\n        S.param2 AS sample_blks_total,\n        S.param3 AS sample_blks_scanned,\n        S.param4 AS ext_stats_total,\n        S.param5 AS ext_stats_computed,\n        S.param6 AS child_tables_total,\n        S.param7 AS child_tables_done,\n        CAST(S.param8 AS oid) AS current_child_table_relid\n    FROM pg_stat_get_progress_info('ANALYZE') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid;"
         },
         {
-            "query": "CREATE VIEW pg_stat_progress_analyze AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        CAST(S.relid AS oid) AS relid,\n        CASE S.param1 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'acquiring sample rows'\n                      WHEN 2 THEN 'acquiring inherited sample rows'\n                      WHEN 3 THEN 'computing statistics'\n                      WHEN 4 THEN 'computing extended statistics'\n                      WHEN 5 THEN 'finalizing analyze'\n                      END AS phase,\n        S.param2 AS sample_blks_total,\n        S.param3 AS sample_blks_scanned,\n        S.param4 AS ext_stats_total,\n        S.param5 AS ext_stats_computed,\n        S.param6 AS child_tables_total,\n        S.param7 AS child_tables_done,\n        CAST(S.param8 AS oid) AS current_child_table_relid\n    FROM pg_stat_get_progress_info('ANALYZE') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_progress_vacuum AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        S.relid AS relid,\n        CASE S.param1 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'scanning heap'\n                      WHEN 2 THEN 'vacuuming indexes'\n                      WHEN 3 THEN 'vacuuming heap'\n                      WHEN 4 THEN 'cleaning up indexes'\n                      WHEN 5 THEN 'truncating heap'\n                      WHEN 6 THEN 'performing final cleanup'\n                      END AS phase,\n        S.param2 AS heap_blks_total, S.param3 AS heap_blks_scanned,\n        S.param4 AS heap_blks_vacuumed, S.param5 AS index_vacuum_count,\n        S.param6 AS max_dead_tuple_bytes, S.param7 AS dead_tuple_bytes,\n        S.param8 AS indexes_total, S.param9 AS indexes_processed\n    FROM pg_stat_get_progress_info('VACUUM') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid;"
         },
         {
-            "query": "CREATE VIEW pg_stat_progress_vacuum AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        S.relid AS relid,\n        CASE S.param1 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'scanning heap'\n                      WHEN 2 THEN 'vacuuming indexes'\n                      WHEN 3 THEN 'vacuuming heap'\n                      WHEN 4 THEN 'cleaning up indexes'\n                      WHEN 5 THEN 'truncating heap'\n                      WHEN 6 THEN 'performing final cleanup'\n                      END AS phase,\n        S.param2 AS heap_blks_total, S.param3 AS heap_blks_scanned,\n        S.param4 AS heap_blks_vacuumed, S.param5 AS index_vacuum_count,\n        S.param6 AS max_dead_tuple_bytes, S.param7 AS dead_tuple_bytes,\n        S.param8 AS indexes_total, S.param9 AS indexes_processed\n    FROM pg_stat_get_progress_info('VACUUM') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_progress_cluster AS\n    SELECT\n        S.pid AS pid,\n        S.datid AS datid,\n        D.datname AS datname,\n        S.relid AS relid,\n        CASE S.param1 WHEN 1 THEN 'CLUSTER'\n                      WHEN 2 THEN 'VACUUM FULL'\n                      END AS command,\n        CASE S.param2 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'seq scanning heap'\n                      WHEN 2 THEN 'index scanning heap'\n                      WHEN 3 THEN 'sorting tuples'\n                      WHEN 4 THEN 'writing new heap'\n                      WHEN 5 THEN 'swapping relation files'\n                      WHEN 6 THEN 'rebuilding index'\n                      WHEN 7 THEN 'performing final cleanup'\n                      END AS phase,\n        CAST(S.param3 AS oid) AS cluster_index_relid,\n        S.param4 AS heap_tuples_scanned,\n        S.param5 AS heap_tuples_written,\n        S.param6 AS heap_blks_total,\n        S.param7 AS heap_blks_scanned,\n        S.param8 AS index_rebuild_count\n    FROM pg_stat_get_progress_info('CLUSTER') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid;"
         },
         {
-            "query": "CREATE VIEW pg_stat_progress_cluster AS\n    SELECT\n        S.pid AS pid,\n        S.datid AS datid,\n        D.datname AS datname,\n        S.relid AS relid,\n        CASE S.param1 WHEN 1 THEN 'CLUSTER'\n                      WHEN 2 THEN 'VACUUM FULL'\n                      END AS command,\n        CASE S.param2 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'seq scanning heap'\n                      WHEN 2 THEN 'index scanning heap'\n                      WHEN 3 THEN 'sorting tuples'\n                      WHEN 4 THEN 'writing new heap'\n                      WHEN 5 THEN 'swapping relation files'\n                      WHEN 6 THEN 'rebuilding index'\n                      WHEN 7 THEN 'performing final cleanup'\n                      END AS phase,\n        CAST(S.param3 AS oid) AS cluster_index_relid,\n        S.param4 AS heap_tuples_scanned,\n        S.param5 AS heap_tuples_written,\n        S.param6 AS heap_blks_total,\n        S.param7 AS heap_blks_scanned,\n        S.param8 AS index_rebuild_count\n    FROM pg_stat_get_progress_info('CLUSTER') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_progress_create_index AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        S.relid AS relid,\n        CAST(S.param7 AS oid) AS index_relid,\n        CASE S.param1 WHEN 1 THEN 'CREATE INDEX'\n                      WHEN 2 THEN 'CREATE INDEX CONCURRENTLY'\n                      WHEN 3 THEN 'REINDEX'\n                      WHEN 4 THEN 'REINDEX CONCURRENTLY'\n                      END AS command,\n        CASE S.param10 WHEN 0 THEN 'initializing'\n                       WHEN 1 THEN 'waiting for writers before build'\n                       WHEN 2 THEN 'building index' ||\n                           COALESCE((': ' || pg_indexam_progress_phasename(S.param9::oid, S.param11)),\n                                    '')\n                       WHEN 3 THEN 'waiting for writers before validation'\n                       WHEN 4 THEN 'index validation: scanning index'\n                       WHEN 5 THEN 'index validation: sorting tuples'\n                       WHEN 6 THEN 'index validation: scanning table'\n                       WHEN 7 THEN 'waiting for old snapshots'\n                       WHEN 8 THEN 'waiting for readers before marking dead'\n                       WHEN 9 THEN 'waiting for readers before dropping'\n                       END as phase,\n        S.param4 AS lockers_total,\n        S.param5 AS lockers_done,\n        S.param6 AS current_locker_pid,\n        S.param16 AS blocks_total,\n        S.param17 AS blocks_done,\n        S.param12 AS tuples_total,\n        S.param13 AS tuples_done,\n        S.param14 AS partitions_total,\n        S.param15 AS partitions_done\n    FROM pg_stat_get_progress_info('CREATE INDEX') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid;"
         },
         {
-            "query": "CREATE VIEW pg_stat_progress_create_index AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        S.relid AS relid,\n        CAST(S.param7 AS oid) AS index_relid,\n        CASE S.param1 WHEN 1 THEN 'CREATE INDEX'\n                      WHEN 2 THEN 'CREATE INDEX CONCURRENTLY'\n                      WHEN 3 THEN 'REINDEX'\n                      WHEN 4 THEN 'REINDEX CONCURRENTLY'\n                      END AS command,\n        CASE S.param10 WHEN 0 THEN 'initializing'\n                       WHEN 1 THEN 'waiting for writers before build'\n                       WHEN 2 THEN 'building index' ||\n                           COALESCE((': ' || pg_indexam_progress_phasename(S.param9::oid, S.param11)),\n                                    '')\n                       WHEN 3 THEN 'waiting for writers before validation'\n                       WHEN 4 THEN 'index validation: scanning index'\n                       WHEN 5 THEN 'index validation: sorting tuples'\n                       WHEN 6 THEN 'index validation: scanning table'\n                       WHEN 7 THEN 'waiting for old snapshots'\n                       WHEN 8 THEN 'waiting for readers before marking dead'\n                       WHEN 9 THEN 'waiting for readers before dropping'\n                       END as phase,\n        S.param4 AS lockers_total,\n        S.param5 AS lockers_done,\n        S.param6 AS current_locker_pid,\n        S.param16 AS blocks_total,\n        S.param17 AS blocks_done,\n        S.param12 AS tuples_total,\n        S.param13 AS tuples_done,\n        S.param14 AS partitions_total,\n        S.param15 AS partitions_done\n    FROM pg_stat_get_progress_info('CREATE INDEX') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_progress_basebackup AS\n    SELECT\n        S.pid AS pid,\n        CASE S.param1 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'waiting for checkpoint to finish'\n                      WHEN 2 THEN 'estimating backup size'\n                      WHEN 3 THEN 'streaming database files'\n                      WHEN 4 THEN 'waiting for wal archiving to finish'\n                      WHEN 5 THEN 'transferring wal files'\n                      END AS phase,\n        CASE S.param2 WHEN -1 THEN NULL ELSE S.param2 END AS backup_total,\n        S.param3 AS backup_streamed,\n        S.param4 AS tablespaces_total,\n        S.param5 AS tablespaces_streamed\n    FROM pg_stat_get_progress_info('BASEBACKUP') AS S;"
         },
         {
-            "query": "CREATE VIEW pg_stat_progress_basebackup AS\n    SELECT\n        S.pid AS pid,\n        CASE S.param1 WHEN 0 THEN 'initializing'\n                      WHEN 1 THEN 'waiting for checkpoint to finish'\n                      WHEN 2 THEN 'estimating backup size'\n                      WHEN 3 THEN 'streaming database files'\n                      WHEN 4 THEN 'waiting for wal archiving to finish'\n                      WHEN 5 THEN 'transferring wal files'\n                      END AS phase,\n        CASE S.param2 WHEN -1 THEN NULL ELSE S.param2 END AS backup_total,\n        S.param3 AS backup_streamed,\n        S.param4 AS tablespaces_total,\n        S.param5 AS tablespaces_streamed\n    FROM pg_stat_get_progress_info('BASEBACKUP') AS S",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_progress_copy AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        S.relid AS relid,\n        CASE S.param5 WHEN 1 THEN 'COPY FROM'\n                      WHEN 2 THEN 'COPY TO'\n                      END AS command,\n        CASE S.param6 WHEN 1 THEN 'FILE'\n                      WHEN 2 THEN 'PROGRAM'\n                      WHEN 3 THEN 'PIPE'\n                      WHEN 4 THEN 'CALLBACK'\n                      END AS \"type\",\n        S.param1 AS bytes_processed,\n        S.param2 AS bytes_total,\n        S.param3 AS tuples_processed,\n        S.param4 AS tuples_excluded,\n        S.param7 AS tuples_skipped\n    FROM pg_stat_get_progress_info('COPY') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid;"
         },
         {
-            "query": "CREATE VIEW pg_stat_progress_copy AS\n    SELECT\n        S.pid AS pid, S.datid AS datid, D.datname AS datname,\n        S.relid AS relid,\n        CASE S.param5 WHEN 1 THEN 'COPY FROM'\n                      WHEN 2 THEN 'COPY TO'\n                      END AS command,\n        CASE S.param6 WHEN 1 THEN 'FILE'\n                      WHEN 2 THEN 'PROGRAM'\n                      WHEN 3 THEN 'PIPE'\n                      WHEN 4 THEN 'CALLBACK'\n                      END AS \"type\",\n        S.param1 AS bytes_processed,\n        S.param2 AS bytes_total,\n        S.param3 AS tuples_processed,\n        S.param4 AS tuples_excluded,\n        S.param7 AS tuples_skipped\n    FROM pg_stat_get_progress_info('COPY') AS S\n        LEFT JOIN pg_database D ON S.datid = D.oid",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_user_mappings AS\n    SELECT\n        U.oid       AS umid,\n        S.oid       AS srvid,\n        S.srvname   AS srvname,\n        U.umuser    AS umuser,\n        CASE WHEN U.umuser = 0 THEN\n            'public'\n        ELSE\n            A.rolname\n        END AS usename,\n        CASE WHEN (U.umuser <> 0 AND A.rolname = current_user\n                     AND (pg_has_role(S.srvowner, 'USAGE')\n                          OR has_server_privilege(S.oid, 'USAGE')))\n                    OR (U.umuser = 0 AND pg_has_role(S.srvowner, 'USAGE'))\n                    OR (SELECT rolsuper FROM pg_authid WHERE rolname = current_user)\n                    THEN U.umoptions\n                 ELSE NULL END AS umoptions\n    FROM pg_user_mapping U\n        JOIN pg_foreign_server S ON (U.umserver = S.oid)\n        LEFT JOIN pg_authid A ON (A.oid = U.umuser);"
         },
         {
-            "query": "CREATE VIEW pg_user_mappings AS\n    SELECT\n        U.oid       AS umid,\n        S.oid       AS srvid,\n        S.srvname   AS srvname,\n        U.umuser    AS umuser,\n        CASE WHEN U.umuser = 0 THEN\n            'public'\n        ELSE\n            A.rolname\n        END AS usename,\n        CASE WHEN (U.umuser <> 0 AND A.rolname = current_user\n                     AND (pg_has_role(S.srvowner, 'USAGE')\n                          OR has_server_privilege(S.oid, 'USAGE')))\n                    OR (U.umuser = 0 AND pg_has_role(S.srvowner, 'USAGE'))\n                    OR (SELECT rolsuper FROM pg_authid WHERE rolname = current_user)\n                    THEN U.umoptions\n                 ELSE NULL END AS umoptions\n    FROM pg_user_mapping U\n        JOIN pg_foreign_server S ON (U.umserver = S.oid)\n        LEFT JOIN pg_authid A ON (A.oid = U.umuser)",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_user_mapping FROM public;"
         },
         {
-            "query": "REVOKE ALL ON pg_user_mapping FROM public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_replication_origin_status AS\n    SELECT *\n    FROM pg_show_replication_origin_status();"
         },
         {
-            "query": "CREATE VIEW pg_replication_origin_status AS\n    SELECT *\n    FROM pg_show_replication_origin_status()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "REVOKE ALL ON pg_replication_origin_status FROM public;"
         },
         {
-            "query": "REVOKE ALL ON pg_replication_origin_status FROM public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "-- All columns of pg_subscription except subconninfo are publicly readable.\nREVOKE ALL ON pg_subscription FROM public;"
         },
         {
-            "query": "-- All columns of pg_subscription except subconninfo are publicly readable.\nREVOKE ALL ON pg_subscription FROM public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "GRANT SELECT (oid, subdbid, subskiplsn, subname, subowner, subenabled,\n              subbinary, substream, subtwophasestate, subdisableonerr,\n\t\t\t  subpasswordrequired, subrunasowner, subfailover,\n              subslotname, subsynccommit, subpublications, suborigin)\n    ON pg_subscription TO public;"
         },
         {
-            "query": "GRANT SELECT (oid, subdbid, subskiplsn, subname, subowner, subenabled,\n              subbinary, substream, subtwophasestate, subdisableonerr,\n\t\t\t  subpasswordrequired, subrunasowner, subfailover,\n              subslotname, subsynccommit, subpublications, suborigin)\n    ON pg_subscription TO public",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_stat_subscription_stats AS\n    SELECT\n        ss.subid,\n        s.subname,\n        ss.apply_error_count,\n        ss.sync_error_count,\n        ss.stats_reset\n    FROM pg_subscription as s,\n         pg_stat_get_subscription_stats(s.oid) as ss;"
         },
         {
-            "query": "CREATE VIEW pg_stat_subscription_stats AS\n    SELECT\n        ss.subid,\n        s.subname,\n        ss.apply_error_count,\n        ss.sync_error_count,\n        ss.stats_reset\n    FROM pg_subscription as s,\n         pg_stat_get_subscription_stats(s.oid) as ss",
-            "name": "system_views.sql"
-        },
-        {
-            "query": "CREATE VIEW pg_wait_events AS\n    SELECT * FROM pg_get_wait_events()",
-            "name": "system_views.sql"
+            "name": "system_views.sql",
+            "query": "CREATE VIEW pg_wait_events AS\n    SELECT * FROM pg_get_wait_events();"
         }
     ]
 }

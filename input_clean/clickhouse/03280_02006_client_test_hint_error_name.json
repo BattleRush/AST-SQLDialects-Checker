@@ -2,12 +2,8 @@
     "name": "02006_client_test_hint_error_name.sql",
     "tests": [
         {
-            "query": "-- Tags: no-fasttest\n\nselect throwIf(1);",
-            "name": "02006_client_test_hint_error_name.sql"
-        },
-        {
-            "query": " -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }\n;",
-            "name": "02006_client_test_hint_error_name.sql"
+            "name": "02006_client_test_hint_error_name.sql",
+            "query": "-- Tags: no-fasttest\n\nselect throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }\n;"
         }
     ]
 }

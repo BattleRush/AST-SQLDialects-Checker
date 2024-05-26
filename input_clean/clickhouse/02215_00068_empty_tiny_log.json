@@ -2,16 +2,16 @@
     "name": "00068_empty_tiny_log.sql",
     "tests": [
         {
-            "query": "CREATE TABLE IF NOT EXISTS empty_tiny_log(A UInt8) Engine = TinyLog;",
-            "name": "00068_empty_tiny_log.sql"
+            "name": "00068_empty_tiny_log.sql",
+            "query": "CREATE TABLE IF NOT EXISTS empty_tiny_log(A UInt8) Engine = TinyLog;"
         },
         {
-            "query": "\n\nSELECT A FROM empty_tiny_log;",
-            "name": "00068_empty_tiny_log.sql"
+            "name": "00068_empty_tiny_log.sql",
+            "query": "SELECT A FROM empty_tiny_log;"
         },
         {
-            "query": "\n\nDROP TABLE empty_tiny_log;",
-            "name": "00068_empty_tiny_log.sql"
+            "name": "00068_empty_tiny_log.sql",
+            "query": "DROP TABLE empty_tiny_log;"
         }
     ]
 }

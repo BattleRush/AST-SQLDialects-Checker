@@ -2,84 +2,76 @@
     "name": "02572_materialized_views_ignore_errors.sql",
     "tests": [
         {
-            "query": "set prefer_localhost_replica=1;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "set prefer_localhost_replica=1;"
         },
         {
-            "query": "\n\ndrop table if exists data_02572;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "drop table if exists data_02572;"
         },
         {
-            "query": "\ndrop table if exists proxy_02572;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "drop table if exists proxy_02572;"
         },
         {
-            "query": "\ndrop table if exists push_to_proxy_mv_02572;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "drop table if exists push_to_proxy_mv_02572;"
         },
         {
-            "query": "\ndrop table if exists receiver_02572;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "drop table if exists receiver_02572;"
         },
         {
-            "query": "\n\ncreate table data_02572 (key Int) engine=Memory();",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "create table data_02572 (key Int) engine=Memory();"
         },
         {
-            "query": "\n\ncreate table proxy_02572 (key Int) engine=Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "create table proxy_02572 (key Int) engine=Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');"
         },
         {
-            "query": "\n-- ensure that insert fails\ninsert into proxy_02572 values (1);",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "-- ensure that insert fails\ninsert into proxy_02572 values (1); -- { serverError UNKNOWN_TABLE }\n\n-- proxy data with MV\ncreate materialized view push_to_proxy_mv_02572 to proxy_02572 as select * from data_02572;"
         },
         {
-            "query": " -- { serverError UNKNOWN_TABLE }\n\n-- proxy data with MV\ncreate materialized view push_to_proxy_mv_02572 to proxy_02572 as select * from data_02572;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "-- { echoOn }\nselect * from data_02572 order by key;"
         },
         {
-            "query": "\n\n-- { echoOn }\nselect * from data_02572 order by key;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "insert into data_02572 settings materialized_views_ignore_errors=1 values (2);"
         },
         {
-            "query": "\n\ninsert into data_02572 settings materialized_views_ignore_errors=1 values (2);",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "select * from data_02572 order by key;"
         },
         {
-            "query": "\nselect * from data_02572 order by key;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "-- check system.query_views_log\nsystem flush logs;"
         },
         {
-            "query": "\n-- check system.query_views_log\nsystem flush logs;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "-- lower(status) to pass through clickhouse-test \"exception\" check\nselect lower(status::String), errorCodeToName(exception_code)\nfrom system.query_views_log where\n    view_name = concatWithSeparator('.', currentDatabase(), 'push_to_proxy_mv_02572') and\n    view_target = concatWithSeparator('.', currentDatabase(), 'proxy_02572')\n    order by event_date, event_time\n;"
         },
         {
-            "query": "\n-- lower(status) to pass through clickhouse-test \"exception\" check\nselect lower(status::String), errorCodeToName(exception_code)\nfrom system.query_views_log where\n    view_name = concatWithSeparator('.', currentDatabase(), 'push_to_proxy_mv_02572') and\n    view_target = concatWithSeparator('.', currentDatabase(), 'proxy_02572')\n    order by event_date, event_time\n;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "-- materialized_views_ignore_errors=0\ninsert into data_02572 values (1); -- { serverError UNKNOWN_TABLE }\nselect * from data_02572 order by key;"
         },
         {
-            "query": "\n\n-- materialized_views_ignore_errors=0\ninsert into data_02572 values (1);",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "create table receiver_02572 as data_02572;"
         },
         {
-            "query": " -- { serverError UNKNOWN_TABLE }\nselect * from data_02572 order by key;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "insert into data_02572 values (3);"
         },
         {
-            "query": "\n\ncreate table receiver_02572 as data_02572;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "select * from data_02572 order by key;"
         },
         {
-            "query": "\n\ninsert into data_02572 values (3);",
-            "name": "02572_materialized_views_ignore_errors.sql"
-        },
-        {
-            "query": "\nselect * from data_02572 order by key;",
-            "name": "02572_materialized_views_ignore_errors.sql"
-        },
-        {
-            "query": "\nselect * from receiver_02572 order by key;",
-            "name": "02572_materialized_views_ignore_errors.sql"
+            "name": "02572_materialized_views_ignore_errors.sql",
+            "query": "select * from receiver_02572 order by key;"
         }
     ]
 }

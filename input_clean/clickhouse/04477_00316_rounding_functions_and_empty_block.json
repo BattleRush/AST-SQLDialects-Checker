@@ -2,12 +2,12 @@
     "name": "00316_rounding_functions_and_empty_block.sql",
     "tests": [
         {
-            "query": "SET any_join_distinct_right_table_keys = 1;",
-            "name": "00316_rounding_functions_and_empty_block.sql"
+            "name": "00316_rounding_functions_and_empty_block.sql",
+            "query": "SET any_join_distinct_right_table_keys = 1;"
         },
         {
-            "query": "\n\nSELECT\n    floor((ReferrerTimestamp - InstallTimestamp) / 86400) AS DaysSinceInstallations\nFROM\n(\n    SELECT 6534090703218709881 AS DeviceIDHash, 1458586663 AS InstallTimestamp\n    UNION ALL SELECT 2697418689476658272, 1458561552\n) js1 ANY INNER JOIN\n(\n    SELECT 1034415739529768519 AS DeviceIDHash, 1458566664 AS ReferrerTimestamp\n    UNION ALL SELECT 2697418689476658272, 1458561552\n) js2 USING DeviceIDHash;",
-            "name": "00316_rounding_functions_and_empty_block.sql"
+            "name": "00316_rounding_functions_and_empty_block.sql",
+            "query": "SELECT\n    floor((ReferrerTimestamp - InstallTimestamp) / 86400) AS DaysSinceInstallations\nFROM\n(\n    SELECT 6534090703218709881 AS DeviceIDHash, 1458586663 AS InstallTimestamp\n    UNION ALL SELECT 2697418689476658272, 1458561552\n) js1 ANY INNER JOIN\n(\n    SELECT 1034415739529768519 AS DeviceIDHash, 1458566664 AS ReferrerTimestamp\n    UNION ALL SELECT 2697418689476658272, 1458561552\n) js2 USING DeviceIDHash;"
         }
     ]
 }

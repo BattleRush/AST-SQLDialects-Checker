@@ -2,16 +2,16 @@
     "name": "02579_fill_empty_chunk.sql",
     "tests": [
         {
-            "query": "-- this SELECT produces empty chunk in FillingTransform\n\nSET enable_positional_arguments = 0;",
-            "name": "02579_fill_empty_chunk.sql"
+            "name": "02579_fill_empty_chunk.sql",
+            "query": "-- this SELECT produces empty chunk in FillingTransform\n\nSET enable_positional_arguments = 0;"
         },
         {
-            "query": "\nSET allow_experimental_analyzer = 0;",
-            "name": "02579_fill_empty_chunk.sql"
+            "name": "02579_fill_empty_chunk.sql",
+            "query": "SET allow_experimental_analyzer = 0;"
         },
         {
-            "query": "\n\nSELECT\n    2 AS x,\n    arrayJoin([NULL, NULL, NULL])\nGROUP BY\n    GROUPING SETS (\n        (0),\n        ([NULL, NULL, NULL]))\nORDER BY x ASC WITH FILL FROM 1 TO 10;",
-            "name": "02579_fill_empty_chunk.sql"
+            "name": "02579_fill_empty_chunk.sql",
+            "query": "SELECT\n    2 AS x,\n    arrayJoin([NULL, NULL, NULL])\nGROUP BY\n    GROUPING SETS (\n        (0),\n        ([NULL, NULL, NULL]))\nORDER BY x ASC WITH FILL FROM 1 TO 10;"
         }
     ]
 }

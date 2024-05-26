@@ -2,44 +2,44 @@
     "name": "00663_tiny_log_empty_insert.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS empty;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "DROP TABLE IF EXISTS empty;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS data;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "DROP TABLE IF EXISTS data;"
         },
         {
-            "query": "\n\nCREATE TABLE empty (value Int8) ENGINE = TinyLog;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "CREATE TABLE empty (value Int8) ENGINE = TinyLog;"
         },
         {
-            "query": "\nCREATE TABLE data (value Int8) ENGINE = TinyLog;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "CREATE TABLE data (value Int8) ENGINE = TinyLog;"
         },
         {
-            "query": "\n\nINSERT INTO data SELECT * FROM empty;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "INSERT INTO data SELECT * FROM empty;"
         },
         {
-            "query": "\nSELECT * FROM data;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "SELECT * FROM data;"
         },
         {
-            "query": "\n\nINSERT INTO data SELECT 1;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "INSERT INTO data SELECT 1;"
         },
         {
-            "query": "\nSELECT * FROM data;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "SELECT * FROM data;"
         },
         {
-            "query": "\n\nDROP TABLE empty;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "DROP TABLE empty;"
         },
         {
-            "query": "\nDROP TABLE data;",
-            "name": "00663_tiny_log_empty_insert.sql"
+            "name": "00663_tiny_log_empty_insert.sql",
+            "query": "DROP TABLE data;"
         }
     ]
 }

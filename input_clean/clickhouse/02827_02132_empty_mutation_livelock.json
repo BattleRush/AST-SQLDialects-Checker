@@ -2,36 +2,36 @@
     "name": "02132_empty_mutation_livelock.sql",
     "tests": [
         {
-            "query": "drop table if exists a8x;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "drop table if exists a8x;"
         },
         {
-            "query": "\n\nset empty_result_for_aggregation_by_empty_set=1;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "set empty_result_for_aggregation_by_empty_set=1;"
         },
         {
-            "query": "\ncreate table a8x ENGINE = MergeTree ORDER BY tuple() settings min_bytes_for_wide_part=0 as SELECT number FROM system.numbers limit 100;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "create table a8x ENGINE = MergeTree ORDER BY tuple() settings min_bytes_for_wide_part=0 as SELECT number FROM system.numbers limit 100;"
         },
         {
-            "query": "\n\nselect count() from a8x;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "select count() from a8x;"
         },
         {
-            "query": "\n\nset mutations_sync=1;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "set mutations_sync=1;"
         },
         {
-            "query": "\nalter table a8x update number=0 WHERE number=-3;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "alter table a8x update number=0 WHERE number=-3;"
         },
         {
-            "query": "\n\nselect count() from a8x;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "select count() from a8x;"
         },
         {
-            "query": "\ndrop table if exists a8x;",
-            "name": "02132_empty_mutation_livelock.sql"
+            "name": "02132_empty_mutation_livelock.sql",
+            "query": "drop table if exists a8x;"
         }
     ]
 }

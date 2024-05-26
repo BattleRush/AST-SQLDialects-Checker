@@ -14,8 +14,38 @@ def compare_dataframes(df1, df2):
     
     shape_equal = df1.shape == df2.shape
     columns_equal = list(df1.columns) == list(df2.columns)
-    dtypes_equal = df1.dtypes.equals(df2.dtypes)
-    values_equal = df1.equals(df2)
+    
+    dtypes1 = df1.dtypes
+    dtypes2 = df2.dtypes
+    
+    dtypes_equal = shape_equal
+    # if shape is equal, then compare dtypes by index
+    if shape_equal:
+        for i in range(len(dtypes1)):
+            if dtypes1.iloc[i] != dtypes2.iloc[i]:
+                dtypes_equal = False
+                break
+    
+    #dtypes_equal = df1.dtypes.equals(df2.dtypes)
+    values_equal = shape_equal
+    
+    # iterate over the both tables and string compare the values
+    if shape_equal:
+        for i in range(df1.shape[0]):
+            for j in range(df1.shape[1]):
+                if df1.iat[i, j] != df2.iat[i, j]:
+                    
+                    # sometimes we get obj back as last resort check that str comparison
+                    # works for all types
+                    value1_str = str(df1.iat[i, j])
+                    value2_str = str(df2.iat[i, j])
+                    
+                    if value1_str != value2_str:
+                        print(f"Values not equal at {i}, {j}")
+                        values_equal = False
+                        break
+            if not values_equal:
+                break
     
     return shape_equal, columns_equal, dtypes_equal, values_equal
     # # Check shape

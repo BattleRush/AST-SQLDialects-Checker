@@ -2,68 +2,68 @@
     "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
     "tests": [
         {
-            "query": "\ndrop table if exists {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "\ndrop table if exists {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;"
         },
         {
-            "query": "\nCREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 (dim_key Int64, dim_id String) ENGINE = MergeTree Order by (dim_key);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 (dim_key Int64, dim_id String) ENGINE = MergeTree Order by (dim_key);"
         },
         {
-            "query": "\ninsert into {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 values(1,'test1');",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "insert into {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 values(1,'test1');"
         },
         {
-            "query": "\n\ndrop DICTIONARY if exists {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080;",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "drop DICTIONARY if exists {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080;"
         },
         {
-            "query": "\n\nCREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080 ( dim_key Int64, dim_id String )\nPRIMARY KEY dim_key\nsource(clickhouse(host 'localhost' port tcpPort() user 'default' password '' db currentDatabase() table 'test_table_01080'))\nLIFETIME(MIN 0 MAX 0) LAYOUT(complex_key_hashed());",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080 ( dim_key Int64, dim_id String )\nPRIMARY KEY dim_key\nsource(clickhouse(host 'localhost' port tcpPort() user 'default' password '' db currentDatabase() table 'test_table_01080'))\nLIFETIME(MIN 0 MAX 0) LAYOUT(complex_key_hashed());"
         },
         {
-            "query": "\n\nSELECT dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', tuple(toInt64(1)));",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "SELECT dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', tuple(toInt64(1)));"
         },
         {
-            "query": "\n\nSELECT dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', tuple(toInt64(0)));",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "SELECT dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', tuple(toInt64(0)));"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(0)) as x);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(0)) as x);"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(1)) as x);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(1)) as x);"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(number)) as x from numbers(5));",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(number)) as x from numbers(5));"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(rand64()*0)) as x);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(rand64()*0)) as x);"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(blockSize()=0)) as x);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(blockSize()=0)) as x);"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(materialize(0))) as x);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(materialize(0))) as x);"
         },
         {
-            "query": "\n\nselect dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(materialize(1))) as x);",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x) from (select tuple(toInt64(materialize(1))) as x);"
         },
         {
-            "query": "\n\n\ndrop DICTIONARY   {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080;",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "drop DICTIONARY   {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080;"
         },
         {
-            "query": "\ndrop table   {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;",
-            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql"
+            "name": "01080_check_for_error_incorrect_size_of_nested_column.sql",
+            "query": "drop table   {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;"
         }
     ]
 }

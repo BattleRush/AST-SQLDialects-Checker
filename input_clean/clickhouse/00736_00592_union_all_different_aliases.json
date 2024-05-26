@@ -2,12 +2,12 @@
     "name": "00592_union_all_different_aliases.sql",
     "tests": [
         {
-            "query": "SELECT 1 AS a\nUNION ALL \nSELECT 1 AS b;",
-            "name": "00592_union_all_different_aliases.sql"
+            "name": "00592_union_all_different_aliases.sql",
+            "query": "SELECT 1 AS a\nUNION ALL \nSELECT 1 AS b;"
         },
         {
-            "query": "\n\nSELECT 1 AS a\nUNION ALL \nSELECT 1 AS a;",
-            "name": "00592_union_all_different_aliases.sql"
+            "name": "00592_union_all_different_aliases.sql",
+            "query": "SELECT 1 AS a\nUNION ALL \nSELECT 1 AS a;"
         }
     ]
 }

@@ -2,44 +2,44 @@
     "name": "02582_analyzer_join_subquery_empty_column_list.sql",
     "tests": [
         {
-            "query": "SET allow_experimental_analyzer = 1;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SET allow_experimental_analyzer = 1;"
         },
         {
-            "query": "\n-- { echoOn }\n\nSELECT a FROM ( select 1 AS a ) AS t1, ( select 2 AS b, 3 AS c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "-- { echoOn }\n\nSELECT a FROM ( select 1 AS a ) AS t1, ( select 2 AS b, 3 AS c) AS t2;"
         },
         {
-            "query": "\nSELECT a FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT a FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c) AS t2;"
         },
         {
-            "query": "\nSELECT a FROM ( select 1 AS a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT a FROM ( select 1 AS a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;"
         },
         {
-            "query": "\nSELECT a FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT a FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;"
         },
         {
-            "query": "\nSELECT a FROM ( select * from ( select 1 AS a UNION ALL select 1 as a) ) AS t1, ( select * from (  select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c )) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT a FROM ( select * from ( select 1 AS a UNION ALL select 1 as a) ) AS t1, ( select * from (  select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c )) AS t2;"
         },
         {
-            "query": "\nSELECT b FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT b FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;"
         },
         {
-            "query": "\nSELECT c FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT c FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;"
         },
         {
-            "query": "\nSELECT 42 FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT 42 FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;"
         },
         {
-            "query": "\nSELECT count() FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;",
-            "name": "02582_analyzer_join_subquery_empty_column_list.sql"
+            "name": "02582_analyzer_join_subquery_empty_column_list.sql",
+            "query": "SELECT count() FROM ( select 1 AS a UNION ALL select 1 as a ) AS t1, ( select 2 AS b, 3 AS c UNION ALL select 2 as b, 3 as c) AS t2;"
         }
     ]
 }

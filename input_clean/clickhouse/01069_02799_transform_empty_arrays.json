@@ -2,16 +2,16 @@
     "name": "02799_transform_empty_arrays.sql",
     "tests": [
         {
-            "query": "SELECT transform(number, [], [1]) FROM numbers(10);",
-            "name": "02799_transform_empty_arrays.sql"
+            "name": "02799_transform_empty_arrays.sql",
+            "query": "SELECT transform(number, [], [1]) FROM numbers(10);"
         },
         {
-            "query": "\nSELECT transform(number, [], [], 'Hello') FROM numbers(10);",
-            "name": "02799_transform_empty_arrays.sql"
+            "name": "02799_transform_empty_arrays.sql",
+            "query": "SELECT transform(number, [], [], 'Hello') FROM numbers(10);"
         },
         {
-            "query": "\nSELECT transform(number, [], [], 'Hello ' || number::String) FROM numbers(10);",
-            "name": "02799_transform_empty_arrays.sql"
+            "name": "02799_transform_empty_arrays.sql",
+            "query": "SELECT transform(number, [], [], 'Hello ' || number::String) FROM numbers(10);"
         }
     ]
 }

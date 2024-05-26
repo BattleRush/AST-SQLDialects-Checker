@@ -2,24 +2,20 @@
     "name": "01544_errorCodeToName.sql",
     "tests": [
         {
-            "query": "SELECT errorCodeToName(toUInt32(-1));",
-            "name": "01544_errorCodeToName.sql"
+            "name": "01544_errorCodeToName.sql",
+            "query": "SELECT errorCodeToName(toUInt32(-1));"
         },
         {
-            "query": "\nSELECT errorCodeToName(-1);",
-            "name": "01544_errorCodeToName.sql"
+            "name": "01544_errorCodeToName.sql",
+            "query": "SELECT errorCodeToName(-1);"
         },
         {
-            "query": "\nSELECT errorCodeToName(950);",
-            "name": "01544_errorCodeToName.sql"
+            "name": "01544_errorCodeToName.sql",
+            "query": "SELECT errorCodeToName(950); /* gap in error codes */\nSELECT errorCodeToName(0);"
         },
         {
-            "query": " /* gap in error codes */\nSELECT errorCodeToName(0);",
-            "name": "01544_errorCodeToName.sql"
-        },
-        {
-            "query": "\nSELECT errorCodeToName(1);",
-            "name": "01544_errorCodeToName.sql"
+            "name": "01544_errorCodeToName.sql",
+            "query": "SELECT errorCodeToName(1);"
         }
     ]
 }

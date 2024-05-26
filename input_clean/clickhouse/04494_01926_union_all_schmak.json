@@ -2,8 +2,8 @@
     "name": "01926_union_all_schmak.sql",
     "tests": [
         {
-            "query": "SELECT * FROM (\n    SELECT 1 AS a, 2 AS b FROM system.one\n    JOIN system.one USING dummy\n      UNION ALL\n    SELECT 3 AS a, 4 AS b FROM system.one\n)\nWHERE a != 10\nORDER BY a, b;",
-            "name": "01926_union_all_schmak.sql"
+            "name": "01926_union_all_schmak.sql",
+            "query": "SELECT * FROM (\n    SELECT 1 AS a, 2 AS b FROM system.one\n    JOIN system.one USING dummy\n      UNION ALL\n    SELECT 3 AS a, 4 AS b FROM system.one\n)\nWHERE a != 10\nORDER BY a, b;"
         }
     ]
 }

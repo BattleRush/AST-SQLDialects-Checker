@@ -2,68 +2,68 @@
     "name": "02013_emptystring_cast.sql",
     "tests": [
         {
-            "query": "drop table if exists test_uint64;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_uint64;"
         },
         {
-            "query": "\ncreate table test_uint64 (`data` UInt64 Default 0) engine = MergeTree order by tuple();",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "create table test_uint64 (`data` UInt64 Default 0) engine = MergeTree order by tuple();"
         },
         {
-            "query": "\ninsert into test_uint64 values ('0'), (NULL), (1), ('2');",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "insert into test_uint64 values ('0'), (NULL), (1), ('2');"
         },
         {
-            "query": "\ndrop table if exists test_uint64;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_uint64;"
         },
         {
-            "query": "\n\ndrop table if exists test_float64;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_float64;"
         },
         {
-            "query": "\ncreate table test_float64 (`data` Float64 Default 0.0) engine = MergeTree order by tuple();",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "create table test_float64 (`data` Float64 Default 0.0) engine = MergeTree order by tuple();"
         },
         {
-            "query": "\ninsert into test_float64 values ('0.1'), (NULL), (1.1), ('2.2');",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "insert into test_float64 values ('0.1'), (NULL), (1.1), ('2.2');"
         },
         {
-            "query": "\ndrop table if exists test_float64;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_float64;"
         },
         {
-            "query": "\n\ndrop table if exists test_date;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_date;"
         },
         {
-            "query": "\ncreate table test_date (`data` Date) engine = MergeTree order by tuple();",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "create table test_date (`data` Date) engine = MergeTree order by tuple();"
         },
         {
-            "query": "\ninsert into test_date values ('2021-01-01'), (NULL), ('2021-02-01'), ('2021-03-01');",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "insert into test_date values ('2021-01-01'), (NULL), ('2021-02-01'), ('2021-03-01');"
         },
         {
-            "query": "\ndrop table if exists test_date;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_date;"
         },
         {
-            "query": "\n\ndrop table if exists test_datetime;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_datetime;"
         },
         {
-            "query": "\ncreate table test_datetime (`data` DateTime) engine = MergeTree order by tuple();",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "create table test_datetime (`data` DateTime) engine = MergeTree order by tuple();"
         },
         {
-            "query": "\ninsert into test_datetime values ('2021-01-01 00:00:00'), (NULL), ('2021-02-01 01:00:00'), ('2021-03-01 02:00:00');",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "insert into test_datetime values ('2021-01-01 00:00:00'), (NULL), ('2021-02-01 01:00:00'), ('2021-03-01 02:00:00');"
         },
         {
-            "query": "\ndrop table if exists test_datetime;",
-            "name": "02013_emptystring_cast.sql"
+            "name": "02013_emptystring_cast.sql",
+            "query": "drop table if exists test_datetime;"
         }
     ]
 }

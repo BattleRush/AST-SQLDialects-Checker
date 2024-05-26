@@ -2,28 +2,28 @@
     "name": "00597_with_totals_on_empty_set.sql",
     "tests": [
         {
-            "query": "SELECT count() FROM numbers(10) WHERE number = -1 WITH TOTALS FORMAT Vertical;",
-            "name": "00597_with_totals_on_empty_set.sql"
+            "name": "00597_with_totals_on_empty_set.sql",
+            "query": "SELECT count() FROM numbers(10) WHERE number = -1 WITH TOTALS FORMAT Vertical;"
         },
         {
-            "query": "\nSELECT count() FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
-            "name": "00597_with_totals_on_empty_set.sql"
+            "name": "00597_with_totals_on_empty_set.sql",
+            "query": "SELECT count() FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;"
         },
         {
-            "query": "\nSELECT number, count() FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
-            "name": "00597_with_totals_on_empty_set.sql"
+            "name": "00597_with_totals_on_empty_set.sql",
+            "query": "SELECT number, count() FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;"
         },
         {
-            "query": "\nSELECT groupArray(number) FROM numbers(10) WHERE number = -1 WITH TOTALS FORMAT Vertical;",
-            "name": "00597_with_totals_on_empty_set.sql"
+            "name": "00597_with_totals_on_empty_set.sql",
+            "query": "SELECT groupArray(number) FROM numbers(10) WHERE number = -1 WITH TOTALS FORMAT Vertical;"
         },
         {
-            "query": "\nSELECT groupArray(number) FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
-            "name": "00597_with_totals_on_empty_set.sql"
+            "name": "00597_with_totals_on_empty_set.sql",
+            "query": "SELECT groupArray(number) FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;"
         },
         {
-            "query": "\nSELECT number, groupArray(number) FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;",
-            "name": "00597_with_totals_on_empty_set.sql"
+            "name": "00597_with_totals_on_empty_set.sql",
+            "query": "SELECT number, groupArray(number) FROM numbers(10) WHERE number = -1 GROUP BY number WITH TOTALS FORMAT Vertical;"
         }
     ]
 }

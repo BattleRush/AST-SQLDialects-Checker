@@ -2,300 +2,296 @@
     "name": "partition_info.sql",
     "tests": [
         {
-            "query": "--\n-- Tests for functions providing information about partitions\n--\nSELECT * FROM pg_partition_tree(NULL)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "--\n-- Tests for functions providing information about partitions\n--\nSELECT * FROM pg_partition_tree(NULL);"
         },
         {
-            "query": "SELECT * FROM pg_partition_tree(0)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_tree(0);"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors(NULL)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors(NULL);"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors(0)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors(0);"
         },
         {
-            "query": "SELECT pg_partition_root(NULL)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root(NULL);"
         },
         {
-            "query": "SELECT pg_partition_root(0)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root(0);"
         },
         {
-            "query": "-- Test table partition trees\nCREATE TABLE ptif_test (a int, b int) PARTITION BY range (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- Test table partition trees\nCREATE TABLE ptif_test (a int, b int) PARTITION BY range (a);"
         },
         {
-            "query": "CREATE TABLE ptif_test0 PARTITION OF ptif_test\n  FOR VALUES FROM (minvalue) TO (0) PARTITION BY list (b)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_test0 PARTITION OF ptif_test\n  FOR VALUES FROM (minvalue) TO (0) PARTITION BY list (b);"
         },
         {
-            "query": "CREATE TABLE ptif_test01 PARTITION OF ptif_test0 FOR VALUES IN (1)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_test01 PARTITION OF ptif_test0 FOR VALUES IN (1);"
         },
         {
-            "query": "CREATE TABLE ptif_test1 PARTITION OF ptif_test\n  FOR VALUES FROM (0) TO (100) PARTITION BY list (b)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_test1 PARTITION OF ptif_test\n  FOR VALUES FROM (0) TO (100) PARTITION BY list (b);"
         },
         {
-            "query": "CREATE TABLE ptif_test11 PARTITION OF ptif_test1 FOR VALUES IN (1)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_test11 PARTITION OF ptif_test1 FOR VALUES IN (1);"
         },
         {
-            "query": "CREATE TABLE ptif_test2 PARTITION OF ptif_test\n  FOR VALUES FROM (100) TO (200)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_test2 PARTITION OF ptif_test\n  FOR VALUES FROM (100) TO (200);"
         },
         {
-            "query": "-- This partitioned table should remain with no partitions.\nCREATE TABLE ptif_test3 PARTITION OF ptif_test\n  FOR VALUES FROM (200) TO (maxvalue) PARTITION BY list (b)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- This partitioned table should remain with no partitions.\nCREATE TABLE ptif_test3 PARTITION OF ptif_test\n  FOR VALUES FROM (200) TO (maxvalue) PARTITION BY list (b);"
         },
         {
-            "query": "-- Test pg_partition_root for tables\nSELECT pg_partition_root('ptif_test')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- Test pg_partition_root for tables\nSELECT pg_partition_root('ptif_test');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test0')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test0');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test01')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test01');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test3')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test3');"
         },
         {
-            "query": "-- Test index partition tree\nCREATE INDEX ptif_test_index ON ONLY ptif_test (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- Test index partition tree\nCREATE INDEX ptif_test_index ON ONLY ptif_test (a);"
         },
         {
-            "query": "CREATE INDEX ptif_test0_index ON ONLY ptif_test0 (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE INDEX ptif_test0_index ON ONLY ptif_test0 (a);"
         },
         {
-            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test0_index",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test0_index;"
         },
         {
-            "query": "CREATE INDEX ptif_test01_index ON ptif_test01 (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE INDEX ptif_test01_index ON ptif_test01 (a);"
         },
         {
-            "query": "ALTER INDEX ptif_test0_index ATTACH PARTITION ptif_test01_index",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "ALTER INDEX ptif_test0_index ATTACH PARTITION ptif_test01_index;"
         },
         {
-            "query": "CREATE INDEX ptif_test1_index ON ONLY ptif_test1 (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE INDEX ptif_test1_index ON ONLY ptif_test1 (a);"
         },
         {
-            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test1_index",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test1_index;"
         },
         {
-            "query": "CREATE INDEX ptif_test11_index ON ptif_test11 (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE INDEX ptif_test11_index ON ptif_test11 (a);"
         },
         {
-            "query": "ALTER INDEX ptif_test1_index ATTACH PARTITION ptif_test11_index",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "ALTER INDEX ptif_test1_index ATTACH PARTITION ptif_test11_index;"
         },
         {
-            "query": "CREATE INDEX ptif_test2_index ON ptif_test2 (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE INDEX ptif_test2_index ON ptif_test2 (a);"
         },
         {
-            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test2_index",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test2_index;"
         },
         {
-            "query": "CREATE INDEX ptif_test3_index ON ptif_test3 (a)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE INDEX ptif_test3_index ON ptif_test3 (a);"
         },
         {
-            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test3_index",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "ALTER INDEX ptif_test_index ATTACH PARTITION ptif_test3_index;"
         },
         {
-            "query": "-- Test pg_partition_root for indexes\nSELECT pg_partition_root('ptif_test_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- Test pg_partition_root for indexes\nSELECT pg_partition_root('ptif_test_index');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test0_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test0_index');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test01_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test01_index');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test3_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test3_index');"
         },
         {
-            "query": "-- List all tables members of the tree\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List all tables members of the tree\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test');"
         },
         {
-            "query": "-- List tables from an intermediate level\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test0') p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List tables from an intermediate level\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test0') p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List from leaf table\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test01') p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List from leaf table\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test01') p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List from partitioned table with no partitions\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test3') p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List from partitioned table with no partitions\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test3') p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List all ancestors of root and leaf tables\nSELECT * FROM pg_partition_ancestors('ptif_test01')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List all ancestors of root and leaf tables\nSELECT * FROM pg_partition_ancestors('ptif_test01');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_test')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_test');"
         },
         {
-            "query": "-- List all members using pg_partition_root with leaf table reference\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree(pg_partition_root('ptif_test01')) p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List all members using pg_partition_root with leaf table reference\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree(pg_partition_root('ptif_test01')) p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List all indexes members of the tree\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List all indexes members of the tree\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test_index');"
         },
         {
-            "query": "-- List indexes from an intermediate level\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test0_index') p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List indexes from an intermediate level\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test0_index') p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List from leaf index\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test01_index') p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List from leaf index\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test01_index') p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List from partitioned index with no partitions\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test3_index') p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List from partitioned index with no partitions\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_test3_index') p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List all members using pg_partition_root with leaf index reference\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree(pg_partition_root('ptif_test01_index')) p\n  JOIN pg_class c ON (p.relid = c.oid)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List all members using pg_partition_root with leaf index reference\nSELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree(pg_partition_root('ptif_test01_index')) p\n  JOIN pg_class c ON (p.relid = c.oid);"
         },
         {
-            "query": "-- List all ancestors of root and leaf indexes\nSELECT * FROM pg_partition_ancestors('ptif_test01_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- List all ancestors of root and leaf indexes\nSELECT * FROM pg_partition_ancestors('ptif_test01_index');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_test_index')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_test_index');"
         },
         {
-            "query": "DROP TABLE ptif_test",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "DROP TABLE ptif_test;"
         },
         {
-            "query": "-- Table that is not part of any partition tree is not listed.\nCREATE TABLE ptif_normal_table(a int)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- Table that is not part of any partition tree is not listed.\nCREATE TABLE ptif_normal_table(a int);"
         },
         {
-            "query": "SELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_normal_table')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT relid, parentrelid, level, isleaf\n  FROM pg_partition_tree('ptif_normal_table');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_normal_table')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_normal_table');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_normal_table')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_normal_table');"
         },
         {
-            "query": "DROP TABLE ptif_normal_table",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "DROP TABLE ptif_normal_table;"
         },
         {
-            "query": "-- Various partitioning-related functions return empty/NULL if passed relations\n-- of types that cannot be part of a partition tree",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "-- Various partitioning-related functions return empty/NULL if passed relations\n-- of types that cannot be part of a partition tree; for example, views,\n-- materialized views, legacy inheritance children or parents, etc.\nCREATE VIEW ptif_test_view AS SELECT 1;"
         },
         {
-            "query": "for example, views,\n-- materialized views, legacy inheritance children or parents, etc.\nCREATE VIEW ptif_test_view AS SELECT 1",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE MATERIALIZED VIEW ptif_test_matview AS SELECT 1;"
         },
         {
-            "query": "CREATE MATERIALIZED VIEW ptif_test_matview AS SELECT 1",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_li_parent ();"
         },
         {
-            "query": "CREATE TABLE ptif_li_parent ()",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "CREATE TABLE ptif_li_child () INHERITS (ptif_li_parent);"
         },
         {
-            "query": "CREATE TABLE ptif_li_child () INHERITS (ptif_li_parent)",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_tree('ptif_test_view');"
         },
         {
-            "query": "SELECT * FROM pg_partition_tree('ptif_test_view')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_tree('ptif_test_matview');"
         },
         {
-            "query": "SELECT * FROM pg_partition_tree('ptif_test_matview')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_tree('ptif_li_parent');"
         },
         {
-            "query": "SELECT * FROM pg_partition_tree('ptif_li_parent')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_tree('ptif_li_child');"
         },
         {
-            "query": "SELECT * FROM pg_partition_tree('ptif_li_child')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_test_view');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_test_view')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_test_matview');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_test_matview')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_li_parent');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_li_parent')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT * FROM pg_partition_ancestors('ptif_li_child');"
         },
         {
-            "query": "SELECT * FROM pg_partition_ancestors('ptif_li_child')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test_view');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test_view')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_test_matview');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_test_matview')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_li_parent');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_li_parent')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "SELECT pg_partition_root('ptif_li_child');"
         },
         {
-            "query": "SELECT pg_partition_root('ptif_li_child')",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "DROP VIEW ptif_test_view;"
         },
         {
-            "query": "DROP VIEW ptif_test_view",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "DROP MATERIALIZED VIEW ptif_test_matview;"
         },
         {
-            "query": "DROP MATERIALIZED VIEW ptif_test_matview",
-            "name": "partition_info.sql"
-        },
-        {
-            "query": "DROP TABLE ptif_li_parent, ptif_li_child",
-            "name": "partition_info.sql"
+            "name": "partition_info.sql",
+            "query": "DROP TABLE ptif_li_parent, ptif_li_child;"
         }
     ]
 }

@@ -2,28 +2,28 @@
     "name": "00648_replacing_empty_set_from_prewhere.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS final_test;",
-            "name": "00648_replacing_empty_set_from_prewhere.sql"
+            "name": "00648_replacing_empty_set_from_prewhere.sql",
+            "query": "DROP TABLE IF EXISTS final_test;"
         },
         {
-            "query": "\nset allow_deprecated_syntax_for_merge_tree=1;",
-            "name": "00648_replacing_empty_set_from_prewhere.sql"
+            "name": "00648_replacing_empty_set_from_prewhere.sql",
+            "query": "set allow_deprecated_syntax_for_merge_tree=1;"
         },
         {
-            "query": "\nCREATE TABLE final_test (id String, version Date) ENGINE = ReplacingMergeTree(version, id, 8192);",
-            "name": "00648_replacing_empty_set_from_prewhere.sql"
+            "name": "00648_replacing_empty_set_from_prewhere.sql",
+            "query": "CREATE TABLE final_test (id String, version Date) ENGINE = ReplacingMergeTree(version, id, 8192);"
         },
         {
-            "query": "\nINSERT INTO final_test (id, version) VALUES ('2018-01-01', '2018-01-01');",
-            "name": "00648_replacing_empty_set_from_prewhere.sql"
+            "name": "00648_replacing_empty_set_from_prewhere.sql",
+            "query": "INSERT INTO final_test (id, version) VALUES ('2018-01-01', '2018-01-01');"
         },
         {
-            "query": "\nSELECT * FROM final_test FINAL PREWHERE id == '2018-01-02';",
-            "name": "00648_replacing_empty_set_from_prewhere.sql"
+            "name": "00648_replacing_empty_set_from_prewhere.sql",
+            "query": "SELECT * FROM final_test FINAL PREWHERE id == '2018-01-02';"
         },
         {
-            "query": "\nDROP TABLE final_test;",
-            "name": "00648_replacing_empty_set_from_prewhere.sql"
+            "name": "00648_replacing_empty_set_from_prewhere.sql",
+            "query": "DROP TABLE final_test;"
         }
     ]
 }

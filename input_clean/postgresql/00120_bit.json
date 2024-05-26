@@ -2,40 +2,40 @@
     "name": "bit.sql",
     "tests": [
         {
-            "query": "set enable_seqscan=off",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "set enable_seqscan=off;"
         },
         {
-            "query": "CREATE TABLE test_bit (\n\ti bit(3)\n)",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "CREATE TABLE test_bit (\n\ti bit(3)\n);"
         },
         {
-            "query": "INSERT INTO test_bit VALUES ('001'),('010'),('011'),('100'),('101'),('110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO test_bit VALUES ('001'),('010'),('011'),('100'),('101'),('110');"
         },
         {
-            "query": "CREATE INDEX idx_bit ON test_bit USING gin (i)",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "CREATE INDEX idx_bit ON test_bit USING gin (i);"
         },
         {
-            "query": "SELECT * FROM test_bit WHERE i<'100'::bit(3) ORDER BY i",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM test_bit WHERE i<'100'::bit(3) ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bit WHERE i<='100'::bit(3) ORDER BY i",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM test_bit WHERE i<='100'::bit(3) ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bit WHERE i='100'::bit(3) ORDER BY i",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM test_bit WHERE i='100'::bit(3) ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bit WHERE i>='100'::bit(3) ORDER BY i",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM test_bit WHERE i>='100'::bit(3) ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bit WHERE i>'100'::bit(3) ORDER BY i",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM test_bit WHERE i>'100'::bit(3) ORDER BY i;"
         }
     ]
 }

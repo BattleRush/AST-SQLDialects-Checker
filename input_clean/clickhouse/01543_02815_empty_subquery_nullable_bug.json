@@ -2,24 +2,24 @@
     "name": "02815_empty_subquery_nullable_bug.sql",
     "tests": [
         {
-            "query": "SELECT * FROM (\n    SELECT (\n            SELECT 0 AS x\n            FROM (SELECT 1 AS x) t1\n            JOIN (SELECT 1 AS x) t2 USING (x)\n        ) AS x\n    FROM ( SELECT 1 AS x )\n) FORMAT Null;",
-            "name": "02815_empty_subquery_nullable_bug.sql"
+            "name": "02815_empty_subquery_nullable_bug.sql",
+            "query": "SELECT * FROM (\n    SELECT (\n            SELECT 0 AS x\n            FROM (SELECT 1 AS x) t1\n            JOIN (SELECT 1 AS x) t2 USING (x)\n        ) AS x\n    FROM ( SELECT 1 AS x )\n) FORMAT Null;"
         },
         {
-            "query": "\n\nSELECT (x IN (111)) == 1\nFROM\n(\n    SELECT ( SELECT 3 :: Nullable(UInt8) WHERE 0 ) AS x\n    FROM ( SELECT 2 AS x )\n) FORMAT Null;",
-            "name": "02815_empty_subquery_nullable_bug.sql"
+            "name": "02815_empty_subquery_nullable_bug.sql",
+            "query": "SELECT (x IN (111)) == 1\nFROM\n(\n    SELECT ( SELECT 3 :: Nullable(UInt8) WHERE 0 ) AS x\n    FROM ( SELECT 2 AS x )\n) FORMAT Null;"
         },
         {
-            "query": "\n\nSELECT (x IN (111)) == 1\nFROM\n(\n    SELECT ( SELECT 3 :: Nullable(UInt8) WHERE 1 ) AS x\n    FROM ( SELECT 2 AS x )\n) FORMAT Null;",
-            "name": "02815_empty_subquery_nullable_bug.sql"
+            "name": "02815_empty_subquery_nullable_bug.sql",
+            "query": "SELECT (x IN (111)) == 1\nFROM\n(\n    SELECT ( SELECT 3 :: Nullable(UInt8) WHERE 1 ) AS x\n    FROM ( SELECT 2 AS x )\n) FORMAT Null;"
         },
         {
-            "query": "\n\nSELECT (x IN (111)) == 1\nFROM\n(\n    SELECT ( SELECT 3 WHERE 0 ) AS x\n    FROM ( SELECT 2 AS x )\n) FORMAT Null;",
-            "name": "02815_empty_subquery_nullable_bug.sql"
+            "name": "02815_empty_subquery_nullable_bug.sql",
+            "query": "SELECT (x IN (111)) == 1\nFROM\n(\n    SELECT ( SELECT 3 WHERE 0 ) AS x\n    FROM ( SELECT 2 AS x )\n) FORMAT Null;"
         },
         {
-            "query": "\n\nSELECT x, (SELECT 1 WHERE NULL) AS x FORMAT Null;",
-            "name": "02815_empty_subquery_nullable_bug.sql"
+            "name": "02815_empty_subquery_nullable_bug.sql",
+            "query": "SELECT x, (SELECT 1 WHERE NULL) AS x FORMAT Null;"
         }
     ]
 }

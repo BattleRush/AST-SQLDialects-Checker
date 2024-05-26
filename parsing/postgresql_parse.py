@@ -6,8 +6,8 @@ def extract_sql_queries(file_path):
     with open(file_path, 'r', encoding="utf-8", errors='ignore') as file:
         content = file.read()
 
-    # Split content by semicolons ensure the ; is not inside quotes
-    statements = re.split(r';(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)', content)
+    # Split content by semicolons ensure when its at the end of the line
+    statements = re.split(r";\s*\n", content)
     
     # Remove leading/trailing whitespace from each statement
     statements = [statement.strip() for statement in statements if statement.strip()]
@@ -37,7 +37,10 @@ def extract_sql_queries(file_path):
         
         # if statement doesnt end with ; then add it
         if not cleaned_statement.endswith(";"):
+            print("Adding ; to statement")
             cleaned_statement += ";"
+        else:
+            print("Statement ends with ;", cleaned_statement[-5:])
         
         cleaned_statements.append(cleaned_statement)
         
@@ -95,8 +98,8 @@ def parse_postgres():
         tests = []
         for query in sql_queries:
             tests.append({
-                "query": query,
-                "name": test_name
+                "name": test_name,
+                "query": query + ";"
             })
             
         test["tests"] = tests
@@ -122,4 +125,6 @@ def parse_postgres():
 
 
     print("Parsing postgresql tests done")
+    
+parse_postgres()
 

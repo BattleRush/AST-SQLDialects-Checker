@@ -2,28 +2,28 @@
     "name": "00288_empty_stripelog.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS stripelog;",
-            "name": "00288_empty_stripelog.sql"
+            "name": "00288_empty_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripelog;"
         },
         {
-            "query": "\nCREATE TABLE stripelog (x UInt8) ENGINE = StripeLog;",
-            "name": "00288_empty_stripelog.sql"
+            "name": "00288_empty_stripelog.sql",
+            "query": "CREATE TABLE stripelog (x UInt8) ENGINE = StripeLog;"
         },
         {
-            "query": "\n\nSELECT * FROM stripelog ORDER BY x;",
-            "name": "00288_empty_stripelog.sql"
+            "name": "00288_empty_stripelog.sql",
+            "query": "SELECT * FROM stripelog ORDER BY x;"
         },
         {
-            "query": "\nINSERT INTO stripelog VALUES (1), (2);",
-            "name": "00288_empty_stripelog.sql"
+            "name": "00288_empty_stripelog.sql",
+            "query": "INSERT INTO stripelog VALUES (1), (2);"
         },
         {
-            "query": "\nSELECT * FROM stripelog ORDER BY x;",
-            "name": "00288_empty_stripelog.sql"
+            "name": "00288_empty_stripelog.sql",
+            "query": "SELECT * FROM stripelog ORDER BY x;"
         },
         {
-            "query": "\n\nDROP TABLE stripelog;",
-            "name": "00288_empty_stripelog.sql"
+            "name": "00288_empty_stripelog.sql",
+            "query": "DROP TABLE stripelog;"
         }
     ]
 }

@@ -2,8 +2,8 @@
     "name": "01720_union_distinct_with_limit.sql",
     "tests": [
         {
-            "query": "SELECT x\nFROM\n(\n    SELECT 1 AS x\n    UNION DISTINCT\n    SELECT 1\n)\nLIMIT 1;",
-            "name": "01720_union_distinct_with_limit.sql"
+            "name": "01720_union_distinct_with_limit.sql",
+            "query": "SELECT x\nFROM\n(\n    SELECT 1 AS x\n    UNION DISTINCT\n    SELECT 1\n)\nLIMIT 1;"
         }
     ]
 }

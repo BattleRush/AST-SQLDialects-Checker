@@ -2,244 +2,244 @@
     "name": "01018_empty_aggregation_filling.sql",
     "tests": [
         {
-            "query": "SELECT '--- Int Empty ---';",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT '--- Int Empty ---';"
         },
         {
-            "query": "\n\nSELECT arrayReduce('avgOrDefault', arrayPopBack([1]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrDefault', arrayPopBack([1]));"
         },
         {
-            "query": "\nSELECT arrayReduce('avgOrNull', arrayPopBack([1]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrNull', arrayPopBack([1]));"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrDefault', arrayPopBack([1]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrDefault', arrayPopBack([1]));"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrNull', arrayPopBack([1]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrNull', arrayPopBack([1]));"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrDefault', arrayPopBack([1]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', arrayPopBack([1]));"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', arrayPopBack([1]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', arrayPopBack([1]));"
         },
         {
-            "query": "\n\nSELECT avgOrDefaultIf(x, x > 1) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrDefaultIf(x, x > 1) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT avgOrNullIf(x, x > 1) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrNullIf(x, x > 1) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT stddevSampOrDefaultIf(x, x > 1) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrDefaultIf(x, x > 1) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT stddevSampOrNullIf(x, x > 1) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrNullIf(x, x > 1) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT maxOrDefaultIf(x, x > 1) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrDefaultIf(x, x > 1) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT maxOrNullIf(x, x > 1) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrNullIf(x, x > 1) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\n\nSELECT avgOrDefaultIfMerge(state) FROM (SELECT avgOrDefaultIfState(x, x > 1) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrDefaultIfMerge(state) FROM (SELECT avgOrDefaultIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT avgOrNullIfMerge(state) FROM (SELECT avgOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrNullIfMerge(state) FROM (SELECT avgOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT stddevSampOrDefaultIfMerge(state) FROM (SELECT stddevSampOrDefaultIfState(x, x > 1) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrDefaultIfMerge(state) FROM (SELECT stddevSampOrDefaultIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT stddevSampOrNullIfMerge(state) FROM (SELECT stddevSampOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrNullIfMerge(state) FROM (SELECT stddevSampOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT maxOrDefaultIfMerge(state) FROM (SELECT maxOrDefaultIfState(x, x > 1) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrDefaultIfMerge(state) FROM (SELECT maxOrDefaultIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT maxOrNullIfMerge(state) FROM (SELECT maxOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrNullIfMerge(state) FROM (SELECT maxOrNullIfState(x, x > 1) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\n\nSELECT '--- Int Non-empty ---';",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT '--- Int Non-empty ---';"
         },
         {
-            "query": "\n\nSELECT arrayReduce('avgOrDefault', [1]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrDefault', [1]);"
         },
         {
-            "query": "\nSELECT arrayReduce('avgOrNull', [1]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrNull', [1]);"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrDefault', [1]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrDefault', [1]);"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrNull', [1]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrNull', [1]);"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrDefault', [1]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', [1]);"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', [1]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', [1]);"
         },
         {
-            "query": "\n\nSELECT avgOrDefaultIf(x, x > 0) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrDefaultIf(x, x > 0) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT avgOrNullIf(x, x > 0) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrNullIf(x, x > 0) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT stddevSampOrDefaultIf(x, x > 0) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrDefaultIf(x, x > 0) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT stddevSampOrNullIf(x, x > 0) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrNullIf(x, x > 0) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT maxOrDefaultIf(x, x > 0) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrDefaultIf(x, x > 0) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\nSELECT maxOrNullIf(x, x > 0) FROM (SELECT 1 AS x);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrNullIf(x, x > 0) FROM (SELECT 1 AS x);"
         },
         {
-            "query": "\n\nSELECT avgOrDefaultIfMerge(state) FROM (SELECT avgOrDefaultIfState(x, x > 0) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrDefaultIfMerge(state) FROM (SELECT avgOrDefaultIfState(x, x > 0) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT avgOrNullIfMerge(state) FROM (SELECT avgOrNullIfState(x, x > 0) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT avgOrNullIfMerge(state) FROM (SELECT avgOrNullIfState(x, x > 0) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT stddevSampOrDefaultIfMerge(state) FROM (SELECT stddevSampOrDefaultIfState(x, x > 0) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrDefaultIfMerge(state) FROM (SELECT stddevSampOrDefaultIfState(x, x > 0) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT stddevSampOrNullIfMerge(state) FROM (SELECT stddevSampOrNullIfState(x, x > 0) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT stddevSampOrNullIfMerge(state) FROM (SELECT stddevSampOrNullIfState(x, x > 0) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT maxOrDefaultIfMerge(state) FROM (SELECT maxOrDefaultIfState(x, x > 0) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrDefaultIfMerge(state) FROM (SELECT maxOrDefaultIfState(x, x > 0) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\nSELECT maxOrNullIfMerge(state) FROM (SELECT maxOrNullIfState(x, x > 0) AS state FROM (SELECT 1 AS x));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT maxOrNullIfMerge(state) FROM (SELECT maxOrNullIfState(x, x > 0) AS state FROM (SELECT 1 AS x));"
         },
         {
-            "query": "\n\nSELECT '--- Other Types Empty ---';",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT '--- Other Types Empty ---';"
         },
         {
-            "query": "\n\nSELECT arrayReduce('maxOrDefault', arrayPopBack(['hello']));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', arrayPopBack(['hello']));"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', arrayPopBack(['hello']));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', arrayPopBack(['hello']));"
         },
         {
-            "query": "\n\nSELECT arrayReduce('maxOrDefault', arrayPopBack(arrayPopBack([toDateTime('2011-04-05 14:19:19'), null])));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', arrayPopBack(arrayPopBack([toDateTime('2011-04-05 14:19:19'), null])));"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', arrayPopBack(arrayPopBack([toDateTime('2011-04-05 14:19:19'), null])));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', arrayPopBack(arrayPopBack([toDateTime('2011-04-05 14:19:19'), null])));"
         },
         {
-            "query": "\n\nSELECT arrayReduce('avgOrDefault', arrayPopBack([toDecimal128(-123.45, 2)]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrDefault', arrayPopBack([toDecimal128(-123.45, 2)]));"
         },
         {
-            "query": "\nSELECT arrayReduce('avgOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrDefault', arrayPopBack([toDecimal128(-123.45, 2)]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrDefault', arrayPopBack([toDecimal128(-123.45, 2)]));"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrDefault', arrayPopBack([toDecimal128(-123.45, 2)]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', arrayPopBack([toDecimal128(-123.45, 2)]));"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', arrayPopBack([toDecimal128(-123.45, 2)]));"
         },
         {
-            "query": "\n\nSELECT '--- Other Types Non-empty ---';",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT '--- Other Types Non-empty ---';"
         },
         {
-            "query": "\n\nSELECT arrayReduce('maxOrDefault', ['hello']);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', ['hello']);"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', ['hello']);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', ['hello']);"
         },
         {
-            "query": "\n\nSELECT arrayReduce('maxOrDefault', [toDateTime('2011-04-05 14:19:19'), null]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', [toDateTime('2011-04-05 14:19:19'), null]);"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', [toDateTime('2011-04-05 14:19:19'), null]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', [toDateTime('2011-04-05 14:19:19'), null]);"
         },
         {
-            "query": "\n\nSELECT arrayReduce('avgOrDefault', [toDecimal128(-123.45, 2)]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrDefault', [toDecimal128(-123.45, 2)]);"
         },
         {
-            "query": "\nSELECT arrayReduce('avgOrNull', [toDecimal128(-123.45, 2)]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('avgOrNull', [toDecimal128(-123.45, 2)]);"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrDefault', [toDecimal128(-123.45, 2)]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrDefault', [toDecimal128(-123.45, 2)]);"
         },
         {
-            "query": "\nSELECT arrayReduce('stddevSampOrNull', [toDecimal128(-123.45, 2)]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('stddevSampOrNull', [toDecimal128(-123.45, 2)]);"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrDefault', [toDecimal128(-123.45, 2)]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrDefault', [toDecimal128(-123.45, 2)]);"
         },
         {
-            "query": "\nSELECT arrayReduce('maxOrNull', [toDecimal128(-123.45, 2)]);",
-            "name": "01018_empty_aggregation_filling.sql"
+            "name": "01018_empty_aggregation_filling.sql",
+            "query": "SELECT arrayReduce('maxOrNull', [toDecimal128(-123.45, 2)]);"
         }
     ]
 }

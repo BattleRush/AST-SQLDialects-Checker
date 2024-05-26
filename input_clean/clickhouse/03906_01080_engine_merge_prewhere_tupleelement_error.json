@@ -2,48 +2,48 @@
     "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
     "tests": [
         {
-            "query": "drop table if exists A1;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "drop table if exists A1;"
         },
         {
-            "query": "\ndrop table if exists A_M;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "drop table if exists A_M;"
         },
         {
-            "query": "\nCREATE TABLE A1( a DateTime ) ENGINE = MergeTree ORDER BY tuple();",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "CREATE TABLE A1( a DateTime ) ENGINE = MergeTree ORDER BY tuple();"
         },
         {
-            "query": "\nCREATE TABLE A_M as A1 ENGINE = Merge(currentDatabase(), '^A1$');",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "CREATE TABLE A_M as A1 ENGINE = Merge(currentDatabase(), '^A1$');"
         },
         {
-            "query": "\ninsert into A1(a) select now();",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "insert into A1(a) select now();"
         },
         {
-            "query": "\n\nset optimize_move_to_prewhere=0;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "set optimize_move_to_prewhere=0;"
         },
         {
-            "query": "\n\nSELECT tupleElement(arrayJoin([(1, 1)]), 1) FROM A_M PREWHERE tupleElement((1, 1), 1) =1;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "SELECT tupleElement(arrayJoin([(1, 1)]), 1) FROM A_M PREWHERE tupleElement((1, 1), 1) =1;"
         },
         {
-            "query": "\n\nSELECT tupleElement(arrayJoin([(1, 1)]), 1) FROM A_M WHERE tupleElement((1, 1), 1) =1;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "SELECT tupleElement(arrayJoin([(1, 1)]), 1) FROM A_M WHERE tupleElement((1, 1), 1) =1;"
         },
         {
-            "query": "\n\nSELECT tupleElement(arrayJoin([(1, 1)]), 1) FROM A1 PREWHERE tupleElement((1, 1), 1) =1;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "SELECT tupleElement(arrayJoin([(1, 1)]), 1) FROM A1 PREWHERE tupleElement((1, 1), 1) =1;"
         },
         {
-            "query": "\n\ndrop table A1;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "drop table A1;"
         },
         {
-            "query": "\ndrop table A_M;",
-            "name": "01080_engine_merge_prewhere_tupleelement_error.sql"
+            "name": "01080_engine_merge_prewhere_tupleelement_error.sql",
+            "query": "drop table A_M;"
         }
     ]
 }

@@ -2,8 +2,8 @@
     "name": "02150_replace_regexp_all_empty_match.sql",
     "tests": [
         {
-            "query": "select replaceRegexpAll('Hello, World!', '^', 'here: ');",
-            "name": "02150_replace_regexp_all_empty_match.sql"
+            "name": "02150_replace_regexp_all_empty_match.sql",
+            "query": "select replaceRegexpAll('Hello, World!', '^', 'here: ');"
         }
     ]
 }

@@ -2,68 +2,68 @@
     "name": "00145_empty_likes.sql",
     "tests": [
         {
-            "query": "SELECT materialize('Hello') LIKE '';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '%';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '%%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '%%';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '%%%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '%%%';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '%_%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '%_%';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '_';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '_';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '_%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '_%';"
         },
         {
-            "query": "\nSELECT materialize('Hello') LIKE '%_';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT materialize('Hello') LIKE '%_';"
         },
         {
-            "query": "\n\nSELECT 'Hello' LIKE '';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '%';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '%%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '%%';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '%%%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '%%%';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '%_%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '%_%';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '_';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '_';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '_%';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '_%';"
         },
         {
-            "query": "\nSELECT 'Hello' LIKE '%_';",
-            "name": "00145_empty_likes.sql"
+            "name": "00145_empty_likes.sql",
+            "query": "SELECT 'Hello' LIKE '%_';"
         }
     ]
 }

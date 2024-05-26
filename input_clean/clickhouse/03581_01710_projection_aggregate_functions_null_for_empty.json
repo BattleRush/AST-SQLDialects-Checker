@@ -2,24 +2,24 @@
     "name": "01710_projection_aggregate_functions_null_for_empty.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS t1;",
-            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql",
+            "query": "DROP TABLE IF EXISTS t1;"
         },
         {
-            "query": "\n\nCREATE TABLE t1 (c0 Int32, PRIMARY KEY (c0)) ENGINE=MergeTree;",
-            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql",
+            "query": "CREATE TABLE t1 (c0 Int32, PRIMARY KEY (c0)) ENGINE=MergeTree;"
         },
         {
-            "query": "\nINSERT INTO t1 VALUES (1554690688);",
-            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql",
+            "query": "INSERT INTO t1 VALUES (1554690688);"
         },
         {
-            "query": "\n\nSELECT MIN(t1.c0) FROM t1 SETTINGS aggregate_functions_null_for_empty = 1;",
-            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql",
+            "query": "SELECT MIN(t1.c0) FROM t1 SETTINGS aggregate_functions_null_for_empty = 1;"
         },
         {
-            "query": "\n\nDROP TABLE IF EXISTS t1;",
-            "name": "01710_projection_aggregate_functions_null_for_empty.sql"
+            "name": "01710_projection_aggregate_functions_null_for_empty.sql",
+            "query": "DROP TABLE IF EXISTS t1;"
         }
     ]
 }

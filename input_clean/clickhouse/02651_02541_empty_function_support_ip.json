@@ -2,36 +2,36 @@
     "name": "02541_empty_function_support_ip.sql",
     "tests": [
         {
-            "query": "SELECT empty(toIPv6('::'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT empty(toIPv6('::'));"
         },
         {
-            "query": "\nSELECT notEmpty(toIPv6('::'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT notEmpty(toIPv6('::'));"
         },
         {
-            "query": "\nSELECT empty(toIPv6('::1'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT empty(toIPv6('::1'));"
         },
         {
-            "query": "\nSELECT notEmpty(toIPv6('::1'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT notEmpty(toIPv6('::1'));"
         },
         {
-            "query": "\n\nSELECT empty(toIPv4('0.0.0.0'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT empty(toIPv4('0.0.0.0'));"
         },
         {
-            "query": "\nSELECT notEmpty(toIPv4('0.0.0.0'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT notEmpty(toIPv4('0.0.0.0'));"
         },
         {
-            "query": "\nSELECT empty(toIPv4('127.0.0.1'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT empty(toIPv4('127.0.0.1'));"
         },
         {
-            "query": "\nSELECT notEmpty(toIPv4('127.0.0.1'));",
-            "name": "02541_empty_function_support_ip.sql"
+            "name": "02541_empty_function_support_ip.sql",
+            "query": "SELECT notEmpty(toIPv4('127.0.0.1'));"
         }
     ]
 }

@@ -2,520 +2,544 @@
     "name": "index_including.sql",
     "tests": [
         {
-            "query": "/*\n * 1.test CREATE INDEX\n *\n * Deliberately avoid dropping objects in this section, to get some pg_dump\n * coverage.\n */\n\n-- Regular index with included columns\nCREATE TABLE tbl_include_reg (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 1.test CREATE INDEX\n *\n * Deliberately avoid dropping objects in this section, to get some pg_dump\n * coverage.\n */\n\n-- Regular index with included columns\nCREATE TABLE tbl_include_reg (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "INSERT INTO tbl_include_reg SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl_include_reg SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "CREATE INDEX tbl_include_reg_idx ON tbl_include_reg (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX tbl_include_reg_idx ON tbl_include_reg (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "-- duplicate column is pretty pointless, but we allow it anyway\nCREATE INDEX ON tbl_include_reg (c1, c2) INCLUDE (c1, c3)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- duplicate column is pretty pointless, but we allow it anyway\nCREATE INDEX ON tbl_include_reg (c1, c2) INCLUDE (c1, c3);"
         },
         {
-            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_reg'::regclass ORDER BY c.relname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_reg'::regclass ORDER BY c.relname;"
         },
         {
-            "query": "\\d tbl_include_reg_idx\n\n-- Unique index and unique constraint\nCREATE TABLE tbl_include_unique1 (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "\\d tbl_include_reg_idx\n\n-- Unique index and unique constraint\nCREATE TABLE tbl_include_unique1 (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "INSERT INTO tbl_include_unique1 SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl_include_unique1 SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "CREATE UNIQUE INDEX tbl_include_unique1_idx_unique ON tbl_include_unique1 using btree (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX tbl_include_unique1_idx_unique ON tbl_include_unique1 using btree (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "ALTER TABLE tbl_include_unique1 add UNIQUE USING INDEX tbl_include_unique1_idx_unique",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl_include_unique1 add UNIQUE USING INDEX tbl_include_unique1_idx_unique;"
         },
         {
-            "query": "ALTER TABLE tbl_include_unique1 add UNIQUE (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl_include_unique1 add UNIQUE (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_unique1'::regclass ORDER BY c.relname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_unique1'::regclass ORDER BY c.relname;"
         },
         {
-            "query": "-- Unique index and unique constraint. Both must fail.\nCREATE TABLE tbl_include_unique2 (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- Unique index and unique constraint. Both must fail.\nCREATE TABLE tbl_include_unique2 (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "INSERT INTO tbl_include_unique2 SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl_include_unique2 SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "CREATE UNIQUE INDEX tbl_include_unique2_idx_unique ON tbl_include_unique2 using btree (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX tbl_include_unique2_idx_unique ON tbl_include_unique2 using btree (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "ALTER TABLE tbl_include_unique2 add UNIQUE (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl_include_unique2 add UNIQUE (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "-- PK constraint\nCREATE TABLE tbl_include_pk (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- PK constraint\nCREATE TABLE tbl_include_pk (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "INSERT INTO tbl_include_pk SELECT 1, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl_include_pk SELECT 1, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "ALTER TABLE tbl_include_pk add PRIMARY KEY (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl_include_pk add PRIMARY KEY (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_pk'::regclass ORDER BY c.relname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_pk'::regclass ORDER BY c.relname;"
         },
         {
-            "query": "CREATE TABLE tbl_include_box (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE TABLE tbl_include_box (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "INSERT INTO tbl_include_box SELECT 1, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl_include_box SELECT 1, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "CREATE UNIQUE INDEX tbl_include_box_idx_unique ON tbl_include_box using btree (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX tbl_include_box_idx_unique ON tbl_include_box using btree (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "ALTER TABLE tbl_include_box add PRIMARY KEY USING INDEX tbl_include_box_idx_unique",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl_include_box add PRIMARY KEY USING INDEX tbl_include_box_idx_unique;"
         },
         {
-            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_box'::regclass ORDER BY c.relname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_indexdef(i.indexrelid)\nFROM pg_index i JOIN pg_class c ON i.indexrelid = c.oid\nWHERE i.indrelid = 'tbl_include_box'::regclass ORDER BY c.relname;"
         },
         {
-            "query": "-- PK constraint. Must fail.\nCREATE TABLE tbl_include_box_pk (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- PK constraint. Must fail.\nCREATE TABLE tbl_include_box_pk (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "INSERT INTO tbl_include_box_pk SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl_include_box_pk SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "ALTER TABLE tbl_include_box_pk add PRIMARY KEY (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl_include_box_pk add PRIMARY KEY (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "/*\n * 2. Test CREATE TABLE with constraint\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tCONSTRAINT covering UNIQUE(c1,c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 2. Test CREATE TABLE with constraint\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tCONSTRAINT covering UNIQUE(c1,c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tCONSTRAINT covering PRIMARY KEY(c1,c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tCONSTRAINT covering PRIMARY KEY(c1,c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "INSERT INTO tbl SELECT 1, NULL, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT 1, NULL, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "INSERT INTO tbl SELECT x, 2*x, NULL, NULL FROM generate_series(1,300) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT x, 2*x, NULL, NULL FROM generate_series(1,300) AS x;"
         },
         {
-            "query": "explain (costs off)\nselect * from tbl where (c1,c2,c3) < (2,5,1)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "explain (costs off)\nselect * from tbl where (c1,c2,c3) < (2,5,1);"
         },
         {
-            "query": "select * from tbl where (c1,c2,c3) < (2,5,1)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "select * from tbl where (c1,c2,c3) < (2,5,1);"
         },
         {
-            "query": "-- row comparison that compares high key at page boundary\nSET enable_seqscan = off",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- row comparison that compares high key at page boundary\nSET enable_seqscan = off;"
         },
         {
-            "query": "explain (costs off)\nselect * from tbl where (c1,c2,c3) < (262,1,1) limit 1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "explain (costs off)\nselect * from tbl where (c1,c2,c3) < (262,1,1) limit 1;"
         },
         {
-            "query": "select * from tbl where (c1,c2,c3) < (262,1,1) limit 1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "select * from tbl where (c1,c2,c3) < (262,1,1) limit 1;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "RESET enable_seqscan",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "RESET enable_seqscan;"
         },
         {
-            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tUNIQUE(c1,c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tUNIQUE(c1,c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tPRIMARY KEY(c1,c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tPRIMARY KEY(c1,c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "INSERT INTO tbl SELECT 1, NULL, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT 1, NULL, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "INSERT INTO tbl SELECT x, 2*x, NULL, NULL FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT x, 2*x, NULL, NULL FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tEXCLUDE USING btree (c1 WITH =) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box,\n\t\t\t\tEXCLUDE USING btree (c1 WITH =) INCLUDE(c3,c4));"
         },
         {
-            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexrelid::regclass, indnatts, indnkeyatts, indisunique, indisprimary, indkey, indclass FROM pg_index WHERE indrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT pg_get_constraintdef(oid), conname, conkey FROM pg_constraint WHERE conrelid = 'tbl'::regclass::oid;"
         },
         {
-            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- ensure that constraint works\nINSERT INTO tbl SELECT 1, 2, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "INSERT INTO tbl SELECT x, 2*x, NULL, NULL FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT x, 2*x, NULL, NULL FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "/*\n * 3.0 Test ALTER TABLE DROP COLUMN.\n * Any column deletion leads to index deletion.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 int)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 3.0 Test ALTER TABLE DROP COLUMN.\n * Any column deletion leads to index deletion.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 int);"
         },
         {
-            "query": "CREATE UNIQUE INDEX tbl_idx ON tbl using btree(c1, c2, c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX tbl_idx ON tbl using btree(c1, c2, c3, c4);"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "ALTER TABLE tbl DROP COLUMN c3",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl DROP COLUMN c3;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "/*\n * 3.1 Test ALTER TABLE DROP COLUMN.\n * Included column deletion leads to the index deletion,\n * AS well AS key columns deletion. It's explained in documentation.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box);\nCREATE UNIQUE INDEX tbl_idx ON tbl using btree(c1, c2) INCLUDE(c3,c4);\nSELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;\nALTER TABLE tbl DROP COLUMN c3;\nSELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;\nDROP TABLE tbl;\n\n/*\n * 3.2 Test ALTER TABLE DROP COLUMN.\n * Included column deletion leads to the index deletion.\n * AS well AS key columns deletion. It's explained in documentation.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 3.1 Test ALTER TABLE DROP COLUMN.\n * Included column deletion leads to the index deletion,\n * AS well AS key columns deletion. It's explained in documentation.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box);"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX tbl_idx ON tbl using btree(c1, c2) INCLUDE(c3,c4);"
         },
         {
-            "query": "ALTER TABLE tbl DROP COLUMN c3",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl DROP COLUMN c3;"
         },
         {
-            "query": "ALTER TABLE tbl DROP COLUMN c1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 3.2 Test ALTER TABLE DROP COLUMN.\n * Included column deletion leads to the index deletion.\n * AS well AS key columns deletion. It's explained in documentation.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "/*\n * 3.3 Test ALTER TABLE SET STATISTICS\n */\nCREATE TABLE tbl (c1 int, c2 int)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "CREATE INDEX tbl_idx ON tbl (c1, (c1+0)) INCLUDE (c2)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl DROP COLUMN c3;"
         },
         {
-            "query": "ALTER INDEX tbl_idx ALTER COLUMN 1 SET STATISTICS 1000",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "ALTER INDEX tbl_idx ALTER COLUMN 2 SET STATISTICS 1000",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl DROP COLUMN c1;"
         },
         {
-            "query": "ALTER INDEX tbl_idx ALTER COLUMN 3 SET STATISTICS 1000",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "ALTER INDEX tbl_idx ALTER COLUMN 4 SET STATISTICS 1000",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 3.3 Test ALTER TABLE SET STATISTICS\n */\nCREATE TABLE tbl (c1 int, c2 int);"
         },
         {
-            "query": "/*\n * 4. CREATE INDEX CONCURRENTLY\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX tbl_idx ON tbl (c1, (c1+0)) INCLUDE (c2);"
         },
         {
-            "query": "INSERT INTO tbl SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,1000) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER INDEX tbl_idx ALTER COLUMN 1 SET STATISTICS 1000;"
         },
         {
-            "query": "CREATE UNIQUE INDEX CONCURRENTLY on tbl (c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER INDEX tbl_idx ALTER COLUMN 2 SET STATISTICS 1000;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER INDEX tbl_idx ALTER COLUMN 3 SET STATISTICS 1000;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER INDEX tbl_idx ALTER COLUMN 4 SET STATISTICS 1000;"
         },
         {
-            "query": "/*\n * 5. REINDEX\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 4. CREATE INDEX CONCURRENTLY\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "ALTER TABLE tbl DROP COLUMN c3",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,1000) AS x;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX CONCURRENTLY on tbl (c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "REINDEX INDEX tbl_c1_c2_c3_c4_key",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "ALTER TABLE tbl DROP COLUMN c1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 5. REINDEX\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl DROP COLUMN c3;"
         },
         {
-            "query": "/*\n * 7. Check various AMs. All but btree, gist and spgist must fail.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 box, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "CREATE INDEX on tbl USING brin(c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "REINDEX INDEX tbl_c1_c2_c3_c4_key;"
         },
         {
-            "query": "CREATE INDEX on tbl USING gist(c3) INCLUDE (c1, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "CREATE INDEX on tbl USING spgist(c3) INCLUDE (c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl DROP COLUMN c1;"
         },
         {
-            "query": "CREATE INDEX on tbl USING gin(c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "SELECT indexdef FROM pg_indexes WHERE tablename = 'tbl' ORDER BY indexname;"
         },
         {
-            "query": "CREATE INDEX on tbl USING hash(c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "CREATE INDEX on tbl USING rtree(c3) INCLUDE (c1, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 7. Check various AMs. All but btree, gist and spgist must fail.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 box, c4 box);"
         },
         {
-            "query": "CREATE INDEX on tbl USING btree(c1, c2) INCLUDE (c3, c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING brin(c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING gist(c3) INCLUDE (c1, c4);"
         },
         {
-            "query": "/*\n * 8. Update, delete values in indexed table.\n */\nCREATE TABLE tbl (c1 int, c2 int, c3 int, c4 box)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING spgist(c3) INCLUDE (c4);"
         },
         {
-            "query": "INSERT INTO tbl SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING gin(c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "CREATE UNIQUE INDEX tbl_idx_unique ON tbl using btree(c1, c2) INCLUDE (c3,c4)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING hash(c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "UPDATE tbl SET c1 = 100 WHERE c1 = 2",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING rtree(c3) INCLUDE (c1, c4);"
         },
         {
-            "query": "UPDATE tbl SET c1 = 1 WHERE c1 = 3",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX on tbl USING btree(c1, c2) INCLUDE (c3, c4);"
         },
         {
-            "query": "-- should fail\nUPDATE tbl SET c2 = 2 WHERE c1 = 1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "UPDATE tbl SET c3 = 1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 8. Update, delete values in indexed table.\n */\nCREATE TABLE tbl (c1 int, c2 int, c3 int, c4 box);"
         },
         {
-            "query": "DELETE FROM tbl WHERE c1 = 5 OR c3 = 12",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "DROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE UNIQUE INDEX tbl_idx_unique ON tbl using btree(c1, c2) INCLUDE (c3,c4);"
         },
         {
-            "query": "/*\n * 9. Alter column type.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4))",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "UPDATE tbl SET c1 = 100 WHERE c1 = 2;"
         },
         {
-            "query": "INSERT INTO tbl SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "UPDATE tbl SET c1 = 1 WHERE c1 = 3;"
         },
         {
-            "query": "ALTER TABLE tbl ALTER c1 TYPE bigint",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "-- should fail\nUPDATE tbl SET c2 = 2 WHERE c1 = 1;"
         },
         {
-            "query": "ALTER TABLE tbl ALTER c3 TYPE bigint",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "UPDATE tbl SET c3 = 1;"
         },
         {
-            "query": "\\d tbl\nDROP TABLE tbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DELETE FROM tbl WHERE c1 = 5 OR c3 = 12;"
         },
         {
-            "query": "/*\n * 10. Test coverage for names stored as cstrings in indexes\n */\nCREATE TABLE nametbl (c1 int, c2 name, c3 float)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "DROP TABLE tbl;"
         },
         {
-            "query": "CREATE INDEX nametbl_c1_c2_idx ON nametbl (c2, c1) INCLUDE (c3)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 9. Alter column type.\n */\nCREATE TABLE tbl (c1 int,c2 int, c3 int, c4 box, UNIQUE(c1, c2) INCLUDE(c3,c4));"
         },
         {
-            "query": "INSERT INTO nametbl VALUES(1, 'two', 3.0)",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO tbl SELECT x, 2*x, 3*x, box('4,4,4,4') FROM generate_series(1,10) AS x;"
         },
         {
-            "query": "VACUUM nametbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl ALTER c1 TYPE bigint;"
         },
         {
-            "query": "SET enable_seqscan = 0",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "ALTER TABLE tbl ALTER c3 TYPE bigint;"
         },
         {
-            "query": "-- Ensure we get an index only scan plan\nEXPLAIN (COSTS OFF) SELECT c2, c1, c3 FROM nametbl WHERE c2 = 'two' AND c1 = 1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "\\d tbl\nDROP TABLE tbl;"
         },
         {
-            "query": "-- Validate the results look sane\nSELECT c2, c1, c3 FROM nametbl WHERE c2 = 'two' AND c1 = 1",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "/*\n * 10. Test coverage for names stored as cstrings in indexes\n */\nCREATE TABLE nametbl (c1 int, c2 name, c3 float);"
         },
         {
-            "query": "RESET enable_seqscan",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "CREATE INDEX nametbl_c1_c2_idx ON nametbl (c2, c1) INCLUDE (c3);"
         },
         {
-            "query": "DROP TABLE nametbl",
-            "name": "index_including.sql"
+            "name": "index_including.sql",
+            "query": "INSERT INTO nametbl VALUES(1, 'two', 3.0);"
+        },
+        {
+            "name": "index_including.sql",
+            "query": "VACUUM nametbl;"
+        },
+        {
+            "name": "index_including.sql",
+            "query": "SET enable_seqscan = 0;"
+        },
+        {
+            "name": "index_including.sql",
+            "query": "-- Ensure we get an index only scan plan\nEXPLAIN (COSTS OFF) SELECT c2, c1, c3 FROM nametbl WHERE c2 = 'two' AND c1 = 1;"
+        },
+        {
+            "name": "index_including.sql",
+            "query": "-- Validate the results look sane\nSELECT c2, c1, c3 FROM nametbl WHERE c2 = 'two' AND c1 = 1;"
+        },
+        {
+            "name": "index_including.sql",
+            "query": "RESET enable_seqscan;"
+        },
+        {
+            "name": "index_including.sql",
+            "query": "DROP TABLE nametbl;"
         }
     ]
 }

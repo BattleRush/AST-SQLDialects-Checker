@@ -2,6 +2,7 @@
 
 import os
 import json
+import re
 import chardet
 import clickhouse_connect
 import pandas as pd
@@ -54,7 +55,8 @@ def parse_clickhouse():
                 
                 #exit
 
-                queries = query.split(";")
+                #queries = query.split(";")
+                queries = re.split(r";\s*\n", query)
                 
                 # remove empty queries or that are only whitespace or newlines
                 queries = [q for q in queries if q.strip()]
@@ -62,8 +64,8 @@ def parse_clickhouse():
                 tests = []
                 for q in queries:
                     tests.append({
-                        "query": q + ";",
-                        "name": file
+                        "name": file,
+                        "query": q + ";"
                     })
                     
                 # add the test to the all_tests

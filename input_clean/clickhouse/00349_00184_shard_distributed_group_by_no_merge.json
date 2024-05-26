@@ -2,132 +2,132 @@
     "name": "00184_shard_distributed_group_by_no_merge.sql",
     "tests": [
         {
-            "query": "-- Tags: distributed\n\nSELECT 'distributed_group_by_no_merge=1';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "-- Tags: distributed\n\nSELECT 'distributed_group_by_no_merge=1';"
         },
         {
-            "query": "\nSELECT count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one) SETTINGS distributed_group_by_no_merge=1;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one) SETTINGS distributed_group_by_no_merge=1;"
         },
         {
-            "query": "\nSELECT count(), uniq(dummy) FROM remote('127.0.0.{2,3,4,5}', system.one) SETTINGS distributed_group_by_no_merge=1;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT count(), uniq(dummy) FROM remote('127.0.0.{2,3,4,5}', system.one) SETTINGS distributed_group_by_no_merge=1;"
         },
         {
-            "query": "\nSELECT count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one) LIMIT 1 SETTINGS distributed_group_by_no_merge=1;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one) LIMIT 1 SETTINGS distributed_group_by_no_merge=1;"
         },
         {
-            "query": "\n\nSELECT 'distributed_group_by_no_merge=2';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'distributed_group_by_no_merge=2';"
         },
         {
-            "query": "\nSET max_distributed_connections=1;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SET max_distributed_connections=1;"
         },
         {
-            "query": "\nSET max_threads=1;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SET max_threads=1;"
         },
         {
-            "query": "\n\nSELECT 'LIMIT';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'LIMIT';"
         },
         {
-            "query": "\nSELECT * FROM (SELECT any(_shard_num) shard_num, count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one)) ORDER BY shard_num LIMIT 1 SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT * FROM (SELECT any(_shard_num) shard_num, count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one)) ORDER BY shard_num LIMIT 1 SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\nSELECT 'OFFSET';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'OFFSET';"
         },
         {
-            "query": "\nSELECT * FROM (SELECT any(_shard_num) shard_num, count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one)) ORDER BY shard_num LIMIT 1, 1 SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT * FROM (SELECT any(_shard_num) shard_num, count(), uniq(dummy) FROM remote('127.0.0.{2,3}', system.one)) ORDER BY shard_num LIMIT 1, 1 SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\nSELECT 'ALIAS';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'ALIAS';"
         },
         {
-            "query": "\nSELECT dummy AS d FROM remote('127.0.0.{2,3}', system.one) ORDER BY d SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT dummy AS d FROM remote('127.0.0.{2,3}', system.one) ORDER BY d SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\nDROP TABLE IF EXISTS data_00184;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "DROP TABLE IF EXISTS data_00184;"
         },
         {
-            "query": "\nCREATE TABLE data_00184 Engine=Memory() AS SELECT * FROM numbers(2);",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "CREATE TABLE data_00184 Engine=Memory() AS SELECT * FROM numbers(2);"
         },
         {
-            "query": "\nSELECT 'ORDER BY';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'ORDER BY';"
         },
         {
-            "query": "\nSELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) ORDER BY number DESC SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) ORDER BY number DESC SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\nSELECT 'ORDER BY LIMIT';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'ORDER BY LIMIT';"
         },
         {
-            "query": "\nSELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) ORDER BY number DESC LIMIT 1 SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) ORDER BY number DESC LIMIT 1 SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\nSELECT 'LIMIT BY';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'LIMIT BY';"
         },
         {
-            "query": "\nSELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) LIMIT 1 BY number SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) LIMIT 1 BY number SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\nSELECT 'LIMIT BY LIMIT';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'LIMIT BY LIMIT';"
         },
         {
-            "query": "\nSELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) LIMIT 1 BY number LIMIT 1 SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT number FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) LIMIT 1 BY number LIMIT 1 SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\nSELECT 'GROUP BY ORDER BY';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'GROUP BY ORDER BY';"
         },
         {
-            "query": "\nSELECT uniq(number) u FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) GROUP BY number ORDER BY u DESC SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT uniq(number) u FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) GROUP BY number ORDER BY u DESC SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\n-- cover possible tricky issues\nSELECT 'GROUP BY w/ ALIAS';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "-- cover possible tricky issues\nSELECT 'GROUP BY w/ ALIAS';"
         },
         {
-            "query": "\nSELECT n FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) GROUP BY number AS n ORDER BY n SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT n FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) GROUP BY number AS n ORDER BY n SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\nSELECT 'ORDER BY w/ ALIAS';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'ORDER BY w/ ALIAS';"
         },
         {
-            "query": "\nSELECT n FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) ORDER BY number AS n LIMIT 1 SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT n FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184) ORDER BY number AS n LIMIT 1 SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\nSELECT 'func(aggregate function) GROUP BY';",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT 'func(aggregate function) GROUP BY';"
         },
         {
-            "query": "\nSELECT assumeNotNull(argMax(dummy, 1)) FROM remote('127.1', system.one) SETTINGS distributed_group_by_no_merge=2;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "SELECT assumeNotNull(argMax(dummy, 1)) FROM remote('127.1', system.one) SETTINGS distributed_group_by_no_merge=2;"
         },
         {
-            "query": "\n\ndrop table data_00184;",
-            "name": "00184_shard_distributed_group_by_no_merge.sql"
+            "name": "00184_shard_distributed_group_by_no_merge.sql",
+            "query": "drop table data_00184;"
         }
     ]
 }

@@ -2,20 +2,20 @@
     "name": "02227_union_match_by_name.sql",
     "tests": [
         {
-            "query": "SET allow_experimental_analyzer = 1;",
-            "name": "02227_union_match_by_name.sql"
+            "name": "02227_union_match_by_name.sql",
+            "query": "SET allow_experimental_analyzer = 1;"
         },
         {
-            "query": "\n\n-- { echoOn }\n\nEXPLAIN header = 1, optimize = 0 SELECT avgWeighted(x, y) FROM (SELECT NULL, 255 AS x, 1 AS y UNION ALL SELECT y, NULL AS x, 1 AS y);",
-            "name": "02227_union_match_by_name.sql"
+            "name": "02227_union_match_by_name.sql",
+            "query": "-- { echoOn }\n\nEXPLAIN header = 1, optimize = 0 SELECT avgWeighted(x, y) FROM (SELECT NULL, 255 AS x, 1 AS y UNION ALL SELECT y, NULL AS x, 1 AS y);"
         },
         {
-            "query": "\nSELECT avgWeighted(x, y) FROM (SELECT NULL, 255 AS x, 1 AS y UNION ALL SELECT y, NULL AS x, 1 AS y);",
-            "name": "02227_union_match_by_name.sql"
+            "name": "02227_union_match_by_name.sql",
+            "query": "SELECT avgWeighted(x, y) FROM (SELECT NULL, 255 AS x, 1 AS y UNION ALL SELECT y, NULL AS x, 1 AS y);"
         },
         {
-            "query": "\n\n-- { echoOff }\n;",
-            "name": "02227_union_match_by_name.sql"
+            "name": "02227_union_match_by_name.sql",
+            "query": "-- { echoOff }\n;"
         }
     ]
 }

@@ -2,460 +2,460 @@
     "name": "00087_math_functions.sql",
     "tests": [
         {
-            "query": "select abs(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(0) = 0;"
         },
         {
-            "query": "\nselect abs(1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(1) = 1;"
         },
         {
-            "query": "\nselect abs(1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(1) = 1;"
         },
         {
-            "query": "\nselect abs(0.0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(0.0) = 0;"
         },
         {
-            "query": "\nselect abs(1.0) = 1.0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(1.0) = 1.0;"
         },
         {
-            "query": "\nselect abs(-1.0) = 1.0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(-1.0) = 1.0;"
         },
         {
-            "query": "\nselect abs(-128) = 128;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(-128) = 128;"
         },
         {
-            "query": "\nselect abs(127) = 127;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(127) = 127;"
         },
         {
-            "query": "\nselect sum(abs(number - 10 as x) = (x < 0 ? -x : x)) / count() from system.one array join range(1000000) as number;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(number - 10 as x) = (x < 0 ? -x : x)) / count() from system.one array join range(1000000) as number;"
         },
         {
-            "query": "\n\nselect sqrt(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sqrt(0) = 0;"
         },
         {
-            "query": "\nselect sqrt(1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sqrt(1) = 1;"
         },
         {
-            "query": "\nselect sqrt(4) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sqrt(4) = 2;"
         },
         {
-            "query": "\nselect sum(sqrt(x * x) = x) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(sqrt(x * x) = x) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\n\nselect cbrt(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cbrt(0) = 0;"
         },
         {
-            "query": "\nselect cbrt(1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cbrt(1) = 1;"
         },
         {
-            "query": "\nselect cbrt(8) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cbrt(8) = 2;"
         },
         {
-            "query": "\nselect sum(abs(cbrt(x * x * x) - x) < 1.0e-9) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(cbrt(x * x * x) - x) < 1.0e-9) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\n\nselect pow(1, 0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select pow(1, 0) = 1;"
         },
         {
-            "query": "\nselect pow(2, 0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select pow(2, 0) = 1;"
         },
         {
-            "query": "\nselect sum(pow(x, 0) = 1) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(pow(x, 0) = 1) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\nselect pow(1, 1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select pow(1, 1) = 1;"
         },
         {
-            "query": "\nselect pow(2, 1) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select pow(2, 1) = 2;"
         },
         {
-            "query": "\nselect sum(abs(pow(x, 1) - x) < 1.0e-9) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(pow(x, 1) - x) < 1.0e-9) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\nselect sum(pow(x, 2) = x * x) / count() from system.one array join range(10000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(pow(x, 2) = x * x) / count() from system.one array join range(10000) as x;"
         },
         {
-            "query": "\n\nselect tgamma(0) = inf;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select tgamma(0) = inf;"
         },
         {
-            "query": "\nselect tgamma(1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select tgamma(1) = 1;"
         },
         {
-            "query": "\nselect tgamma(2) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select tgamma(2) = 1;"
         },
         {
-            "query": "\nselect tgamma(3) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select tgamma(3) = 2;"
         },
         {
-            "query": "\nselect tgamma(4) = 6;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select tgamma(4) = 6;"
         },
         {
-            "query": "\n\nselect sum(abs(lgamma(x + 1) - log(tgamma(x + 1))) < 1.0e-8) / count() from system.one array join range(10) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(lgamma(x + 1) - log(tgamma(x + 1))) < 1.0e-8) / count() from system.one array join range(10) as x;"
         },
         {
-            "query": "\n\nselect abs(e() - arraySum(arrayMap(x -> 1 / tgamma(x + 1), range(13)))) < 1.0e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(e() - arraySum(arrayMap(x -> 1 / tgamma(x + 1), range(13)))) < 1.0e-9;"
         },
         {
-            "query": "\n\nselect log(0) = -inf;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log(0) = -inf;"
         },
         {
-            "query": "\nselect log(1) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log(1) = 0;"
         },
         {
-            "query": "\nselect abs(log(e()) - 1) < 1e-8;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(log(e()) - 1) < 1e-8;"
         },
         {
-            "query": "\nselect abs(log(exp(1)) - 1) < 1e-8;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(log(exp(1)) - 1) < 1e-8;"
         },
         {
-            "query": "\nselect abs(log(exp(2)) - 2) < 1e-8;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(log(exp(2)) - 2) < 1e-8;"
         },
         {
-            "query": "\nselect sum(abs(log(exp(x)) - x) < 1e-8) / count() from system.one array join range(100) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(log(exp(x)) - x) < 1e-8) / count() from system.one array join range(100) as x;"
         },
         {
-            "query": "\n\nselect exp2(-1) = 1/2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select exp2(-1) = 1/2;"
         },
         {
-            "query": "\nselect exp2(0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select exp2(0) = 1;"
         },
         {
-            "query": "\nselect exp2(1) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select exp2(1) = 2;"
         },
         {
-            "query": "\nselect exp2(2) = 4;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select exp2(2) = 4;"
         },
         {
-            "query": "\nselect exp2(3) = 8;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select exp2(3) = 8;"
         },
         {
-            "query": "\nselect sum(exp2(x) = pow(2, x)) / count() from system.one array join range(1000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(exp2(x) = pow(2, x)) / count() from system.one array join range(1000) as x;"
         },
         {
-            "query": "\n\nselect log2(0) = -inf;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log2(0) = -inf;"
         },
         {
-            "query": "\nselect log2(1) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log2(1) = 0;"
         },
         {
-            "query": "\nselect log2(2) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log2(2) = 1;"
         },
         {
-            "query": "\nselect log2(4) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log2(4) = 2;"
         },
         {
-            "query": "\nselect sum(abs(log2(exp2(x)) - x) < 1.0e-9) / count() from system.one array join range(1000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(log2(exp2(x)) - x) < 1.0e-9) / count() from system.one array join range(1000) as x;"
         },
         {
-            "query": "\n\nselect log1p(-1) = -inf;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log1p(-1) = -inf;"
         },
         {
-            "query": "\nselect log1p(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select log1p(0) = 0;"
         },
         {
-            "query": "\nselect abs(log1p(exp(2) - 1) - 2) < 1e8;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(log1p(exp(2) - 1) - 2) < 1e8;"
         },
         {
-            "query": "\nselect abs(log1p(exp(3) - 1) - 3) < 1e8;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(log1p(exp(3) - 1) - 3) < 1e8;"
         },
         {
-            "query": "\nselect sum(abs(log1p(exp(x) - 1) - x) < 1e-8) / count() from system.one array join range(100) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(log1p(exp(x) - 1) - x) < 1e-8) / count() from system.one array join range(100) as x;"
         },
         {
-            "query": "\n\nselect sin(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sin(0) = 0;"
         },
         {
-            "query": "\nselect sin(pi() / 4) = 1 / sqrt(2);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sin(pi() / 4) = 1 / sqrt(2);"
         },
         {
-            "query": "\nselect sin(pi() / 2) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sin(pi() / 2) = 1;"
         },
         {
-            "query": "\nselect sin(3 * pi() / 2) = -1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sin(3 * pi() / 2) = -1;"
         },
         {
-            "query": "\nselect sum(sin(pi() / 2 + 2 * pi() * x) = 1) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(sin(pi() / 2 + 2 * pi() * x) = 1) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\n\nselect cos(0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cos(0) = 1;"
         },
         {
-            "query": "\nselect abs(cos(pi() / 4) - 1 / sqrt(2)) < 1.0e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(cos(pi() / 4) - 1 / sqrt(2)) < 1.0e-9;"
         },
         {
-            "query": "\nselect cos(pi() / 2) < 1.0e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cos(pi() / 2) < 1.0e-9;"
         },
         {
-            "query": "\nselect sum(abs(cos(2 * pi() * x)) - 1 < 1.0e-9) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(cos(2 * pi() * x)) - 1 < 1.0e-9) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\n\nselect tan(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select tan(0) = 0;"
         },
         {
-            "query": "\nselect abs(tan(pi() / 4) - 1) < 1.0e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(tan(pi() / 4) - 1) < 1.0e-9;"
         },
         {
-            "query": "\nselect sum(abs(tan(pi() / 4 + 2 * pi() * x) - 1) < 1.0e-8) / count() from system.one array join range(1000000) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(tan(pi() / 4 + 2 * pi() * x) - 1) < 1.0e-8) / count() from system.one array join range(1000000) as x;"
         },
         {
-            "query": "\n\nselect asin(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select asin(0) = 0;"
         },
         {
-            "query": "\nselect asin(1) = pi() / 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select asin(1) = pi() / 2;"
         },
         {
-            "query": "\nselect asin(-1) = -pi() / 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select asin(-1) = -pi() / 2;"
         },
         {
-            "query": "\n\nselect acos(0) = pi() / 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select acos(0) = pi() / 2;"
         },
         {
-            "query": "\nselect acos(1) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select acos(1) = 0;"
         },
         {
-            "query": "\nselect acos(-1) = pi();",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select acos(-1) = pi();"
         },
         {
-            "query": "\n\nselect atan(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan(0) = 0;"
         },
         {
-            "query": "\nselect atan(1) = pi() / 4;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan(1) = pi() / 4;"
         },
         {
-            "query": "\n\nselect atan2(0, 1) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan2(0, 1) = 0;"
         },
         {
-            "query": "\nselect atan2(0, 2) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan2(0, 2) = 0;"
         },
         {
-            "query": "\nselect atan2(1, 0) = pi() / 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan2(1, 0) = pi() / 2;"
         },
         {
-            "query": "\nselect atan2(1, 1) = pi() / 4;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan2(1, 1) = pi() / 4;"
         },
         {
-            "query": "\nselect atan2(-1, -1) = -3 * pi() / 4;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atan2(-1, -1) = -3 * pi() / 4;"
         },
         {
-            "query": "\n\nselect hypot(0, 1) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select hypot(0, 1) = 1;"
         },
         {
-            "query": "\nselect hypot(1, 0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select hypot(1, 0) = 1;"
         },
         {
-            "query": "\nselect hypot(1, 1) = sqrt(2);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select hypot(1, 1) = sqrt(2);"
         },
         {
-            "query": "\nselect hypot(-1, 1) = sqrt(2);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select hypot(-1, 1) = sqrt(2);"
         },
         {
-            "query": "\nselect hypot(3, 4) = 5;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select hypot(3, 4) = 5;"
         },
         {
-            "query": "\n\nselect sinh(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sinh(0) = 0;"
         },
         {
-            "query": "\nselect sinh(1) = -sinh(-1);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sinh(1) = -sinh(-1);"
         },
         {
-            "query": "\nselect abs(sinh(1) - 0.5 * (e() - exp(-1))) < 1e-6;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(sinh(1) - 0.5 * (e() - exp(-1))) < 1e-6;"
         },
         {
-            "query": "\nselect abs(sinh(2) - 0.5 * (exp(2) - exp(-2))) < 1e-6;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(sinh(2) - 0.5 * (exp(2) - exp(-2))) < 1e-6;"
         },
         {
-            "query": "\nselect sum(abs(sinh(x) - 0.5 * (exp(x) - exp(-x))) < 1e-6) / count() from system.one array join range(10) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(sinh(x) - 0.5 * (exp(x) - exp(-x))) < 1e-6) / count() from system.one array join range(10) as x;"
         },
         {
-            "query": "\n\nselect cosh(0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cosh(0) = 1;"
         },
         {
-            "query": "\nselect cosh(1) = cosh(-1);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select cosh(1) = cosh(-1);"
         },
         {
-            "query": "\nselect abs(cosh(1) - 0.5 * (e() + exp(-1))) < 1e-6;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(cosh(1) - 0.5 * (e() + exp(-1))) < 1e-6;"
         },
         {
-            "query": "\nselect abs(pow(cosh(1), 2) - pow(sinh(1), 2) - 1) < 1e-6;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(pow(cosh(1), 2) - pow(sinh(1), 2) - 1) < 1e-6;"
         },
         {
-            "query": "\nselect sum(abs(cosh(x) * cosh(x) - sinh(x) * sinh(x) - 1) < 1e-6) / count() from system.one array join range(10) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(cosh(x) * cosh(x) - sinh(x) * sinh(x) - 1) < 1e-6) / count() from system.one array join range(10) as x;"
         },
         {
-            "query": "\n\nselect asinh(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select asinh(0) = 0;"
         },
         {
-            "query": "\nselect asinh(1) = -asinh(-1);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select asinh(1) = -asinh(-1);"
         },
         {
-            "query": "\nselect abs(asinh(1) - ln(1 + sqrt(2))) < 1e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(asinh(1) - ln(1 + sqrt(2))) < 1e-9;"
         },
         {
-            "query": "\nselect abs(asinh(sinh(1)) - 1) < 1e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(asinh(sinh(1)) - 1) < 1e-9;"
         },
         {
-            "query": "\nselect sum(abs(asinh(sinh(x)) - x) < 1e-9) / count() from system.one array join range(100) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(asinh(sinh(x)) - x) < 1e-9) / count() from system.one array join range(100) as x;"
         },
         {
-            "query": "\n\nselect acosh(1) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select acosh(1) = 0;"
         },
         {
-            "query": "\nselect abs(acosh(2) - ln(2 + sqrt(3))) < 1e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(acosh(2) - ln(2 + sqrt(3))) < 1e-9;"
         },
         {
-            "query": "\nselect abs(acosh(cosh(2)) - 2) < 1e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(acosh(cosh(2)) - 2) < 1e-9;"
         },
         {
-            "query": "\nselect abs(acosh(cosh(3)) - 3) < 1e-9;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(acosh(cosh(3)) - 3) < 1e-9;"
         },
         {
-            "query": "\nselect sum(abs(acosh(cosh(x)) - x) < 1e-9) / count() from system.one array join range(1, 101) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(acosh(cosh(x)) - x) < 1e-9) / count() from system.one array join range(1, 101) as x;"
         },
         {
-            "query": "\n\nselect atanh(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atanh(0) = 0;"
         },
         {
-            "query": "\nselect atanh(0.5) = -atanh(-0.5);",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select atanh(0.5) = -atanh(-0.5);"
         },
         {
-            "query": "\nselect abs(atanh(0.9) - 0.5 * ln(19)) < 1e-5;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(atanh(0.9) - 0.5 * ln(19)) < 1e-5;"
         },
         {
-            "query": "\nselect abs(atanh(tanh(1)) - 1) < 1e-5;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select abs(atanh(tanh(1)) - 1) < 1e-5;"
         },
         {
-            "query": "\nselect sum(abs(atanh(tanh(x)) - x) < 1e-5) / count() from system.one array join range(10) as x;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select sum(abs(atanh(tanh(x)) - x) < 1e-5) / count() from system.one array join range(10) as x;"
         },
         {
-            "query": "\n\nselect erf(0) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select erf(0) = 0;"
         },
         {
-            "query": "\nselect erf(-10) = -1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select erf(-10) = -1;"
         },
         {
-            "query": "\nselect erf(10) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select erf(10) = 1;"
         },
         {
-            "query": "\n\nselect erfc(0) = 1;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select erfc(0) = 1;"
         },
         {
-            "query": "\nselect erfc(-10) = 2;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select erfc(-10) = 2;"
         },
         {
-            "query": "\nselect erfc(28) = 0;",
-            "name": "00087_math_functions.sql"
+            "name": "00087_math_functions.sql",
+            "query": "select erfc(28) = 0;"
         }
     ]
 }

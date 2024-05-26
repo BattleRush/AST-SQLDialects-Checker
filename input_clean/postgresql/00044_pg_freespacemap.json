@@ -2,64 +2,64 @@
     "name": "pg_freespacemap.sql",
     "tests": [
         {
-            "query": "CREATE EXTENSION pg_freespacemap",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "CREATE EXTENSION pg_freespacemap;"
         },
         {
-            "query": "CREATE TABLE freespace_tab (c1 int) WITH (autovacuum_enabled = off)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "CREATE TABLE freespace_tab (c1 int) WITH (autovacuum_enabled = off);"
         },
         {
-            "query": "CREATE INDEX freespace_brin ON freespace_tab USING brin (c1)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "CREATE INDEX freespace_brin ON freespace_tab USING brin (c1);"
         },
         {
-            "query": "CREATE INDEX freespace_btree ON freespace_tab USING btree (c1)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "CREATE INDEX freespace_btree ON freespace_tab USING btree (c1);"
         },
         {
-            "query": "CREATE INDEX freespace_hash ON freespace_tab USING hash (c1)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "CREATE INDEX freespace_hash ON freespace_tab USING hash (c1);"
         },
         {
-            "query": "-- report all the sizes of the FSMs for all the relation blocks.\nWITH rel AS (SELECT oid::regclass AS id FROM pg_class WHERE relname ~ 'freespace')\n  SELECT rel.id, fsm.blkno, (fsm.avail > 0) AS is_avail\n    FROM rel, LATERAL pg_freespace(rel.id) AS fsm\n    ORDER BY 1, 2",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "-- report all the sizes of the FSMs for all the relation blocks.\nWITH rel AS (SELECT oid::regclass AS id FROM pg_class WHERE relname ~ 'freespace')\n  SELECT rel.id, fsm.blkno, (fsm.avail > 0) AS is_avail\n    FROM rel, LATERAL pg_freespace(rel.id) AS fsm\n    ORDER BY 1, 2;"
         },
         {
-            "query": "INSERT INTO freespace_tab VALUES (1)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "INSERT INTO freespace_tab VALUES (1);"
         },
         {
-            "query": "VACUUM freespace_tab",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "VACUUM freespace_tab;"
         },
         {
-            "query": "WITH rel AS (SELECT oid::regclass AS id FROM pg_class WHERE relname ~ 'freespace')\n  SELECT rel.id, fsm.blkno, (fsm.avail > 0) AS is_avail\n    FROM rel, LATERAL pg_freespace(rel.id) AS fsm\n    ORDER BY 1, 2",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "WITH rel AS (SELECT oid::regclass AS id FROM pg_class WHERE relname ~ 'freespace')\n  SELECT rel.id, fsm.blkno, (fsm.avail > 0) AS is_avail\n    FROM rel, LATERAL pg_freespace(rel.id) AS fsm\n    ORDER BY 1, 2;"
         },
         {
-            "query": "DELETE FROM freespace_tab",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "DELETE FROM freespace_tab;"
         },
         {
-            "query": "VACUUM freespace_tab",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "VACUUM freespace_tab;"
         },
         {
-            "query": "WITH rel AS (SELECT oid::regclass AS id FROM pg_class WHERE relname ~ 'freespace')\n  SELECT rel.id, fsm.blkno, (fsm.avail > 0) AS is_avail\n    FROM rel, LATERAL pg_freespace(rel.id) AS fsm\n    ORDER BY 1, 2",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "WITH rel AS (SELECT oid::regclass AS id FROM pg_class WHERE relname ~ 'freespace')\n  SELECT rel.id, fsm.blkno, (fsm.avail > 0) AS is_avail\n    FROM rel, LATERAL pg_freespace(rel.id) AS fsm\n    ORDER BY 1, 2;"
         },
         {
-            "query": "-- failures with incorrect block number\nSELECT * FROM pg_freespace('freespace_tab', -1)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "-- failures with incorrect block number\nSELECT * FROM pg_freespace('freespace_tab', -1);"
         },
         {
-            "query": "SELECT * FROM pg_freespace('freespace_tab', 4294967295)",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "SELECT * FROM pg_freespace('freespace_tab', 4294967295);"
         },
         {
-            "query": "DROP TABLE freespace_tab",
-            "name": "pg_freespacemap.sql"
+            "name": "pg_freespacemap.sql",
+            "query": "DROP TABLE freespace_tab;"
         }
     ]
 }

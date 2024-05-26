@@ -2,32 +2,32 @@
     "name": "md5.sql",
     "tests": [
         {
-            "query": "--\n-- MD5 message digest\n--\n\nSELECT digest('', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "--\n-- MD5 message digest\n--\n\nSELECT digest('', 'md5');"
         },
         {
-            "query": "SELECT digest('a', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "SELECT digest('a', 'md5');"
         },
         {
-            "query": "SELECT digest('abc', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "SELECT digest('abc', 'md5');"
         },
         {
-            "query": "SELECT digest('message digest', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "SELECT digest('message digest', 'md5');"
         },
         {
-            "query": "SELECT digest('abcdefghijklmnopqrstuvwxyz', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "SELECT digest('abcdefghijklmnopqrstuvwxyz', 'md5');"
         },
         {
-            "query": "SELECT digest('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "SELECT digest('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 'md5');"
         },
         {
-            "query": "SELECT digest('12345678901234567890123456789012345678901234567890123456789012345678901234567890', 'md5')",
-            "name": "md5.sql"
+            "name": "md5.sql",
+            "query": "SELECT digest('12345678901234567890123456789012345678901234567890123456789012345678901234567890', 'md5');"
         }
     ]
 }

@@ -2,12 +2,12 @@
     "name": "01837_cast_to_array_from_empty_array.sql",
     "tests": [
         {
-            "query": "SELECT CAST([] AS Array(Array(String)));",
-            "name": "01837_cast_to_array_from_empty_array.sql"
+            "name": "01837_cast_to_array_from_empty_array.sql",
+            "query": "SELECT CAST([] AS Array(Array(String)));"
         },
         {
-            "query": "\nSELECT CAST([] AS Array(Array(Array(String))));",
-            "name": "01837_cast_to_array_from_empty_array.sql"
+            "name": "01837_cast_to_array_from_empty_array.sql",
+            "query": "SELECT CAST([] AS Array(Array(Array(String))));"
         }
     ]
 }

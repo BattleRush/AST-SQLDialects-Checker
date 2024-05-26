@@ -2,8 +2,8 @@
     "name": "00098_9_union_all.sql",
     "tests": [
         {
-            "query": "SELECT * FROM (SELECT 1 UNION ALL SELECT 2) ORDER BY 1 ASC;",
-            "name": "00098_9_union_all.sql"
+            "name": "00098_9_union_all.sql",
+            "query": "SELECT * FROM (SELECT 1 UNION ALL SELECT 2) ORDER BY 1 ASC;"
         }
     ]
 }

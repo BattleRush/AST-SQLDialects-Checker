@@ -2,20 +2,20 @@
     "name": "00098_k_union_all.sql",
     "tests": [
         {
-            "query": "SET output_format_pretty_color=1;",
-            "name": "00098_k_union_all.sql"
+            "name": "00098_k_union_all.sql",
+            "query": "SET output_format_pretty_color=1;"
         },
         {
-            "query": "\nSELECT 1 FORMAT PrettySpace;",
-            "name": "00098_k_union_all.sql"
+            "name": "00098_k_union_all.sql",
+            "query": "SELECT 1 FORMAT PrettySpace;"
         },
         {
-            "query": "\nSELECT 1 UNION ALL SELECT 1 FORMAT PrettySpace;",
-            "name": "00098_k_union_all.sql"
+            "name": "00098_k_union_all.sql",
+            "query": "SELECT 1 UNION ALL SELECT 1 FORMAT PrettySpace;"
         },
         {
-            "query": "\nSELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 FORMAT PrettySpace;",
-            "name": "00098_k_union_all.sql"
+            "name": "00098_k_union_all.sql",
+            "query": "SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 FORMAT PrettySpace;"
         }
     ]
 }

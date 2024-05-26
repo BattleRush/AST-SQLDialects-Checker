@@ -2,48 +2,44 @@
     "name": "02919_insert_meet_eternal_hardware_error.sql",
     "tests": [
         {
-            "query": "-- Tags: zookeeper, no-parallel\n\nDROP TABLE IF EXISTS t_hardware_error NO DELAY;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "-- Tags: zookeeper, no-parallel\n\nDROP TABLE IF EXISTS t_hardware_error NO DELAY;"
         },
         {
-            "query": "\n\nCREATE TABLE t_hardware_error (\n    KeyID UInt32\n) Engine = ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/t_async_insert_dedup', '{replica}')\nORDER BY (KeyID);",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "CREATE TABLE t_hardware_error (\n    KeyID UInt32\n) Engine = ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/t_async_insert_dedup', '{replica}')\nORDER BY (KeyID);"
         },
         {
-            "query": "\n\ninsert into t_hardware_error values (1), (2), (3), (4), (5);",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "insert into t_hardware_error values (1), (2), (3), (4), (5);"
         },
         {
-            "query": "\n\n-- Data is written to ZK but the connection fails right after and we can't recover it\nsystem enable failpoint replicated_merge_tree_commit_zk_fail_after_op;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "-- Data is written to ZK but the connection fails right after and we can't recover it\nsystem enable failpoint replicated_merge_tree_commit_zk_fail_after_op;"
         },
         {
-            "query": "\nsystem enable failpoint replicated_merge_tree_commit_zk_fail_when_recovering_from_hw_fault;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "system enable failpoint replicated_merge_tree_commit_zk_fail_when_recovering_from_hw_fault;"
         },
         {
-            "query": "\n\ninsert into t_hardware_error values (6), (7), (8), (9), (10);",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "insert into t_hardware_error values (6), (7), (8), (9), (10); -- {serverError UNKNOWN_STATUS_OF_INSERT}\n\nsystem disable failpoint replicated_commit_zk_fail_after_op;"
         },
         {
-            "query": " -- {serverError UNKNOWN_STATUS_OF_INSERT}\n\nsystem disable failpoint replicated_commit_zk_fail_after_op;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "system disable failpoint replicated_merge_tree_commit_zk_fail_when_recovering_from_hw_fault;"
         },
         {
-            "query": "\nsystem disable failpoint replicated_merge_tree_commit_zk_fail_when_recovering_from_hw_fault;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "insert into t_hardware_error values (11), (12), (13), (14), (15);"
         },
         {
-            "query": "\n\ninsert into t_hardware_error values (11), (12), (13), (14), (15);",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "-- All 3 commits have been written correctly. The unknown status is ok (since it failed after the operation)\nSelect arraySort(groupArray(KeyID)) FROM t_hardware_error;"
         },
         {
-            "query": "\n\n-- All 3 commits have been written correctly. The unknown status is ok (since it failed after the operation)\nSelect arraySort(groupArray(KeyID)) FROM t_hardware_error;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
-        },
-        {
-            "query": "\n\nDROP TABLE t_hardware_error NO DELAY;",
-            "name": "02919_insert_meet_eternal_hardware_error.sql"
+            "name": "02919_insert_meet_eternal_hardware_error.sql",
+            "query": "DROP TABLE t_hardware_error NO DELAY;"
         }
     ]
 }

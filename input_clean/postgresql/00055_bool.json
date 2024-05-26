@@ -2,84 +2,84 @@
     "name": "bool.sql",
     "tests": [
         {
-            "query": "-- bool check\n\nCREATE TABLE booltmp (a bool)",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "-- bool check\n\nCREATE TABLE booltmp (a bool);"
         },
         {
-            "query": "INSERT INTO booltmp VALUES (false), (true)",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "INSERT INTO booltmp VALUES (false), (true);"
         },
         {
-            "query": "SET enable_seqscan=on",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SET enable_seqscan=on;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a <  true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a <  true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a <= true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a <= true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a  = true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a  = true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a >= true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a >= true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a >  true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a >  true;"
         },
         {
-            "query": "CREATE INDEX boolidx ON booltmp USING gist ( a )",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "CREATE INDEX boolidx ON booltmp USING gist ( a );"
         },
         {
-            "query": "SET enable_seqscan=off",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SET enable_seqscan=off;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a <  true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a <  true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a <= true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a <= true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a  = true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a  = true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a >= true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a >= true;"
         },
         {
-            "query": "SELECT count(*) FROM booltmp WHERE a >  true",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT count(*) FROM booltmp WHERE a >  true;"
         },
         {
-            "query": "-- Test index-only scans\nSET enable_bitmapscan=off",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "-- Test index-only scans\nSET enable_bitmapscan=off;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT * FROM booltmp WHERE a",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT * FROM booltmp WHERE a;"
         },
         {
-            "query": "SELECT * FROM booltmp WHERE a",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM booltmp WHERE a;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF)\nSELECT * FROM booltmp WHERE NOT a",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF)\nSELECT * FROM booltmp WHERE NOT a;"
         },
         {
-            "query": "SELECT * FROM booltmp WHERE NOT a",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM booltmp WHERE NOT a;"
         }
     ]
 }

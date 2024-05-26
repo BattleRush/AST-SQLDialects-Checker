@@ -76,7 +76,7 @@ list_of_dbms = ["postgresql", "sqlite", "clickhouse", "duckdb"]
 clean_dbs()
 
 skip = 0
-take = 1000
+take = 2
 
 for current_db in list_of_dbms:
     
@@ -124,6 +124,7 @@ for current_db in list_of_dbms:
                 "source_exception": "",
                 "source_result": None,
                 "source_shape": None,
+                "source_datatypes": None,
                 "source_result_html": "",
                 "target_dbs": []
             }
@@ -155,6 +156,7 @@ for current_db in list_of_dbms:
                 if source_result is not None:
                     source_result_str = source_result.to_string()
                     current_query_report["source_result_html"] = source_result.to_html()
+                    current_query_report["source_datatypes"] = source_result.dtypes.to_string()
                 else:
                     source_result_str = ""
                 
@@ -197,12 +199,14 @@ for current_db in list_of_dbms:
                 target_result_str = ""
                 target_shape = None
                 target_result_html = ""
+                target_result_dtypes = None
                 
                 try:
                     target_result = run_query(target_db, query)
                     if target_result is not None:
                         target_result_str = target_result.to_string()
-                        target_result_html = target_result.to_html()                        
+                        target_result_html = target_result.to_html()   
+                        target_result_dtypes = target_result.dtypes.to_string()                     
                     else:
                         target_result_str = ""
                     target_shape = target_result.shape if target_result is not None else None
@@ -224,11 +228,11 @@ for current_db in list_of_dbms:
                     "result": target_result_str,
                     "result_html": target_result_html,
                     "error": target_db_error,
+                    "data_types": target_result_dtypes,
                     "shape_equal": shape_equal,
                     "columns_equal": columns_equal,
                     "dtypes_equal": dtypes_equal,
                     "values_equal": values_equal,
-                    "full_match": full_match,
                     "shape": target_shape
                 }
                 

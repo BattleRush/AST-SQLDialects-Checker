@@ -2,84 +2,84 @@
     "name": "bool.sql",
     "tests": [
         {
-            "query": "set enable_seqscan=off",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "set enable_seqscan=off;"
         },
         {
-            "query": "CREATE TABLE test_bool (\n\ti boolean\n)",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "CREATE TABLE test_bool (\n\ti boolean\n);"
         },
         {
-            "query": "INSERT INTO test_bool VALUES (false),(true),(null)",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "INSERT INTO test_bool VALUES (false),(true),(null);"
         },
         {
-            "query": "CREATE INDEX idx_bool ON test_bool USING gin (i)",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "CREATE INDEX idx_bool ON test_bool USING gin (i);"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i<true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i<true ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i<=true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i<=true ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i=true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i=true ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i>=true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i>=true ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i>true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i>true ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i<false ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i<false ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i<=false ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i<=false ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i=false ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i=false ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i>=false ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i>=false ORDER BY i;"
         },
         {
-            "query": "SELECT * FROM test_bool WHERE i>false ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "SELECT * FROM test_bool WHERE i>false ORDER BY i;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i<true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i<true ORDER BY i;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i<=true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i<=true ORDER BY i;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i=true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i=true ORDER BY i;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i>=true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i>=true ORDER BY i;"
         },
         {
-            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i>true ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "EXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i>true ORDER BY i;"
         },
         {
-            "query": "-- probably sufficient to check just this one:\nEXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i=false ORDER BY i",
-            "name": "bool.sql"
+            "name": "bool.sql",
+            "query": "-- probably sufficient to check just this one:\nEXPLAIN (COSTS OFF) SELECT * FROM test_bool WHERE i=false ORDER BY i;"
         }
     ]
 }

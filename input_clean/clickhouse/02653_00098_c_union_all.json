@@ -2,8 +2,8 @@
     "name": "00098_c_union_all.sql",
     "tests": [
         {
-            "query": "SELECT X + 1 FROM (SELECT 12345678901 AS X UNION ALL SELECT number FROM system.numbers LIMIT 10) ORDER BY X ASC;",
-            "name": "00098_c_union_all.sql"
+            "name": "00098_c_union_all.sql",
+            "query": "SELECT X + 1 FROM (SELECT 12345678901 AS X UNION ALL SELECT number FROM system.numbers LIMIT 10) ORDER BY X ASC;"
         }
     ]
 }

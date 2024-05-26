@@ -2,12 +2,12 @@
     "name": "02124_empty_uuid.sql",
     "tests": [
         {
-            "query": "SELECT\n    arrayJoin([toUUID('00000000-0000-0000-0000-000000000000'), toUUID('992f6910-42b2-43cd-98bc-c812fbf9b683')]) AS x,\n    empty(x) AS emp;",
-            "name": "02124_empty_uuid.sql"
+            "name": "02124_empty_uuid.sql",
+            "query": "SELECT\n    arrayJoin([toUUID('00000000-0000-0000-0000-000000000000'), toUUID('992f6910-42b2-43cd-98bc-c812fbf9b683')]) AS x,\n    empty(x) AS emp;"
         },
         {
-            "query": "\n\nSELECT\n    arrayJoin([toUUID('992f6910-42b2-43cd-98bc-c812fbf9b683'), toUUID('00000000-0000-0000-0000-000000000000')]) AS x,\n    empty(x) AS emp;",
-            "name": "02124_empty_uuid.sql"
+            "name": "02124_empty_uuid.sql",
+            "query": "SELECT\n    arrayJoin([toUUID('992f6910-42b2-43cd-98bc-c812fbf9b683'), toUUID('00000000-0000-0000-0000-000000000000')]) AS x,\n    empty(x) AS emp;"
         }
     ]
 }

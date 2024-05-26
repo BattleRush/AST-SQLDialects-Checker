@@ -2,548 +2,380 @@
     "name": "bit.sql",
     "tests": [
         {
-            "query": "--\n-- BIT types\n--\n\n--\n-- Build tables for testing\n--\n\nCREATE TABLE BIT_TABLE(b BIT(11))",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "--\n-- BIT types\n--\n\n--\n-- Build tables for testing\n--\n\nCREATE TABLE BIT_TABLE(b BIT(11));"
         },
         {
-            "query": "INSERT INTO BIT_TABLE VALUES (B'10')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_TABLE VALUES (B'10'); -- too short\nINSERT INTO BIT_TABLE VALUES (B'00000000000');"
         },
         {
-            "query": "-- too short\nINSERT INTO BIT_TABLE VALUES (B'00000000000')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_TABLE VALUES (B'11011000000');"
         },
         {
-            "query": "INSERT INTO BIT_TABLE VALUES (B'11011000000')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_TABLE VALUES (B'01010101010');"
         },
         {
-            "query": "INSERT INTO BIT_TABLE VALUES (B'01010101010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_TABLE VALUES (B'101011111010'); -- too long\n--INSERT INTO BIT_TABLE VALUES ('X554');"
         },
         {
-            "query": "INSERT INTO BIT_TABLE VALUES (B'101011111010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "--INSERT INTO BIT_TABLE VALUES ('X555');"
         },
         {
-            "query": "-- too long\n--INSERT INTO BIT_TABLE VALUES ('X554')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM BIT_TABLE;"
         },
         {
-            "query": "--INSERT INTO BIT_TABLE VALUES ('X555')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "CREATE TABLE VARBIT_TABLE(v BIT VARYING(11));"
         },
         {
-            "query": "SELECT * FROM BIT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_TABLE VALUES (B'');"
         },
         {
-            "query": "CREATE TABLE VARBIT_TABLE(v BIT VARYING(11))",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_TABLE VALUES (B'0');"
         },
         {
-            "query": "INSERT INTO VARBIT_TABLE VALUES (B'')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_TABLE VALUES (B'010101');"
         },
         {
-            "query": "INSERT INTO VARBIT_TABLE VALUES (B'0')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_TABLE VALUES (B'01010101010');"
         },
         {
-            "query": "INSERT INTO VARBIT_TABLE VALUES (B'010101')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_TABLE VALUES (B'101011111010'); -- too long\n--INSERT INTO VARBIT_TABLE VALUES ('X554');"
         },
         {
-            "query": "INSERT INTO VARBIT_TABLE VALUES (B'01010101010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "--INSERT INTO VARBIT_TABLE VALUES ('X555');"
         },
         {
-            "query": "INSERT INTO VARBIT_TABLE VALUES (B'101011111010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM VARBIT_TABLE;"
         },
         {
-            "query": "-- too long\n--INSERT INTO VARBIT_TABLE VALUES ('X554')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- Literals with syntax errors\nSELECT b' 0';"
         },
         {
-            "query": "--INSERT INTO VARBIT_TABLE VALUES ('X555')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT b'0 ';"
         },
         {
-            "query": "SELECT * FROM VARBIT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT x' 0';"
         },
         {
-            "query": "-- Literals with syntax errors\nSELECT b' 0'",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT x'0 ';"
         },
         {
-            "query": "SELECT b'0 '",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- Concatenation\nSELECT v, b, (v || b) AS concat\n       FROM BIT_TABLE, VARBIT_TABLE\n       ORDER BY 3;"
         },
         {
-            "query": "SELECT x' 0'",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- Length\nSELECT b, length(b) AS lb\n       FROM BIT_TABLE;"
         },
         {
-            "query": "SELECT x'0 '",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT v, length(v) AS lv\n       FROM VARBIT_TABLE;"
         },
         {
-            "query": "-- Concatenation\nSELECT v, b, (v || b) AS concat\n       FROM BIT_TABLE, VARBIT_TABLE\n       ORDER BY 3",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- Substring\nSELECT b,\n       SUBSTRING(b FROM 2 FOR 4) AS sub_2_4,\n       SUBSTRING(b FROM 7 FOR 13) AS sub_7_13,\n       SUBSTRING(b FROM 6) AS sub_6\n       FROM BIT_TABLE;"
         },
         {
-            "query": "-- Length\nSELECT b, length(b) AS lb\n       FROM BIT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT v,\n       SUBSTRING(v FROM 2 FOR 4) AS sub_2_4,\n       SUBSTRING(v FROM 7 FOR 13) AS sub_7_13,\n       SUBSTRING(v FROM 6) AS sub_6\n       FROM VARBIT_TABLE;"
         },
         {
-            "query": "SELECT v, length(v) AS lv\n       FROM VARBIT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- test overflow cases\nSELECT SUBSTRING('01010101'::bit(8) FROM 2 FOR 2147483646) AS \"1010101\";"
         },
         {
-            "query": "-- Substring\nSELECT b,\n       SUBSTRING(b FROM 2 FOR 4) AS sub_2_4,\n       SUBSTRING(b FROM 7 FOR 13) AS sub_7_13,\n       SUBSTRING(b FROM 6) AS sub_6\n       FROM BIT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT SUBSTRING('01010101'::bit(8) FROM -10 FOR 2147483646) AS \"01010101\";"
         },
         {
-            "query": "SELECT v,\n       SUBSTRING(v FROM 2 FOR 4) AS sub_2_4,\n       SUBSTRING(v FROM 7 FOR 13) AS sub_7_13,\n       SUBSTRING(v FROM 6) AS sub_6\n       FROM VARBIT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT SUBSTRING('01010101'::bit(8) FROM -10 FOR -2147483646) AS \"error\";"
         },
         {
-            "query": "-- test overflow cases\nSELECT SUBSTRING('01010101'::bit(8) FROM 2 FOR 2147483646) AS \"1010101\"",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT SUBSTRING('01010101'::varbit FROM 2 FOR 2147483646) AS \"1010101\";"
         },
         {
-            "query": "SELECT SUBSTRING('01010101'::bit(8) FROM -10 FOR 2147483646) AS \"01010101\"",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT SUBSTRING('01010101'::varbit FROM -10 FOR 2147483646) AS \"01010101\";"
         },
         {
-            "query": "SELECT SUBSTRING('01010101'::bit(8) FROM -10 FOR -2147483646) AS \"error\"",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT SUBSTRING('01010101'::varbit FROM -10 FOR -2147483646) AS \"error\";"
         },
         {
-            "query": "SELECT SUBSTRING('01010101'::varbit FROM 2 FOR 2147483646) AS \"1010101\"",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "--- Bit operations\nDROP TABLE varbit_table;"
         },
         {
-            "query": "SELECT SUBSTRING('01010101'::varbit FROM -10 FOR 2147483646) AS \"01010101\"",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "CREATE TABLE varbit_table (a BIT VARYING(16), b BIT VARYING(16));"
         },
         {
-            "query": "SELECT SUBSTRING('01010101'::varbit FROM -10 FOR -2147483646) AS \"error\"",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "COPY varbit_table FROM stdin;"
         },
         {
-            "query": "--- Bit operations\nDROP TABLE varbit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "X0F\tX10\nX1F\tX11\nX2F\tX12\nX3F\tX13\nX8F\tX04\nX000F\tX0010\nX0123\tXFFFF\nX2468\tX2468\nXFA50\tX05AF\nX1234\tXFFF5\n\\.\n\nSELECT a, b, ~a AS \"~ a\", a & b AS \"a & b\",\n       a | b AS \"a | b\", a # b AS \"a # b\" FROM varbit_table;"
         },
         {
-            "query": "CREATE TABLE varbit_table (a BIT VARYING(16), b BIT VARYING(16))",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT a,b,a<b AS \"a<b\",a<=b AS \"a<=b\",a=b AS \"a=b\",\n        a>=b AS \"a>=b\",a>b AS \"a>b\",a<>b AS \"a<>b\" FROM varbit_table;"
         },
         {
-            "query": "COPY varbit_table FROM stdin",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT a,a<<4 AS \"a<<4\",b,b>>2 AS \"b>>2\" FROM varbit_table;"
         },
         {
-            "query": "X0F\tX10\nX1F\tX11\nX2F\tX12\nX3F\tX13\nX8F\tX04\nX000F\tX0010\nX0123\tXFFFF\nX2468\tX2468\nXFA50\tX05AF\nX1234\tXFFF5\n\\.\n\nSELECT a, b, ~a AS \"~ a\", a & b AS \"a & b\",\n       a | b AS \"a | b\", a # b AS \"a # b\" FROM varbit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "DROP TABLE varbit_table;"
         },
         {
-            "query": "SELECT a,b,a<b AS \"a<b\",a<=b AS \"a<=b\",a=b AS \"a=b\",\n        a>=b AS \"a>=b\",a>b AS \"a>b\",a<>b AS \"a<>b\" FROM varbit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "--- Bit operations\nDROP TABLE bit_table;"
         },
         {
-            "query": "SELECT a,a<<4 AS \"a<<4\",b,b>>2 AS \"b>>2\" FROM varbit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "CREATE TABLE bit_table (a BIT(16), b BIT(16));"
         },
         {
-            "query": "DROP TABLE varbit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "COPY bit_table FROM stdin;"
         },
         {
-            "query": "--- Bit operations\nDROP TABLE bit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "X0F00\tX1000\nX1F00\tX1100\nX2F00\tX1200\nX3F00\tX1300\nX8F00\tX0400\nX000F\tX0010\nX0123\tXFFFF\nX2468\tX2468\nXFA50\tX05AF\nX1234\tXFFF5\n\\.\n\nSELECT a,b,~a AS \"~ a\",a & b AS \"a & b\",\n\ta|b AS \"a | b\", a # b AS \"a # b\" FROM bit_table;"
         },
         {
-            "query": "CREATE TABLE bit_table (a BIT(16), b BIT(16))",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT a,b,a<b AS \"a<b\",a<=b AS \"a<=b\",a=b AS \"a=b\",\n        a>=b AS \"a>=b\",a>b AS \"a>b\",a<>b AS \"a<>b\" FROM bit_table;"
         },
         {
-            "query": "COPY bit_table FROM stdin",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT a,a<<4 AS \"a<<4\",b,b>>2 AS \"b>>2\" FROM bit_table;"
         },
         {
-            "query": "X0F00\tX1000\nX1F00\tX1100\nX2F00\tX1200\nX3F00\tX1300\nX8F00\tX0400\nX000F\tX0010\nX0123\tXFFFF\nX2468\tX2468\nXFA50\tX05AF\nX1234\tXFFF5\n\\.\n\nSELECT a,b,~a AS \"~ a\",a & b AS \"a & b\",\n\ta|b AS \"a | b\", a # b AS \"a # b\" FROM bit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "DROP TABLE bit_table;"
         },
         {
-            "query": "SELECT a,b,a<b AS \"a<b\",a<=b AS \"a<=b\",a=b AS \"a=b\",\n        a>=b AS \"a>=b\",a>b AS \"a>b\",a<>b AS \"a<>b\" FROM bit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- The following should fail\nselect B'001' & B'10';"
         },
         {
-            "query": "SELECT a,a<<4 AS \"a<<4\",b,b>>2 AS \"b>>2\" FROM bit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "select B'0111' | B'011';"
         },
         {
-            "query": "DROP TABLE bit_table",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "select B'0010' # B'011101';"
         },
         {
-            "query": "-- The following should fail\nselect B'001' & B'10'",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- More position tests, checking all the boundary cases\nSELECT POSITION(B'1010' IN B'0000101');   -- 0\nSELECT POSITION(B'1010' IN B'00001010');  -- 5\nSELECT POSITION(B'1010' IN B'00000101');  -- 0\nSELECT POSITION(B'1010' IN B'000001010');  -- 6\n\nSELECT POSITION(B'' IN B'00001010');  -- 1\nSELECT POSITION(B'0' IN B'');  -- 0\nSELECT POSITION(B'' IN B'');  -- 0\nSELECT POSITION(B'101101' IN B'001011011011011000');  -- 3\nSELECT POSITION(B'10110110' IN B'001011011011010');  -- 3\nSELECT POSITION(B'1011011011011' IN B'001011011011011');  -- 3\nSELECT POSITION(B'1011011011011' IN B'00001011011011011');  -- 5\n\nSELECT POSITION(B'11101011' IN B'11101011'); -- 1\nSELECT POSITION(B'11101011' IN B'011101011'); -- 2\nSELECT POSITION(B'11101011' IN B'00011101011'); -- 4\nSELECT POSITION(B'11101011' IN B'0000011101011'); -- 6\n\nSELECT POSITION(B'111010110' IN B'111010110'); -- 1\nSELECT POSITION(B'111010110' IN B'0111010110'); -- 2\nSELECT POSITION(B'111010110' IN B'000111010110'); -- 4\nSELECT POSITION(B'111010110' IN B'00000111010110'); -- 6\n\nSELECT POSITION(B'111010110' IN B'11101011'); -- 0\nSELECT POSITION(B'111010110' IN B'011101011'); -- 0\nSELECT POSITION(B'111010110' IN B'00011101011'); -- 0\nSELECT POSITION(B'111010110' IN B'0000011101011'); -- 0\n\nSELECT POSITION(B'111010110' IN B'111010110'); -- 1\nSELECT POSITION(B'111010110' IN B'0111010110'); -- 2\nSELECT POSITION(B'111010110' IN B'000111010110'); -- 4\nSELECT POSITION(B'111010110' IN B'00000111010110'); -- 6\n\nSELECT POSITION(B'111010110' IN B'000001110101111101011'); -- 0\nSELECT POSITION(B'111010110' IN B'0000001110101111101011'); -- 0\nSELECT POSITION(B'111010110' IN B'000000001110101111101011'); -- 0\nSELECT POSITION(B'111010110' IN B'00000000001110101111101011'); -- 0\n\nSELECT POSITION(B'111010110' IN B'0000011101011111010110'); -- 14\nSELECT POSITION(B'111010110' IN B'00000011101011111010110'); -- 15\nSELECT POSITION(B'111010110' IN B'0000000011101011111010110'); -- 17\nSELECT POSITION(B'111010110' IN B'000000000011101011111010110'); -- 19\n\nSELECT POSITION(B'000000000011101011111010110' IN B'000000000011101011111010110'); -- 1\nSELECT POSITION(B'00000000011101011111010110' IN B'000000000011101011111010110'); -- 2\nSELECT POSITION(B'0000000000011101011111010110' IN B'000000000011101011111010110'); -- 0\n\n\n-- Shifting\n\nCREATE TABLE BIT_SHIFT_TABLE(b BIT(16));"
         },
         {
-            "query": "select B'0111' | B'011'",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_SHIFT_TABLE VALUES (B'1101100000000000');"
         },
         {
-            "query": "select B'0010' # B'011101'",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>1 FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- More position tests, checking all the boundary cases\nSELECT POSITION(B'1010' IN B'0000101')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>2 FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'1010' IN B'00001010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>4 FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 5\nSELECT POSITION(B'1010' IN B'00000101')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>8 FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'1010' IN B'000001010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT POSITION(B'1101' IN b),\n       POSITION(B'11011' IN b),\n       b\n       FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 6\n\nSELECT POSITION(B'' IN B'00001010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT b, b >> 1 AS bsr, b << 1 AS bsl\n       FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 1\nSELECT POSITION(B'0' IN B'')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT b, b >> 8 AS bsr8, b << 8 AS bsl8\n       FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'' IN B'')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT b::bit(15), b::bit(15) >> 1 AS bsr, b::bit(15) << 1 AS bsl\n       FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'101101' IN B'001011011011011000')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT b::bit(15), b::bit(15) >> 8 AS bsr8, b::bit(15) << 8 AS bsl8\n       FROM BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 3\nSELECT POSITION(B'10110110' IN B'001011011011010')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "CREATE TABLE VARBIT_SHIFT_TABLE(v BIT VARYING(20));"
         },
         {
-            "query": "-- 3\nSELECT POSITION(B'1011011011011' IN B'001011011011011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_SHIFT_TABLE VALUES (B'11011');"
         },
         {
-            "query": "-- 3\nSELECT POSITION(B'1011011011011' IN B'00001011011011011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'0' AS BIT VARYING(6)) >>1 FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 5\n\nSELECT POSITION(B'11101011' IN B'11101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'00' AS BIT VARYING(8)) >>2 FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 1\nSELECT POSITION(B'11101011' IN B'011101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'0000' AS BIT VARYING(12)) >>4 FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 2\nSELECT POSITION(B'11101011' IN B'00011101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'00000000' AS BIT VARYING(20)) >>8 FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 4\nSELECT POSITION(B'11101011' IN B'0000011101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT POSITION(B'1101' IN v),\n       POSITION(B'11011' IN v),\n       v\n       FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 6\n\nSELECT POSITION(B'111010110' IN B'111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT v, v >> 1 AS vsr, v << 1 AS vsl\n       FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 1\nSELECT POSITION(B'111010110' IN B'0111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT v, v >> 8 AS vsr8, v << 8 AS vsl8\n       FROM VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 2\nSELECT POSITION(B'111010110' IN B'000111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "DROP TABLE BIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 4\nSELECT POSITION(B'111010110' IN B'00000111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "DROP TABLE VARBIT_SHIFT_TABLE;"
         },
         {
-            "query": "-- 6\n\nSELECT POSITION(B'111010110' IN B'11101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- Get/Set bit\nSELECT get_bit(B'0101011000100', 10);"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'111010110' IN B'011101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT set_bit(B'0101011000100100', 15, 1);"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'111010110' IN B'00011101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT set_bit(B'0101011000100100', 16, 1);\t-- fail\n\n-- Overlay\nSELECT overlay(B'0101011100' placing '001' from 2 for 3);"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'111010110' IN B'0000011101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT overlay(B'0101011100' placing '101' from 6);"
         },
         {
-            "query": "-- 0\n\nSELECT POSITION(B'111010110' IN B'111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT overlay(B'0101011100' placing '001' from 11);"
         },
         {
-            "query": "-- 1\nSELECT POSITION(B'111010110' IN B'0111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT overlay(B'0101011100' placing '001' from 20);"
         },
         {
-            "query": "-- 2\nSELECT POSITION(B'111010110' IN B'000111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- bit_count\nSELECT bit_count(B'0101011100'::bit(10));"
         },
         {
-            "query": "-- 4\nSELECT POSITION(B'111010110' IN B'00000111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT bit_count(B'1111111111'::bit(10));"
         },
         {
-            "query": "-- 6\n\nSELECT POSITION(B'111010110' IN B'000001110101111101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT bit_count(repeat('0', 100)::bit(100));"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'111010110' IN B'0000001110101111101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT bit_count(repeat('1', 100)::bit(100));"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'111010110' IN B'000000001110101111101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT bit_count(repeat('01', 500)::bit(1000));"
         },
         {
-            "query": "-- 0\nSELECT POSITION(B'111010110' IN B'00000000001110101111101011')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT bit_count(repeat('10101', 200)::bit(1000));"
         },
         {
-            "query": "-- 0\n\nSELECT POSITION(B'111010110' IN B'0000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- This table is intentionally left around to exercise pg_dump/pg_upgrade\nCREATE TABLE bit_defaults(\n  b1 bit(4) DEFAULT '1001',\n  b2 bit(4) DEFAULT B'0101',\n  b3 bit varying(5) DEFAULT '1001',\n  b4 bit varying(5) DEFAULT B'0101'\n);"
         },
         {
-            "query": "-- 14\nSELECT POSITION(B'111010110' IN B'00000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "\\d bit_defaults\nINSERT INTO bit_defaults DEFAULT VALUES;"
         },
         {
-            "query": "-- 15\nSELECT POSITION(B'111010110' IN B'0000000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "TABLE bit_defaults;"
         },
         {
-            "query": "-- 17\nSELECT POSITION(B'111010110' IN B'000000000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "-- test non-error-throwing API for some core types\nSELECT pg_input_is_valid('01010001', 'bit(10)');"
         },
         {
-            "query": "-- 19\n\nSELECT POSITION(B'000000000011101011111010110' IN B'000000000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM pg_input_error_info('01010001', 'bit(10)');"
         },
         {
-            "query": "-- 1\nSELECT POSITION(B'00000000011101011111010110' IN B'000000000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT pg_input_is_valid('01010Z01', 'bit(8)');"
         },
         {
-            "query": "-- 2\nSELECT POSITION(B'0000000000011101011111010110' IN B'000000000011101011111010110')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM pg_input_error_info('01010Z01', 'bit(8)');"
         },
         {
-            "query": "-- 0\n\n\n-- Shifting\n\nCREATE TABLE BIT_SHIFT_TABLE(b BIT(16))",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT pg_input_is_valid('x01010Z01', 'bit(32)');"
         },
         {
-            "query": "INSERT INTO BIT_SHIFT_TABLE VALUES (B'1101100000000000')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM pg_input_error_info('x01010Z01', 'bit(32)');"
         },
         {
-            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>1 FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT pg_input_is_valid('01010Z01', 'varbit');"
         },
         {
-            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>2 FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM pg_input_error_info('01010Z01', 'varbit');"
         },
         {
-            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>4 FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT pg_input_is_valid('x01010Z01', 'varbit');"
         },
         {
-            "query": "INSERT INTO BIT_SHIFT_TABLE SELECT b>>8 FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT POSITION(B'1101' IN b),\n       POSITION(B'11011' IN b),\n       b\n       FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT b, b >> 1 AS bsr, b << 1 AS bsl\n       FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT b, b >> 8 AS bsr8, b << 8 AS bsl8\n       FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT b::bit(15), b::bit(15) >> 1 AS bsr, b::bit(15) << 1 AS bsl\n       FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT b::bit(15), b::bit(15) >> 8 AS bsr8, b::bit(15) << 8 AS bsl8\n       FROM BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "CREATE TABLE VARBIT_SHIFT_TABLE(v BIT VARYING(20))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "INSERT INTO VARBIT_SHIFT_TABLE VALUES (B'11011')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'0' AS BIT VARYING(6)) >>1 FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'00' AS BIT VARYING(8)) >>2 FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'0000' AS BIT VARYING(12)) >>4 FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "INSERT INTO VARBIT_SHIFT_TABLE SELECT CAST(v || B'00000000' AS BIT VARYING(20)) >>8 FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT POSITION(B'1101' IN v),\n       POSITION(B'11011' IN v),\n       v\n       FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT v, v >> 1 AS vsr, v << 1 AS vsl\n       FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT v, v >> 8 AS vsr8, v << 8 AS vsl8\n       FROM VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "DROP TABLE BIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "DROP TABLE VARBIT_SHIFT_TABLE",
-            "name": "bit.sql"
-        },
-        {
-            "query": "-- Get/Set bit\nSELECT get_bit(B'0101011000100', 10)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT set_bit(B'0101011000100100', 15, 1)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT set_bit(B'0101011000100100', 16, 1)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "-- fail\n\n-- Overlay\nSELECT overlay(B'0101011100' placing '001' from 2 for 3)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT overlay(B'0101011100' placing '101' from 6)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT overlay(B'0101011100' placing '001' from 11)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT overlay(B'0101011100' placing '001' from 20)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "-- bit_count\nSELECT bit_count(B'0101011100'::bit(10))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT bit_count(B'1111111111'::bit(10))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT bit_count(repeat('0', 100)::bit(100))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT bit_count(repeat('1', 100)::bit(100))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT bit_count(repeat('01', 500)::bit(1000))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT bit_count(repeat('10101', 200)::bit(1000))",
-            "name": "bit.sql"
-        },
-        {
-            "query": "-- This table is intentionally left around to exercise pg_dump/pg_upgrade\nCREATE TABLE bit_defaults(\n  b1 bit(4) DEFAULT '1001',\n  b2 bit(4) DEFAULT B'0101',\n  b3 bit varying(5) DEFAULT '1001',\n  b4 bit varying(5) DEFAULT B'0101'\n)",
-            "name": "bit.sql"
-        },
-        {
-            "query": "\\d bit_defaults\nINSERT INTO bit_defaults DEFAULT VALUES",
-            "name": "bit.sql"
-        },
-        {
-            "query": "TABLE bit_defaults",
-            "name": "bit.sql"
-        },
-        {
-            "query": "-- test non-error-throwing API for some core types\nSELECT pg_input_is_valid('01010001', 'bit(10)')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT * FROM pg_input_error_info('01010001', 'bit(10)')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT pg_input_is_valid('01010Z01', 'bit(8)')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT * FROM pg_input_error_info('01010Z01', 'bit(8)')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT pg_input_is_valid('x01010Z01', 'bit(32)')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT * FROM pg_input_error_info('x01010Z01', 'bit(32)')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT pg_input_is_valid('01010Z01', 'varbit')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT * FROM pg_input_error_info('01010Z01', 'varbit')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT pg_input_is_valid('x01010Z01', 'varbit')",
-            "name": "bit.sql"
-        },
-        {
-            "query": "SELECT * FROM pg_input_error_info('x01010Z01', 'varbit')",
-            "name": "bit.sql"
+            "name": "bit.sql",
+            "query": "SELECT * FROM pg_input_error_info('x01010Z01', 'varbit');"
         }
     ]
 }

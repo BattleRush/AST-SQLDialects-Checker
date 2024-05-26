@@ -2,44 +2,44 @@
     "name": "02011_dictionary_empty_attribute_list.sql",
     "tests": [
         {
-            "query": "-- Tags: no-parallel\n\nDROP TABLE IF EXISTS test_table;",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "-- Tags: no-parallel\n\nDROP TABLE IF EXISTS test_table;"
         },
         {
-            "query": "\nCREATE TABLE test_table (id UInt64) ENGINE=TinyLog;",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "CREATE TABLE test_table (id UInt64) ENGINE=TinyLog;"
         },
         {
-            "query": "\nINSERT INTO test_table VALUES (0);",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "INSERT INTO test_table VALUES (0);"
         },
         {
-            "query": "\n\nDROP DICTIONARY IF EXISTS test_dictionary;",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "DROP DICTIONARY IF EXISTS test_dictionary;"
         },
         {
-            "query": "\nCREATE DICTIONARY test_dictionary (id UInt64) PRIMARY KEY id LAYOUT(DIRECT()) SOURCE(CLICKHOUSE(TABLE 'test_table'));",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "CREATE DICTIONARY test_dictionary (id UInt64) PRIMARY KEY id LAYOUT(DIRECT()) SOURCE(CLICKHOUSE(TABLE 'test_table'));"
         },
         {
-            "query": "\nSELECT * FROM test_dictionary;",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "SELECT * FROM test_dictionary;"
         },
         {
-            "query": "\nSELECT dictHas('test_dictionary', toUInt64(0));",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "SELECT dictHas('test_dictionary', toUInt64(0));"
         },
         {
-            "query": "\nSELECT dictHas('test_dictionary', toUInt64(1));",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "SELECT dictHas('test_dictionary', toUInt64(1));"
         },
         {
-            "query": "\n\nDROP DICTIONARY test_dictionary;",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "DROP DICTIONARY test_dictionary;"
         },
         {
-            "query": "\nDROP TABLE test_table;",
-            "name": "02011_dictionary_empty_attribute_list.sql"
+            "name": "02011_dictionary_empty_attribute_list.sql",
+            "query": "DROP TABLE test_table;"
         }
     ]
 }

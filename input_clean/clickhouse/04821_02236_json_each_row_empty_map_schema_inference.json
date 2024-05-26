@@ -2,16 +2,16 @@
     "name": "02236_json_each_row_empty_map_schema_inference.sql",
     "tests": [
         {
-            "query": "-- Tags: no-fasttest\nset input_format_json_try_infer_named_tuples_from_objects=0;",
-            "name": "02236_json_each_row_empty_map_schema_inference.sql"
+            "name": "02236_json_each_row_empty_map_schema_inference.sql",
+            "query": "-- Tags: no-fasttest\nset input_format_json_try_infer_named_tuples_from_objects=0;"
         },
         {
-            "query": "\nset input_format_json_read_objects_as_strings=0;",
-            "name": "02236_json_each_row_empty_map_schema_inference.sql"
+            "name": "02236_json_each_row_empty_map_schema_inference.sql",
+            "query": "set input_format_json_read_objects_as_strings=0;"
         },
         {
-            "query": "\nselect * from format(JSONEachRow, '{\"a\" : {}}, {\"a\" : {\"b\" : 1}}')\n;",
-            "name": "02236_json_each_row_empty_map_schema_inference.sql"
+            "name": "02236_json_each_row_empty_map_schema_inference.sql",
+            "query": "select * from format(JSONEachRow, '{\"a\" : {}}, {\"a\" : {\"b\" : 1}}')\n;"
         }
     ]
 }

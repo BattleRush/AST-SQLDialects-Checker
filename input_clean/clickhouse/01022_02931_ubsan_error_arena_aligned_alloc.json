@@ -2,8 +2,8 @@
     "name": "02931_ubsan_error_arena_aligned_alloc.sql",
     "tests": [
         {
-            "query": "-- previously it caused `runtime error: applying non-zero offset 7 to null pointer`\nSELECT sumResample(65535, 20, 1)(number, number % 20) FROM numbers(200);",
-            "name": "02931_ubsan_error_arena_aligned_alloc.sql"
+            "name": "02931_ubsan_error_arena_aligned_alloc.sql",
+            "query": "-- previously it caused `runtime error: applying non-zero offset 7 to null pointer`\nSELECT sumResample(65535, 20, 1)(number, number % 20) FROM numbers(200);"
         }
     ]
 }

@@ -2,12 +2,8 @@
     "name": "01372_remote_table_function_empty_table.sql",
     "tests": [
         {
-            "query": "SELECT * FROM remote('127..2', 'a.');",
-            "name": "01372_remote_table_function_empty_table.sql"
-        },
-        {
-            "query": " -- { serverError 62 }\n\n-- Clear cache to avoid future errors in the logs\nSYSTEM DROP DNS CACHE\n;",
-            "name": "01372_remote_table_function_empty_table.sql"
+            "name": "01372_remote_table_function_empty_table.sql",
+            "query": "SELECT * FROM remote('127..2', 'a.'); -- { serverError 62 }\n\n-- Clear cache to avoid future errors in the logs\nSYSTEM DROP DNS CACHE\n;"
         }
     ]
 }

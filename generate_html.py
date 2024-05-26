@@ -22,8 +22,10 @@ for root, dirs, files in os.walk("output"):
             
             # if the html file exists do not process the json file
             if os.path.exists(os.path.join("output", html_file)):
-                print("Skipping", file)
-                continue
+                # if the file is not older than 1h then regenerate it
+                if time.time() - os.path.getmtime(os.path.join("output", html_file)) > 3600:
+                  print("Skipping", file)
+                  continue
             
             print("Processing", file)
 
@@ -245,6 +247,9 @@ for root, dirs, files in os.walk("output"):
                         continue
                     
                     html += f"<th>{db} Success</th>"
+                    html += f"<th>{db} Success Match</th>"
+                    html += f"<th>{db} Shape Match</th>"
+                    html += f"<th>{db} Result Match</th>"
                 html += "</tr>"
                 
                 for test_report in reports:
@@ -274,6 +279,25 @@ for root, dirs, files in os.walk("output"):
                         target_success_count = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["success"]])
                         target_success_count_percentage = target_success_count / total_queries * 100
                         html += f"<td style='background-color: {color_for_percentage(target_success_count_percentage)}'>{target_success_count} ({target_success_count_percentage:.2f}%)</td>"
+                    
+                        count_success_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and query_report["source_success"] == target_report["success"]])
+                        # count shape match only where success matches
+                        count_shape_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["shape_equal"]])
+                        count_result_match = sum([1 for query_report in test_report["queries"] for target_report in query_report["target_dbs"] if target_report["db"] == db and target_report["values_equal"]])
+                        
+                        if count_success_match == 0:
+                            count_success_match_percentage = 0
+                            count_shape_match_percentage = 0
+                            count_result_match_percentage = 0
+                        else:
+                            count_success_match_percentage = count_success_match / total_queries * 100
+                            count_shape_match_percentage = count_shape_match / count_success_match * 100
+                            count_result_match_percentage = count_result_match / count_success_match * 100
+                        
+                        # display achieved count/total count (percentage)
+                        html += f"<td style='background-color: {color_for_percentage(count_success_match_percentage)}'>{count_success_match}/{total_queries} ({count_success_match_percentage:.2f}%)</td>"
+                        html += f"<td style='background-color: {color_for_percentage(count_shape_match_percentage)}'>{count_shape_match}/{count_success_match} ({count_shape_match_percentage:.2f}%)</td>"
+                        html += f"<td style='background-color: {color_for_percentage(count_result_match_percentage)}'>{count_result_match}/{count_success_match} ({count_result_match_percentage:.2f}%)</td>"
                     
                     html += "</tr>"
                     
@@ -336,21 +360,21 @@ for root, dirs, files in os.walk("output"):
                                 html += f"<th>Error</th>"
                                 html += f"<th>Result</th>"
                                 html += f"<th>Shape</th>"
+                                html += f"<th>Data types</th>"
                                 html += f"<th>Shape Equal</th>"
                                 html += f"<th>Columns Equal</th>"
                                 html += f"<th>Dtypes Equal</th>"
                                 html += f"<th>Values Equal</th>"
-                                html += f"<th>Full Match</th>"
                                 html += "</tr>"
                                 
                                 # add row of source
                                 html += "<tr>"
-                                html += f"<td>REFERENCE: {test_report['source_db']}</td>"
+                                html += f"<td><b>{test_report['source_db']}</b></td>"
                                 html += f"<td style='background-color: {'green' if query_report['source_success'] else 'red'}'>{query_report['source_success']}</td>"
                                 html += f"<td>{query_report['source_exception']}</td>"
                                 html += f"<td>{query_report['source_result_html']}</td>"
                                 html += f"<td>{query_report['source_shape']}</td>"
-                                html += f"<td></td>"
+                                html += f"<td>{query_report['source_datatypes']}</td>"
                                 html += f"<td></td>"
                                 html += f"<td></td>"
                                 html += f"<td></td>"
@@ -365,11 +389,11 @@ for root, dirs, files in os.walk("output"):
                             html += f"<td>{target_report['error']}</td>"
                             html += f"<td>{target_report['result_html']}</td>"
                             html += f"<td>{target_report['shape']}</td>"
+                            html += f"<td>{target_report['data_types']}</td>"
                             html += f"<td>{target_report['shape_equal']}</td>"
                             html += f"<td>{target_report['columns_equal']}</td>"
                             html += f"<td>{target_report['dtypes_equal']}</td>"
                             html += f"<td>{target_report['values_equal']}</td>"
-                            html += f"<td>{target_report['full_match']}</td>"
                             html += "</tr>"
                             
                         html += "</table>"

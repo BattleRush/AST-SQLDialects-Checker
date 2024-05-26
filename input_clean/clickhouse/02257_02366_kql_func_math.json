@@ -2,36 +2,28 @@
     "name": "02366_kql_func_math.sql",
     "tests": [
         {
-            "query": "set dialect = 'kusto';",
-            "name": "02366_kql_func_math.sql"
+            "name": "02366_kql_func_math.sql",
+            "query": "set dialect = 'kusto';"
         },
         {
-            "query": "\nprint '-- isnan --';",
-            "name": "02366_kql_func_math.sql"
+            "name": "02366_kql_func_math.sql",
+            "query": "print '-- isnan --';"
         },
         {
-            "query": "\nprint isnan(double(nan));",
-            "name": "02366_kql_func_math.sql"
+            "name": "02366_kql_func_math.sql",
+            "query": "print isnan(double(nan));"
         },
         {
-            "query": "\nprint isnan(4.2);",
-            "name": "02366_kql_func_math.sql"
+            "name": "02366_kql_func_math.sql",
+            "query": "print isnan(4.2);"
         },
         {
-            "query": "\nprint isnan(4);",
-            "name": "02366_kql_func_math.sql"
+            "name": "02366_kql_func_math.sql",
+            "query": "print isnan(4); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }\nprint isnan(real(+inf));"
         },
         {
-            "query": " -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }\nprint isnan(real(+inf));",
-            "name": "02366_kql_func_math.sql"
-        },
-        {
-            "query": "\nprint isnan(dynamic(null));",
-            "name": "02366_kql_func_math.sql"
-        },
-        {
-            "query": " -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }\n;",
-            "name": "02366_kql_func_math.sql"
+            "name": "02366_kql_func_math.sql",
+            "query": "print isnan(dynamic(null)); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }\n;"
         }
     ]
 }

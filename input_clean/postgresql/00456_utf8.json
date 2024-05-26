@@ -2,80 +2,80 @@
     "name": "utf8.sql",
     "tests": [
         {
-            "query": "drop table \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "drop table \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         },
         {
-            "query": "create table \u8a08\u7b97\u6a5f\u7528\u8a9e (\u7528\u8a9e text, \u5206\u985e\u30b3\u30fc\u30c9 varchar, \u5099\u80031A\u3060\u3088 char(16))",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "create table \u8a08\u7b97\u6a5f\u7528\u8a9e (\u7528\u8a9e text, \u5206\u985e\u30b3\u30fc\u30c9 varchar, \u5099\u80031A\u3060\u3088 char(16));"
         },
         {
-            "query": "create index \u8a08\u7b97\u6a5f\u7528\u8a9eindex1 on \u8a08\u7b97\u6a5f\u7528\u8a9e using btree (\u7528\u8a9e)",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "create index \u8a08\u7b97\u6a5f\u7528\u8a9eindex1 on \u8a08\u7b97\u6a5f\u7528\u8a9e using btree (\u7528\u8a9e);"
         },
         {
-            "query": "create index \u8a08\u7b97\u6a5f\u7528\u8a9eindex2 on \u8a08\u7b97\u6a5f\u7528\u8a9e using hash (\u5206\u985e\u30b3\u30fc\u30c9)",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "create index \u8a08\u7b97\u6a5f\u7528\u8a9eindex2 on \u8a08\u7b97\u6a5f\u7528\u8a9e using hash (\u5206\u985e\u30b3\u30fc\u30c9);"
         },
         {
-            "query": "insert into \u8a08\u7b97\u6a5f\u7528\u8a9e values('\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u30c7\u30a3\u30b9\u30d7\u30ec\u30a4','\u6a5fA01\u4e0a')",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "insert into \u8a08\u7b97\u6a5f\u7528\u8a9e values('\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u30c7\u30a3\u30b9\u30d7\u30ec\u30a4','\u6a5fA01\u4e0a');"
         },
         {
-            "query": "insert into \u8a08\u7b97\u6a5f\u7528\u8a9e values('\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u30b0\u30e9\u30d5\u30a3\u30c3\u30af\u30b9','\u5206B10\u4e2d')",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "insert into \u8a08\u7b97\u6a5f\u7528\u8a9e values('\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u30b0\u30e9\u30d5\u30a3\u30c3\u30af\u30b9','\u5206B10\u4e2d');"
         },
         {
-            "query": "insert into \u8a08\u7b97\u6a5f\u7528\u8a9e values('\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u30d7\u30ed\u30b0\u30e9\u30de\u30fc','\u4ebaZ01\u4e0b')",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "insert into \u8a08\u7b97\u6a5f\u7528\u8a9e values('\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u30d7\u30ed\u30b0\u30e9\u30de\u30fc','\u4ebaZ01\u4e0b');"
         },
         {
-            "query": "vacuum \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "vacuum \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 = '\u4ebaZ01\u4e0b'",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 = '\u4ebaZ01\u4e0b';"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 ~* '\u4ebaz01\u4e0b'",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 ~* '\u4ebaz01\u4e0b';"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 like '_Z01_'",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 like '_Z01_';"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 like '_Z%'",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u5206\u985e\u30b3\u30fc\u30c9 like '_Z%';"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u7528\u8a9e ~ '\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf[\u30c7\u30b0]'",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u7528\u8a9e ~ '\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf[\u30c7\u30b0]';"
         },
         {
-            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u7528\u8a9e ~* '\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf[\u30c7\u30b0]'",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select * from \u8a08\u7b97\u6a5f\u7528\u8a9e where \u7528\u8a9e ~* '\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf[\u30c7\u30b0]';"
         },
         {
-            "query": "select *,character_length(\u7528\u8a9e) from \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select *,character_length(\u7528\u8a9e) from \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         },
         {
-            "query": "select *,octet_length(\u7528\u8a9e) from \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select *,octet_length(\u7528\u8a9e) from \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         },
         {
-            "query": "select *,position('\u30c7' in \u7528\u8a9e) from \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select *,position('\u30c7' in \u7528\u8a9e) from \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         },
         {
-            "query": "select *,substring(\u7528\u8a9e from 10 for 4) from \u8a08\u7b97\u6a5f\u7528\u8a9e",
-            "name": "utf8.sql"
+            "name": "utf8.sql",
+            "query": "select *,substring(\u7528\u8a9e from 10 for 4) from \u8a08\u7b97\u6a5f\u7528\u8a9e;"
         }
     ]
 }

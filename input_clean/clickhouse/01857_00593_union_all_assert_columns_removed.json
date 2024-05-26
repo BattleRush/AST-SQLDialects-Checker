@@ -2,36 +2,36 @@
     "name": "00593_union_all_assert_columns_removed.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS columns;",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "DROP TABLE IF EXISTS columns;"
         },
         {
-            "query": "\nCREATE TABLE columns (a UInt8, b UInt8, c UInt8) ENGINE = Memory;",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "CREATE TABLE columns (a UInt8, b UInt8, c UInt8) ENGINE = Memory;"
         },
         {
-            "query": "\nINSERT INTO columns VALUES (1, 2, 3);",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "INSERT INTO columns VALUES (1, 2, 3);"
         },
         {
-            "query": "\nSET max_columns_to_read = 1;",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "SET max_columns_to_read = 1;"
         },
         {
-            "query": "\n\nSELECT a FROM (SELECT * FROM columns);",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "SELECT a FROM (SELECT * FROM columns);"
         },
         {
-            "query": "\nSELECT a FROM (SELECT * FROM (SELECT * FROM columns));",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "SELECT a FROM (SELECT * FROM (SELECT * FROM columns));"
         },
         {
-            "query": "\nSELECT a FROM (SELECT * FROM columns UNION ALL SELECT * FROM columns);",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "SELECT a FROM (SELECT * FROM columns UNION ALL SELECT * FROM columns);"
         },
         {
-            "query": "\n\nDROP TABLE columns;",
-            "name": "00593_union_all_assert_columns_removed.sql"
+            "name": "00593_union_all_assert_columns_removed.sql",
+            "query": "DROP TABLE columns;"
         }
     ]
 }

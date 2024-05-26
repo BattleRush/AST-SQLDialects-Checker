@@ -2,8 +2,8 @@
     "name": "00001_select_1.sql",
     "tests": [
         {
-            "query": "SELECT 1\n;",
-            "name": "00001_select_1.sql"
+            "name": "00001_select_1.sql",
+            "query": "SELECT 1\n;"
         }
     ]
 }

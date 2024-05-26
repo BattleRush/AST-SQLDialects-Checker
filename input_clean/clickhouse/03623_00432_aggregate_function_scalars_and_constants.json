@@ -2,128 +2,128 @@
     "name": "00432_aggregate_function_scalars_and_constants.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS agg_func_col;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "DROP TABLE IF EXISTS agg_func_col;"
         },
         {
-            "query": "\n\nset allow_deprecated_syntax_for_merge_tree=1;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "set allow_deprecated_syntax_for_merge_tree=1;"
         },
         {
-            "query": "\nCREATE TABLE agg_func_col (p Date, k UInt8, d AggregateFunction(sum, UInt64) DEFAULT arrayReduce('sumState', [toUInt64(200)])) ENGINE = AggregatingMergeTree(p, k, 1);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "CREATE TABLE agg_func_col (p Date, k UInt8, d AggregateFunction(sum, UInt64) DEFAULT arrayReduce('sumState', [toUInt64(200)])) ENGINE = AggregatingMergeTree(p, k, 1);"
         },
         {
-            "query": "\nINSERT INTO agg_func_col (k) VALUES (0);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "INSERT INTO agg_func_col (k) VALUES (0);"
         },
         {
-            "query": "\nINSERT INTO agg_func_col (k, d) SELECT 1 AS k, arrayReduce('sumState', [toUInt64(100)]) AS d;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "INSERT INTO agg_func_col (k, d) SELECT 1 AS k, arrayReduce('sumState', [toUInt64(100)]) AS d;"
         },
         {
-            "query": "\nSELECT k, sumMerge(d) FROM agg_func_col GROUP BY k ORDER BY k;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT k, sumMerge(d) FROM agg_func_col GROUP BY k ORDER BY k;"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nALTER TABLE agg_func_col ADD COLUMN af_avg1 AggregateFunction(avg, UInt8);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "ALTER TABLE agg_func_col ADD COLUMN af_avg1 AggregateFunction(avg, UInt8);"
         },
         {
-            "query": "\nSELECT k, sumMerge(d), avgMerge(af_avg1) FROM agg_func_col GROUP BY k ORDER BY k;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT k, sumMerge(d), avgMerge(af_avg1) FROM agg_func_col GROUP BY k ORDER BY k;"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nINSERT INTO agg_func_col (k, af_avg1) VALUES (2, arrayReduce('avgState', [101]));",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "INSERT INTO agg_func_col (k, af_avg1) VALUES (2, arrayReduce('avgState', [101]));"
         },
         {
-            "query": "\nSELECT k, sumMerge(d), avgMerge(af_avg1) FROM agg_func_col GROUP BY k ORDER BY k;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT k, sumMerge(d), avgMerge(af_avg1) FROM agg_func_col GROUP BY k ORDER BY k;"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nALTER TABLE agg_func_col ADD COLUMN af_gua AggregateFunction(groupUniqArray, String) DEFAULT arrayReduce('groupUniqArrayState', ['---', '---']);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "ALTER TABLE agg_func_col ADD COLUMN af_gua AggregateFunction(groupUniqArray, String) DEFAULT arrayReduce('groupUniqArrayState', ['---', '---']);"
         },
         {
-            "query": "\nSELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nINSERT INTO agg_func_col (k, af_avg1, af_gua) VALUES (3, arrayReduce('avgState', [102, 102]), arrayReduce('groupUniqArrayState', ['igua', 'igua']));",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "INSERT INTO agg_func_col (k, af_avg1, af_gua) VALUES (3, arrayReduce('avgState', [102, 102]), arrayReduce('groupUniqArrayState', ['igua', 'igua']));"
         },
         {
-            "query": "\nSELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;"
         },
         {
-            "query": "\n\nOPTIMIZE TABLE agg_func_col;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "OPTIMIZE TABLE agg_func_col;"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nSELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;"
         },
         {
-            "query": "\n\nDROP TABLE IF EXISTS agg_func_col;",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "DROP TABLE IF EXISTS agg_func_col;"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nSELECT arrayReduce('groupUniqArrayIf', ['---', '---', 't1'], [1, 1, 0]);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT arrayReduce('groupUniqArrayIf', ['---', '---', 't1'], [1, 1, 0]);"
         },
         {
-            "query": "\nSELECT arrayReduce('groupUniqArrayMergeIf',\n\t[arrayReduce('groupUniqArrayState', ['---', '---']), arrayReduce('groupUniqArrayState', ['t1', 't'])],\n\t[1, 0]\n);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT arrayReduce('groupUniqArrayMergeIf',\n\t[arrayReduce('groupUniqArrayState', ['---', '---']), arrayReduce('groupUniqArrayState', ['t1', 't'])],\n\t[1, 0]\n);"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nSELECT arrayReduce('avgState', [0]) IN (arrayReduce('avgState', [0, 1]), arrayReduce('avgState', [0]));",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT arrayReduce('avgState', [0]) IN (arrayReduce('avgState', [0, 1]), arrayReduce('avgState', [0]));"
         },
         {
-            "query": "\nSELECT arrayReduce('avgState', [0]) IN (arrayReduce('avgState', [0, 1]), arrayReduce('avgState', [1]));",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT arrayReduce('avgState', [0]) IN (arrayReduce('avgState', [0, 1]), arrayReduce('avgState', [1]));"
         },
         {
-            "query": "\n\nSELECT '';",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT '';"
         },
         {
-            "query": "\nSELECT arrayReduce('uniqExactMerge',\n    [arrayReduce('uniqExactMergeState',\n        [\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678901])\n        ])\n    ]);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT arrayReduce('uniqExactMerge',\n    [arrayReduce('uniqExactMergeState',\n        [\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678901])\n        ])\n    ]);"
         },
         {
-            "query": "\n\nSELECT arrayReduce('uniqExactMerge',\n    [arrayReduce('uniqExactMergeState',\n        [\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678902])\n        ])\n    ]);",
-            "name": "00432_aggregate_function_scalars_and_constants.sql"
+            "name": "00432_aggregate_function_scalars_and_constants.sql",
+            "query": "SELECT arrayReduce('uniqExactMerge',\n    [arrayReduce('uniqExactMergeState',\n        [\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678902])\n        ])\n    ]);"
         }
     ]
 }

@@ -2,472 +2,388 @@
     "name": "alter.sql",
     "tests": [
         {
-            "query": "--\n-- Test for various ALTER statements\n--\n\n-- clean-up in case a prior regression run failed\nSET client_min_messages TO 'warning'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "--\n-- Test for various ALTER statements\n--\n\n-- clean-up in case a prior regression run failed\nSET client_min_messages TO 'warning';"
         },
         {
-            "query": "DROP DATABASE IF EXISTS sepgsql_test_regression_1",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP DATABASE IF EXISTS sepgsql_test_regression_1;"
         },
         {
-            "query": "DROP DATABASE IF EXISTS sepgsql_test_regression",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP DATABASE IF EXISTS sepgsql_test_regression;"
         },
         {
-            "query": "DROP USER IF EXISTS regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP USER IF EXISTS regress_sepgsql_test_user;"
         },
         {
-            "query": "RESET client_min_messages",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "RESET client_min_messages;"
         },
         {
-            "query": "-- @SECURITY-CONTEXT=unconfined_u:unconfined_r:sepgsql_regtest_superuser_t:s0\n\n--\n-- CREATE Objects to be altered (with debug_audit being silent)\n--\nCREATE DATABASE sepgsql_test_regression_1",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "-- @SECURITY-CONTEXT=unconfined_u:unconfined_r:sepgsql_regtest_superuser_t:s0\n\n--\n-- CREATE Objects to be altered (with debug_audit being silent)\n--\nCREATE DATABASE sepgsql_test_regression_1;"
         },
         {
-            "query": "CREATE USER regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE USER regress_sepgsql_test_user;"
         },
         {
-            "query": "CREATE SCHEMA regtest_schema_1",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE SCHEMA regtest_schema_1;"
         },
         {
-            "query": "CREATE SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE SCHEMA regtest_schema_2;"
         },
         {
-            "query": "GRANT ALL ON SCHEMA regtest_schema_1 TO public",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "GRANT ALL ON SCHEMA regtest_schema_1 TO public;"
         },
         {
-            "query": "GRANT ALL ON SCHEMA regtest_schema_2  TO public",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "GRANT ALL ON SCHEMA regtest_schema_2  TO public;"
         },
         {
-            "query": "SET search_path = regtest_schema_1, regtest_schema_2, public",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "SET search_path = regtest_schema_1, regtest_schema_2, public;"
         },
         {
-            "query": "CREATE TABLE regtest_table_1 (a int, b text)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE TABLE regtest_table_1 (a int, b text);"
         },
         {
-            "query": "CREATE TABLE regtest_table_2 (c text) inherits (regtest_table_1)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE TABLE regtest_table_2 (c text) inherits (regtest_table_1);"
         },
         {
-            "query": "CREATE TABLE regtest_table_3 (x int primary key, y text)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE TABLE regtest_table_3 (x int primary key, y text);"
         },
         {
-            "query": "---\n-- partitioned table parent\nCREATE TABLE regtest_ptable_1 (o int, p text) PARTITION BY RANGE (o)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "---\n-- partitioned table parent\nCREATE TABLE regtest_ptable_1 (o int, p text) PARTITION BY RANGE (o);"
         },
         {
-            "query": "-- partitioned table children\nCREATE TABLE regtest_ptable_1_ones PARTITION OF regtest_ptable_1 FOR VALUES FROM ('0') TO ('10')",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "-- partitioned table children\nCREATE TABLE regtest_ptable_1_ones PARTITION OF regtest_ptable_1 FOR VALUES FROM ('0') TO ('10');"
         },
         {
-            "query": "CREATE TABLE regtest_ptable_1_tens PARTITION OF regtest_ptable_1 FOR VALUES FROM ('10') TO ('100')",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE TABLE regtest_ptable_1_tens PARTITION OF regtest_ptable_1 FOR VALUES FROM ('10') TO ('100');"
         },
         {
-            "query": "---\n\nCREATE SEQUENCE regtest_seq_1",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "---\n\nCREATE SEQUENCE regtest_seq_1;"
         },
         {
-            "query": "CREATE VIEW regtest_view_1 AS SELECT * FROM regtest_table_1 WHERE a > 0",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE VIEW regtest_view_1 AS SELECT * FROM regtest_table_1 WHERE a > 0;"
         },
         {
-            "query": "CREATE FUNCTION regtest_func_1 (text) RETURNS bool\n  AS 'BEGIN RETURN true; END' LANGUAGE 'plpgsql'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE FUNCTION regtest_func_1 (text) RETURNS bool\n  AS 'BEGIN RETURN true; END' LANGUAGE 'plpgsql';"
         },
         {
-            "query": "-- switch on debug_audit\nSET sepgsql.debug_audit = true",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "-- switch on debug_audit\nSET sepgsql.debug_audit = true;"
         },
         {
-            "query": "SET client_min_messages = LOG",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "SET client_min_messages = LOG;"
         },
         {
-            "query": "--\n-- ALTER xxx OWNER TO\n--\n-- XXX: It should take db_xxx:{setattr} permission checks even if\n--      owner is not actually changed.\n--\nALTER DATABASE sepgsql_test_regression_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "--\n-- ALTER xxx OWNER TO\n--\n-- XXX: It should take db_xxx:{setattr} permission checks even if\n--      owner is not actually changed.\n--\nALTER DATABASE sepgsql_test_regression_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER DATABASE sepgsql_test_regression_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER DATABASE sepgsql_test_regression_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER SCHEMA regtest_schema_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SCHEMA regtest_schema_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER SCHEMA regtest_schema_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SCHEMA regtest_schema_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER TABLE regtest_table_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER TABLE regtest_table_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable_1_ones OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable_1_ones OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER SEQUENCE regtest_seq_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SEQUENCE regtest_seq_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER SEQUENCE regtest_seq_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SEQUENCE regtest_seq_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER VIEW regtest_view_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER VIEW regtest_view_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER VIEW regtest_view_1 OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER VIEW regtest_view_1 OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER FUNCTION regtest_func_1(text) OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER FUNCTION regtest_func_1(text) OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "ALTER FUNCTION regtest_func_1(text) OWNER TO regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER FUNCTION regtest_func_1(text) OWNER TO regress_sepgsql_test_user;"
         },
         {
-            "query": "--\n-- ALTER xxx SET SCHEMA\n--\nALTER TABLE regtest_table_1 SET SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "--\n-- ALTER xxx SET SCHEMA\n--\nALTER TABLE regtest_table_1 SET SCHEMA regtest_schema_2;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable_1 SET SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable_1 SET SCHEMA regtest_schema_2;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable_1_ones SET SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable_1_ones SET SCHEMA regtest_schema_2;"
         },
         {
-            "query": "ALTER SEQUENCE regtest_seq_1 SET SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SEQUENCE regtest_seq_1 SET SCHEMA regtest_schema_2;"
         },
         {
-            "query": "ALTER VIEW regtest_view_1 SET SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER VIEW regtest_view_1 SET SCHEMA regtest_schema_2;"
         },
         {
-            "query": "ALTER FUNCTION regtest_func_1(text) SET SCHEMA regtest_schema_2",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER FUNCTION regtest_func_1(text) SET SCHEMA regtest_schema_2;"
         },
         {
-            "query": "--\n-- ALTER xxx RENAME TO\n--\nALTER DATABASE sepgsql_test_regression_1 RENAME TO sepgsql_test_regression",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "--\n-- ALTER xxx RENAME TO\n--\nALTER DATABASE sepgsql_test_regression_1 RENAME TO sepgsql_test_regression;"
         },
         {
-            "query": "ALTER SCHEMA regtest_schema_1 RENAME TO regtest_schema",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SCHEMA regtest_schema_1 RENAME TO regtest_schema;"
         },
         {
-            "query": "ALTER TABLE regtest_table_1 RENAME TO regtest_table",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_1 RENAME TO regtest_table;"
         },
         {
-            "query": "---\n-- partitioned table parent\nALTER TABLE regtest_ptable_1 RENAME TO regtest_ptable",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "---\n-- partitioned table parent\nALTER TABLE regtest_ptable_1 RENAME TO regtest_ptable;"
         },
         {
-            "query": "-- partitioned table child\nALTER TABLE regtest_ptable_1_ones RENAME TO regtest_table_part",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "-- partitioned table child\nALTER TABLE regtest_ptable_1_ones RENAME TO regtest_table_part;"
         },
         {
-            "query": "---\n\nALTER SEQUENCE regtest_seq_1 RENAME TO regtest_seq",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "---\n\nALTER SEQUENCE regtest_seq_1 RENAME TO regtest_seq;"
         },
         {
-            "query": "ALTER VIEW regtest_view_1 RENAME TO regtest_view",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER VIEW regtest_view_1 RENAME TO regtest_view;"
         },
         {
-            "query": "ALTER FUNCTION regtest_func_1(text) RENAME TO regtest_func",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER FUNCTION regtest_func_1(text) RENAME TO regtest_func;"
         },
         {
-            "query": "SET search_path = regtest_schema, regtest_schema_2, public",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "SET search_path = regtest_schema, regtest_schema_2, public;"
         },
         {
-            "query": "--\n-- misc ALTER commands\n--\nALTER DATABASE sepgsql_test_regression CONNECTION LIMIT 999",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "--\n-- misc ALTER commands\n--\nALTER DATABASE sepgsql_test_regression CONNECTION LIMIT 999;"
         },
         {
-            "query": "ALTER DATABASE sepgsql_test_regression SET search_path TO regtest_schema, public",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER DATABASE sepgsql_test_regression SET search_path TO regtest_schema, public; -- not supported yet\n\nALTER TABLE regtest_table ADD COLUMN d float;"
         },
         {
-            "query": "-- not supported yet\n\nALTER TABLE regtest_table ADD COLUMN d float",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table DROP COLUMN d;"
         },
         {
-            "query": "ALTER TABLE regtest_table DROP COLUMN d",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ALTER b SET DEFAULT 'abcd';   -- not supported yet\nALTER TABLE regtest_table ALTER b SET DEFAULT 'XYZ';    -- not supported yet\nALTER TABLE regtest_table ALTER b DROP DEFAULT;         -- not supported yet\nALTER TABLE regtest_table ALTER b SET NOT NULL;"
         },
         {
-            "query": "ALTER TABLE regtest_table ALTER b SET DEFAULT 'abcd'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ALTER b DROP NOT NULL;"
         },
         {
-            "query": "-- not supported yet\nALTER TABLE regtest_table ALTER b SET DEFAULT 'XYZ'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ALTER b SET STATISTICS -1;"
         },
         {
-            "query": "-- not supported yet\nALTER TABLE regtest_table ALTER b DROP DEFAULT",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ALTER b SET (n_distinct = 999);"
         },
         {
-            "query": "-- not supported yet\nALTER TABLE regtest_table ALTER b SET NOT NULL",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ALTER b SET STORAGE PLAIN;"
         },
         {
-            "query": "ALTER TABLE regtest_table ALTER b DROP NOT NULL",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ADD CONSTRAINT test_fk FOREIGN KEY (a) REFERENCES regtest_table_3(x); -- not supported\nALTER TABLE regtest_table ADD CONSTRAINT test_ck CHECK (b like '%abc%') NOT VALID;      -- not supported\nALTER TABLE regtest_table VALIDATE CONSTRAINT test_ck;  -- not supported\nALTER TABLE regtest_table DROP CONSTRAINT test_ck;      -- not supported\n\nCREATE TRIGGER regtest_test_trig BEFORE UPDATE ON regtest_table\n    FOR EACH ROW EXECUTE PROCEDURE suppress_redundant_updates_trigger();"
         },
         {
-            "query": "ALTER TABLE regtest_table ALTER b SET STATISTICS -1",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table DISABLE TRIGGER regtest_test_trig;"
         },
         {
-            "query": "ALTER TABLE regtest_table ALTER b SET (n_distinct = 999)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table ENABLE  TRIGGER regtest_test_trig;"
         },
         {
-            "query": "ALTER TABLE regtest_table ALTER b SET STORAGE PLAIN",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "CREATE RULE regtest_test_rule AS ON INSERT TO regtest_table_3 DO ALSO NOTHING;"
         },
         {
-            "query": "ALTER TABLE regtest_table ADD CONSTRAINT test_fk FOREIGN KEY (a) REFERENCES regtest_table_3(x)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_3 DISABLE RULE regtest_test_rule;"
         },
         {
-            "query": "-- not supported\nALTER TABLE regtest_table ADD CONSTRAINT test_ck CHECK (b like '%abc%') NOT VALID",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_3 ENABLE RULE regtest_test_rule;"
         },
         {
-            "query": "-- not supported\nALTER TABLE regtest_table VALIDATE CONSTRAINT test_ck",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table SET (fillfactor = 75);"
         },
         {
-            "query": "-- not supported\nALTER TABLE regtest_table DROP CONSTRAINT test_ck",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table RESET (fillfactor);"
         },
         {
-            "query": "-- not supported\n\nCREATE TRIGGER regtest_test_trig BEFORE UPDATE ON regtest_table\n    FOR EACH ROW EXECUTE PROCEDURE suppress_redundant_updates_trigger()",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_2 NO INHERIT regtest_table;   -- not supported\nALTER TABLE regtest_table_2 INHERIT regtest_table;      -- not supported\nALTER TABLE regtest_table SET TABLESPACE pg_default;"
         },
         {
-            "query": "ALTER TABLE regtest_table DISABLE TRIGGER regtest_test_trig",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "---\n-- partitioned table parent\nALTER TABLE regtest_ptable ADD COLUMN d float;"
         },
         {
-            "query": "ALTER TABLE regtest_table ENABLE  TRIGGER regtest_test_trig",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable DROP COLUMN d;"
         },
         {
-            "query": "CREATE RULE regtest_test_rule AS ON INSERT TO regtest_table_3 DO ALSO NOTHING",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable ALTER p SET DEFAULT 'abcd';   -- not supported by sepgsql\nALTER TABLE regtest_ptable ALTER p SET DEFAULT 'XYZ';    -- not supported by sepgsql\nALTER TABLE regtest_ptable ALTER p DROP DEFAULT;         -- not supported by sepgsql\nALTER TABLE regtest_ptable ALTER p SET NOT NULL;"
         },
         {
-            "query": "ALTER TABLE regtest_table_3 DISABLE RULE regtest_test_rule",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable ALTER p DROP NOT NULL;"
         },
         {
-            "query": "ALTER TABLE regtest_table_3 ENABLE RULE regtest_test_rule",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable ALTER p SET STATISTICS -1;"
         },
         {
-            "query": "ALTER TABLE regtest_table SET (fillfactor = 75)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable ALTER p SET (n_distinct = 999);"
         },
         {
-            "query": "ALTER TABLE regtest_table RESET (fillfactor)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable ALTER p SET STORAGE PLAIN;"
         },
         {
-            "query": "ALTER TABLE regtest_table_2 NO INHERIT regtest_table",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_ptable ADD CONSTRAINT test_ck CHECK (p like '%abc%') NOT VALID;      -- not supported by sepgsql\nALTER TABLE regtest_ptable DROP CONSTRAINT test_ck;      -- not supported by sepgsql\n\nALTER TABLE regtest_ptable SET TABLESPACE pg_default;"
         },
         {
-            "query": "-- not supported\nALTER TABLE regtest_table_2 INHERIT regtest_table",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "-- partitioned table child\nALTER TABLE regtest_table_part ALTER p SET DEFAULT 'abcd';   -- not supported by sepgsql\nALTER TABLE regtest_table_part ALTER p SET DEFAULT 'XYZ';    -- not supported by sepgsql\nALTER TABLE regtest_table_part ALTER p DROP DEFAULT;         -- not supported by sepgsql\nALTER TABLE regtest_table_part ALTER p SET NOT NULL;"
         },
         {
-            "query": "-- not supported\nALTER TABLE regtest_table SET TABLESPACE pg_default",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part ALTER p DROP NOT NULL;"
         },
         {
-            "query": "---\n-- partitioned table parent\nALTER TABLE regtest_ptable ADD COLUMN d float",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part ALTER p SET STATISTICS -1;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable DROP COLUMN d",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part ALTER p SET (n_distinct = 999);"
         },
         {
-            "query": "ALTER TABLE regtest_ptable ALTER p SET DEFAULT 'abcd'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part ALTER p SET STORAGE PLAIN;"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_ptable ALTER p SET DEFAULT 'XYZ'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part ADD CONSTRAINT test_ck CHECK (p like '%abc%') NOT VALID;      -- not supported by sepgsql\nALTER TABLE regtest_table_part VALIDATE CONSTRAINT test_ck;  -- not supported by sepgsql\nALTER TABLE regtest_table_part DROP CONSTRAINT test_ck;      -- not supported by sepgsql\n\nCREATE TRIGGER regtest_part_test_trig BEFORE UPDATE ON regtest_table_part\n    FOR EACH ROW EXECUTE PROCEDURE suppress_redundant_updates_trigger();"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_ptable ALTER p DROP DEFAULT",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part DISABLE TRIGGER regtest_part_test_trig;"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_ptable ALTER p SET NOT NULL",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part ENABLE  TRIGGER regtest_part_test_trig;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable ALTER p DROP NOT NULL",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part SET (fillfactor = 75);"
         },
         {
-            "query": "ALTER TABLE regtest_ptable ALTER p SET STATISTICS -1",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part RESET (fillfactor);"
         },
         {
-            "query": "ALTER TABLE regtest_ptable ALTER p SET (n_distinct = 999)",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER TABLE regtest_table_part SET TABLESPACE pg_default;"
         },
         {
-            "query": "ALTER TABLE regtest_ptable ALTER p SET STORAGE PLAIN",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "---\n\nALTER VIEW regtest_view SET (security_barrier);"
         },
         {
-            "query": "ALTER TABLE regtest_ptable ADD CONSTRAINT test_ck CHECK (p like '%abc%') NOT VALID",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "ALTER SEQUENCE regtest_seq INCREMENT BY 10 START WITH 1000;"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_ptable DROP CONSTRAINT test_ck",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "--\n-- clean-up objects\n--\nRESET sepgsql.debug_audit;"
         },
         {
-            "query": "-- not supported by sepgsql\n\nALTER TABLE regtest_ptable SET TABLESPACE pg_default",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "RESET client_min_messages;"
         },
         {
-            "query": "-- partitioned table child\nALTER TABLE regtest_table_part ALTER p SET DEFAULT 'abcd'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP DATABASE sepgsql_test_regression;"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_table_part ALTER p SET DEFAULT 'XYZ'",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP SCHEMA regtest_schema CASCADE;"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_table_part ALTER p DROP DEFAULT",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP SCHEMA regtest_schema_2 CASCADE;"
         },
         {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_table_part ALTER p SET NOT NULL",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part ALTER p DROP NOT NULL",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part ALTER p SET STATISTICS -1",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part ALTER p SET (n_distinct = 999)",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part ALTER p SET STORAGE PLAIN",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part ADD CONSTRAINT test_ck CHECK (p like '%abc%') NOT VALID",
-            "name": "alter.sql"
-        },
-        {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_table_part VALIDATE CONSTRAINT test_ck",
-            "name": "alter.sql"
-        },
-        {
-            "query": "-- not supported by sepgsql\nALTER TABLE regtest_table_part DROP CONSTRAINT test_ck",
-            "name": "alter.sql"
-        },
-        {
-            "query": "-- not supported by sepgsql\n\nCREATE TRIGGER regtest_part_test_trig BEFORE UPDATE ON regtest_table_part\n    FOR EACH ROW EXECUTE PROCEDURE suppress_redundant_updates_trigger()",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part DISABLE TRIGGER regtest_part_test_trig",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part ENABLE  TRIGGER regtest_part_test_trig",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part SET (fillfactor = 75)",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part RESET (fillfactor)",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER TABLE regtest_table_part SET TABLESPACE pg_default",
-            "name": "alter.sql"
-        },
-        {
-            "query": "---\n\nALTER VIEW regtest_view SET (security_barrier)",
-            "name": "alter.sql"
-        },
-        {
-            "query": "ALTER SEQUENCE regtest_seq INCREMENT BY 10 START WITH 1000",
-            "name": "alter.sql"
-        },
-        {
-            "query": "--\n-- clean-up objects\n--\nRESET sepgsql.debug_audit",
-            "name": "alter.sql"
-        },
-        {
-            "query": "RESET client_min_messages",
-            "name": "alter.sql"
-        },
-        {
-            "query": "DROP DATABASE sepgsql_test_regression",
-            "name": "alter.sql"
-        },
-        {
-            "query": "DROP SCHEMA regtest_schema CASCADE",
-            "name": "alter.sql"
-        },
-        {
-            "query": "DROP SCHEMA regtest_schema_2 CASCADE",
-            "name": "alter.sql"
-        },
-        {
-            "query": "DROP USER regress_sepgsql_test_user",
-            "name": "alter.sql"
+            "name": "alter.sql",
+            "query": "DROP USER regress_sepgsql_test_user;"
         }
     ]
 }

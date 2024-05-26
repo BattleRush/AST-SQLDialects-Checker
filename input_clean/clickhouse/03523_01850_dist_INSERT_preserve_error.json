@@ -2,56 +2,52 @@
     "name": "01850_dist_INSERT_preserve_error.sql",
     "tests": [
         {
-            "query": "-- Tags: no-parallel\n\ncreate database if not exists shard_0;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "-- Tags: no-parallel\n\ncreate database if not exists shard_0;"
         },
         {
-            "query": "\ncreate database if not exists shard_1;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "create database if not exists shard_1;"
         },
         {
-            "query": "\n\ndrop table if exists dist_01850;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "drop table if exists dist_01850;"
         },
         {
-            "query": "\ndrop table if exists shard_0.data_01850;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "drop table if exists shard_0.data_01850;"
         },
         {
-            "query": "\n\ncreate table shard_0.data_01850 (key Int) engine=Memory();",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "create table shard_0.data_01850 (key Int) engine=Memory();"
         },
         {
-            "query": "\ncreate table dist_01850 (key Int) engine=Distributed('test_cluster_two_replicas_different_databases', /* default_database= */ '', data_01850, key);",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "create table dist_01850 (key Int) engine=Distributed('test_cluster_two_replicas_different_databases', /* default_database= */ '', data_01850, key);"
         },
         {
-            "query": "\n\nset distributed_foreground_insert=1;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "set distributed_foreground_insert=1;"
         },
         {
-            "query": "\nset prefer_localhost_replica=0;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "set prefer_localhost_replica=0;"
         },
         {
-            "query": "\ninsert into dist_01850 values (1);",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "insert into dist_01850 values (1); -- { serverError 60 }\n\ndrop table if exists dist_01850;"
         },
         {
-            "query": " -- { serverError 60 }\n\ndrop table if exists dist_01850;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "drop table shard_0.data_01850;"
         },
         {
-            "query": "\ndrop table shard_0.data_01850;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "drop database shard_0;"
         },
         {
-            "query": "\n\ndrop database shard_0;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
-        },
-        {
-            "query": "\ndrop database shard_1;",
-            "name": "01850_dist_INSERT_preserve_error.sql"
+            "name": "01850_dist_INSERT_preserve_error.sql",
+            "query": "drop database shard_1;"
         }
     ]
 }

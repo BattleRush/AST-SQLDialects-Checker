@@ -2,28 +2,28 @@
     "name": "00800_low_cardinality_empty_array.sql",
     "tests": [
         {
-            "query": "drop table if exists lc_00800_1;",
-            "name": "00800_low_cardinality_empty_array.sql"
+            "name": "00800_low_cardinality_empty_array.sql",
+            "query": "drop table if exists lc_00800_1;"
         },
         {
-            "query": "\ncreate table lc_00800_1 (names Array(LowCardinality(String))) engine=MergeTree order by tuple();",
-            "name": "00800_low_cardinality_empty_array.sql"
+            "name": "00800_low_cardinality_empty_array.sql",
+            "query": "create table lc_00800_1 (names Array(LowCardinality(String))) engine=MergeTree order by tuple();"
         },
         {
-            "query": "\ninsert into lc_00800_1 values ([]);",
-            "name": "00800_low_cardinality_empty_array.sql"
+            "name": "00800_low_cardinality_empty_array.sql",
+            "query": "insert into lc_00800_1 values ([]);"
         },
         {
-            "query": "\ninsert into lc_00800_1 select emptyArrayString();",
-            "name": "00800_low_cardinality_empty_array.sql"
+            "name": "00800_low_cardinality_empty_array.sql",
+            "query": "insert into lc_00800_1 select emptyArrayString();"
         },
         {
-            "query": "\nselect * from lc_00800_1;",
-            "name": "00800_low_cardinality_empty_array.sql"
+            "name": "00800_low_cardinality_empty_array.sql",
+            "query": "select * from lc_00800_1;"
         },
         {
-            "query": "\ndrop table if exists lc_00800_1;",
-            "name": "00800_low_cardinality_empty_array.sql"
+            "name": "00800_low_cardinality_empty_array.sql",
+            "query": "drop table if exists lc_00800_1;"
         }
     ]
 }

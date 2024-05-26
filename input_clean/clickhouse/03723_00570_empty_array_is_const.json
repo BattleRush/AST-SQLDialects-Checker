@@ -2,16 +2,16 @@
     "name": "00570_empty_array_is_const.sql",
     "tests": [
         {
-            "query": "SELECT dumpColumnStructure([]);",
-            "name": "00570_empty_array_is_const.sql"
+            "name": "00570_empty_array_is_const.sql",
+            "query": "SELECT dumpColumnStructure([]);"
         },
         {
-            "query": "\nSELECT dumpColumnStructure([[[]]]);",
-            "name": "00570_empty_array_is_const.sql"
+            "name": "00570_empty_array_is_const.sql",
+            "query": "SELECT dumpColumnStructure([[[]]]);"
         },
         {
-            "query": "\nSELECT DISTINCT dumpColumnStructure([[], [1]]) FROM numbers(2);",
-            "name": "00570_empty_array_is_const.sql"
+            "name": "00570_empty_array_is_const.sql",
+            "query": "SELECT DISTINCT dumpColumnStructure([[], [1]]) FROM numbers(2);"
         }
     ]
 }

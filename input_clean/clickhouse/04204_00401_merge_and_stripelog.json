@@ -2,180 +2,180 @@
     "name": "00401_merge_and_stripelog.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS stripe1;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe1;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe2;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe2;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe3;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe3;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe4;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe4;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe5;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe5;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe6;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe6;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe7;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe7;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe8;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe8;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe9;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe9;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe10;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS merge_00401;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS merge_00401;"
         },
         {
-            "query": "\n\nCREATE TABLE stripe1 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe1 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe2 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe2 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe3 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe3 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe4 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe4 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe5 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe5 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe6 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe6 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe7 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe7 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe8 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe8 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe9 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe9 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\nCREATE TABLE stripe10 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE stripe10 ENGINE = StripeLog AS SELECT number AS x FROM system.numbers LIMIT 10;"
         },
         {
-            "query": "\n\nCREATE TABLE merge_00401 AS stripe1 ENGINE = Merge(currentDatabase(), '^stripe\\\\d+');",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "CREATE TABLE merge_00401 AS stripe1 ENGINE = Merge(currentDatabase(), '^stripe\\\\d+');"
         },
         {
-            "query": "\n\nSELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;"
         },
         {
-            "query": "\nSET max_threads = 1;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SET max_threads = 1;"
         },
         {
-            "query": "\nSELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;"
         },
         {
-            "query": "\nSET max_threads = 2;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SET max_threads = 2;"
         },
         {
-            "query": "\nSELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;"
         },
         {
-            "query": "\nSET max_threads = 5;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SET max_threads = 5;"
         },
         {
-            "query": "\nSELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;"
         },
         {
-            "query": "\nSET max_threads = 10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SET max_threads = 10;"
         },
         {
-            "query": "\nSELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;"
         },
         {
-            "query": "\nSET max_threads = 20;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SET max_threads = 20;"
         },
         {
-            "query": "\nSELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "SELECT x, count() FROM merge_00401 GROUP BY x ORDER BY x;"
         },
         {
-            "query": "\n\nDROP TABLE IF EXISTS stripe1;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe1;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe2;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe2;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe3;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe3;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe4;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe4;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe5;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe5;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe6;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe6;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe7;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe7;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe8;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe8;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe9;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe9;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS stripe10;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS stripe10;"
         },
         {
-            "query": "\nDROP TABLE IF EXISTS merge_00401;",
-            "name": "00401_merge_and_stripelog.sql"
+            "name": "00401_merge_and_stripelog.sql",
+            "query": "DROP TABLE IF EXISTS merge_00401;"
         }
     ]
 }

@@ -2,24 +2,24 @@
     "name": "00931_low_cardinality_read_with_empty_array.sql",
     "tests": [
         {
-            "query": "DROP TABLE IF EXISTS lc_00931;",
-            "name": "00931_low_cardinality_read_with_empty_array.sql"
+            "name": "00931_low_cardinality_read_with_empty_array.sql",
+            "query": "DROP TABLE IF EXISTS lc_00931;"
         },
         {
-            "query": "\n\nCREATE TABLE lc_00931 (\n    key UInt64,\n    value Array(LowCardinality(String)))\nENGINE = MergeTree\nORDER BY key;",
-            "name": "00931_low_cardinality_read_with_empty_array.sql"
+            "name": "00931_low_cardinality_read_with_empty_array.sql",
+            "query": "CREATE TABLE lc_00931 (\n    key UInt64,\n    value Array(LowCardinality(String)))\nENGINE = MergeTree\nORDER BY key;"
         },
         {
-            "query": "\n\nINSERT INTO lc_00931 SELECT number,\nif (number < 10000 OR number > 100000,\n    [toString(number)],\n    emptyArrayString())\n    FROM system.numbers LIMIT 200000;",
-            "name": "00931_low_cardinality_read_with_empty_array.sql"
+            "name": "00931_low_cardinality_read_with_empty_array.sql",
+            "query": "INSERT INTO lc_00931 SELECT number,\nif (number < 10000 OR number > 100000,\n    [toString(number)],\n    emptyArrayString())\n    FROM system.numbers LIMIT 200000;"
         },
         {
-            "query": "\n\nSELECT * FROM lc_00931\nWHERE (key < 100 OR key > 50000)\n    AND NOT has(value, toString(key))\n    AND length(value) == 1\nLIMIT 10\nSETTINGS max_block_size = 8192,\n         max_threads = 1;",
-            "name": "00931_low_cardinality_read_with_empty_array.sql"
+            "name": "00931_low_cardinality_read_with_empty_array.sql",
+            "query": "SELECT * FROM lc_00931\nWHERE (key < 100 OR key > 50000)\n    AND NOT has(value, toString(key))\n    AND length(value) == 1\nLIMIT 10\nSETTINGS max_block_size = 8192,\n         max_threads = 1;"
         },
         {
-            "query": "\n\nDROP TABLE IF EXISTS lc_00931;",
-            "name": "00931_low_cardinality_read_with_empty_array.sql"
+            "name": "00931_low_cardinality_read_with_empty_array.sql",
+            "query": "DROP TABLE IF EXISTS lc_00931;"
         }
     ]
 }

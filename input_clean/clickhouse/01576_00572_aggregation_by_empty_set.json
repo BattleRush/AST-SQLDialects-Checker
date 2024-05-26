@@ -2,64 +2,64 @@
     "name": "00572_aggregation_by_empty_set.sql",
     "tests": [
         {
-            "query": "CREATE TEMPORARY TABLE t (x UInt8);",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "CREATE TEMPORARY TABLE t (x UInt8);"
         },
         {
-            "query": "\n\nSET empty_result_for_aggregation_by_empty_set = 0;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SET empty_result_for_aggregation_by_empty_set = 0;"
         },
         {
-            "query": "\n\nSELECT count() FROM system.one WHERE 0;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count() FROM system.one WHERE 0;"
         },
         {
-            "query": "\nSELECT count() FROM system.one WHERE rand() < 0;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count() FROM system.one WHERE rand() < 0;"
         },
         {
-            "query": "\nSELECT count() FROM system.one WHERE 1;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count() FROM system.one WHERE 1;"
         },
         {
-            "query": "\n\nSELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t;"
         },
         {
-            "query": "\nSELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM (SELECT * FROM t UNION ALL SELECT * FROM t);",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM (SELECT * FROM t UNION ALL SELECT * FROM t);"
         },
         {
-            "query": "\nSELECT x, count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t GROUP BY x;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT x, count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t GROUP BY x;"
         },
         {
-            "query": "\n\nSET empty_result_for_aggregation_by_empty_set = 1;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SET empty_result_for_aggregation_by_empty_set = 1;"
         },
         {
-            "query": "\n\nSELECT count() FROM system.one WHERE 0;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count() FROM system.one WHERE 0;"
         },
         {
-            "query": "\nSELECT count() FROM system.one WHERE rand() < 0;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count() FROM system.one WHERE rand() < 0;"
         },
         {
-            "query": "\nSELECT count() FROM system.one WHERE 1;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count() FROM system.one WHERE 1;"
         },
         {
-            "query": "\n\nSELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t;"
         },
         {
-            "query": "\nSELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM (SELECT * FROM t UNION ALL SELECT * FROM t);",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM (SELECT * FROM t UNION ALL SELECT * FROM t);"
         },
         {
-            "query": "\nSELECT x, count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t GROUP BY x;",
-            "name": "00572_aggregation_by_empty_set.sql"
+            "name": "00572_aggregation_by_empty_set.sql",
+            "query": "SELECT x, count(), uniq(x), avg(x), avg(toNullable(x)), groupArray(x), groupUniqArray(x) FROM t GROUP BY x;"
         }
     ]
 }

@@ -2,48 +2,48 @@
     "name": "03141_fetches_errors_stress.sql",
     "tests": [
         {
-            "query": "-- Tags: no-parallel\n-- Tag no-parallel -- due to failpoints\n\ncreate table data_r1 (key Int, value String) engine=ReplicatedMergeTree('/tables/{database}/data', '{table}') order by tuple();",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "-- Tags: no-parallel\n-- Tag no-parallel -- due to failpoints\n\ncreate table data_r1 (key Int, value String) engine=ReplicatedMergeTree('/tables/{database}/data', '{table}') order by tuple();"
         },
         {
-            "query": "\ncreate table data_r2 (key Int, value String) engine=ReplicatedMergeTree('/tables/{database}/data', '{table}') order by tuple();",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "create table data_r2 (key Int, value String) engine=ReplicatedMergeTree('/tables/{database}/data', '{table}') order by tuple();"
         },
         {
-            "query": "\n\nsystem enable failpoint replicated_sends_failpoint;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "system enable failpoint replicated_sends_failpoint;"
         },
         {
-            "query": "\ninsert into data_r1 select number, randomPrintableASCII(100) from numbers(100_000) settings max_block_size=1000, min_insert_block_size_rows=1000;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "insert into data_r1 select number, randomPrintableASCII(100) from numbers(100_000) settings max_block_size=1000, min_insert_block_size_rows=1000;"
         },
         {
-            "query": "\nsystem disable failpoint replicated_sends_failpoint;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "system disable failpoint replicated_sends_failpoint;"
         },
         {
-            "query": "\n\nsystem sync replica data_r2;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "system sync replica data_r2;"
         },
         {
-            "query": "\n\nsystem flush logs;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "system flush logs;"
         },
         {
-            "query": "\nselect event_time_microseconds, logger_name, message from system.text_log where level = 'Error' and message like '%Malformed chunked encoding%' order by 1 format LineAsString;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "select event_time_microseconds, logger_name, message from system.text_log where level = 'Error' and message like '%Malformed chunked encoding%' order by 1 format LineAsString;"
         },
         {
-            "query": "\n\n-- { echoOn }\nselect table, errorCodeToName(error), count() from system.part_log where database = currentDatabase() and error > 0 and errorCodeToName(error) not in ('FAULT_INJECTED', 'NO_REPLICA_HAS_PART', 'ATTEMPT_TO_READ_AFTER_EOF') group by 1, 2 order by 1, 2;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "-- { echoOn }\nselect table, errorCodeToName(error), count() from system.part_log where database = currentDatabase() and error > 0 and errorCodeToName(error) not in ('FAULT_INJECTED', 'NO_REPLICA_HAS_PART', 'ATTEMPT_TO_READ_AFTER_EOF') group by 1, 2 order by 1, 2;"
         },
         {
-            "query": "\nselect count() from data_r1;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "select count() from data_r1;"
         },
         {
-            "query": "\nselect count() from data_r2;",
-            "name": "03141_fetches_errors_stress.sql"
+            "name": "03141_fetches_errors_stress.sql",
+            "query": "select count() from data_r2;"
         }
     ]
 }
