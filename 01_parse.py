@@ -3,6 +3,9 @@ from parsing.postgresql_parse import parse_postgres
 from parsing.sqlite_parse import parse_sqlite
 from parsing.duckdb_parse import parse_duckdb
 
+if not os.path.exists("input"):
+    os.makedirs("input")
+
 
 parse_clickhouse()
 parse_postgres()

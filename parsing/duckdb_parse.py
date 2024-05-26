@@ -242,5 +242,3 @@ def parse_duckdb():
     #print(parsed_tests)
 
 parse_duckdb()
-#print(TYPE3s)
-#parse_sqlite()

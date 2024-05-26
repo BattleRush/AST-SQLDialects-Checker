@@ -1,4 +1,4 @@
-# go trough all files in input_clean and check if the same file exists in inpu folder
+# go trough all files in input_clean and check if the same file exists in input folder
 
 import os
 

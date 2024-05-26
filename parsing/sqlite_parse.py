@@ -249,5 +249,4 @@ def parse_sqlite():
             count += 1   
             
      
-#parse_duckdb()
 parse_sqlite()
