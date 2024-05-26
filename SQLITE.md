@@ -47,8 +47,7 @@ proc do_execsql_test {args} {
 }
 ```
 
-
-Finally run: 
+To run the SQLite test suite run the following commands: 
 ```bash
 ./configure
 make
@@ -56,5 +55,4 @@ make testfixture
 tclsh ./test/testrunner.tcl all
 ```
 
-
-Ciao
+After the test suite has finished, there should be a testrunner.log. This file will be used by the parser to extract the SQL queries.
