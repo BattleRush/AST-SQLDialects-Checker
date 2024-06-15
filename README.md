@@ -2,13 +2,13 @@
 *Authors: Albert Cerfeda, Karlo Piskor*
 
 ## PostgreSQL Summary
-![PostgreSQL](./images/postgres_summary.png)
+![PostgreSQL](./tex/img/postgres_summary.png)
 
 ## SQLite Summary
-![SQLITE](./images/sqlite_summary.png)
+![SQLITE](./tex/img/sqlite_summary.png)
 
 ## Detailed view of a single test case query
-![Detailed](./images/details.png)
+![Detailed](./tex/img/details.png)
 
 This project leverages the existing test suites for popular DBMSs such as Sqlite, Clickhouse, PostgreSQL, DuckDB and cross-evaluation for assessing the differences and intricacies of SQL dialects.
 ### Reproduction package

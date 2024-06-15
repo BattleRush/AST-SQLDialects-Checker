@@ -1,12 +1,12 @@
-[submodule "databases/sqlite"]
-	path = databases/sqlite
+[submodule "src/databases/sqlite"]
+	path = src/databases/sqlite
 	url = https://github.com/sqlite/sqlite.git
-[submodule "databases/postgresql"]
-	path = databases/postgresql
+[submodule "src/databases/postgresql"]
+	path = src/databases/postgresql
 	url = https://github.com/postgres/postgres.git
-[submodule "databases/clickhouse"]
-	path = databases/clickhouse
+[submodule "src/databases/clickhouse"]
+	path = src/databases/clickhouse
 	url = https://github.com/ClickHouse/ClickHouse.git
-[submodule "databases/duckdb"]
-	path = databases/duckdb
+[submodule "src/databases/duckdb"]
+	path = src/databases/duckdb
 	url = https://github.com/duckdb/duckdb.git
